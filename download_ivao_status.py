@@ -1,7 +1,7 @@
 #!/bin/python
 # pygtk-IVAO-status
 # Author: Tony P. Diaz
-# Date Jul 2012
+# Date Jul 2011
 # License GPLv3+
 
 import urllib2
