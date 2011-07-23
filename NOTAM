@@ -28,6 +28,7 @@ planned_hrsfuel:planned_minfuel:planned_altairport:planned_remarks:planned_route
 planned_depairport_lat:planned_depairport_lon:planned_destairport_lat:planned_destairport_lon:
 atis_message:time_last_atis_received:time_connected:client_software_name:client_software_version:
 adminrating:atc_or_pilotrating:planned_altairport2:planned_typeofflight:planned_pob:true_heading:onground
+
 callsign : the callsign of the client. It's the name the client is recognized on the network
 vid : the personal VID of the client. The VID is the unique code assigned by IVAO to every registered user
 realname : the realname of the user connected. It's the name the user put into Squawkbox or ProController when he connects to the network
