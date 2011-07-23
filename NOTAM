@@ -1,0 +1,154 @@
+This NOTAM is for describe the whazzup file retrieved.
+
+!GENERAL
+
+The general section contains some general settings.
+They are:
+
+VERSION : it's a integer number stating the data file format release. It will be incremented every time the data format will change
+
+RELOAD : it's time in minutes network-data.txt file will be updated. There is no need to download the file with an interval less than this value, because the file will be updated only with this frequency.
+
+UPDATE : it's the last date and time network-data.txt file has been updated. Format is: yyyymmddhhnnss. You should check that this data/time read is more recent that the last data/time read by your previous download, and you should consider data only if this data/time is more recent. This is to avoid using data downloaded from not synchronized (outdated) servers. Eventually you can try to download data from a different server if this data/time is less recent than the last read.
+
+CONNECTED CLIENTS : it's the number of clients currently connected. This includes all clients connected, also observers.
+
+
+!CLIENTS
+
+This section contains all data related to all clients connected.
+Each client connected is on its own record (row) ending with CR+LF, and all fields are separated by ":" character (without quotes).
+The data fields are variable length, and they are (in one long line, split below):
+
+callsign:vid:realname:clienttype:frequency:latitude:longitude:altitude:groundspeed:
+planned_aircraft:planned_tascruise:planned_depairport:planned_altitude:planned_destairport:
+server:protrevision:rating:transponder:facilitytype:visualrange:planned_revision:
+planned_flighttype:planned_deptime:planned_actdeptime:planned_hrsenroute:planned_minenroute:
+planned_hrsfuel:planned_minfuel:planned_altairport:planned_remarks:planned_route:
+planned_depairport_lat:planned_depairport_lon:planned_destairport_lat:planned_destairport_lon:
+atis_message:time_last_atis_received:time_connected:client_software_name:client_software_version:
+adminrating:atc_or_pilotrating:planned_altairport2:planned_typeofflight:planned_pob:true_heading:onground
+callsign : the callsign of the client. It's the name the client is recognized on the network
+vid : the personal VID of the client. The VID is the unique code assigned by IVAO to every registered user
+realname : the realname of the user connected. It's the name the user put into Squawkbox or ProController when he connects to the network
+clienttype : can be ATC, PILOT or FOLME
+frequency : the frequency the client is tuned to. Actually only ACT frequencies are reported, PILOT frequencies aren't available
+latitude : the current latitude of the position of the pilot or controller. Expressed in degrees and degrees fractions
+longitude : the current longitude of the position of the pilot or controller. Expressed in degrees and degrees fractions
+altitude : the current altitude in feet of the pilot or controller. For controllers is the transmitter elevation
+groundspeed : the current groundspeed of the pilot. Not available for controllers
+planned_aircraft : the aircraft type put into flight plan by the pilot (example: T/B743/F). Only for pilots. Available only after the pilot has submitted a flight plan
+planned_tascruise : the true airspeed put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_depairport : ICAO code of the departure airport put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_altitude : the altitude put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_destairport : the destination airport put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+server : the server name to which the client is connected
+protrevision : the protocol number revision used by the client
+rating : the rating of the user connected.
+ATC Ratings are:
+
+OBS - Observer
+S1 - Student 1
+S2 - Student 2
+S3 - Student 3
+C1 - Controller 1
+C2 - Controller 2
+C3 - Controller 3
+I1 - Instructor 1
+I2 - Instructor 2
+I3 - Instructor 3
+SUP - Supervisor
+ADM - Administrator
+
+Pilot Ratings are:
+
+OBS - Observer
+SFO - Second Flight Officer
+FFO - First Flight Officer
+C - Captain
+FC - Flight Captain
+SC - Senior Captain
+SFC - Senior Flight Captain
+CC - Commercial Captain
+CFC - Commercial Flight Captain
+CSC - Commercial Senior Captain
+SUP - Supervisor
+ADM - Administrator
+
+transponder : the squawk code set by client. Only for pilots
+facilitytype : type of facility controlled by an ATC. Only for controllers.
+
+Can be:
+0 - Observer
+1 - Flight Service Station
+2 - Clearance Delivery
+3 - Ground
+4 - Tower
+5 - Approach/Departure
+6 - Center
+
+visualrange : range of visibility set by a ATC. Only for controllers
+planned_revision : revision of flight plan submitted (not sure...). Only for pilots. Available only after the pilot has submitted a flight plan
+planned_flighttype : type of flight plan submitted. Only for pilots. Available only after the pilot has submitted a flight plan.
+
+Can be:
+I - IFR
+V - VFR
+S - S/VFR
+
+planned_deptime : the departure time (format is hhmm) put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_actdeptime : the actual departure time (format is hhmm) put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_hrsenroute : the hours enroute put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_minenroute : the minutes enroute put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_hrsfuel : the hours of fuel loaded put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_minfuel : the minutes of fuel loaded put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_altairport : ICAO code of the planned alternate destination airport put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_remarks : the remarks put into flight plan by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_route : the flight plan submitted by the pilot. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_depairport_lat: latitude of the departure airport. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_depairport_lon: longitude of the departure airport. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_destairport_lat: latitude of the destination airport. Only for pilots. Available only after the pilot has submitted a flight plan
+planned_destairport_lon: longitude of the destination airport. Only for pilots. Available only after the pilot has submitted a flight plan
+atis_message: client ATIS message. Only for controllers. It's updated every 30 minutes or every time someone request this client atis by way of the function present at the url shown by "atis0" parameter in the status.txt file. CRLF characters are encoded and are substituted with "^§" characters (without quotes)
+time_last_atis_received: it's the last date and time this client ATIS has been updated in the data server. Format is: yyyymmddhhnnss. If the client changes its atis after this date/time the data server will have an older atis. To retrieve the most updated atis you need to use the function present at the url shown by "atis0" parameter in the status.txt file. Please do it only if absolutely necessary: that function takes network bandwidth
+time_connected: date and time of that client connected to server. Format is: yyyymmddhhnnss.
+client_software_name: (short) Name of the client software used, empty if unknown
+client_software_version: Version of the client software used, empty if unknown
+adminrating: subset of rating : 1(unrated), 2(rated) ,11(supervisor) or 12(administrator)
+atc_or_pilot_rating: ATC rating (for controllers) or the Pilot rating (for pilots): 2 to 10
+planned_altairport2: only for pilots. ICAO code of second alternate airport.
+
+planned_typeofflight: only for pilots. Contains the planned flighttype. Can be on of the following: 
+S Scheduled Services 
+N Non-Scheduled Services 
+G General Aviation 
+M Military 
+X Other
+
+planned_pob: only for pilots. Number of persons on board of the plane.
+true_heading: True heading is in relation to the lines of meridian (north-south lines). The units are degrees from north in a clockwise direction. East is 90, south is 180 and west is 270 degree.
+onground: in contact with the ground.
+
+Can be:
+1 = on ground
+0 = not on ground
+
+
+!SERVER
+
+This section contains a list of all servers currently available for clients connections.
+Each server available is on its own record (row) ending with CR+LF, and all fields are separated by ":" character (without quote).
+The data fields are variable length, and they are:
+
+ident:hostname_or_IP:location:name:clients_connection_allowed:max_connections
+ident : the identification name of the server
+hostname_or_IP : hostname or IP address of the server
+location : physical location of the server
+name : descriptive name of the server
+clients_connection_allowed : flag that tells if clients connections to that server are allowed.
+
+Can be:
+1 - connections allowed
+0 - connections not allowed
+
+max_connections: Maximum number of connections this server will allow
