@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>819</width>
+    <height>593</height>
+   </rect>
+  </property>
+  <property name="cursor">
+   <cursorShape>PointingHandCursor</cursorShape>
+  </property>
+  <property name="windowTitle">
+   <string>IVAO :: Status of IVAN</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../images/ivao.jpg</normaloff>
+    <normalon>../images/ivao.jpg</normalon>
+    <activeoff>../images/ivao.jpg</activeoff>
+    <activeon>../images/ivao.jpg</activeon>
+    <selectedoff>../images/ivao.jpg</selectedoff>
+    <selectedon>../images/ivao.jpg</selectedon>../images/ivao.jpg</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
