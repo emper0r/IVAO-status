@@ -57,8 +57,8 @@ class Main(QtGui.QMainWindow):
         for rows in range(0, len(pilot_list)):
             callsign = pilot_list[rows].split(":")[0]
             vid = pilot_list[rows].split(":")[1]
-            realname = str(pilot_list[rows].rsplit(" ", 1)[0])
-            clienttype = pilot_list[rows].split(":")[2]
+            realname = str(pilot_list[rows].rsplit(":")[2])
+            clienttype = pilot_list[rows].split(":")[3]
             frequency = 0
             latitude = 0
             longitude = 0
@@ -66,10 +66,10 @@ class Main(QtGui.QMainWindow):
             groundspeed = 0
             planned_aircraft = 0
             planned_tascruise = 0
-            planned_depairport = srt(pilot_list[rows].split(":")[11])
-            planned_altitude = srt(pilot_list[rows].split(":")[12])
-            planned_destairport = srt(pilot_list[rows].split(":")[13])
-            server = str(pilot_list[rows].rsplit(" ", 1)[1])           
+            planned_depairport = pilot_list[rows].split(":")[11]
+            planned_altitude = pilot_list[rows].split(":")[12]
+            planned_destairport = pilot_list[rows].split(":")[13]
+            server = pilot_list[rows].split(":")[14]
             protrevision = 0
             rating = 0
             transponder = 0
@@ -103,7 +103,7 @@ class Main(QtGui.QMainWindow):
             true_heading = 0
             onground = 0
 
-            cursor.execute("INSERT INTO status_ivao (callsign, vid, server) VALUES (?,?,?,?)", (str(callsign), int(vid), str(server), str(clienttype)))
+            cursor.execute("INSERT INTO status_ivao (callsign, vid, server, clienttype, planned_depairport, planned_altitude, planned_destairport) VALUES (?,?,?,?,?,?,?)", (callsign, vid, server, clienttype, planned_depairport, planned_altitude, planned_destairport))
 
         connection.commit()
         connection.close()
