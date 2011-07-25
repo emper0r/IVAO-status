@@ -26,17 +26,14 @@ class Main(QtGui.QMainWindow):
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.setWindowIcon(QtGui.QIcon('./images/ivao.jpg'))
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL("clicked()"), QtGui.qApp, QtCore.SLOT("quit()"))
-        self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.__download_whazzup)
-
-    def __download_whazzup(self):
+        self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.UpdateDB)
+        
+    def UpdateDB(self):
 
         StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + IVAO_STATUS)
         StatusFile = open(IVAO_STATUS, 'w')
         StatusFile.write(StatusURL.read())
         StatusFile.close()
-        self.UpdateDB()
-        
-    def UpdateDB(self):
 
         pilot_list = []
         atc_list = []
@@ -53,19 +50,64 @@ class Main(QtGui.QMainWindow):
 
         connection = sqlite3.connect('ivao.db')
         cursor = connection.cursor()
+        
+        cursor.execute("BEGIN TRANSACTION;")
+        cursor.execute("DELETE FROM status_ivao;")
+        
         for rows in range(0, len(pilot_list)):
             callsign = pilot_list[rows].split(":")[0]
             vid = pilot_list[rows].split(":")[1]
-            cursor.execute("INSERT INTO status_ivao (callsign, vid) VALUES (?,?)", (str(callsign), int(vid)))
+            realname = str(pilot_list[rows].rsplit(" ", 1)[0])
+            clienttype = pilot_list[rows].split(":")[2]
+            frequency = 0
+            latitude = 0
+            longitude = 0
+            altitude = 0
+            groundspeed = 0
+            planned_aircraft = 0
+            planned_tascruise = 0
+            planned_depairport = srt(pilot_list[rows].split(":")[11])
+            planned_altitude = srt(pilot_list[rows].split(":")[12])
+            planned_destairport = srt(pilot_list[rows].split(":")[13])
+            server = str(pilot_list[rows].rsplit(" ", 1)[1])           
+            protrevision = 0
+            rating = 0
+            transponder = 0
+            facilitytype = 0
+            visualrange = 0
+            planned_revision = 0
+            planned_flighttype = 0
+            planned_deptime = 0
+            planned_actdeptime = 0
+            planned_hrsenroute = 0
+            planned_minenroute = 0
+            planned_hrsfuel = 0
+            planned_minfuel = 0
+            planned_altairport = 0
+            planned_remarks = 0
+            planned_route = 0
+            planned_depairport_lat = 0
+            planned_depairport_lon = 0
+            planned_destairport_lat = 0
+            planned_destairport_lon = 0
+            atis_message = 0
+            time_last_atis_received = 0
+            time_connected = 0
+            client_software_name = 0
+            client_software_version = 0
+            adminrating = 0
+            atc_or_pilotrating = 0
+            planned_altairport2 = 0
+            planned_typeofflight = 0
+            planned_pob = 0
+            true_heading = 0
+            onground = 0
+
+            cursor.execute("INSERT INTO status_ivao (callsign, vid, server) VALUES (?,?,?,?)", (str(callsign), int(vid), str(server), str(clienttype)))
+
         connection.commit()
         connection.close()
-        
-#        StatusFile = open(ivao_status)
-#        list_users = []
-#        for i in range(8, (len(total_lines) - 13)):
-#            list_users.append(StatusFile.readlines())
-#           
-#            parser_colons = list_users[0][i].split(':')
+
 #            parser_slash = list_users[0][i].split('/')
 #            
 #            print "Callsign: " + parser_colons[10]
@@ -75,11 +117,6 @@ class Main(QtGui.QMainWindow):
 #            except:
 #                print "Aircraft: -"
 #                
-#            print "Name: " + str(parser_colons[2].rsplit(" ", 1)[0])
-#            print "Conected from: " + str(parser_colons[2].rsplit(" ", 1)[1])
-#            print "Departure: " + parser_colons[11]
-#            print "Arrive: " + parser_colons[13]
-#            print "Flight Level: " + parser_colons[12]
 #            print
 #        
 #        StatusFile.close()
