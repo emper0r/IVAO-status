@@ -23,7 +23,7 @@ class Main(QtGui.QMainWindow):
         screen = QtGui.QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-
+        self.setWindowIcon(QtGui.QIcon('./images/ivao.jpg'))
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL("clicked()"), QtGui.qApp, QtCore.SLOT("quit()"))
         self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.__download_whazzup)
 

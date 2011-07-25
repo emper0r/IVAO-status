@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -10,20 +13,17 @@
     <height>768</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="cursor">
    <cursorShape>PointingHandCursor</cursorShape>
   </property>
   <property name="windowTitle">
    <string>IVAO :: Status of IVAN</string>
-  </property>
-  <property name="windowIcon">
-   <iconset>
-    <normaloff>../images/ivao.jpg</normaloff>
-    <normalon>../images/ivao.jpg</normalon>
-    <activeoff>../images/ivao.jpg</activeoff>
-    <activeon>../images/ivao.jpg</activeon>
-    <selectedoff>../images/ivao.jpg</selectedoff>
-    <selectedon>../images/ivao.jpg</selectedon>../images/ivao.jpg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
