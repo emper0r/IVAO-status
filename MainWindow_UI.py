@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Mon Jul 25 04:59:49 2011
+# Created: Mon Jul 25 05:09:12 2011
 #      by: PyQt4 UI code generator 4.7.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -27,6 +27,30 @@ class Ui_MainWindow(object):
         self.tabWidget.setObjectName("tabWidget")
         self.main = QtGui.QWidget()
         self.main.setObjectName("main")
+        self.TotalPlayers = QtGui.QLineEdit(self.main)
+        self.TotalPlayers.setEnabled(True)
+        self.TotalPlayers.setGeometry(QtCore.QRect(50, 20, 51, 23))
+        self.TotalPlayers.setReadOnly(True)
+        self.TotalPlayers.setObjectName("TotalPlayers")
+        self.TotalATC = QtGui.QLineEdit(self.main)
+        self.TotalATC.setEnabled(True)
+        self.TotalATC.setGeometry(QtCore.QRect(122, 20, 51, 23))
+        self.TotalATC.setReadOnly(True)
+        self.TotalATC.setObjectName("TotalATC")
+        self.TotalPilots = QtGui.QLineEdit(self.main)
+        self.TotalPilots.setEnabled(True)
+        self.TotalPilots.setGeometry(QtCore.QRect(195, 20, 51, 23))
+        self.TotalPilots.setReadOnly(True)
+        self.TotalPilots.setObjectName("TotalPilots")
+        self.TotalPlayers_label = QtGui.QLabel(self.main)
+        self.TotalPlayers_label.setGeometry(QtCore.QRect(39, 40, 71, 20))
+        self.TotalPlayers_label.setObjectName("TotalPlayers_label")
+        self.TotalAtc_label = QtGui.QLabel(self.main)
+        self.TotalAtc_label.setGeometry(QtCore.QRect(120, 40, 51, 20))
+        self.TotalAtc_label.setObjectName("TotalAtc_label")
+        self.TotalPilots_label = QtGui.QLabel(self.main)
+        self.TotalPilots_label.setGeometry(QtCore.QRect(190, 40, 61, 20))
+        self.TotalPilots_label.setObjectName("TotalPilots_label")
         self.tabWidget.addTab(self.main, "")
         self.countries = QtGui.QWidget()
         self.countries.setObjectName("countries")
@@ -101,6 +125,12 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "IVAO :: Status of IVAN", None, QtGui.QApplication.UnicodeUTF8))
+        self.TotalPlayers.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
+        self.TotalATC.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
+        self.TotalPilots.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
+        self.TotalPlayers_label.setText(QtGui.QApplication.translate("MainWindow", "Total Players", None, QtGui.QApplication.UnicodeUTF8))
+        self.TotalAtc_label.setText(QtGui.QApplication.translate("MainWindow", "Total ATC", None, QtGui.QApplication.UnicodeUTF8))
+        self.TotalPilots_label.setText(QtGui.QApplication.translate("MainWindow", "Total Pilots", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.main), QtGui.QApplication.translate("MainWindow", "Main", None, QtGui.QApplication.UnicodeUTF8))
         self.country_list.setItemText(0, QtGui.QApplication.translate("MainWindow", "Cuba", None, QtGui.QApplication.UnicodeUTF8))
         self.atc_label.setText(QtGui.QApplication.translate("MainWindow", "ATC List", None, QtGui.QApplication.UnicodeUTF8))

@@ -46,8 +46,10 @@ class Main(QtGui.QMainWindow):
             if "ATC" in StatusFile:
                 atc_list.append(StatusFile)
 
-        print "Pilots: %d" % (len(pilot_list))
-        print "ATC: %d" % (len(atc_list))
+        self.ui.TotalPilots.setText(str(len(pilot_list)))
+        self.ui.TotalATC.setText(str(len(atc_list)))
+        self.ui.TotalPlayers.setText(str(len(atc_list) + len(pilot_list)))
+
 
         
 #        StatusFile = open(ivao_status)
