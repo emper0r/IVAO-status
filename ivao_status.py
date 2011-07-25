@@ -33,23 +33,21 @@ class Main(QtGui.QMainWindow):
         StatusFile = open(IVAO_STATUS, 'w')
         StatusFile.write(StatusURL.read())
         StatusFile.close()
-        UpdateDB()
+        self.UpdateDB()
         
     def UpdateDB(self):
 
         pilot_list = []
         atc_list = []
 
-        for StatusFile in open(ivao_status):
+        for StatusFile in open(IVAO_STATUS):
             if "PILOT" in StatusFile:
                 pilot_list.append(StatusFile)
             if "ATC" in StatusFile:
                 atc_list.append(StatusFile)
 
-        print "Pilots: %s" % len(pilot_list)
-        print "ATC: %s" %s len(atc_list)
-
-        StatusFile.close()
+        print "Pilots: %d" % (len(pilot_list))
+        print "ATC: %d" % (len(atc_list))
 
         
 #        StatusFile = open(ivao_status)
