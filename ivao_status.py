@@ -10,6 +10,8 @@ from PyQt4 import QtCore, QtGui
 import MainWindow_UI
 import urllib2
 
+IVAO_STATUS = 'whazzup.txt'
+
 class Main(QtGui.QMainWindow):
     def __init__(self):
         
@@ -23,22 +25,33 @@ class Main(QtGui.QMainWindow):
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
 
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL("clicked()"), QtGui.qApp, QtCore.SLOT("quit()"))
-        self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.update_ivao)
+        self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.__download_whazzup)
 
-    def update_ivao(self):
+    def __download_whazzup(self):
 
-        ivao_status = 'whazzup.txt'
-           
-        StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + ivao_status)
-        StatusFile = open(ivao_status, 'w')
+        StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + IVAO_STATUS)
+        StatusFile = open(IVAO_STATUS, 'w')
         StatusFile.write(StatusURL.read())
         StatusFile.close()
-#        
-#        StatusFile = open(ivao_status)
-#        total_lines = StatusFile.read().split('\n')
-#        print len(total_lines)
-#        StatusFile.close()
-#        
+        UpdateDB()
+        
+    def UpdateDB(self):
+
+        pilot_list = []
+        atc_list = []
+
+        for StatusFile in open(ivao_status):
+            if "PILOT" in StatusFile:
+                pilot_list.append(StatusFile)
+            if "ATC" in StatusFile:
+                atc_list.append(StatusFile)
+
+        print "Pilots: %s" % len(pilot_list)
+        print "ATC: %s" %s len(atc_list)
+
+        StatusFile.close()
+
+        
 #        StatusFile = open(ivao_status)
 #        list_users = []
 #        for i in range(8, (len(total_lines) - 13)):
