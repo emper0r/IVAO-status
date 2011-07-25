@@ -9,6 +9,7 @@ import sys
 from PyQt4 import QtCore, QtGui
 import MainWindow_UI
 import urllib2
+import sqlite3
 
 IVAO_STATUS = 'whazzup.txt'
 
@@ -40,17 +41,24 @@ class Main(QtGui.QMainWindow):
         pilot_list = []
         atc_list = []
 
-        for StatusFile in open(IVAO_STATUS):
-            if "PILOT" in StatusFile:
-                pilot_list.append(StatusFile)
-            if "ATC" in StatusFile:
-                atc_list.append(StatusFile)
+        for logged_users in open(IVAO_STATUS):
+            if "PILOT" in logged_users:
+                pilot_list.append(logged_users)
+            if "ATC" in logged_users:
+                atc_list.append(logged_users)
 
         self.ui.TotalPilots.setText(str(len(pilot_list)))
         self.ui.TotalATC.setText(str(len(atc_list)))
         self.ui.TotalPlayers.setText(str(len(atc_list) + len(pilot_list)))
 
-
+        connection = sqlite3.connect('ivao.db')
+        cursor = connection.cursor()
+        for rows in range(0, len(pilot_list)):
+            callsign = pilot_list[rows].split(":")[0]
+            vid = pilot_list[rows].split(":")[1]
+            cursor.execute("INSERT INTO status_ivao (callsign, vid) VALUES (?,?)", (str(callsign), int(vid)))
+        connection.commit()
+        connection.close()
         
 #        StatusFile = open(ivao_status)
 #        list_users = []

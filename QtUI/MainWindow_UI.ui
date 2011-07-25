@@ -86,7 +86,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>195</x>
+        <x>192</x>
         <y>20</y>
         <width>51</width>
         <height>23</height>
@@ -115,27 +115,27 @@
      <widget class="QLabel" name="TotalAtc_label">
       <property name="geometry">
        <rect>
-        <x>120</x>
+        <x>135</x>
         <y>40</y>
-        <width>51</width>
+        <width>31</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>Total ATC</string>
+       <string>ATC</string>
       </property>
      </widget>
      <widget class="QLabel" name="TotalPilots_label">
       <property name="geometry">
        <rect>
-        <x>190</x>
+        <x>201</x>
         <y>40</y>
-        <width>61</width>
+        <width>31</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>Total Pilots</string>
+       <string>Pilots</string>
       </property>
      </widget>
     </widget>
