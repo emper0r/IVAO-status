@@ -23,13 +23,16 @@ class Main(QtGui.QMainWindow):
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
 
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL("clicked()"), QtGui.qApp, QtCore.SLOT("quit()"))
-        
-#        ivao_status = 'whazzup.txt'
-#           
-#        StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + ivao_status)
-#        StatusFile = open(ivao_status, 'w')
-#        StatusFile.write(StatusURL.read())
-#        StatusFile.close()
+        self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.update_ivao)
+
+    def update_ivao(self):
+
+        ivao_status = 'whazzup.txt'
+           
+        StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + ivao_status)
+        StatusFile = open(ivao_status, 'w')
+        StatusFile.write(StatusURL.read())
+        StatusFile.close()
 #        
 #        StatusFile = open(ivao_status)
 #        total_lines = StatusFile.read().split('\n')
