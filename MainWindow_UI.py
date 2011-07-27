@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Mon Jul 25 08:12:04 2011
+# Created: Wed Jul 27 10:06:43 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -28,33 +28,33 @@ class Ui_MainWindow(object):
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
-        self.tabWidget.setGeometry(QtCore.QRect(4, 30, 1015, 718))
+        self.tabWidget.setGeometry(QtCore.QRect(4, 30, 1015, 711))
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.main = QtGui.QWidget()
         self.main.setObjectName(_fromUtf8("main"))
         self.TotalPlayers = QtGui.QLineEdit(self.main)
         self.TotalPlayers.setEnabled(True)
-        self.TotalPlayers.setGeometry(QtCore.QRect(50, 20, 51, 23))
+        self.TotalPlayers.setGeometry(QtCore.QRect(29, 20, 51, 23))
         self.TotalPlayers.setReadOnly(True)
         self.TotalPlayers.setObjectName(_fromUtf8("TotalPlayers"))
         self.TotalATC = QtGui.QLineEdit(self.main)
         self.TotalATC.setEnabled(True)
-        self.TotalATC.setGeometry(QtCore.QRect(122, 20, 51, 23))
+        self.TotalATC.setGeometry(QtCore.QRect(101, 20, 51, 23))
         self.TotalATC.setReadOnly(True)
         self.TotalATC.setObjectName(_fromUtf8("TotalATC"))
         self.TotalPilots = QtGui.QLineEdit(self.main)
         self.TotalPilots.setEnabled(True)
-        self.TotalPilots.setGeometry(QtCore.QRect(192, 20, 51, 23))
+        self.TotalPilots.setGeometry(QtCore.QRect(171, 20, 51, 23))
         self.TotalPilots.setReadOnly(True)
         self.TotalPilots.setObjectName(_fromUtf8("TotalPilots"))
         self.TotalPlayers_label = QtGui.QLabel(self.main)
-        self.TotalPlayers_label.setGeometry(QtCore.QRect(39, 40, 71, 20))
+        self.TotalPlayers_label.setGeometry(QtCore.QRect(18, 40, 71, 20))
         self.TotalPlayers_label.setObjectName(_fromUtf8("TotalPlayers_label"))
         self.TotalAtc_label = QtGui.QLabel(self.main)
-        self.TotalAtc_label.setGeometry(QtCore.QRect(135, 40, 31, 20))
+        self.TotalAtc_label.setGeometry(QtCore.QRect(114, 40, 31, 20))
         self.TotalAtc_label.setObjectName(_fromUtf8("TotalAtc_label"))
         self.TotalPilots_label = QtGui.QLabel(self.main)
-        self.TotalPilots_label.setGeometry(QtCore.QRect(201, 40, 41, 20))
+        self.TotalPilots_label.setGeometry(QtCore.QRect(180, 40, 41, 20))
         self.TotalPilots_label.setObjectName(_fromUtf8("TotalPilots_label"))
         self.tabWidget.addTab(self.main, _fromUtf8(""))
         self.countries = QtGui.QWidget()
@@ -121,6 +121,9 @@ class Ui_MainWindow(object):
         self.ExitBtn = QtGui.QPushButton(self.centralwidget)
         self.ExitBtn.setGeometry(QtCore.QRect(107, 3, 92, 24))
         self.ExitBtn.setObjectName(_fromUtf8("ExitBtn"))
+        self.action_update = QtGui.QLabel(self.centralwidget)
+        self.action_update.setGeometry(QtCore.QRect(10, 747, 101, 16))
+        self.action_update.setObjectName(_fromUtf8("action_update"))
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -151,4 +154,5 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.actual_user), QtGui.QApplication.translate("MainWindow", "Actual User", None, QtGui.QApplication.UnicodeUTF8))
         self.UpdateBtn.setText(QtGui.QApplication.translate("MainWindow", "Update", None, QtGui.QApplication.UnicodeUTF8))
         self.ExitBtn.setText(QtGui.QApplication.translate("MainWindow", "Exit", None, QtGui.QApplication.UnicodeUTF8))
+        self.action_update.setText(QtGui.QApplication.translate("MainWindow", "Ready", None, QtGui.QApplication.UnicodeUTF8))
 

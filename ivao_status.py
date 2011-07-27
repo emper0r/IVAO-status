@@ -29,7 +29,8 @@ class Main(QtGui.QMainWindow):
         self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.UpdateDB)
         
     def UpdateDB(self):
-
+        
+        self.ui.action_update.setText("Downloading from IVAO status update...")
         StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + IVAO_STATUS)
         StatusFile = open(IVAO_STATUS, 'w')
         StatusFile.write(StatusURL.read())
@@ -37,7 +38,9 @@ class Main(QtGui.QMainWindow):
 
         pilot_list = []
         atc_list = []
-
+        
+        self.ui.action_update.setText("Ready... Counting players...")
+        
         for logged_users in open(IVAO_STATUS):
             if "PILOT" in logged_users:
                 pilot_list.append(logged_users)
@@ -47,8 +50,10 @@ class Main(QtGui.QMainWindow):
         self.ui.TotalPilots.setText(str(len(pilot_list)))
         self.ui.TotalATC.setText(str(len(atc_list)))
         self.ui.TotalPlayers.setText(str(len(atc_list) + len(pilot_list)))
+        
+        self.ui.action_update.setText("Inserting into DB...")
 
-        connection = sqlite3.connect('ivao.db')
+        connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
         
         cursor.execute("BEGIN TRANSACTION;")
@@ -60,23 +65,23 @@ class Main(QtGui.QMainWindow):
             realname = str(pilot_list[rows].rsplit(":")[2])
             clienttype = pilot_list[rows].split(":")[3]
             frequency = 0
-            latitude = 0
-            longitude = 0
-            altitude = 0
-            groundspeed = 0
+            latitude = pilot_list[rows].split(":")[5]
+            longitude = pilot_list[rows].split(":")[6]
+            altitude = pilot_list[rows].split(":")[7]
+            groundspeed = pilot_list[rows].split(":")[8]
             planned_aircraft = 0
             planned_tascruise = 0
             planned_depairport = pilot_list[rows].split(":")[11]
             planned_altitude = pilot_list[rows].split(":")[12]
             planned_destairport = pilot_list[rows].split(":")[13]
             server = pilot_list[rows].split(":")[14]
-            protrevision = 0
-            rating = 0
-            transponder = 0
-            facilitytype = 0
-            visualrange = 0
-            planned_revision = 0
-            planned_flighttype = 0
+            protrevision = pilot_list[rows].split(":")[15]
+            rating = pilot_list[rows].split(":")[16]
+            transponder = pilot_list[rows].split(":")[17]
+            facilitytype = pilot_list[rows].split(":")[18]
+            visualrange = pilot_list[rows].split(":")[19]
+            planned_revision = pilot_list[rows].split(":")[20]
+            planned_flighttype = pilot_list[rows].split(":")[21]
             planned_deptime = 0
             planned_actdeptime = 0
             planned_hrsenroute = 0
@@ -103,10 +108,18 @@ class Main(QtGui.QMainWindow):
             true_heading = 0
             onground = 0
 
-            cursor.execute("INSERT INTO status_ivao (callsign, vid, server, clienttype, planned_depairport, planned_altitude, planned_destairport) VALUES (?,?,?,?,?,?,?)", (callsign, vid, server, clienttype, planned_depairport, planned_altitude, planned_destairport))
+            cursor.execute("INSERT INTO status_ivao (callsign, vid, server, clienttype\
+            , latitude, longitude, groundspeed, planned_depairport, planned_altitude\
+            , planned_destairport, server, protrevision, rating, transponder, facilitytype\
+            , visualrange, planned_revision, planned_flighttype) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+            (callsign, vid, server, clienttype, latitude, longitude, groundspeed, planned_depairport, \
+             planned_altitude, planned_destairport, server, protrevision, rating, transponder, facilitytype, \
+             visualrange, planned_revision, planned_flighttype))
 
         connection.commit()
         connection.close()
+        
+        self.ui.action_update.setText("Ready")
 
 #            parser_slash = list_users[0][i].split('/')
 #            

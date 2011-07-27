@@ -32,7 +32,7 @@
       <x>4</x>
       <y>30</y>
       <width>1015</width>
-      <height>718</height>
+      <height>711</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -48,7 +48,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>50</x>
+        <x>29</x>
         <y>20</y>
         <width>51</width>
         <height>23</height>
@@ -67,7 +67,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>122</x>
+        <x>101</x>
         <y>20</y>
         <width>51</width>
         <height>23</height>
@@ -86,7 +86,7 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>192</x>
+        <x>171</x>
         <y>20</y>
         <width>51</width>
         <height>23</height>
@@ -102,7 +102,7 @@
      <widget class="QLabel" name="TotalPlayers_label">
       <property name="geometry">
        <rect>
-        <x>39</x>
+        <x>18</x>
         <y>40</y>
         <width>71</width>
         <height>20</height>
@@ -115,7 +115,7 @@
      <widget class="QLabel" name="TotalAtc_label">
       <property name="geometry">
        <rect>
-        <x>135</x>
+        <x>114</x>
         <y>40</y>
         <width>31</width>
         <height>20</height>
@@ -128,7 +128,7 @@
      <widget class="QLabel" name="TotalPilots_label">
       <property name="geometry">
        <rect>
-        <x>201</x>
+        <x>180</x>
         <y>40</y>
         <width>41</width>
         <height>20</height>
@@ -347,6 +347,19 @@
     </property>
     <property name="text">
      <string>Exit</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="action_update">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>747</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ready</string>
     </property>
    </widget>
   </widget>
