@@ -30,6 +30,18 @@ class Main(QtGui.QMainWindow):
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL("clicked()"), QtGui.qApp, QtCore.SLOT("quit()"))
         self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.UpdateDB)
         
+        connection = sqlite3.connect('database/ivao.db')
+        cursor = connection.cursor()
+        countries = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes desc;")
+        connection.commit()
+        
+        for line in countries:
+            country = "%s" % line
+            self.ui.country_list.addItem(country)
+        
+        connection.close()
+         
+        
     def UpdateDB(self):
         
         action_update = threading.local()        
