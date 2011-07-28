@@ -48,8 +48,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>29</x>
-        <y>20</y>
+        <x>92</x>
+        <y>657</y>
         <width>51</width>
         <height>23</height>
        </rect>
@@ -67,8 +67,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>101</x>
-        <y>20</y>
+        <x>202</x>
+        <y>656</y>
         <width>51</width>
         <height>23</height>
        </rect>
@@ -86,8 +86,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>171</x>
-        <y>20</y>
+        <x>320</x>
+        <y>656</y>
         <width>51</width>
         <height>23</height>
        </rect>
@@ -102,8 +102,8 @@
      <widget class="QLabel" name="TotalPlayers_label">
       <property name="geometry">
        <rect>
-        <x>18</x>
-        <y>40</y>
+        <x>19</x>
+        <y>660</y>
         <width>71</width>
         <height>20</height>
        </rect>
@@ -115,8 +115,8 @@
      <widget class="QLabel" name="TotalAtc_label">
       <property name="geometry">
        <rect>
-        <x>114</x>
-        <y>40</y>
+        <x>176</x>
+        <y>660</y>
         <width>31</width>
         <height>20</height>
        </rect>
@@ -128,14 +128,119 @@
      <widget class="QLabel" name="TotalPilots_label">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>40</y>
+        <x>282</x>
+        <y>660</y>
         <width>41</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
        <string>Pilots</string>
+      </property>
+     </widget>
+     <widget class="QTableView" name="IVAOStatustableView">
+      <property name="geometry">
+       <rect>
+        <x>9</x>
+        <y>22</y>
+        <width>441</width>
+        <height>211</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="IVAOStatusLabel">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>5</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>IVAO Status</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="FriendstableWidget">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>23</y>
+        <width>531</width>
+        <height>211</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="FriendsLabel">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>4</y>
+        <width>51</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Friends</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="SearchClientsLabel">
+      <property name="geometry">
+       <rect>
+        <x>13</x>
+        <y>254</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Search Clients</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="SearchtableWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>292</y>
+        <width>441</width>
+        <height>211</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="SearchForLabel">
+      <property name="geometry">
+       <rect>
+        <x>13</x>
+        <y>273</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Search For:</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="METARtableWidget">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>291</y>
+        <width>531</width>
+        <height>211</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="MetarLabel">
+      <property name="geometry">
+       <rect>
+        <x>473</x>
+        <y>272</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>METAR</string>
       </property>
      </widget>
     </widget>
@@ -186,7 +291,7 @@
        <rect>
         <x>535</x>
         <y>13</y>
-        <width>41</width>
+        <width>51</width>
         <height>16</height>
        </rect>
       </property>
