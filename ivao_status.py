@@ -11,6 +11,7 @@ import MainWindow_UI
 import urllib2
 import sqlite3
 import threading
+import unicodedata
 
 IVAO_STATUS = 'whazzup.txt'
 
@@ -62,53 +63,54 @@ class Main(QtGui.QMainWindow):
         cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM status_ivao;")
         
-        for rows in range(0, len(pilot_list)):
-            callsign = pilot_list[rows].split(":")[0]
-            vid = pilot_list[rows].split(":")[1]
-            realname = pilot_list[rows].rsplit(":")[2]
-            clienttype = pilot_list[rows].split(":")[3]
-            latitude = pilot_list[rows].split(":")[5]
-            longitude = pilot_list[rows].split(":")[6]
-            altitude = pilot_list[rows].split(":")[7]
-            groundspeed = pilot_list[rows].split(":")[8]
-            planned_aircraft = pilot_list[rows].split(":")[9]
-            planned_tascruise = pilot_list[rows].split(":")[10]
-            planned_depairport = pilot_list[rows].split(":")[11]
-            planned_altitude = pilot_list[rows].split(":")[12]
-            planned_destairport = pilot_list[rows].split(":")[13]
-            server = pilot_list[rows].split(":")[14]
-            protrevision = pilot_list[rows].split(":")[15]
-            rating = pilot_list[rows].split(":")[16]
-            transponder = pilot_list[rows].split(":")[17]
-            visualrange = pilot_list[rows].split(":")[19]
-            planned_revision = pilot_list[rows].split(":")[20]
-            planned_flighttype = pilot_list[rows].split(":")[21]
-            planned_deptime = pilot_list[rows].split(":")[22]
-            planned_actdeptime = pilot_list[rows].split(":")[23]
-            planned_hrsenroute = pilot_list[rows].split(":")[24]
-            planned_minenroute = pilot_list[rows].split(":")[25]
-            planned_hrsfuel = pilot_list[rows].split(":")[26]
-            planned_minfuel = pilot_list[rows].split(":")[27]
-            planned_altairport = pilot_list[rows].split(":")[28]
-            planned_remarks = pilot_list[rows].split(":")[29]
-            planned_route = pilot_list[rows].split(":")[30]
-            planned_depairport_lat = pilot_list[rows].split(":")[31]
-            planned_depairport_lon = pilot_list[rows].split(":")[32]
-            planned_destairport_lat = pilot_list[rows].split(":")[33]
-            planned_destairport_lon = pilot_list[rows].split(":")[34]
-            time_last_atis_received = pilot_list[rows].split(":")[36]
-            time_connected = pilot_list[rows].split(":")[37]
-            client_software_name = pilot_list[rows].split(":")[38]
-            client_software_version = pilot_list[rows].split(":")[39]
-            adminrating = pilot_list[rows].split(":")[40]
-            atc_or_pilotrating = pilot_list[rows].split(":")[41]
-            planned_altairport2 = pilot_list[rows].split(":")[42]
-            planned_typeofflight = pilot_list[rows].split(":")[43]
-            planned_pob = pilot_list[rows].split(":")[44]
-            true_heading = pilot_list[rows].split(":")[45]
-            onground = pilot_list[rows].split(":")[46]
+        for rows in pilot_list:
+            fields = rows.split(":")
+            callsign = fields[0]
+            vid = fields[1]
+            realname = rows.rsplit(":")[2]
+            clienttype = fields[3]
+            latitude = fields[5]
+            longitude = fields[6]
+            altitude = fields[7]
+            groundspeed = fields[8]
+            planned_aircraft = fields[9]
+            planned_tascruise = fields[10]
+            planned_depairport = fields[11]
+            planned_altitude = fields[12]
+            planned_destairport = fields[13]
+            server = fields[14]
+            protrevision = fields[15]
+            rating = fields[16]
+            transponder = fields[17]
+            visualrange = fields[19]
+            planned_revision = fields[20]
+            planned_flighttype = fields[21]
+            planned_deptime = fields[22]
+            planned_actdeptime = fields[23]
+            planned_hrsenroute = fields[24]
+            planned_minenroute = fields[25]
+            planned_hrsfuel = fields[26]
+            planned_minfuel = fields[27]
+            planned_altairport = fields[28]
+            planned_remarks = fields[29]
+            planned_route = fields[30]
+            planned_depairport_lat = fields[31]
+            planned_depairport_lon = fields[32]
+            planned_destairport_lat = fields[33]
+            planned_destairport_lon = fields[34]
+            time_last_atis_received = fields[36]
+            time_connected = fields[37]
+            client_software_name = fields[38]
+            client_software_version = fields[39]
+            adminrating = fields[40]
+            atc_or_pilotrating = fields[41]
+            planned_altairport2 = fields[42]
+            planned_typeofflight = fields[43]
+            planned_pob = fields[44]
+            true_heading = fields[45]
+            onground = fields[46]
 
-            cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, server, clienttype \
+            cursor.execute("INSERT INTO status_ivao (callsign, vid, server, clienttype \
             , latitude, longitude, altitude, groundspeed, planned_aircraft, planned_tascruise \
             , planned_depairport, planned_altitude, planned_destairport, server, protrevision \
             , rating, transponder, visualrange, planned_revision, planned_flighttype \
@@ -117,8 +119,8 @@ class Main(QtGui.QMainWindow):
             , planned_depairport_lon, planned_destairport_lat, planned_destairport_lon \
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
             , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
-            , onground) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-            (callsign, vid, realname, server, clienttype \
+            , onground) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+            (callsign, vid, server, clienttype \
             , latitude, longitude, altitude, groundspeed, planned_aircraft, planned_tascruise \
             , planned_depairport, planned_altitude, planned_destairport, server, protrevision \
             , rating, transponder, visualrange, planned_revision, planned_flighttype \
@@ -131,42 +133,39 @@ class Main(QtGui.QMainWindow):
 
         connection.commit()
 
-        for rows in range(0, len(atc_list)):
-            callsign = atc_list[rows].split(":")[0]
-            vid = atc_list[rows].split(":")[1]
-            realname = atc_list[rows].rsplit(":")[2]
-            clienttype = atc_list[rows].split(":")[3]
-            frequency = atc_list[rows].split(":")[4]
-            latitude = atc_list[rows].split(":")[5]
-            longitude = atc_list[rows].split(":")[6]
-            altitude = atc_list[rows].split(":")[7]
-            server = atc_list[rows].split(":")[14]
-            protrevision = atc_list[rows].split(":")[15]
-            rating = atc_list[rows].split(":")[16]
-            facilitytype = atc_list[rows].split(":")[18]
-            visualrange = atc_list[rows].split(":")[19]
-            atis_message = atc_list[rows].split(":")[35]
-            time_last_atis_received = atc_list[rows].split(":")[36]
-            time_connected = atc_list[rows].split(":")[37]
-            client_software_name = atc_list[rows].split(":")[38]
-            client_software_version = atc_list[rows].split(":")[39]
-            adminrating = atc_list[rows].split(":")[40]
-            atc_or_atcrating = atc_list[rows].split(":")[41]
-            true_heading = atc_list[rows].split(":")[45]
-            onground = atc_list[rows].split(":")[46]
+        for rows in atc_list:
+            fields = rows.split(":")
+            callsign = fields[0]
+            vid = fields[1]
+            realname = rows.rsplit(":")[2]
+            clienttype = fields[3]
+            frequency = fields[4]
+            latitude = fields[5]
+            longitude = fields[6]
+            altitude = fields[7]
+            server = fields[14]
+            protrevision = fields[15]
+            rating = fields[16]
+            facilitytype = fields[18]
+            visualrange = fields[19]
+            atis_message = fields[35]
+            time_last_atis_received = fields[36]
+            time_connected = fields[37]
+            client_software_name = fields[38]
+            client_software_version = fields[39]
+            adminrating = fields[40]
+            atc_or_atcrating = fields[41]
 
-            cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, server, clienttype, frequency \
+            cursor.execute("INSERT INTO status_ivao (callsign, vid, server, clienttype, frequency \
             , latitude, longitude, altitude, server, protrevision \
-            , rating, facilitytype, visualrange, planned_revision, atis_message \
+            , rating, facilitytype, visualrange \
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
-            , adminrating, atc_or_pilotrating, true_heading \
-            , onground) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-            (callsign, vid, realname, server, clienttype, frequency \
+            , adminrating, atc_or_pilotrating) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+            (callsign, vid, server, clienttype, frequency \
             , latitude, longitude, altitude, server, protrevision \
-            , rating, facilitytype, visualrange, atis_message \
+            , rating, facilitytype, visualrange \
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
-            , adminrating, atc_or_pilotrating, true_heading \
-            , onground))
+            , adminrating, atc_or_pilotrating))
 
         connection.commit()
         connection.close()
