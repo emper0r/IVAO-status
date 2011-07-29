@@ -15,9 +15,9 @@ import threading
 IVAO_STATUS = 'whazzup.txt'
 
 class Main(QtGui.QMainWindow):
-    def __init__(self):
+    def __init__(self, *args):
 
-        QtGui.QMainWindow.__init__(self)
+        QtGui.QMainWindow.__init__(self, *args)
 
         self.ui = MainWindow_UI.Ui_MainWindow()
         self.ui.setupUi(self)
@@ -25,7 +25,7 @@ class Main(QtGui.QMainWindow):
         screen = QtGui.QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QtGui.QIcon('./images/ivao.jpg'))
+        self.setWindowIcon(QtGui.QIcon('./airlines/ivao.jpg'))
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL("clicked()"), QtGui.qApp, QtCore.SLOT("quit()"))
         self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.UpdateDB)
 
@@ -33,13 +33,12 @@ class Main(QtGui.QMainWindow):
         cursor = connection.cursor()
         countries = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes desc;")
         connection.commit()
-
+        
         for line in countries:
             country = "%s" % line
             self.ui.country_list.addItem(country)
 
         connection.close()
-        PopulateAll(self)
 
     def UpdateDB(self):
 
@@ -182,30 +181,38 @@ class Main(QtGui.QMainWindow):
         connection.close()
 
         self.ui.action_update.setText("Ready")
-        table = PopulateAll(mystruct, 5, 3)
 
-class PopulateAll(QtGui.QTableWidget):
-    def __init__(self, mystruct, *args):
-        QTableWidget.__init__(self, *args)
-        connection = sqlite3.connect('database/ivao.db')
-        cursor = connection.cursor()
-        vid = cursor.execute("SELECT vid FROM status_ivao;")
-        connection.commit()
-        rows = []
-        for line in vid:
-            rows.append(line)
-   
-        thestruct = {}
-     
-        self.data = thestruct
-        #self.data = thestruct
-        self.setmydata()
+        my_array = [['00','01','02','ab','bc'],
+                    ['10','11','12'],
+                    ['20','21','22'],
+                    ['30','31','32']]
+    
+        self.data = my_array
+        self.ui.ATCtableWidget.setCurrentCell(0, 0)
+        self.ui.ATCtableWidget = self.addData(self.data)
 
-    def setmydata(self):
-        for n, key in enumerate(self.data):
-            for m, item in enumerate(self.data[key]):
-                newitem = self.ui.ATCtableWidgetItem(item)
-                self.setItem(m, n, newitem)
+        
+    def addData(self, data, startrow=None,  startcol = None):
+        if startcol:
+            sc = startcol
+        else:
+            sc = 0
+        if startrow:
+            sr = startrow
+        else:
+            sr = 0
+
+        m = sr
+        
+        for row in data:
+            n = sc
+            for item in row:
+                #self.ui.ATCtableWidget.setItem(m,  n,  '%s') % str(self.ui.ATCtableWidget(item))
+                cell = QtGui.QTableWidgetItem()
+                cell.setText(item)
+                self.ui.ATCtableWidget.setItem(m,  n,  cell)
+                n += 1
+            m += 1
 
 def main():
     app = QtGui.QApplication(sys.argv)
