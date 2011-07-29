@@ -182,16 +182,30 @@ class Main(QtGui.QMainWindow):
         connection.close()
 
         self.ui.action_update.setText("Ready")
-        PopulateAll()
+        table = PopulateAll(mystruct, 5, 3)
 
-def PopulateAll(self):
-    connection = sqlite3.connect('database/ivao.db')
-    cursor = connection.cursor()
-    vid = cursor.execute("SELECT vid FROM status_ivao;")
-    connection.commit()
-    
-    for line in vid:
-        print line
+class PopulateAll(QtGui.QTableWidget):
+    def __init__(self, mystruct, *args):
+        QTableWidget.__init__(self, *args)
+        connection = sqlite3.connect('database/ivao.db')
+        cursor = connection.cursor()
+        vid = cursor.execute("SELECT vid FROM status_ivao;")
+        connection.commit()
+        rows = []
+        for line in vid:
+            rows.append(line)
+   
+        thestruct = {}
+     
+        self.data = thestruct
+        #self.data = thestruct
+        self.setmydata()
+
+    def setmydata(self):
+        for n, key in enumerate(self.data):
+            for m, item in enumerate(self.data[key]):
+                newitem = self.ui.ATCtableWidgetItem(item)
+                self.setItem(m, n, newitem)
 
 def main():
     app = QtGui.QApplication(sys.argv)
