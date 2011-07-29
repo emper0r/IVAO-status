@@ -1,4 +1,4 @@
-#!/bin/python -W
+#!/Bin/python -W
 # IVAO-status
 # Author: Antonio P. Diaz <emperor.cu@gmail.com>
 # Date Jul 2011
@@ -11,52 +11,51 @@ import MainWindow_UI
 import urllib2
 import sqlite3
 import threading
-import unicodedata
 
 IVAO_STATUS = 'whazzup.txt'
 
 class Main(QtGui.QMainWindow):
     def __init__(self):
-        
+
         QtGui.QMainWindow.__init__(self)
-       
+
         self.ui = MainWindow_UI.Ui_MainWindow()
         self.ui.setupUi(self)
-        
+
         screen = QtGui.QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.setWindowIcon(QtGui.QIcon('./images/ivao.jpg'))
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL("clicked()"), QtGui.qApp, QtCore.SLOT("quit()"))
         self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.UpdateDB)
-        
+
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
         countries = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes desc;")
         connection.commit()
-        
+
         for line in countries:
             country = "%s" % line
             self.ui.country_list.addItem(country)
-        
+
         connection.close()
-         
-        
+        PopulateAll(self)
+
     def UpdateDB(self):
-        
-        action_update = threading.local()        
+
+        action_update = threading.local()
         action_update = self.ui.action_update.setText("Downloading from IVAO status update...")
         thread = threading.Thread(action_update)
         thread.start()
         thread.join()
-        
+
         pilot_list = []
         atc_list = []
-        
+
         StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + IVAO_STATUS)
-        
+
         self.ui.action_update.setText("Ready... Counting players...")
-        
+
         for logged_users in StatusURL.readlines():
             if "PILOT" in logged_users:
                 pilot_list.append(logged_users)
@@ -66,15 +65,15 @@ class Main(QtGui.QMainWindow):
         self.ui.TotalPilots.setText(str(len(pilot_list)))
         self.ui.TotalATC.setText(str(len(atc_list)))
         self.ui.TotalPlayers.setText(str(len(atc_list) + len(pilot_list)))
-        
+
         self.ui.action_update.setText("Inserting into DB...")
 
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
-        
+
         cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM status_ivao;")
-        
+
         for rows in pilot_list:
             fields = rows.split(":")
             callsign = fields[0]
@@ -181,15 +180,24 @@ class Main(QtGui.QMainWindow):
 
         connection.commit()
         connection.close()
-        
+
         self.ui.action_update.setText("Ready")
+        PopulateAll()
+
+def PopulateAll(self):
+    connection = sqlite3.connect('database/ivao.db')
+    cursor = connection.cursor()
+    vid = cursor.execute("SELECT vid FROM status_ivao;")
+    connection.commit()
+    
+    for line in vid:
+        print line
 
 def main():
     app = QtGui.QApplication(sys.argv)
     window = Main()
     window.show()
     sys.exit(app.exec_())
-
 
 if __name__ == "__main__":
     main()
