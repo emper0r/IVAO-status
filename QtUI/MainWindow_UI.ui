@@ -32,7 +32,7 @@
       <x>4</x>
       <y>30</y>
       <width>1015</width>
-      <height>711</height>
+      <height>681</height>
      </rect>
     </property>
     <property name="cursor">
@@ -51,8 +51,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>110</x>
-        <y>657</y>
+        <x>112</x>
+        <y>620</y>
         <width>51</width>
         <height>23</height>
        </rect>
@@ -71,7 +71,7 @@
       <property name="geometry">
        <rect>
         <x>208</x>
-        <y>656</y>
+        <y>620</y>
         <width>51</width>
         <height>23</height>
        </rect>
@@ -90,7 +90,7 @@
       <property name="geometry">
        <rect>
         <x>327</x>
-        <y>656</y>
+        <y>620</y>
         <width>51</width>
         <height>23</height>
        </rect>
@@ -106,8 +106,8 @@
       <property name="geometry">
        <rect>
         <x>16</x>
-        <y>658</y>
-        <width>91</width>
+        <y>621</y>
+        <width>101</width>
         <height>20</height>
        </rect>
       </property>
@@ -125,7 +125,7 @@
       <property name="geometry">
        <rect>
         <x>179</x>
-        <y>658</y>
+        <y>622</y>
         <width>31</width>
         <height>20</height>
        </rect>
@@ -144,7 +144,7 @@
       <property name="geometry">
        <rect>
         <x>285</x>
-        <y>658</y>
+        <y>622</y>
         <width>41</width>
         <height>20</height>
        </rect>
@@ -203,7 +203,7 @@
        <rect>
         <x>470</x>
         <y>6</y>
-        <width>51</width>
+        <width>61</width>
         <height>16</height>
        </rect>
       </property>
@@ -222,7 +222,7 @@
        <rect>
         <x>13</x>
         <y>254</y>
-        <width>101</width>
+        <width>111</width>
         <height>16</height>
        </rect>
       </property>
@@ -332,7 +332,7 @@
      <widget class="QLineEdit" name="METAREdit">
       <property name="geometry">
        <rect>
-        <x>520</x>
+        <x>524</x>
         <y>270</y>
         <width>61</width>
         <height>20</height>
@@ -396,6 +396,12 @@
       <attribute name="verticalHeaderDefaultSectionSize">
        <number>30</number>
       </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>30</number>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>100</number>
+      </attribute>
       <column>
        <property name="text">
         <string>VID</string>
@@ -433,7 +439,7 @@
         <x>8</x>
         <y>210</y>
         <width>991</width>
-        <height>471</height>
+        <height>431</height>
        </rect>
       </property>
       <property name="cursor" stdset="0">
@@ -465,9 +471,9 @@
      <widget class="QLabel" name="pilot_list">
       <property name="geometry">
        <rect>
-        <x>461</x>
+        <x>455</x>
         <y>193</y>
-        <width>71</width>
+        <width>81</width>
         <height>16</height>
        </rect>
       </property>
@@ -492,10 +498,10 @@
      <widget class="QTableView" name="ATC_FullList">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>1006</width>
-        <height>683</height>
+        <x>5</x>
+        <y>10</y>
+        <width>1001</width>
+        <height>631</height>
        </rect>
       </property>
      </widget>
@@ -507,10 +513,10 @@
      <widget class="QTableView" name="PILOT_FullList">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>1006</width>
-        <height>687</height>
+        <x>5</x>
+        <y>6</y>
+        <width>1001</width>
+        <height>631</height>
        </rect>
       </property>
      </widget>
@@ -522,10 +528,10 @@
      <widget class="QTableView" name="ObservertableView">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>991</width>
-        <height>661</height>
+        <x>4</x>
+        <y>6</y>
+        <width>1001</width>
+        <height>635</height>
        </rect>
       </property>
      </widget>
@@ -540,7 +546,7 @@
         <x>6</x>
         <y>40</y>
         <width>485</width>
-        <height>641</height>
+        <height>601</height>
        </rect>
       </property>
      </widget>
@@ -550,7 +556,7 @@
         <x>500</x>
         <y>40</y>
         <width>501</width>
-        <height>641</height>
+        <height>601</height>
        </rect>
       </property>
      </widget>
@@ -562,9 +568,9 @@
      <widget class="QTableView" name="InboundTableView">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>5</x>
         <y>20</y>
-        <width>1006</width>
+        <width>1001</width>
         <height>193</height>
        </rect>
       </property>
@@ -591,9 +597,9 @@
      <widget class="QTableView" name="OutboundTableView">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>5</x>
         <y>227</y>
-        <width>1006</width>
+        <width>1001</width>
         <height>192</height>
        </rect>
       </property>
@@ -620,10 +626,10 @@
      <widget class="QTableView" name="NearbyATCViewTable">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>5</x>
         <y>435</y>
-        <width>1006</width>
-        <height>192</height>
+        <width>1001</width>
+        <height>201</height>
        </rect>
       </property>
      </widget>
@@ -684,7 +690,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>747</y>
+      <y>711</y>
       <width>101</width>
       <height>16</height>
      </rect>

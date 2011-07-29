@@ -1,14 +1,31 @@
 Name: IVAO - STATUS
 Author: Antonio Peña
+E-mail: <emperor.cu@gmail.com>
 License: GPLv3+
 Date: Jul 2011
 
 A software to can see the Pilots & Controlles of IVAO on-line
 to can check how working the operations at the IVAN
 
-This tools is only for fun to flight simulator users but maybe usefully.
-In IVAO exist some like this for Windows called Eye of IVAO and is free but
+This tools is only for information about flight simulator users very usefully at the IVAN.
+In IVAO exist some like this for Windows called The Eye of IVAO and is free but
 with license of IVAO.
 
 At this case is almost same thing but license for GPLv3+ for community of
 Free Software.
+
+Before run this software need some dependencies as require listed below:
+
+libphonon4
+libpulse-mainloop-glib0
+libqt4-assistant
+libqt4-help
+libqt4-scripttools
+libqt4-svg
+libqt4-test
+libqt4-webkit
+libqt4-xmlpatterns
+pyqt4-dev-tools
+python-qt4
+python-sip
+libsqlite3-0
