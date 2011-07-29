@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>768</height>
+    <height>686</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,6 +18,18 @@
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1024</width>
+    <height>686</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1024</width>
+    <height>686</height>
+   </size>
   </property>
   <property name="cursor">
    <cursorShape>PointingHandCursor</cursorShape>
@@ -32,7 +44,7 @@
       <x>4</x>
       <y>30</y>
       <width>1015</width>
-      <height>681</height>
+      <height>641</height>
      </rect>
     </property>
     <property name="cursor">
@@ -52,7 +64,7 @@
       <property name="geometry">
        <rect>
         <x>112</x>
-        <y>620</y>
+        <y>580</y>
         <width>51</width>
         <height>23</height>
        </rect>
@@ -71,7 +83,7 @@
       <property name="geometry">
        <rect>
         <x>208</x>
-        <y>620</y>
+        <y>580</y>
         <width>51</width>
         <height>23</height>
        </rect>
@@ -90,7 +102,7 @@
       <property name="geometry">
        <rect>
         <x>327</x>
-        <y>620</y>
+        <y>580</y>
         <width>51</width>
         <height>23</height>
        </rect>
@@ -106,7 +118,7 @@
       <property name="geometry">
        <rect>
         <x>16</x>
-        <y>621</y>
+        <y>581</y>
         <width>101</width>
         <height>20</height>
        </rect>
@@ -125,7 +137,7 @@
       <property name="geometry">
        <rect>
         <x>179</x>
-        <y>622</y>
+        <y>582</y>
         <width>31</width>
         <height>20</height>
        </rect>
@@ -144,7 +156,7 @@
       <property name="geometry">
        <rect>
         <x>285</x>
-        <y>622</y>
+        <y>582</y>
         <width>41</width>
         <height>20</height>
        </rect>
@@ -439,7 +451,7 @@
         <x>8</x>
         <y>210</y>
         <width>991</width>
-        <height>431</height>
+        <height>391</height>
        </rect>
       </property>
       <property name="cursor" stdset="0">
@@ -499,9 +511,9 @@
       <property name="geometry">
        <rect>
         <x>5</x>
-        <y>10</y>
+        <y>8</y>
         <width>1001</width>
-        <height>631</height>
+        <height>591</height>
        </rect>
       </property>
      </widget>
@@ -514,9 +526,9 @@
       <property name="geometry">
        <rect>
         <x>5</x>
-        <y>6</y>
+        <y>8</y>
         <width>1001</width>
-        <height>631</height>
+        <height>591</height>
        </rect>
       </property>
      </widget>
@@ -528,10 +540,10 @@
      <widget class="QTableView" name="ObservertableView">
       <property name="geometry">
        <rect>
-        <x>4</x>
-        <y>6</y>
+        <x>5</x>
+        <y>8</y>
         <width>1001</width>
-        <height>635</height>
+        <height>591</height>
        </rect>
       </property>
      </widget>
@@ -544,9 +556,9 @@
       <property name="geometry">
        <rect>
         <x>6</x>
-        <y>40</y>
+        <y>10</y>
         <width>485</width>
-        <height>601</height>
+        <height>591</height>
        </rect>
       </property>
      </widget>
@@ -554,9 +566,9 @@
       <property name="geometry">
        <rect>
         <x>500</x>
-        <y>40</y>
+        <y>10</y>
         <width>501</width>
-        <height>601</height>
+        <height>591</height>
        </rect>
       </property>
      </widget>
@@ -627,9 +639,9 @@
       <property name="geometry">
        <rect>
         <x>5</x>
-        <y>435</y>
+        <y>440</y>
         <width>1001</width>
-        <height>201</height>
+        <height>161</height>
        </rect>
       </property>
      </widget>
@@ -690,7 +702,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>711</y>
+      <y>671</y>
       <width>101</width>
       <height>16</height>
      </rect>
