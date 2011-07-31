@@ -75,7 +75,7 @@ class Main(QtGui.QMainWindow):
             fields = rows.split(":")
             callsign = fields[0]
             vid = fields[1]
-            realname = rows.rsplit(":")[2]
+            realname = rows.rsplit(":")[2].decode('latin-1')
             clienttype = fields[3]
             latitude = fields[5]
             longitude = fields[6]
@@ -118,7 +118,7 @@ class Main(QtGui.QMainWindow):
             true_heading = fields[45]
             onground = fields[46]
 
-            cursor.execute("INSERT INTO status_ivao (callsign, vid, server, clienttype \
+            cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, server, clienttype \
             , latitude, longitude, altitude, groundspeed, planned_aircraft, planned_tascruise \
             , planned_depairport, planned_altitude, planned_destairport, server, protrevision \
             , rating, transponder, visualrange, planned_revision, planned_flighttype \
@@ -127,8 +127,8 @@ class Main(QtGui.QMainWindow):
             , planned_depairport_lon, planned_destairport_lat, planned_destairport_lon \
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
             , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
-            , onground) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-            (callsign, vid, server, clienttype \
+            , onground) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+            (callsign, vid, realname, server, clienttype \
             , latitude, longitude, altitude, groundspeed, planned_aircraft, planned_tascruise \
             , planned_depairport, planned_altitude, planned_destairport, server, protrevision \
             , rating, transponder, visualrange, planned_revision, planned_flighttype \
@@ -145,7 +145,7 @@ class Main(QtGui.QMainWindow):
             fields = rows.split(":")
             callsign = fields[0]
             vid = fields[1]
-            realname = rows.rsplit(":")[2]
+            realname = rows.rsplit(":")[2].decode('latin-1')
             clienttype = fields[3]
             frequency = fields[4]
             latitude = fields[5]
@@ -164,12 +164,12 @@ class Main(QtGui.QMainWindow):
             adminrating = fields[40]
             atc_or_atcrating = fields[41]
 
-            cursor.execute("INSERT INTO status_ivao (callsign, vid, server, clienttype, frequency \
+            cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, server, clienttype, frequency \
             , latitude, longitude, altitude, server, protrevision \
             , rating, facilitytype, visualrange \
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
-            , adminrating, atc_or_pilotrating) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-            (callsign, vid, server, clienttype, frequency \
+            , adminrating, atc_or_pilotrating) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+            (callsign, vid, realname, server, clienttype, frequency \
             , latitude, longitude, altitude, server, protrevision \
             , rating, facilitytype, visualrange \
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
@@ -194,7 +194,7 @@ class Main(QtGui.QMainWindow):
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 2, col_facility)
             col_frequency = QtGui.QTableWidgetItem(str(row[2]), 0)
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 3, col_frequency)
-            col_realname = QtGui.QTableWidgetItem(str(row[3]), 0)
+            col_realname = QtGui.QTableWidgetItem(str(row[3].encode('latin-1')), 0)
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 4, col_realname)
             col_rating = QtGui.QTableWidgetItem(str(row[4]), 0)
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 5, col_rating)
