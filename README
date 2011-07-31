@@ -29,3 +29,7 @@ pyqt4-dev-tools
 python-qt4
 python-sip
 libsqlite3-0
+
+Preparing the database
+
+Type this in the shell -> /path/where/run/ivao-status/cat ivao_status.sql | sqlite3 database/ivao.db
