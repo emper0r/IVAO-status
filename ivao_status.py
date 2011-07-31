@@ -15,10 +15,8 @@ import threading
 IVAO_STATUS = 'whazzup.txt'
 
 class Main(QtGui.QMainWindow):
-    def __init__(self, *args):
-
-        QtGui.QMainWindow.__init__(self, *args)
-
+    def __init__(self,):
+	QtGui.QMainWindow.__init__(self)
         self.ui = MainWindow_UI.Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -178,41 +176,31 @@ class Main(QtGui.QMainWindow):
             , adminrating, atc_or_pilotrating))
 
         connection.commit()
-        connection.close()
 
         self.ui.action_update.setText("Ready")
 
-        my_array = [['00','01','02','ab','bc'],
-                    ['10','11','12'],
-                    ['20','21','22'],
-                    ['30','31','32']]
-    
-        self.data = my_array
+	cursor.execute("SELECT vid, facilitytype, frequency, realname, rating FROM status_ivao where clienttype='ATC' order by vid desc;")
+	rows = cursor.fetchall()
+
         self.ui.ATCtableWidget.setCurrentCell(0, 0)
-        self.ui.ATCtableWidget = self.addData(self.data)
 
+        for row in rows:
+            self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
+            col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
+            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 0, col_vid)
+#            col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
+#           self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 1, "col_country")
+            col_facility = QtGui.QTableWidgetItem(str(row[1]), 0)
+            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 2, col_facility)
+            col_frequency = QtGui.QTableWidgetItem(str(row[2]), 0)
+            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 3, col_frequency)
+            col_realname = QtGui.QTableWidgetItem(str(row[3]), 0)
+            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 4, col_realname)
+            col_rating = QtGui.QTableWidgetItem(str(row[4]), 0)
+            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 5, col_rating)
+            self.ui.ATCtableWidget.update()
         
-    def addData(self, data, startrow=None,  startcol = None):
-        if startcol:
-            sc = startcol
-        else:
-            sc = 0
-        if startrow:
-            sr = startrow
-        else:
-            sr = 0
-
-        m = sr
-        
-        for row in data:
-            n = sc
-            for item in row:
-                #self.ui.ATCtableWidget.setItem(m,  n,  '%s') % str(self.ui.ATCtableWidget(item))
-                cell = QtGui.QTableWidgetItem()
-                cell.setText(item)
-                self.ui.ATCtableWidget.setItem(m,  n,  cell)
-                n += 1
-            m += 1
+        connection.close()
 
 def main():
     app = QtGui.QApplication(sys.argv)
