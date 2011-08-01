@@ -1,8 +1,21 @@
-#!/Bin/python -W
-# IVAO-status
-# Author: Antonio P. Diaz <emperor.cu@gmail.com>
-# Date Jul 2011
-# License GPLv3+
+#!/bin/python -W
+# Copyright (c) 2011 by Antonio (emper0r) P. Diaz <emperor.cu@gmail.com>
+#
+# GNU General Public Licence (GPL)
+# 
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# IVAO-status :: License GPLv3+
 # -*- coding: utf-8 -*-
 
 import sys
@@ -24,8 +37,9 @@ class Main(QtGui.QMainWindow):
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.setWindowIcon(QtGui.QIcon('./airlines/ivao.jpg'))
-        self.connect(self.ui.ExitBtn, QtCore.SIGNAL("clicked()"), QtGui.qApp, QtCore.SLOT("quit()"))
-        self.connect(self.ui.UpdateBtn, QtCore.SIGNAL("clicked()"), self.UpdateDB)
+        self.connect(self.ui.ExitBtn, QtCore.SIGNAL('clicked()'), QtGui.qApp, QtCore.SLOT("quit()"))
+        self.connect(self.ui.UpdateBtn, QtCore.SIGNAL('clicked()'), self.UpdateDB)
+	self.connect(self.ui.country_list, QtCore.SIGNAL('activated(QString)'), self.country_view)
 
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
@@ -176,16 +190,32 @@ class Main(QtGui.QMainWindow):
             , adminrating, atc_or_pilotrating))
 
         connection.commit()
+	connection.close()
 
         self.ui.action_update.setText("Ready")
-
-	cursor.execute("SELECT vid, facilitytype, frequency, realname, rating FROM status_ivao where clienttype='ATC' order by vid desc;")
+    
+    def  country_view(self):
+	
+	country_selected = self.ui.country_list.currentText()
+	connection = sqlite3.connect('database/ivao.db')
+	cursor = connection.cursor()
+	cursor.execute('SELECT DISTINCT(flagCode) FROM iata_icao_codes WHERE Country LIKE ?',  (country_selected))
+	flagCode = cursor.fetchone()
+	connection.commit()
+	
+	flagCodePath = ('./flags/%s.gif') % flagCode
+	Pixmap = QtGui.QPixmap(flagCodePath)
+	self.ui.flagIcon.fileName = flagCodePath
+	self.ui.flagIcon.setPixmap(Pixmap)
+	
+	cursor.execute("SELECT vid, facilitytype, frequency, rating, realname FROM status_ivao where clienttype='ATC' order by vid desc;")
 	rows = cursor.fetchall()
 
+	self.ui.ATCtableWidget.clearContents()
+	self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
         self.ui.ATCtableWidget.setCurrentCell(0, 0)
-
+	
         for row in rows:
-            self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
             col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 0, col_vid)
 #            col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
@@ -194,10 +224,10 @@ class Main(QtGui.QMainWindow):
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 2, col_facility)
             col_frequency = QtGui.QTableWidgetItem(str(row[2]), 0)
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 3, col_frequency)
-            col_realname = QtGui.QTableWidgetItem(str(row[3].encode('latin-1')), 0)
-            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 4, col_realname)
-            col_rating = QtGui.QTableWidgetItem(str(row[4]), 0)
-            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 5, col_rating)
+            col_rating = QtGui.QTableWidgetItem(str(row[3]), 0)
+            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 4, col_rating)
+            col_realname = QtGui.QTableWidgetItem(str(row[4].encode('latin-1')), 0)
+            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 5, col_realname)
             self.ui.ATCtableWidget.update()
         
         connection.close()
