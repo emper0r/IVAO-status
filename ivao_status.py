@@ -196,7 +196,7 @@ class Main(QtGui.QMainWindow):
         country_selected = self.ui.country_list.currentText()
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
-        cursor.execute('SELECT DISTINCT(flagCode) FROM iata_icao_codes WHERE Country LIKE ?',  (country_selected))
+        cursor.execute("SELECT DISTINCT(flagCode) FROM iata_icao_codes WHERE Country=?", (str(country_selected),))
         flagCode = cursor.fetchone()
         connection.commit()
 
@@ -211,11 +211,11 @@ class Main(QtGui.QMainWindow):
         self.ui.ATCtableWidget.clearContents()
         self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
         self.ui.ATCtableWidget.setCurrentCell(0, 0)
-
+                    
         for row in rows:
             col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 0, col_vid)
-#            col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
+#           col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
 #           self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 1, "col_country")
             col_facility = QtGui.QTableWidgetItem(str(row[1]), 0)
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 2, col_facility)
