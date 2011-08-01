@@ -205,28 +205,60 @@ class Main(QtGui.QMainWindow):
         self.ui.flagIcon.fileName = flagCodePath
         self.ui.flagIcon.setPixmap(Pixmap)
 
-        cursor.execute("SELECT vid, facilitytype, frequency, rating, realname FROM status_ivao where clienttype='ATC' order by vid desc;")
-        rows = cursor.fetchall()
-
-        self.ui.ATCtableWidget.clearContents()
-        self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
-        self.ui.ATCtableWidget.setCurrentCell(0, 0)
+        cursor.execute("SELECT vid, facilitytype, frequency, rating, realname FROM status_ivao \
+                        WHERE clienttype='ATC' ORDER BY vid DESC;")
+        rows_atc = cursor.fetchall()
+        
+        cursor.execute("SELECT vid, aircraft, rating, realname, departure, destination, status, ivan, time \
+                        FROM status_ivao where clienttype='PILOT' order by vid desc;")
+        rows_pilot = cursor.fetchall()
+        
+        self.ui.ATC_FullList.clearContents()
+        self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
+        self.ui.ATC_FullList.setCurrentCell(0, 0)
                     
-        for row in rows:
+        for row in rows_atc:
             col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
-            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 0, col_vid)
+            self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 0, col_vid)
 #           col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
-#           self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 1, "col_country")
+#           self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 1, "col_country")
             col_facility = QtGui.QTableWidgetItem(str(row[1]), 0)
-            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 2, col_facility)
+            self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 2, col_facility)
             col_frequency = QtGui.QTableWidgetItem(str(row[2]), 0)
-            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 3, col_frequency)
+            self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 3, col_frequency)
             col_rating = QtGui.QTableWidgetItem(str(row[3]), 0)
-            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 4, col_rating)
+            self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 4, col_rating)
             col_realname = QtGui.QTableWidgetItem(str(row[4].encode('latin-1')), 0)
-            self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 5, col_realname)
-            self.ui.ATCtableWidget.update()
+            self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 5, col_realname)
+            self.ui.ATC_FullList.update()
 
+        self.ui.PILOT_FullList.clearContents()
+        self.ui.PILOT_FullList.insertRow(self.ui.ATC_FullList.rowCount())
+        self.ui.PILOT_FullList.setCurrentCell(0, 0)
+                    
+        for row in rows_pilot:
+            col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 0, col_vid)
+#           col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
+#           self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 1, "col_country")
+            col_aircraft = QtGui.QTableWidgetItem(str(row[1]), 0)
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 2, col_aircraft)
+            col_rating = QtGui.QTableWidgetItem(str(row[2]), 0)
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 3, col_rating)
+            col_realname = QtGui.QTableWidgetItem(str(row[3].encode('latin-1')), 0)
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 4, col_realname)
+            col_departure = QtGui.QTableWidgetItem(str(row[4], 0))
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 5, col_departure)
+            col_destination = QtGui.QTableWidgetItem(str(row[5], 0))
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 6, col_destination)
+            col_status = QtGui.QTableWidgetItem(str(row[6], 0))
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 7, col_status)
+            col_ivan = QtGui.QTableWidgetItem(str(row[7], 0))
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 8, col_ivan)
+            col_time = QtGui.QTableWidgetItem(str(row[8], 0))
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 9, col_time)
+            self.ui.PILOT_FullList.update()
+            
         connection.close()
 
 def main():

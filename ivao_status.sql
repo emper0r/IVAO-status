@@ -1,3 +1,4 @@
+PRAGMA encoding = "UTF-16"; 
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 
