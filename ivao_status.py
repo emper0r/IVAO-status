@@ -29,7 +29,7 @@ IVAO_STATUS = 'whazzup.txt'
 
 class Main(QtGui.QMainWindow):
     def __init__(self,):
-	QtGui.QMainWindow.__init__(self)
+        QtGui.QMainWindow.__init__(self)
         self.ui = MainWindow_UI.Ui_MainWindow()
         self.ui.setupUi(self)
 
@@ -39,13 +39,13 @@ class Main(QtGui.QMainWindow):
         self.setWindowIcon(QtGui.QIcon('./airlines/ivao.jpg'))
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL('clicked()'), QtGui.qApp, QtCore.SLOT("quit()"))
         self.connect(self.ui.UpdateBtn, QtCore.SIGNAL('clicked()'), self.UpdateDB)
-	self.connect(self.ui.country_list, QtCore.SIGNAL('activated(QString)'), self.country_view)
+        self.connect(self.ui.country_list, QtCore.SIGNAL('activated(QString)'), self.country_view)
 
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
         countries = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes desc;")
         connection.commit()
-        
+
         for line in countries:
             country = "%s" % line
             self.ui.country_list.addItem(country)
@@ -142,16 +142,15 @@ class Main(QtGui.QMainWindow):
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
             , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
             , onground) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-            (callsign, vid, realname, server, clienttype \
-            , latitude, longitude, altitude, groundspeed, planned_aircraft, planned_tascruise \
-            , planned_depairport, planned_altitude, planned_destairport, server, protrevision \
-            , rating, transponder, visualrange, planned_revision, planned_flighttype \
-            , planned_deptime, planned_actdeptime, planned_hrsenroute, planned_minenroute, planned_hrsfuel \
-            , planned_minfuel, planned_altairport, planned_remarks, planned_route, planned_depairport_lat \
-            , planned_depairport_lon, planned_destairport_lat, planned_destairport_lon \
-            , time_last_atis_received, time_connected, client_software_name, client_software_version \
-            , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
-            , onground))
+            (callsign, vid, realname, server, clienttype, latitude, longitude, altitude, groundspeed, planned_aircraft \
+             , planned_tascruise, planned_depairport, planned_altitude, planned_destairport, server, protrevision \
+             , rating, transponder, visualrange, planned_revision, planned_flighttype \
+             , planned_deptime, planned_actdeptime, planned_hrsenroute, planned_minenroute, planned_hrsfuel \
+             , planned_minfuel, planned_altairport, planned_remarks, planned_route, planned_depairport_lat \
+             , planned_depairport_lon, planned_destairport_lat, planned_destairport_lon \
+             , time_last_atis_received, time_connected, client_software_name, client_software_version \
+             , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
+             , onground))
 
         connection.commit()
 
@@ -183,38 +182,36 @@ class Main(QtGui.QMainWindow):
             , rating, facilitytype, visualrange \
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
             , adminrating, atc_or_pilotrating) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-            (callsign, vid, realname, server, clienttype, frequency \
-            , latitude, longitude, altitude, server, protrevision \
-            , rating, facilitytype, visualrange \
-            , time_last_atis_received, time_connected, client_software_name, client_software_version \
-            , adminrating, atc_or_pilotrating))
+            (callsign, vid, realname, server, clienttype, frequency, latitude, longitude, altitude, server \
+             , protrevision, rating, facilitytype, visualrange, time_last_atis_received, time_connected \
+             , client_software_name, client_software_version, adminrating, atc_or_pilotrating))
 
         connection.commit()
-	connection.close()
+        connection.close()
 
         self.ui.action_update.setText("Ready")
-    
-    def  country_view(self):
-	
-	country_selected = self.ui.country_list.currentText()
-	connection = sqlite3.connect('database/ivao.db')
-	cursor = connection.cursor()
-	cursor.execute('SELECT DISTINCT(flagCode) FROM iata_icao_codes WHERE Country LIKE ?',  (country_selected))
-	flagCode = cursor.fetchone()
-	connection.commit()
-	
-	flagCodePath = ('./flags/%s.gif') % flagCode
-	Pixmap = QtGui.QPixmap(flagCodePath)
-	self.ui.flagIcon.fileName = flagCodePath
-	self.ui.flagIcon.setPixmap(Pixmap)
-	
-	cursor.execute("SELECT vid, facilitytype, frequency, rating, realname FROM status_ivao where clienttype='ATC' order by vid desc;")
-	rows = cursor.fetchall()
 
-	self.ui.ATCtableWidget.clearContents()
-	self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
+    def  country_view(self):
+
+        country_selected = self.ui.country_list.currentText()
+        connection = sqlite3.connect('database/ivao.db')
+        cursor = connection.cursor()
+        cursor.execute('SELECT DISTINCT(flagCode) FROM iata_icao_codes WHERE Country LIKE ?',  (country_selected))
+        flagCode = cursor.fetchone()
+        connection.commit()
+
+        flagCodePath = ('./flags/%s.gif') % flagCode
+        Pixmap = QtGui.QPixmap(flagCodePath)
+        self.ui.flagIcon.fileName = flagCodePath
+        self.ui.flagIcon.setPixmap(Pixmap)
+
+        cursor.execute("SELECT vid, facilitytype, frequency, rating, realname FROM status_ivao where clienttype='ATC' order by vid desc;")
+        rows = cursor.fetchall()
+
+        self.ui.ATCtableWidget.clearContents()
+        self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
         self.ui.ATCtableWidget.setCurrentCell(0, 0)
-	
+
         for row in rows:
             col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 0, col_vid)
@@ -229,7 +226,7 @@ class Main(QtGui.QMainWindow):
             col_realname = QtGui.QTableWidgetItem(str(row[4].encode('latin-1')), 0)
             self.ui.ATCtableWidget.setItem(self.ui.ATCtableWidget.rowCount()-1, 5, col_realname)
             self.ui.ATCtableWidget.update()
-        
+
         connection.close()
 
 def main():
