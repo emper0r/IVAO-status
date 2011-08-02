@@ -185,7 +185,7 @@ class Main(QtGui.QMainWindow):
 
         self.ui.action_update.setText("Ready")
 
-        cursor.execute("SELECT vid, frequency, realname, rating, facilitytype FROM status_ivao \
+        cursor.execute("SELECT vid, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
                         WHERE clienttype='ATC' ORDER BY vid DESC;")
         rows_atcs = cursor.fetchall()
         
@@ -206,6 +206,8 @@ class Main(QtGui.QMainWindow):
             self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 4, col_facility)
 #           col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
 #           self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 5, "col_country")
+            col_time = QtGui.QTableWidgetItem(str(row_atc[5]), 0)
+            self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 8, col_time)
             self.ui.ATC_FullList.update()
 
         cursor.execute("SELECT vid, planned_aircraft, rating, realname, planned_depairport \
@@ -222,18 +224,18 @@ class Main(QtGui.QMainWindow):
             self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 0, col_vid)
             col_aircraft = QtGui.QTableWidgetItem(str(row[1]), 0)
             self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 1, col_aircraft)
-            col_rating = QtGui.QTableWidgetItem(str(row[2]), 0)
-            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 2, col_rating)            
             col_realname = QtGui.QTableWidgetItem(str(row[3].encode('latin-1')), 0)
-            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 3, col_realname)           
-#           col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
-#           self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 1, "col_country")
-#           col_departure = QtGui.QTableWidgetItem(str(row[4], 0))
-#           self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 5, col_departure)
-#           col_destination = QtGui.QTableWidgetItem(str(row[5], 0))
-#           self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 6, col_destination)
-#           col_time = QtGui.QTableWidgetItem(str(row[4], 0))
-#           self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 9, col_time)
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 2, col_realname)  
+            col_rating = QtGui.QTableWidgetItem(str(row[2]), 0)
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 3, col_rating)                     
+#           col_country = QtGui.QTableWidgetItem(str(row[4]), 0)
+#           self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 4, "col_country")
+            col_departure = QtGui.QTableWidgetItem(str(row[4]), 0)
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 4, col_departure)
+            col_destination = QtGui.QTableWidgetItem(str(row[5]), 0)
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 5, col_destination)
+            col_time = QtGui.QTableWidgetItem(str(row[6]), 0)
+            self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 8, col_time)
             self.ui.PILOT_FullList.update()
 
         connection.close()
