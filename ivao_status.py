@@ -67,10 +67,14 @@ class Main(QtGui.QMainWindow):
                 pilot_list.append(logged_users)
             if "ATC" in logged_users:
                 atc_list.append(logged_users)
-
-        self.ui.TotalPilots.setText(str(len(pilot_list)))
-        self.ui.TotalATC.setText(str(len(atc_list)))
-        self.ui.TotalPlayers.setText(str(len(atc_list) + len(pilot_list)))
+        
+        self.ui.IVAOStatustableWidget.setCurrentCell(0, 0)
+        pilots_ivao = QtGui.QTableWidgetItem(str(len(pilot_list)))
+        self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
+        atcs_ivao = QtGui.QTableWidgetItem(str(len(atc_list)))
+        self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
+        total_ivao = QtGui.QTableWidgetItem(str(len(atc_list) + len(pilot_list)))
+        self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
 
         self.ui.action_update.setText("Inserting into DB...")
 
@@ -190,9 +194,9 @@ class Main(QtGui.QMainWindow):
         rows_atcs = cursor.fetchall()
         
         self.ui.ATC_FullList.clearContents()
-        self.ui.ATC_FullList.setCurrentCell(0, 0)
         
         for row_atc in rows_atcs:
+            self.ui.ATC_FullList.setCurrentCell(0, 0)
             self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
             col_vid = QtGui.QTableWidgetItem(str(row_atc[0]), 0)
             self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 0, col_vid)
@@ -215,7 +219,7 @@ class Main(QtGui.QMainWindow):
                       where clienttype='PILOT' order by vid desc;")
         rows_pilots = cursor.fetchall()
         
-        self.ui.PILOT_FullList.clearContents()
+        self.ui.PILOT_FullList.clear()
         self.ui.PILOT_FullList.setCurrentCell(0, 0)
                     
         for row in rows_pilots:

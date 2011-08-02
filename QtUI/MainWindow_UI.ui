@@ -57,138 +57,6 @@
      <attribute name="title">
       <string>Main</string>
      </attribute>
-     <widget class="QLineEdit" name="TotalPlayers">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>112</x>
-        <y>580</y>
-        <width>51</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="TotalATC">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>208</x>
-        <y>580</y>
-        <width>51</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="TotalPilots">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>327</x>
-        <y>580</y>
-        <width>51</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="text">
-       <string>0</string>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="TotalPlayers_label">
-      <property name="geometry">
-       <rect>
-        <x>16</x>
-        <y>581</y>
-        <width>101</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="text">
-       <string>Total Players</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="TotalAtc_label">
-      <property name="geometry">
-       <rect>
-        <x>179</x>
-        <y>582</y>
-        <width>31</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="text">
-       <string>ATC</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="TotalPilots_label">
-      <property name="geometry">
-       <rect>
-        <x>285</x>
-        <y>582</y>
-        <width>41</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="cursor">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="text">
-       <string>Pilots</string>
-      </property>
-     </widget>
      <widget class="QTableWidget" name="IVAOStatustableWidget">
       <property name="geometry">
        <rect>
@@ -244,22 +112,50 @@
        <bool>true</bool>
       </attribute>
       <attribute name="verticalHeaderDefaultSectionSize">
-       <number>15</number>
+       <number>20</number>
       </attribute>
       <attribute name="verticalHeaderMinimumSectionSize">
-       <number>15</number>
+       <number>20</number>
       </attribute>
       <attribute name="verticalHeaderShowSortIndicator" stdset="0">
        <bool>true</bool>
       </attribute>
-      <column>
+      <attribute name="verticalHeaderStretchLastSection">
+       <bool>false</bool>
+      </attribute>
+      <row>
        <property name="text">
-        <string>Information Board</string>
+        <string>Pilots</string>
        </property>
-      </column>
+      </row>
+      <row>
+       <property name="text">
+        <string>Controllers</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>Observers</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>Total Players</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string/>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>Total POB</string>
+       </property>
+      </row>
       <column>
        <property name="text">
-        <string>Data</string>
+        <string>Information Board Data</string>
        </property>
       </column>
      </widget>
@@ -421,7 +317,7 @@
         <x>10</x>
         <y>292</y>
         <width>441</width>
-        <height>271</height>
+        <height>311</height>
        </rect>
       </property>
       <property name="cursor" stdset="0">
@@ -462,7 +358,7 @@
         <x>470</x>
         <y>292</y>
         <width>531</width>
-        <height>271</height>
+        <height>311</height>
        </rect>
       </property>
       <property name="cursor" stdset="0">
