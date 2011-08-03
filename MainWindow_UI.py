@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Wed Aug  3 08:21:54 2011
+# Created: Wed Aug  3 15:01:12 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -456,7 +456,7 @@ class Ui_MainWindow(object):
         self.ExitBtn.setCursor(QtCore.Qt.PointingHandCursor)
         self.ExitBtn.setObjectName(_fromUtf8("ExitBtn"))
         self.action_update = QtGui.QLabel(self.centralwidget)
-        self.action_update.setGeometry(QtCore.QRect(6, 667, 101, 16))
+        self.action_update.setGeometry(QtCore.QRect(6, 667, 241, 16))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
