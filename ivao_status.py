@@ -222,7 +222,13 @@ class Main(QtGui.QMainWindow):
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
             col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 0, col_vid)
-            col_aircraft = QtGui.QTableWidgetItem(str(row[1]), 0)
+            try:
+                aircraft = row[1].split('/')[1]
+                if aircraft != '-':
+                    pass
+            except:
+                aircraft = '-'
+            col_aircraft = QtGui.QTableWidgetItem(aircraft, 0)
             self.ui.PILOT_FullList.setItem(startrow, 1, col_aircraft)
             col_realname = QtGui.QTableWidgetItem(str(row[3].encode('latin-1')), 0)
             self.ui.PILOT_FullList.setItem(startrow, 2, col_realname)  
