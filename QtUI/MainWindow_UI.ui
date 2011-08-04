@@ -155,7 +155,7 @@
       </row>
       <column>
        <property name="text">
-        <string>Information Board Data</string>
+        <string>Information Board</string>
        </property>
       </column>
      </widget>
@@ -184,7 +184,7 @@
      <widget class="QTableWidget" name="FriendstableWidget">
       <property name="geometry">
        <rect>
-        <x>460</x>
+        <x>465</x>
         <y>22</y>
         <width>541</width>
         <height>211</height>
@@ -333,8 +333,8 @@
      <widget class="QTableWidget" name="METARtableWidget">
       <property name="geometry">
        <rect>
-        <x>460</x>
-        <y>259</y>
+        <x>465</x>
+        <y>260</y>
         <width>541</width>
         <height>331</height>
        </rect>

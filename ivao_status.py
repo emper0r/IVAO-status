@@ -23,6 +23,7 @@ from PyQt4 import QtCore, QtGui, Qt
 import MainWindow_UI
 import urllib2
 import sqlite3
+import os
 
 IVAO_STATUS = 'whazzup.txt'
 
@@ -52,30 +53,6 @@ class Main(QtGui.QMainWindow):
         connection.close()
 
     def UpdateDB(self):
-        self.ui.action_update.setText("Downloading from IVAO status update...")
-        
-        pilot_list = []
-        atc_list = []
-        
-        StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + IVAO_STATUS)
-
-        self.ui.action_update.setText("Ready... Counting players...")
-
-        for logged_users in StatusURL.readlines():
-            if "PILOT" in logged_users:
-                pilot_list.append(logged_users)
-            if "ATC" in logged_users:
-                atc_list.append(logged_users)
-        
-        self.ui.IVAOStatustableWidget.setCurrentCell(0, 0)
-        pilots_ivao = QtGui.QTableWidgetItem(str(len(pilot_list)))
-        self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
-        atcs_ivao = QtGui.QTableWidgetItem(str(len(atc_list)))
-        self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
-        total_ivao = QtGui.QTableWidgetItem(str(len(atc_list) + len(pilot_list)))
-        self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
-
-        self.ui.action_update.setText("Inserting into DB...")
 
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
@@ -83,6 +60,25 @@ class Main(QtGui.QMainWindow):
         cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM status_ivao;")
 
+        StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + IVAO_STATUS)
+        
+        pilot_list = []
+        atc_list = []
+    
+        for logged_users in StatusURL.readlines():
+            if "PILOT" in logged_users:
+                pilot_list.append(logged_users)
+            if "ATC" in logged_users:
+                atc_list.append(logged_users)
+            
+        self.ui.IVAOStatustableWidget.setCurrentCell(0, 0)
+        pilots_ivao = QtGui.QTableWidgetItem(str(len(pilot_list)))
+        self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
+        atcs_ivao = QtGui.QTableWidgetItem(str(len(atc_list)))
+        self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
+        total_ivao = QtGui.QTableWidgetItem(str(len(atc_list) + len(pilot_list)))
+        self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
+        
         for rows in pilot_list:
             fields = rows.split(":")
             callsign = fields[0]
@@ -151,7 +147,13 @@ class Main(QtGui.QMainWindow):
              , onground))
 
         connection.commit()
-
+        
+        cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
+        connection.commit()
+        pob = cursor.fetchone()
+        pob_ivao = QtGui.QTableWidgetItem(str(int(pob[0])))
+        self.ui.IVAOStatustableWidget.setItem(0, 5, pob_ivao)
+        
         for rows in atc_list:
             fields = rows.split(":")
             callsign = fields[0]
@@ -215,7 +217,7 @@ class Main(QtGui.QMainWindow):
 #           col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
 #           self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 5, "col_country")
             col_time = QtGui.QTableWidgetItem(str(row_atc[5]), 0)
-            self.ui.ATC_FullList.setItem(startrow, 8, col_time)
+            self.ui.ATC_FullList.setItem(startrow, 6, col_time)
             startrow += 1
 
         cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport \
@@ -233,16 +235,36 @@ class Main(QtGui.QMainWindow):
         for row in rows_pilots:
             self.ui.PILOT_FullList.setCurrentCell(0, 0)
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
+        
+            code_airline = row[0][:3]
+            airlineCodePath = './airlines/%s.gif' % code_airline
+            try:
+                if os.path.exists(airlineCodePath) is True:
+                    airline = QtGui.QLabel()
+                    Pixmap = QtGui.QPixmap(airlineCodePath)
+                    airline.fileName = airlineCodePath
+                    col_airline = QtGui.QLabel.setPixmap(Pixmap)
+                    self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
+                else:
+                    code_airline = '-'
+                    col_airline = QtGui.QTableWidgetItem(code_airline, 0)
+                    self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)   
+            except:
+                pass         
+
             col_callsign = QtGui.QTableWidgetItem(str(row[0]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 1, col_callsign)
+            
             try:
                 aircraft = row[1].split('/')[1]
                 if aircraft != '-':
                     pass
             except:
                 aircraft = '-'
+            
             col_aircraft = QtGui.QTableWidgetItem(aircraft, 0)
             self.ui.PILOT_FullList.setItem(startrow, 2, col_aircraft)
+            
             col_realname = QtGui.QTableWidgetItem(str(row[3].encode('latin-1')), 0)
             self.ui.PILOT_FullList.setItem(startrow, 3, col_realname)  
             col_rating = QtGui.QTableWidgetItem(str(rating_pilot[row[2]]), 0)

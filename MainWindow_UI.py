@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Thu Aug  4 00:44:43 2011
+# Created: Thu Aug  4 13:50:24 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -81,7 +81,7 @@ class Ui_MainWindow(object):
         self.IVAOStatusLabel.setCursor(QtCore.Qt.PointingHandCursor)
         self.IVAOStatusLabel.setObjectName(_fromUtf8("IVAOStatusLabel"))
         self.FriendstableWidget = QtGui.QTableWidget(self.main)
-        self.FriendstableWidget.setGeometry(QtCore.QRect(460, 22, 541, 211))
+        self.FriendstableWidget.setGeometry(QtCore.QRect(465, 22, 541, 211))
         self.FriendstableWidget.setProperty(_fromUtf8("cursor"), QtCore.Qt.PointingHandCursor)
         self.FriendstableWidget.setAutoFillBackground(True)
         self.FriendstableWidget.setTabKeyNavigation(False)
@@ -136,7 +136,7 @@ class Ui_MainWindow(object):
         self.SearchForLabel.setCursor(QtCore.Qt.PointingHandCursor)
         self.SearchForLabel.setObjectName(_fromUtf8("SearchForLabel"))
         self.METARtableWidget = QtGui.QTableWidget(self.main)
-        self.METARtableWidget.setGeometry(QtCore.QRect(460, 259, 541, 331))
+        self.METARtableWidget.setGeometry(QtCore.QRect(465, 260, 541, 331))
         self.METARtableWidget.setProperty(_fromUtf8("cursor"), QtCore.Qt.PointingHandCursor)
         self.METARtableWidget.setAutoFillBackground(True)
         self.METARtableWidget.setTabKeyNavigation(False)
@@ -468,7 +468,7 @@ class Ui_MainWindow(object):
         self.IVAOStatustableWidget.verticalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Observers", None, QtGui.QApplication.UnicodeUTF8))
         self.IVAOStatustableWidget.verticalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Total Players", None, QtGui.QApplication.UnicodeUTF8))
         self.IVAOStatustableWidget.verticalHeaderItem(5).setText(QtGui.QApplication.translate("MainWindow", "Total POB", None, QtGui.QApplication.UnicodeUTF8))
-        self.IVAOStatustableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "Information Board Data", None, QtGui.QApplication.UnicodeUTF8))
+        self.IVAOStatustableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "Information Board", None, QtGui.QApplication.UnicodeUTF8))
         self.IVAOStatusLabel.setText(QtGui.QApplication.translate("MainWindow", "IVAO Status", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendstableWidget.setSortingEnabled(True)
         self.FriendstableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "Callsing", None, QtGui.QApplication.UnicodeUTF8))
