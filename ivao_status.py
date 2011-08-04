@@ -191,6 +191,14 @@ class Main(QtGui.QMainWindow):
         rows_atcs = cursor.fetchall()
                 
         startrow = 0
+
+        rating_atc = {"1":"OBS - Observer", "2":"S1 - Student 1", "3":"S2 - Student 2" \
+                  , "4":"S3 - Student 3", "5":"C1 - Controller 1", "6":"C2 - Controller 2" \
+                  , "7":"C3 - Controller 3", "8":"I1 - Instructor 1", "9":"I2 - Instructor 2" \
+                  , "10":"I3 - Instructor 3", "11":"SUP - Supervisor", "12":"ADM - Administrator"}
+        
+        position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
+                        , "3":"Ground", "4":"Tower", "5":"Approach/Departure", "6":"Center"}
         
         for row_atc in rows_atcs:
             col_vid = QtGui.QTableWidgetItem(str(row_atc[0]), 0)
@@ -200,9 +208,9 @@ class Main(QtGui.QMainWindow):
             self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
             col_realname = QtGui.QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
             self.ui.ATC_FullList.setItem(startrow, 2, col_realname)
-            col_rating = QtGui.QTableWidgetItem(str(row_atc[3]), 0)
+            col_rating = QtGui.QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
             self.ui.ATC_FullList.setItem(startrow, 3, col_rating)            
-            col_facility = QtGui.QTableWidgetItem(str(row_atc[4]), 0)
+            col_facility = QtGui.QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
             self.ui.ATC_FullList.setItem(startrow, 4, col_facility)
 #           col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
 #           self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 5, "col_country")
@@ -216,6 +224,11 @@ class Main(QtGui.QMainWindow):
         rows_pilots = cursor.fetchall()
 
         startrow = 0
+        rating_pilot = {"1":"OBS - Observer", "2":"SFO - Second Flight Officer", "3":"FFO - First Flight Officer" \
+                        , "4":"C - Captain", "5":"FC - Flight Captain", "6":"SC - Senior Captain" \
+                        , "7":"SFC - Senior Flight Captain", "8":"CC - Commercial Captain" \
+                        , "9":"CFC - Commercial Flight Captain", "10":"CSC - Commercial Senior Captain" \
+                        , "11":"SUP - Supervisor", "12":"ADM - Administrator"}
         
         for row in rows_pilots:
             self.ui.PILOT_FullList.setCurrentCell(0, 0)
@@ -232,7 +245,7 @@ class Main(QtGui.QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 1, col_aircraft)
             col_realname = QtGui.QTableWidgetItem(str(row[3].encode('latin-1')), 0)
             self.ui.PILOT_FullList.setItem(startrow, 2, col_realname)  
-            col_rating = QtGui.QTableWidgetItem(str(row[2]), 0)
+            col_rating = QtGui.QTableWidgetItem(str(rating_pilot[row[2]]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 3, col_rating)                     
 #           col_country = QtGui.QTableWidgetItem(str(row[4]), 0)
 #           self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 4, "col_country")

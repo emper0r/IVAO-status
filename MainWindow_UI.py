@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Wed Aug  3 15:01:12 2011
+# Created: Thu Aug  4 00:20:21 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -358,6 +358,8 @@ class Ui_MainWindow(object):
         self.PILOT_FullList.setProperty(_fromUtf8("showDropIndicator"), False)
         self.PILOT_FullList.setDragDropOverwriteMode(False)
         self.PILOT_FullList.setAlternatingRowColors(True)
+        self.PILOT_FullList.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
+        self.PILOT_FullList.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         self.PILOT_FullList.setGridStyle(QtCore.Qt.DotLine)
         self.PILOT_FullList.setWordWrap(False)
         self.PILOT_FullList.setObjectName(_fromUtf8("PILOT_FullList"))
