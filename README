@@ -16,18 +16,7 @@ Free Software.
 
 Before run this software need some dependencies as require listed below:
 
-libphonon4
-libpulse-mainloop-glib0
-libqt4-assistant
-libqt4-help
-libqt4-scripttools
-libqt4-svg
-libqt4-test
-libqt4-webkit
-libqt4-xmlpatterns
-pyqt4-dev-tools
 python-qt4
-python-sip
 libsqlite3-0
 
 Preparing the database
