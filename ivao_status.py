@@ -186,7 +186,7 @@ class Main(QtGui.QMainWindow):
 
         connection.commit()
 
-        cursor.execute("SELECT vid, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
+        cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
                         WHERE clienttype='ATC' ORDER BY vid DESC;")
         rows_atcs = cursor.fetchall()
                 
@@ -201,9 +201,9 @@ class Main(QtGui.QMainWindow):
                         , "3":"Ground", "4":"Tower", "5":"Approach/Departure", "6":"Center"}
         
         for row_atc in rows_atcs:
-            col_vid = QtGui.QTableWidgetItem(str(row_atc[0]), 0)
             self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
-            self.ui.ATC_FullList.setItem(startrow, 0, col_vid)
+            col_callsign = QtGui.QTableWidgetItem(str(row_atc[0]), 0)
+            self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
             col_frequency = QtGui.QTableWidgetItem(str(row_atc[1]), 0)
             self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
             col_realname = QtGui.QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
@@ -218,7 +218,7 @@ class Main(QtGui.QMainWindow):
             self.ui.ATC_FullList.setItem(startrow, 8, col_time)
             startrow += 1
 
-        cursor.execute("SELECT vid, planned_aircraft, rating, realname, planned_depairport \
+        cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport \
                       , planned_destairport, time_connected FROM status_ivao \
                       where clienttype='PILOT' order by vid desc;")
         rows_pilots = cursor.fetchall()
@@ -233,8 +233,8 @@ class Main(QtGui.QMainWindow):
         for row in rows_pilots:
             self.ui.PILOT_FullList.setCurrentCell(0, 0)
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
-            col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
-            self.ui.PILOT_FullList.setItem(startrow, 0, col_vid)
+            col_callsign = QtGui.QTableWidgetItem(str(row[0]), 0)
+            self.ui.PILOT_FullList.setItem(startrow, 1, col_callsign)
             try:
                 aircraft = row[1].split('/')[1]
                 if aircraft != '-':
@@ -242,17 +242,17 @@ class Main(QtGui.QMainWindow):
             except:
                 aircraft = '-'
             col_aircraft = QtGui.QTableWidgetItem(aircraft, 0)
-            self.ui.PILOT_FullList.setItem(startrow, 1, col_aircraft)
+            self.ui.PILOT_FullList.setItem(startrow, 2, col_aircraft)
             col_realname = QtGui.QTableWidgetItem(str(row[3].encode('latin-1')), 0)
-            self.ui.PILOT_FullList.setItem(startrow, 2, col_realname)  
+            self.ui.PILOT_FullList.setItem(startrow, 3, col_realname)  
             col_rating = QtGui.QTableWidgetItem(str(rating_pilot[row[2]]), 0)
-            self.ui.PILOT_FullList.setItem(startrow, 3, col_rating)                     
+            self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)                     
 #           col_country = QtGui.QTableWidgetItem(str(row[4]), 0)
 #           self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 4, "col_country")
             col_departure = QtGui.QTableWidgetItem(str(row[4]), 0)
-            self.ui.PILOT_FullList.setItem(startrow, 4, col_departure)
+            self.ui.PILOT_FullList.setItem(startrow, 5, col_departure)
             col_destination = QtGui.QTableWidgetItem(str(row[5]), 0)
-            self.ui.PILOT_FullList.setItem(startrow, 5, col_destination)
+            self.ui.PILOT_FullList.setItem(startrow, 6, col_destination)
             col_time = QtGui.QTableWidgetItem(str(row[6]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 8, col_time)
             startrow += 1
