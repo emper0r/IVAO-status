@@ -203,7 +203,11 @@ class Main(QtGui.QMainWindow):
         
         position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
                         , "3":"Ground", "4":"Tower", "5":"Approach/Departure", "6":"Center"}
-        
+       
+        self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
+        while self.ui.ATC_FullList.rowCount () > 0:
+            self.ui.ATC_FullList.removeRow(0)
+
         for row_atc in rows_atcs:
             self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
             col_callsign = QtGui.QTableWidgetItem(str(row_atc[0]), 0)
@@ -243,6 +247,10 @@ class Main(QtGui.QMainWindow):
                         , "9":"CFC - Commercial Flight Captain", "10":"CSC - Commercial Senior Captain" \
                         , "11":"SUP - Supervisor", "12":"ADM - Administrator"}
         
+        self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
+        while self.ui.PILOT_FullList.rowCount () > 0:
+            self.ui.PILOT_FullList.removeRow(0)
+
         for row_pilot in rows_pilots:
             self.ui.PILOT_FullList.setCurrentCell(0, 0)
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
