@@ -24,6 +24,8 @@ import MainWindow_UI
 import urllib2
 import sqlite3
 import os
+import time
+import datetime
 
 IVAO_STATUS = 'whazzup.txt'
 
@@ -211,12 +213,24 @@ class Main(QtGui.QMainWindow):
             col_realname = QtGui.QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
             self.ui.ATC_FullList.setItem(startrow, 2, col_realname)
             col_rating = QtGui.QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
-            self.ui.ATC_FullList.setItem(startrow, 3, col_rating)            
+            self.ui.ATC_FullList.setItem(startrow, 3, col_rating)
             col_facility = QtGui.QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
             self.ui.ATC_FullList.setItem(startrow, 4, col_facility)
-#           col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
-#           self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 5, "col_country")
-            col_time = QtGui.QTableWidgetItem(str(row_atc[5]), 0)
+            #col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
+            #self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 5, "col_country")
+            hh = int(str(row_atc[5])[-6:-4])
+            mm = int(str(row_atc[5])[-4:-2])
+            ss = int(str(row_atc[5])[-2:])
+            start_connected = '%d:%d:%d' % (hh, mm, ss)
+            update = time.ctime()
+            now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
+            start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
+            update_time = datetime.datetime.strptime(now, '%H:%M:%S')
+            diff = (start - update_time)
+            mm = diff.seconds / 60
+            hh = diff.seconds / 60 / 60
+            player_time = '%d:%d' % (hh, mm)
+            col_time = QtGui.QTableWidgetItem(str(player_time), 0)
             self.ui.ATC_FullList.setItem(startrow, 6, col_time)
             startrow += 1
 
@@ -240,10 +254,10 @@ class Main(QtGui.QMainWindow):
             airlineCodePath = './airlines/%s.gif' % code_airline
             try:
                 if os.path.exists(airlineCodePath) is True:
-                    airline = QtGui.QLabel()
+                    airline = QtGui.QLabel(self)
                     Pixmap = QtGui.QPixmap(airlineCodePath)
-                    airline.fileName = airlineCodePath
-                    col_airline = QtGui.QLabel.setPixmap(Pixmap)
+                    airline.setPixmap(Pixmap)
+                    col_airline = airline.setPixmap(Pixmap)
                     self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
                 else:
                     code_airline = '-'
@@ -275,7 +289,19 @@ class Main(QtGui.QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 5, col_departure)
             col_destination = QtGui.QTableWidgetItem(str(row[5]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 6, col_destination)
-            col_time = QtGui.QTableWidgetItem(str(row[6]), 0)
+            hh = int(str(row[6])[-6:-4])
+            mm = int(str(row[6])[-4:-2])
+            ss = int(str(row[6])[-2:])
+            start_connected = '%d:%d:%d' % (hh, mm, ss)
+            update = time.ctime()
+            now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
+            start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
+            update_time = datetime.datetime.strptime(now, '%H:%M:%S')
+            diff = (start - update_time)
+            mm = diff.seconds / 60
+            hh = diff.seconds / 60 / 60
+            player_time = '%d:%d' % (hh, mm)
+            col_time = QtGui.QTableWidgetItem(str(player_time), 0)
             self.ui.PILOT_FullList.setItem(startrow, 8, col_time)
             startrow += 1
         
