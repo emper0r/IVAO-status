@@ -218,10 +218,7 @@ class Main(QtGui.QMainWindow):
             self.ui.ATC_FullList.setItem(startrow, 4, col_facility)
             #col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
             #self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 5, "col_country")
-            hh = int(str(row_atc[5])[-6:-4])
-            mm = int(str(row_atc[5])[-4:-2])
-            ss = int(str(row_atc[5])[-2:])
-            start_connected = '%d:%d:%d' % (hh, mm, ss)
+            start_connected = '%d:%d:%d' % (int(str(row_atc[5])[-6:-4]), int(str(row_atc[5])[-4:-2]), int(str(row_atc[5])[-2:]))
             update = time.ctime()
             now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
             start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
@@ -246,18 +243,16 @@ class Main(QtGui.QMainWindow):
                         , "9":"CFC - Commercial Flight Captain", "10":"CSC - Commercial Senior Captain" \
                         , "11":"SUP - Supervisor", "12":"ADM - Administrator"}
         
-        for row in rows_pilots:
+        for row_pilot in rows_pilots:
             self.ui.PILOT_FullList.setCurrentCell(0, 0)
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
         
-            code_airline = row[0][:3]
+            code_airline = row_pilot[0][:3]
             airlineCodePath = './airlines/%s.gif' % code_airline
             try:
                 if os.path.exists(airlineCodePath) is True:
-                    airline = QtGui.QLabel(self)
-                    Pixmap = QtGui.QPixmap(airlineCodePath)
-                    airline.setPixmap(Pixmap)
-                    col_airline = airline.setPixmap(Pixmap)
+                    self.airline = QtGui.QLabel(self)
+                    col_airline = self.airline.setPixmap(QtGui.QPixmap(airlineCodePath))
                     self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
                 else:
                     code_airline = '-'
@@ -266,11 +261,11 @@ class Main(QtGui.QMainWindow):
             except:
                 pass         
 
-            col_callsign = QtGui.QTableWidgetItem(str(row[0]), 0)
+            col_callsign = QtGui.QTableWidgetItem(str(row_pilot[0]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 1, col_callsign)
             
             try:
-                aircraft = row[1].split('/')[1]
+                aircraft = row_pilot[1].split('/')[1]
                 if aircraft != '-':
                     pass
             except:
@@ -279,20 +274,17 @@ class Main(QtGui.QMainWindow):
             col_aircraft = QtGui.QTableWidgetItem(aircraft, 0)
             self.ui.PILOT_FullList.setItem(startrow, 2, col_aircraft)
             
-            col_realname = QtGui.QTableWidgetItem(str(row[3].encode('latin-1')), 0)
+            col_realname = QtGui.QTableWidgetItem(str(row_pilot[3].encode('latin-1')), 0)
             self.ui.PILOT_FullList.setItem(startrow, 3, col_realname)  
-            col_rating = QtGui.QTableWidgetItem(str(rating_pilot[row[2]]), 0)
+            col_rating = QtGui.QTableWidgetItem(str(rating_pilot[row_pilot[2]]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)                     
 #           col_country = QtGui.QTableWidgetItem(str(row[4]), 0)
 #           self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 4, "col_country")
-            col_departure = QtGui.QTableWidgetItem(str(row[4]), 0)
+            col_departure = QtGui.QTableWidgetItem(str(row_pilot[4]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 5, col_departure)
-            col_destination = QtGui.QTableWidgetItem(str(row[5]), 0)
+            col_destination = QtGui.QTableWidgetItem(str(row_pilot[5]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 6, col_destination)
-            hh = int(str(row[6])[-6:-4])
-            mm = int(str(row[6])[-4:-2])
-            ss = int(str(row[6])[-2:])
-            start_connected = '%d:%d:%d' % (hh, mm, ss)
+            start_connected = '%d:%d:%d' % (int(str(row_pilot[6])[-6:-4]), int(str(row_pilot[6])[-4:-2]), int(str(row_pilot[6])[-2:]))
             update = time.ctime()
             now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
             start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
