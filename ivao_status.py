@@ -42,7 +42,11 @@ class Main(QtGui.QMainWindow):
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL('clicked()'), QtGui.qApp, QtCore.SLOT("quit()"))
         self.connect(self.ui.UpdateBtn, QtCore.SIGNAL('clicked()'), self.UpdateDB)
         self.connect(self.ui.country_list, QtCore.SIGNAL('activated(QString)'), self.country_view)
-
+        self.ui.PILOT_FullList.setColumnWidth(3, 170)
+        self.ui.PILOT_FullList.setColumnWidth(4, 160)
+        self.ui.ATC_FullList.setColumnWidth(2, 190)
+        self.ui.ATC_FullList.setColumnWidth(3, 140)
+        self.ui.ATC_FullList.setColumnWidth(4, 140)
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
         countries = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes desc;")
@@ -282,9 +286,8 @@ class Main(QtGui.QMainWindow):
             
             col_aircraft = QtGui.QTableWidgetItem(aircraft, 0)
             self.ui.PILOT_FullList.setItem(startrow, 2, col_aircraft)
-            
             col_realname = QtGui.QTableWidgetItem(str(row_pilot[3].encode('latin-1')), 0)
-            self.ui.PILOT_FullList.setItem(startrow, 3, col_realname)  
+            self.ui.PILOT_FullList.setItem(startrow, 3, col_realname)
             col_rating = QtGui.QTableWidgetItem(str(rating_pilot[row_pilot[2]]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)                     
 #           col_country = QtGui.QTableWidgetItem(str(row[4]), 0)
