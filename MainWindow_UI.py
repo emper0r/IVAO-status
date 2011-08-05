@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Fri Aug  5 18:40:31 2011
+# Created: Fri Aug  5 19:18:37 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -124,13 +124,22 @@ class Ui_MainWindow(object):
         self.SearchtableWidget.setGeometry(QtCore.QRect(10, 260, 451, 331))
         self.SearchtableWidget.setProperty(_fromUtf8("cursor"), QtCore.Qt.PointingHandCursor)
         self.SearchtableWidget.setAutoFillBackground(True)
+        self.SearchtableWidget.setTabKeyNavigation(False)
+        self.SearchtableWidget.setProperty(_fromUtf8("showDropIndicator"), False)
+        self.SearchtableWidget.setDragDropOverwriteMode(False)
         self.SearchtableWidget.setAlternatingRowColors(True)
         self.SearchtableWidget.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
+        self.SearchtableWidget.setGridStyle(QtCore.Qt.DotLine)
+        self.SearchtableWidget.setWordWrap(False)
         self.SearchtableWidget.setObjectName(_fromUtf8("SearchtableWidget"))
         self.SearchtableWidget.setColumnCount(0)
         self.SearchtableWidget.setRowCount(0)
+        self.SearchtableWidget.horizontalHeader().setDefaultSectionSize(25)
+        self.SearchtableWidget.horizontalHeader().setMinimumSectionSize(25)
+        self.SearchtableWidget.verticalHeader().setDefaultSectionSize(20)
+        self.SearchtableWidget.verticalHeader().setMinimumSectionSize(20)
         self.SearchForLabel = QtGui.QLabel(self.main)
-        self.SearchForLabel.setGeometry(QtCore.QRect(13, 241, 81, 16))
+        self.SearchForLabel.setGeometry(QtCore.QRect(14, 241, 81, 16))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
@@ -174,14 +183,14 @@ class Ui_MainWindow(object):
         self.MetarLabel.setCursor(QtCore.Qt.PointingHandCursor)
         self.MetarLabel.setObjectName(_fromUtf8("MetarLabel"))
         self.SearchcomboBox = QtGui.QComboBox(self.main)
-        self.SearchcomboBox.setGeometry(QtCore.QRect(95, 239, 80, 22))
+        self.SearchcomboBox.setGeometry(QtCore.QRect(95, 237, 80, 24))
         self.SearchcomboBox.setCursor(QtCore.Qt.PointingHandCursor)
         self.SearchcomboBox.setObjectName(_fromUtf8("SearchcomboBox"))
         self.SearchcomboBox.addItem(_fromUtf8(""))
         self.SearchcomboBox.addItem(_fromUtf8(""))
         self.SearchcomboBox.addItem(_fromUtf8(""))
         self.SearchEdit = QtGui.QLineEdit(self.main)
-        self.SearchEdit.setGeometry(QtCore.QRect(175, 238, 113, 20))
+        self.SearchEdit.setGeometry(QtCore.QRect(175, 237, 113, 22))
         self.SearchEdit.setCursor(QtCore.Qt.PointingHandCursor)
         self.SearchEdit.setObjectName(_fromUtf8("SearchEdit"))
         self.METAREdit = QtGui.QLineEdit(self.main)
@@ -510,6 +519,7 @@ class Ui_MainWindow(object):
         self.FriendstableWidget.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendstableWidget.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("MainWindow", "Info", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendsLabel.setText(QtGui.QApplication.translate("MainWindow", "Friends", None, QtGui.QApplication.UnicodeUTF8))
+        self.SearchtableWidget.setSortingEnabled(True)
         self.SearchForLabel.setText(QtGui.QApplication.translate("MainWindow", "Search For:", None, QtGui.QApplication.UnicodeUTF8))
         self.METARtableWidget.setSortingEnabled(True)
         self.METARtableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "Type", None, QtGui.QApplication.UnicodeUTF8))
