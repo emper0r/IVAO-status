@@ -1,4 +1,4 @@
-#!/bin/python -W
+#!/bin/python
 # Copyright (c) 2011 by Antonio (emper0r) P. Diaz <emperor.cu@gmail.com>
 #
 # GNU General Public Licence (GPL)
@@ -44,9 +44,9 @@ class Main(QtGui.QMainWindow):
         self.connect(self.ui.country_list, QtCore.SIGNAL('activated(QString)'), self.country_view)
         self.ui.PILOT_FullList.setColumnWidth(3, 170)
         self.ui.PILOT_FullList.setColumnWidth(4, 160)
-        self.ui.ATC_FullList.setColumnWidth(2, 190)
+        self.ui.PILOT_FullList.setColumnWidth(5, 105)
+        self.ui.ATC_FullList.setColumnWidth(4, 190)
         self.ui.ATC_FullList.setColumnWidth(3, 140)
-        self.ui.ATC_FullList.setColumnWidth(4, 140)
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
         countries = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes desc;")
@@ -218,14 +218,29 @@ class Main(QtGui.QMainWindow):
             self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
             col_frequency = QtGui.QTableWidgetItem(str(row_atc[1]), 0)
             self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
-            col_realname = QtGui.QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
-            self.ui.ATC_FullList.setItem(startrow, 2, col_realname)
-            col_rating = QtGui.QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
-            self.ui.ATC_FullList.setItem(startrow, 3, col_rating)
-            col_facility = QtGui.QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
-            self.ui.ATC_FullList.setItem(startrow, 4, col_facility)
             #col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
-            #self.ui.ATC_FullList.setItem(self.ui.ATC_FullList.rowCount()-1, 5, "col_country")
+            #self.ui.ATC_FullList.setItem(sstartrow, 2, "col_country")
+            col_facility = QtGui.QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
+            self.ui.ATC_FullList.setItem(startrow, 3, col_facility)
+            col_realname = QtGui.QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
+            self.ui.ATC_FullList.setItem(startrow, 4, col_realname)
+            
+            code_atc_rating = row_atc[3]
+            ratingImagePath = './ratings/atc_level%d.gif' % int(code_atc_rating)
+            try:
+                if os.path.exists(ratingImagePath) is True:
+                    Pixmap = QtGui.QPixmap(ratingImagePath)
+                    ratingImage = QtGui.QLabel(self)
+                    ratingImage.setPixmap(Pixmap)
+                    self.ui.ATC_FullList.setCellWidget(startrow, 6, ratingImage)
+                    col_rating = QtGui.QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
+                    self.ui.ATC_FullList.setItem(startrow, 5, col_rating)
+                else:
+                    col_rating = QtGui.QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
+                    self.ui.ATC_FullList.setItem(startrow, 5, col_rating)
+            except:
+                pass         
+
             start_connected = '%d:%d:%d' % (int(str(row_atc[5])[-6:-4]), int(str(row_atc[5])[-4:-2]), int(str(row_atc[5])[-2:]))
             update = time.ctime()
             now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
@@ -236,7 +251,7 @@ class Main(QtGui.QMainWindow):
             hh = diff.seconds / 60 / 60
             player_time = '%d:%d' % (hh, mm)
             col_time = QtGui.QTableWidgetItem(str(player_time), 0)
-            self.ui.ATC_FullList.setItem(startrow, 6, col_time)
+            self.ui.ATC_FullList.setItem(startrow, 7, col_time)
             startrow += 1
 
         cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport \
@@ -289,13 +304,24 @@ class Main(QtGui.QMainWindow):
             col_realname = QtGui.QTableWidgetItem(str(row_pilot[3].encode('latin-1')), 0)
             self.ui.PILOT_FullList.setItem(startrow, 3, col_realname)
             col_rating = QtGui.QTableWidgetItem(str(rating_pilot[row_pilot[2]]), 0)
-            self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)                     
-#           col_country = QtGui.QTableWidgetItem(str(row[4]), 0)
-#           self.ui.PILOT_FullList.setItem(self.ui.PILOT_FullList.rowCount()-1, 4, "col_country")
+            self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)
+
+            code_pilot_rating = row_pilot[2]
+            ratingImagePath = './ratings/pilot_level%d.gif' % int(code_pilot_rating)
+            try:
+                if os.path.exists(ratingImagePath) is True:
+                    Pixmap = QtGui.QPixmap(ratingImagePath)
+                    ratingImage = QtGui.QLabel(self)
+                    ratingImage.setPixmap(Pixmap)
+                    self.ui.PILOT_FullList.setCellWidget(startrow, 5, ratingImage)
+                else:
+                    pass
+            except:
+                pass
             col_departure = QtGui.QTableWidgetItem(str(row_pilot[4]), 0)
-            self.ui.PILOT_FullList.setItem(startrow, 5, col_departure)
+            self.ui.PILOT_FullList.setItem(startrow, 6, col_departure)
             col_destination = QtGui.QTableWidgetItem(str(row_pilot[5]), 0)
-            self.ui.PILOT_FullList.setItem(startrow, 6, col_destination)
+            self.ui.PILOT_FullList.setItem(startrow, 7, col_destination)
             start_connected = '%d:%d:%d' % (int(str(row_pilot[6])[-6:-4]), int(str(row_pilot[6])[-4:-2]), int(str(row_pilot[6])[-2:]))
             update = time.ctime()
             now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
@@ -306,7 +332,7 @@ class Main(QtGui.QMainWindow):
             hh = diff.seconds / 60 / 60
             player_time = '%d:%d' % (hh, mm)
             col_time = QtGui.QTableWidgetItem(str(player_time), 0)
-            self.ui.PILOT_FullList.setItem(startrow, 8, col_time)
+            self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             startrow += 1
         
         connection.close()
