@@ -259,9 +259,10 @@ class Main(QtGui.QMainWindow):
             airlineCodePath = './airlines/%s.gif' % code_airline
             try:
                 if os.path.exists(airlineCodePath) is True:
-                    self.airline = QtGui.QLabel(self)
-                    col_airline = self.airline.setPixmap(QtGui.QPixmap(airlineCodePath))
-                    self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
+                    Pixmap = QtGui.QPixmap(airlineCodePath)
+                    airline = QtGui.QLabel(self)
+                    airline.setPixmap(Pixmap)
+                    self.ui.PILOT_FullList.setCellWidget(startrow, 0, airline)
                 else:
                     code_airline = '-'
                     col_airline = QtGui.QTableWidgetItem(code_airline, 0)
@@ -319,7 +320,6 @@ class Main(QtGui.QMainWindow):
 
         flagCodePath = ('./flags/%s.gif') % flagCode
         Pixmap = QtGui.QPixmap(flagCodePath)
-        self.ui.flagIcon.fileName = flagCodePath
         self.ui.flagIcon.setPixmap(Pixmap)
         connection.close()
         
