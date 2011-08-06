@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Fri Aug  5 19:18:37 2011
+# Created: Fri Aug  5 22:21:31 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -388,29 +388,6 @@ class Ui_MainWindow(object):
         self.PILOT_FullList.verticalHeader().setDefaultSectionSize(25)
         self.PILOT_FullList.verticalHeader().setMinimumSectionSize(25)
         self.tabWidget.addTab(self.pilots, _fromUtf8(""))
-        self.observers = QtGui.QWidget()
-        self.observers.setObjectName(_fromUtf8("observers"))
-        self.ObservertableWidget = QtGui.QTableWidget(self.observers)
-        self.ObservertableWidget.setGeometry(QtCore.QRect(5, 8, 1001, 591))
-        self.ObservertableWidget.setProperty(_fromUtf8("cursor"), QtCore.Qt.PointingHandCursor)
-        self.ObservertableWidget.setTabKeyNavigation(False)
-        self.ObservertableWidget.setProperty(_fromUtf8("showDropIndicator"), False)
-        self.ObservertableWidget.setDragDropOverwriteMode(False)
-        self.ObservertableWidget.setAlternatingRowColors(True)
-        self.ObservertableWidget.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
-        self.ObservertableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.ObservertableWidget.setTextElideMode(QtCore.Qt.ElideMiddle)
-        self.ObservertableWidget.setGridStyle(QtCore.Qt.DotLine)
-        self.ObservertableWidget.setWordWrap(False)
-        self.ObservertableWidget.setObjectName(_fromUtf8("ObservertableWidget"))
-        self.ObservertableWidget.setColumnCount(0)
-        self.ObservertableWidget.setRowCount(0)
-        self.ObservertableWidget.horizontalHeader().setDefaultSectionSize(80)
-        self.ObservertableWidget.horizontalHeader().setMinimumSectionSize(80)
-        self.ObservertableWidget.verticalHeader().setVisible(False)
-        self.ObservertableWidget.verticalHeader().setDefaultSectionSize(20)
-        self.ObservertableWidget.verticalHeader().setMinimumSectionSize(20)
-        self.tabWidget.addTab(self.observers, _fromUtf8(""))
         self.database = QtGui.QWidget()
         self.database.setObjectName(_fromUtf8("database"))
         self.tableView = QtGui.QTableView(self.database)
@@ -571,7 +548,6 @@ class Ui_MainWindow(object):
         self.PILOT_FullList.horizontalHeaderItem(8).setText(QtGui.QApplication.translate("MainWindow", "Status", None, QtGui.QApplication.UnicodeUTF8))
         self.PILOT_FullList.horizontalHeaderItem(9).setText(QtGui.QApplication.translate("MainWindow", "Time", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.pilots), QtGui.QApplication.translate("MainWindow", "Pilots", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.observers), QtGui.QApplication.translate("MainWindow", "Observers", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.database), QtGui.QApplication.translate("MainWindow", "Database", None, QtGui.QApplication.UnicodeUTF8))
         self.Inbound_traffic.setText(QtGui.QApplication.translate("MainWindow", "Inbound Traffic", None, QtGui.QApplication.UnicodeUTF8))
         self.outbound_traffic.setText(QtGui.QApplication.translate("MainWindow", "Outbound Traffic", None, QtGui.QApplication.UnicodeUTF8))

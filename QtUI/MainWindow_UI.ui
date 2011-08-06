@@ -1042,66 +1042,6 @@
       </column>
      </widget>
     </widget>
-    <widget class="QWidget" name="observers">
-     <attribute name="title">
-      <string>Observers</string>
-     </attribute>
-     <widget class="QTableWidget" name="ObservertableWidget">
-      <property name="geometry">
-       <rect>
-        <x>5</x>
-        <y>8</y>
-        <width>1001</width>
-        <height>591</height>
-       </rect>
-      </property>
-      <property name="cursor" stdset="0">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="tabKeyNavigation">
-       <bool>false</bool>
-      </property>
-      <property name="showDropIndicator" stdset="0">
-       <bool>false</bool>
-      </property>
-      <property name="dragDropOverwriteMode">
-       <bool>false</bool>
-      </property>
-      <property name="alternatingRowColors">
-       <bool>true</bool>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::NoSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <property name="textElideMode">
-       <enum>Qt::ElideMiddle</enum>
-      </property>
-      <property name="gridStyle">
-       <enum>Qt::DotLine</enum>
-      </property>
-      <property name="wordWrap">
-       <bool>false</bool>
-      </property>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>80</number>
-      </attribute>
-      <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>80</number>
-      </attribute>
-      <attribute name="verticalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>20</number>
-      </attribute>
-      <attribute name="verticalHeaderMinimumSectionSize">
-       <number>20</number>
-      </attribute>
-     </widget>
-    </widget>
     <widget class="QWidget" name="database">
      <attribute name="title">
       <string>Database</string>
