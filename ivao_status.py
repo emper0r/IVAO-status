@@ -42,9 +42,15 @@ class Main(QtGui.QMainWindow):
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL('clicked()'), QtGui.qApp, QtCore.SLOT("quit()"))
         self.connect(self.ui.UpdateBtn, QtCore.SIGNAL('clicked()'), self.UpdateDB)
         self.connect(self.ui.country_list, QtCore.SIGNAL('activated(QString)'), self.country_view)
-        self.ui.PILOT_FullList.setColumnWidth(3, 170)
+        self.ui.PILOT_FullList.setColumnWidth(0, 90)
+        self.ui.PILOT_FullList.setColumnWidth(1, 65)
+        self.ui.PILOT_FullList.setColumnWidth(2, 60)
+        self.ui.PILOT_FullList.setColumnWidth(3, 180)
         self.ui.PILOT_FullList.setColumnWidth(4, 160)
         self.ui.PILOT_FullList.setColumnWidth(5, 105)
+        self.ui.PILOT_FullList.setColumnWidth(6, 70)
+        self.ui.PILOT_FullList.setColumnWidth(7, 75)
+        self.ui.PILOT_FullList.setColumnWidth(8, 65)
         self.ui.ATC_FullList.setColumnWidth(4, 190)
         self.ui.ATC_FullList.setColumnWidth(3, 140)
         connection = sqlite3.connect('database/ivao.db')
@@ -245,11 +251,9 @@ class Main(QtGui.QMainWindow):
             update = time.ctime()
             now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
             start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
-            update_time = datetime.datetime.strptime(now, '%H:%M:%S')
-            diff = (start - update_time)
-            mm = diff.seconds / 60
-            hh = diff.seconds / 60 / 60
-            player_time = '%d:%d' % (hh, mm)
+            now_time = datetime.datetime.strptime(now, '%H:%M:%S')
+            diff = (now_time - start)
+            player_time = str(datetime.timedelta(seconds = diff.seconds))
             col_time = QtGui.QTableWidgetItem(str(player_time), 0)
             self.ui.ATC_FullList.setItem(startrow, 7, col_time)
             startrow += 1
@@ -326,11 +330,9 @@ class Main(QtGui.QMainWindow):
             update = time.ctime()
             now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
             start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
-            update_time = datetime.datetime.strptime(now, '%H:%M:%S')
-            diff = (start - update_time)
-            mm = diff.seconds / 60
-            hh = diff.seconds / 60 / 60
-            player_time = '%d:%d' % (hh, mm)
+            now_time = datetime.datetime.strptime(now, '%H:%M:%S')
+            diff = (now_time - start)
+            player_time = str(datetime.timedelta(seconds = diff.seconds))
             col_time = QtGui.QTableWidgetItem(str(player_time), 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             startrow += 1
