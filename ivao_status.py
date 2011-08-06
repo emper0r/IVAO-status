@@ -41,6 +41,8 @@ class Main(QtGui.QMainWindow):
         self.setWindowIcon(QtGui.QIcon('./airlines/ivao.jpg'))
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL('clicked()'), QtGui.qApp, QtCore.SLOT("quit()"))
         self.connect(self.ui.UpdateBtn, QtCore.SIGNAL('clicked()'), self.UpdateDB)
+        self.connect(self.ui.searchpushButton, QtCore.SIGNAL('clicked()'), self.searchpushButton)
+        self.connect(self.ui.METARpushButton, QtCore.SIGNAL('clicked()'), self.metar)
         self.connect(self.ui.country_list, QtCore.SIGNAL('activated(QString)'), self.country_view)
         self.ui.PILOT_FullList.setColumnWidth(0, 90)
         self.ui.PILOT_FullList.setColumnWidth(1, 65)
@@ -258,7 +260,7 @@ class Main(QtGui.QMainWindow):
             self.ui.ATC_FullList.setItem(startrow, 7, col_time)
             startrow += 1
 
-        cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport \
+        cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport \
                       , planned_destairport, time_connected FROM status_ivao \
                       where clienttype='PILOT' order by vid desc;")
         rows_pilots = cursor.fetchall()
@@ -356,7 +358,13 @@ class Main(QtGui.QMainWindow):
         
         # TODO:
         # - Show only Controllers and Pilots selected from countries.
-		
+        
+    def searchpushButton(self):
+        pass
+    
+    def metar(self):
+        pass
+    
 def main():
     app = QtGui.QApplication(sys.argv)
     window = Main()
