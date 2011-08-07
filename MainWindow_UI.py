@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Sat Aug  6 14:01:00 2011
+# Created: Sat Aug  6 22:47:32 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -87,6 +87,7 @@ class Ui_MainWindow(object):
         self.FriendstableWidget.setAutoFillBackground(True)
         self.FriendstableWidget.setTabKeyNavigation(False)
         self.FriendstableWidget.setProperty(_fromUtf8("showDropIndicator"), False)
+        self.FriendstableWidget.setDragDropOverwriteMode(False)
         self.FriendstableWidget.setAlternatingRowColors(True)
         self.FriendstableWidget.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
         self.FriendstableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
@@ -132,7 +133,7 @@ class Ui_MainWindow(object):
         self.SearchtableWidget.setGridStyle(QtCore.Qt.DotLine)
         self.SearchtableWidget.setWordWrap(False)
         self.SearchtableWidget.setObjectName(_fromUtf8("SearchtableWidget"))
-        self.SearchtableWidget.setColumnCount(5)
+        self.SearchtableWidget.setColumnCount(4)
         self.SearchtableWidget.setRowCount(0)
         item = QtGui.QTableWidgetItem()
         self.SearchtableWidget.setHorizontalHeaderItem(0, item)
@@ -142,10 +143,8 @@ class Ui_MainWindow(object):
         self.SearchtableWidget.setHorizontalHeaderItem(2, item)
         item = QtGui.QTableWidgetItem()
         self.SearchtableWidget.setHorizontalHeaderItem(3, item)
-        item = QtGui.QTableWidgetItem()
-        self.SearchtableWidget.setHorizontalHeaderItem(4, item)
-        self.SearchtableWidget.horizontalHeader().setDefaultSectionSize(70)
-        self.SearchtableWidget.horizontalHeader().setMinimumSectionSize(70)
+        self.SearchtableWidget.horizontalHeader().setDefaultSectionSize(60)
+        self.SearchtableWidget.horizontalHeader().setMinimumSectionSize(60)
         self.SearchtableWidget.horizontalHeader().setStretchLastSection(True)
         self.SearchtableWidget.verticalHeader().setDefaultSectionSize(20)
         self.SearchtableWidget.verticalHeader().setMinimumSectionSize(20)
@@ -186,7 +185,7 @@ class Ui_MainWindow(object):
         self.METARtableWidget.verticalHeader().setDefaultSectionSize(15)
         self.METARtableWidget.verticalHeader().setMinimumSectionSize(15)
         self.MetarLabel = QtGui.QLabel(self.main)
-        self.MetarLabel.setGeometry(QtCore.QRect(469, 250, 51, 16))
+        self.MetarLabel.setGeometry(QtCore.QRect(469, 251, 51, 16))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
@@ -201,11 +200,11 @@ class Ui_MainWindow(object):
         self.SearchcomboBox.addItem(_fromUtf8(""))
         self.SearchcomboBox.addItem(_fromUtf8(""))
         self.SearchEdit = QtGui.QLineEdit(self.main)
-        self.SearchEdit.setGeometry(QtCore.QRect(175, 246, 113, 22))
+        self.SearchEdit.setGeometry(QtCore.QRect(175, 247, 113, 22))
         self.SearchEdit.setCursor(QtCore.Qt.PointingHandCursor)
         self.SearchEdit.setObjectName(_fromUtf8("SearchEdit"))
         self.METAREdit = QtGui.QLineEdit(self.main)
-        self.METAREdit.setGeometry(QtCore.QRect(521, 247, 61, 22))
+        self.METAREdit.setGeometry(QtCore.QRect(521, 248, 61, 22))
         self.METAREdit.setCursor(QtCore.Qt.PointingHandCursor)
         self.METAREdit.setObjectName(_fromUtf8("METAREdit"))
         self.searchpushButton = QtGui.QPushButton(self.main)
@@ -513,13 +512,13 @@ class Ui_MainWindow(object):
         self.FriendstableWidget.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Callsing", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendstableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Realname", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendstableWidget.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
+        self.FriendstableWidget.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("MainWindow", "On-Line", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendsLabel.setText(QtGui.QApplication.translate("MainWindow", "Friends", None, QtGui.QApplication.UnicodeUTF8))
         self.SearchtableWidget.setSortingEnabled(True)
         self.SearchtableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "VID", None, QtGui.QApplication.UnicodeUTF8))
-        self.SearchtableWidget.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Realname", None, QtGui.QApplication.UnicodeUTF8))
-        self.SearchtableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Callsing", None, QtGui.QApplication.UnicodeUTF8))
+        self.SearchtableWidget.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Callsing", None, QtGui.QApplication.UnicodeUTF8))
+        self.SearchtableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Realname", None, QtGui.QApplication.UnicodeUTF8))
         self.SearchtableWidget.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
-        self.SearchtableWidget.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("MainWindow", "Country", None, QtGui.QApplication.UnicodeUTF8))
         self.SearchForLabel.setText(QtGui.QApplication.translate("MainWindow", "Search For:", None, QtGui.QApplication.UnicodeUTF8))
         self.METARtableWidget.setSortingEnabled(True)
         self.METARtableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "Type", None, QtGui.QApplication.UnicodeUTF8))

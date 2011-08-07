@@ -55,6 +55,8 @@ class Main(QtGui.QMainWindow):
         self.ui.PILOT_FullList.setColumnWidth(8, 65)
         self.ui.ATC_FullList.setColumnWidth(4, 190)
         self.ui.ATC_FullList.setColumnWidth(3, 140)
+        self.ui.SearchtableWidget.setColumnWidth(1, 90)
+        self.ui.SearchtableWidget.setColumnWidth(2, 160)
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
         countries = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes desc;")
@@ -324,6 +326,7 @@ class Main(QtGui.QMainWindow):
                     pass
             except:
                 pass
+            
             col_departure = QtGui.QTableWidgetItem(str(row_pilot[4]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 6, col_departure)
             col_destination = QtGui.QTableWidgetItem(str(row_pilot[5]), 0)
@@ -360,8 +363,40 @@ class Main(QtGui.QMainWindow):
         # - Show only Controllers and Pilots selected from countries.
         
     def searchpushButton(self):
-        pass
-    
+        connection = sqlite3.connect('database/ivao.db')
+        cursor = connection.cursor()
+        arg = self.ui.SearchEdit.text()
+        item = self.ui.SearchcomboBox.currentIndex()
+        
+        if item == 0:
+            cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where vid like ?;", ('%'+str(arg)+'%',))
+        elif item == 1:
+            cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where callsign like ?;", ('%'+str(arg)+'%',))
+        elif item == 2:
+            cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where realname like ?;", ('%'+str(arg)+'%',))
+            
+        connection.commit()
+        search = cursor.fetchall()
+
+        self.ui.SearchtableWidget.insertRow(self.ui.SearchtableWidget.rowCount())
+        while self.ui.SearchtableWidget.rowCount () > 0:
+            self.ui.SearchtableWidget.removeRow(0)
+        
+        startrow = 0
+        for row in search:
+            self.ui.SearchtableWidget.insertRow(self.ui.SearchtableWidget.rowCount())
+            col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
+            self.ui.SearchtableWidget.setItem(startrow, 0, col_vid)
+            col_callsign = QtGui.QTableWidgetItem(str(row[1]), 0)
+            self.ui.SearchtableWidget.setItem(startrow, 1, col_callsign)  
+            col_realname = QtGui.QTableWidgetItem(str(row[2].encode('latin-1')), 0)            
+            self.ui.SearchtableWidget.setItem(startrow, 2, col_realname)          
+            col_rating = QtGui.QTableWidgetItem(str(row[3]), 0)
+            self.ui.SearchtableWidget.setItem(startrow, 3, col_rating)
+            startrow += 1
+            
+        connection.close()
+     
     def metar(self):
         pass
     
