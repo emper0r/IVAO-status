@@ -67,9 +67,11 @@ class Main(QtGui.QMainWindow):
         self.ui.PILOT_FullList.setColumnWidth(6, 70)
         self.ui.PILOT_FullList.setColumnWidth(7, 75)
         self.ui.PILOT_FullList.setColumnWidth(8, 65)
-        self.ui.ATC_FullList.setColumnWidth(4, 190)
+        self.ui.ATC_FullList.setColumnWidth(2, 50)
         self.ui.ATC_FullList.setColumnWidth(3, 140)
-        self.ui.SearchtableWidget.setColumnWidth(1, 90)
+        self.ui.ATC_FullList.setColumnWidth(4, 190)
+        self.ui.SearchtableWidget.setColumnWidth(0, 50)
+        self.ui.SearchtableWidget.setColumnWidth(1, 100)
         self.ui.SearchtableWidget.setColumnWidth(2, 170)
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
@@ -243,10 +245,10 @@ class Main(QtGui.QMainWindow):
                 if os.path.exists(flagCodePath) is True:
                     Pixmap = QtGui.QPixmap(flagCodePath)
                     flag_country = QtGui.QLabel()
-                    self.ui.flag_country.setPixmap(Pixmap)
-                    self.ui.ATC_FullList.setItem(startrow, 2, flag_country)
+                    flag_country.setPixmap(Pixmap)
+                    self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
                 else:
-                    col_country = QtGui.QTableWidgetItem(str(flagCode), 0)
+                    col_country = QtGui.QTableWidgetItem(str(flagCode).encode('latin-1'), 0)
                     self.ui.ATC_FullList.setItem(startrow, 2, col_country)
             except:
                 pass
