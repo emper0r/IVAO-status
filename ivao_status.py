@@ -240,7 +240,7 @@ class Main(QtGui.QMainWindow):
             cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE ICAO=?", (str(code_icao),))
             flagCode = cursor.fetchone()
             connection.commit()
-            flagCodePath = ('./flags/%s.gif') % flagCode
+            flagCodePath = ('./flags/%s.png') % flagCode
             try:
                 if os.path.exists(flagCodePath) is True:
                     Pixmap = QtGui.QPixmap(flagCodePath)
@@ -372,7 +372,7 @@ class Main(QtGui.QMainWindow):
         flagCode = cursor.fetchone()
         connection.commit()
 
-        flagCodePath = ('./flags/%s.gif') % country_selected
+        flagCodePath = ('./flags/%s.png') % country_selected
         Pixmap = QtGui.QPixmap(flagCodePath)
         self.ui.flagIcon.setPixmap(Pixmap)
         connection.close()
