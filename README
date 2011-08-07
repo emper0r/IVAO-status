@@ -16,8 +16,9 @@ Free Software.
 
 Before run this software need some dependencies as require listed below:
 
-python-qt4
-libsqlite3-0
+python-qt4 >= 4.8.3
+sqlite3 >= 3.7.4
+libsqlite3-0 >= 3.7.4
 
 Preparing the database
 

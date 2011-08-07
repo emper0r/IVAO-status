@@ -29,6 +29,20 @@ import datetime
 
 IVAO_STATUS = 'whazzup.txt'
 
+rating_pilot = {"1":"OBS - Observer", "2":"SFO - Second Flight Officer", "3":"FFO - First Flight Officer" \
+                , "4":"C - Captain", "5":"FC - Flight Captain", "6":"SC - Senior Captain" \
+                , "7":"SFC - Senior Flight Captain", "8":"CC - Commercial Captain" \
+                , "9":"CFC - Commercial Flight Captain", "10":"CSC - Commercial Senior Captain" \
+                , "11":"SUP - Supervisor", "12":"ADM - Administrator"}
+
+rating_atc = {"1":"OBS - Observer", "2":"S1 - Student 1", "3":"S2 - Student 2" \
+          , "4":"S3 - Student 3", "5":"C1 - Controller 1", "6":"C2 - Controller 2" \
+          , "7":"C3 - Controller 3", "8":"I1 - Instructor 1", "9":"I2 - Instructor 2" \
+          , "10":"I3 - Instructor 3", "11":"SUP - Supervisor", "12":"ADM - Administrator"}
+
+position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
+                        , "3":"Ground", "4":"Tower", "5":"Approach/Departure", "6":"Center"}
+
 class Main(QtGui.QMainWindow):
     def __init__(self,):
         QtGui.QMainWindow.__init__(self)
@@ -56,7 +70,7 @@ class Main(QtGui.QMainWindow):
         self.ui.ATC_FullList.setColumnWidth(4, 190)
         self.ui.ATC_FullList.setColumnWidth(3, 140)
         self.ui.SearchtableWidget.setColumnWidth(1, 90)
-        self.ui.SearchtableWidget.setColumnWidth(2, 160)
+        self.ui.SearchtableWidget.setColumnWidth(2, 170)
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
         countries = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes desc;")
@@ -209,14 +223,6 @@ class Main(QtGui.QMainWindow):
         rows_atcs = cursor.fetchall()
                 
         startrow = 0
-
-        rating_atc = {"1":"OBS - Observer", "2":"S1 - Student 1", "3":"S2 - Student 2" \
-                  , "4":"S3 - Student 3", "5":"C1 - Controller 1", "6":"C2 - Controller 2" \
-                  , "7":"C3 - Controller 3", "8":"I1 - Instructor 1", "9":"I2 - Instructor 2" \
-                  , "10":"I3 - Instructor 3", "11":"SUP - Supervisor", "12":"ADM - Administrator"}
-        
-        position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
-                        , "3":"Ground", "4":"Tower", "5":"Approach/Departure", "6":"Center"}
        
         self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
         while self.ui.ATC_FullList.rowCount () > 0:
@@ -249,7 +255,7 @@ class Main(QtGui.QMainWindow):
                     col_rating = QtGui.QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
                     self.ui.ATC_FullList.setItem(startrow, 5, col_rating)
             except:
-                pass         
+                pass
 
             start_connected = '%d:%d:%d' % (int(str(row_atc[5])[-6:-4]), int(str(row_atc[5])[-4:-2]), int(str(row_atc[5])[-2:]))
             update = time.ctime()
@@ -268,11 +274,6 @@ class Main(QtGui.QMainWindow):
         rows_pilots = cursor.fetchall()
 
         startrow = 0
-        rating_pilot = {"1":"OBS - Observer", "2":"SFO - Second Flight Officer", "3":"FFO - First Flight Officer" \
-                        , "4":"C - Captain", "5":"FC - Flight Captain", "6":"SC - Senior Captain" \
-                        , "7":"SFC - Senior Flight Captain", "8":"CC - Commercial Captain" \
-                        , "9":"CFC - Commercial Flight Captain", "10":"CSC - Commercial Senior Captain" \
-                        , "11":"SUP - Supervisor", "12":"ADM - Administrator"}
         
         self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
         while self.ui.PILOT_FullList.rowCount () > 0:
@@ -293,9 +294,9 @@ class Main(QtGui.QMainWindow):
                 else:
                     code_airline = '-'
                     col_airline = QtGui.QTableWidgetItem(code_airline, 0)
-                    self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)   
+                    self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
             except:
-                pass         
+                pass
 
             col_callsign = QtGui.QTableWidgetItem(str(row_pilot[0]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 1, col_callsign)
@@ -309,7 +310,7 @@ class Main(QtGui.QMainWindow):
             
             col_aircraft = QtGui.QTableWidgetItem(aircraft, 0)
             self.ui.PILOT_FullList.setItem(startrow, 2, col_aircraft)
-            col_realname = QtGui.QTableWidgetItem(str(row_pilot[3].encode('latin-1')), 0)
+            col_realname = QtGui.QTableWidgetItem(str(row_pilot[3][:-5].encode('latin-1')), 0)
             self.ui.PILOT_FullList.setItem(startrow, 3, col_realname)
             col_rating = QtGui.QTableWidgetItem(str(rating_pilot[row_pilot[2]]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)
@@ -388,11 +389,25 @@ class Main(QtGui.QMainWindow):
             col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
             self.ui.SearchtableWidget.setItem(startrow, 0, col_vid)
             col_callsign = QtGui.QTableWidgetItem(str(row[1]), 0)
-            self.ui.SearchtableWidget.setItem(startrow, 1, col_callsign)  
-            col_realname = QtGui.QTableWidgetItem(str(row[2].encode('latin-1')), 0)            
-            self.ui.SearchtableWidget.setItem(startrow, 2, col_realname)          
-            col_rating = QtGui.QTableWidgetItem(str(row[3]), 0)
-            self.ui.SearchtableWidget.setItem(startrow, 3, col_rating)
+            self.ui.SearchtableWidget.setItem(startrow, 1, col_callsign)
+            col_realname = QtGui.QTableWidgetItem(str(row[2].encode('latin-1')), 0)
+            self.ui.SearchtableWidget.setItem(startrow, 2, col_realname)
+            if row[4] == 'PILOT':
+                player = 'pilot_level'
+            else:
+                player = 'atc_level'
+            ratingImagePath = './ratings/%s%d.gif' % (player, int(row[3]))
+            try:
+                if os.path.exists(ratingImagePath) is True:
+                    Pixmap = QtGui.QPixmap(ratingImagePath)
+                    ratingImage = QtGui.QLabel(self)
+                    ratingImage.setPixmap(Pixmap)
+                    self.ui.SearchtableWidget.setCellWidget(startrow, 3, ratingImage)
+                else:
+                    pass
+            except:
+                pass
+            
             startrow += 1
             
         connection.close()
