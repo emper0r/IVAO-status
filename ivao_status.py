@@ -227,20 +227,33 @@ class Main(QtGui.QMainWindow):
         self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
         while self.ui.ATC_FullList.rowCount () > 0:
             self.ui.ATC_FullList.removeRow(0)
-
+        
         for row_atc in rows_atcs:
             self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
             col_callsign = QtGui.QTableWidgetItem(str(row_atc[0]), 0)
             self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
             col_frequency = QtGui.QTableWidgetItem(str(row_atc[1]), 0)
             self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
-            #col_country = QtGui.QTableWidgetItem(str(row[1]), 0)
-            #self.ui.ATC_FullList.setItem(sstartrow, 2, "col_country")
+            code_icao = str(row_atc[0][:4])
+            cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE ICAO=?", (str(code_icao),))
+            flagCode = cursor.fetchone()
+            connection.commit()
+            flagCodePath = ('./flags/%s.gif') % flagCode
+            try:
+                if os.path.exists(flagCodePath) is True:
+                    Pixmap = QtGui.QPixmap(flagCodePath)
+                    flag_country = QtGui.QLabel()
+                    self.ui.flag_country.setPixmap(Pixmap)
+                    self.ui.ATC_FullList.setItem(startrow, 2, flag_country)
+                else:
+                    col_country = QtGui.QTableWidgetItem(str(flagCode), 0)
+                    self.ui.ATC_FullList.setItem(startrow, 2, col_country)
+            except:
+                pass
             col_facility = QtGui.QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
             self.ui.ATC_FullList.setItem(startrow, 3, col_facility)
             col_realname = QtGui.QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
-            self.ui.ATC_FullList.setItem(startrow, 4, col_realname)
-            
+            self.ui.ATC_FullList.setItem(startrow, 4, col_realname)            
             code_atc_rating = row_atc[3]
             ratingImagePath = './ratings/atc_level%d.gif' % int(code_atc_rating)
             try:
@@ -256,8 +269,10 @@ class Main(QtGui.QMainWindow):
                     self.ui.ATC_FullList.setItem(startrow, 5, col_rating)
             except:
                 pass
-
-            start_connected = '%d:%d:%d' % (int(str(row_atc[5])[-6:-4]), int(str(row_atc[5])[-4:-2]), int(str(row_atc[5])[-2:]))
+            try:
+                start_connected = '%d:%d:%d' % (int(str(row_atc[5])[-6:-4]), int(str(row_atc[5])[-4:-2]), int(str(row_atc[5])[-2:]))
+            except:
+                pass
             update = time.ctime()
             now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
             start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
@@ -267,7 +282,7 @@ class Main(QtGui.QMainWindow):
             col_time = QtGui.QTableWidgetItem(str(player_time), 0)
             self.ui.ATC_FullList.setItem(startrow, 7, col_time)
             startrow += 1
-
+        
         cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport \
                       , planned_destairport, time_connected FROM status_ivao \
                       where clienttype='PILOT' order by vid desc;")
@@ -351,11 +366,11 @@ class Main(QtGui.QMainWindow):
         country_selected = self.ui.country_list.currentText()
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
-        cursor.execute("SELECT DISTINCT(flagCode) FROM iata_icao_codes WHERE Country=?", (str(country_selected),))
+        cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE Country=?", (str(country_selected),))
         flagCode = cursor.fetchone()
         connection.commit()
 
-        flagCodePath = ('./flags/%s.gif') % flagCode
+        flagCodePath = ('./flags/%s.gif') % country_selected
         Pixmap = QtGui.QPixmap(flagCodePath)
         self.ui.flagIcon.setPixmap(Pixmap)
         connection.close()
