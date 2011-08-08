@@ -67,12 +67,16 @@ class Main(QtGui.QMainWindow):
         self.ui.PILOT_FullList.setColumnWidth(6, 70)
         self.ui.PILOT_FullList.setColumnWidth(7, 75)
         self.ui.PILOT_FullList.setColumnWidth(8, 65)
+        self.ui.ATC_FullList.setColumnWidth(1, 70)
         self.ui.ATC_FullList.setColumnWidth(2, 50)
         self.ui.ATC_FullList.setColumnWidth(3, 140)
         self.ui.ATC_FullList.setColumnWidth(4, 190)
         self.ui.SearchtableWidget.setColumnWidth(0, 50)
         self.ui.SearchtableWidget.setColumnWidth(1, 100)
         self.ui.SearchtableWidget.setColumnWidth(2, 170)
+        Pixmap = QtGui.QPixmap('./airlines/ivao.jpg')
+        self.ui.logo_ivao.setPixmap(Pixmap)
+        self.ui.logo_ivao.show()
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
         countries = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes desc;")
@@ -407,11 +411,13 @@ class Main(QtGui.QMainWindow):
             self.ui.SearchtableWidget.setItem(startrow, 0, col_vid)
             col_callsign = QtGui.QTableWidgetItem(str(row[1]), 0)
             self.ui.SearchtableWidget.setItem(startrow, 1, col_callsign)
-            col_realname = QtGui.QTableWidgetItem(str(row[2].encode('latin-1')), 0)
-            self.ui.SearchtableWidget.setItem(startrow, 2, col_realname)
             if row[4] == 'PILOT':
+                col_realname = QtGui.QTableWidgetItem(str(row[2][:-4].encode('latin-1')), 0)
+                self.ui.SearchtableWidget.setItem(startrow, 2, col_realname)
                 player = 'pilot_level'
             else:
+                col_realname = QtGui.QTableWidgetItem(str(row[2].encode('latin-1')), 0)
+                self.ui.SearchtableWidget.setItem(startrow, 2, col_realname)
                 player = 'atc_level'
             ratingImagePath = './ratings/%s%d.gif' % (player, int(row[3]))
             try:

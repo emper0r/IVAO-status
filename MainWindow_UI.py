@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Sat Aug  6 22:47:32 2011
+# Created: Sun Aug  7 20:37:02 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -33,10 +33,12 @@ class Ui_MainWindow(object):
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
         self.tabWidget.setGeometry(QtCore.QRect(4, 30, 1015, 631))
         self.tabWidget.setCursor(QtCore.Qt.PointingHandCursor)
+        self.tabWidget.setAutoFillBackground(True)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.main = QtGui.QWidget()
         self.main.setObjectName(_fromUtf8("main"))
         self.IVAOStatustableWidget = QtGui.QTableWidget(self.main)
+        self.IVAOStatustableWidget.setEnabled(True)
         self.IVAOStatustableWidget.setGeometry(QtCore.QRect(9, 22, 451, 211))
         self.IVAOStatustableWidget.setProperty(_fromUtf8("cursor"), QtCore.Qt.PointingHandCursor)
         self.IVAOStatustableWidget.setAutoFillBackground(True)
@@ -45,7 +47,7 @@ class Ui_MainWindow(object):
         self.IVAOStatustableWidget.setDragDropOverwriteMode(False)
         self.IVAOStatustableWidget.setAlternatingRowColors(True)
         self.IVAOStatustableWidget.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
-        self.IVAOStatustableWidget.setTextElideMode(QtCore.Qt.ElideMiddle)
+        self.IVAOStatustableWidget.setTextElideMode(QtCore.Qt.ElideNone)
         self.IVAOStatustableWidget.setGridStyle(QtCore.Qt.DotLine)
         self.IVAOStatustableWidget.setWordWrap(False)
         self.IVAOStatustableWidget.setObjectName(_fromUtf8("IVAOStatustableWidget"))
@@ -124,12 +126,15 @@ class Ui_MainWindow(object):
         self.SearchtableWidget = QtGui.QTableWidget(self.main)
         self.SearchtableWidget.setGeometry(QtCore.QRect(10, 270, 451, 321))
         self.SearchtableWidget.setProperty(_fromUtf8("cursor"), QtCore.Qt.PointingHandCursor)
+        self.SearchtableWidget.setAccessibleName(_fromUtf8(""))
         self.SearchtableWidget.setAutoFillBackground(True)
         self.SearchtableWidget.setTabKeyNavigation(False)
         self.SearchtableWidget.setProperty(_fromUtf8("showDropIndicator"), False)
         self.SearchtableWidget.setDragDropOverwriteMode(False)
         self.SearchtableWidget.setAlternatingRowColors(True)
-        self.SearchtableWidget.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
+        self.SearchtableWidget.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
+        self.SearchtableWidget.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        self.SearchtableWidget.setTextElideMode(QtCore.Qt.ElideNone)
         self.SearchtableWidget.setGridStyle(QtCore.Qt.DotLine)
         self.SearchtableWidget.setWordWrap(False)
         self.SearchtableWidget.setObjectName(_fromUtf8("SearchtableWidget"))
@@ -490,6 +495,15 @@ class Ui_MainWindow(object):
         self.action_update.setFont(font)
         self.action_update.setCursor(QtCore.Qt.PointingHandCursor)
         self.action_update.setObjectName(_fromUtf8("action_update"))
+        self.logo_ivao = QtGui.QLabel(self.centralwidget)
+        self.logo_ivao.setGeometry(QtCore.QRect(940, 0, 71, 51))
+        self.logo_ivao.setCursor(QtCore.Qt.PointingHandCursor)
+        self.logo_ivao.setText(_fromUtf8(""))
+        self.logo_ivao.setTextFormat(QtCore.Qt.PlainText)
+        self.logo_ivao.setPixmap(QtGui.QPixmap(_fromUtf8("../airlines/ivao.jpg")))
+        self.logo_ivao.setScaledContents(True)
+        self.logo_ivao.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
+        self.logo_ivao.setObjectName(_fromUtf8("logo_ivao"))
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
