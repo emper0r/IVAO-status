@@ -56,8 +56,9 @@ class Main(QtGui.QMainWindow):
         self.connect(self.ui.ExitBtn, QtCore.SIGNAL('clicked()'), QtGui.qApp, QtCore.SLOT("quit()"))
         self.connect(self.ui.UpdateBtn, QtCore.SIGNAL('clicked()'), self.UpdateDB)
         self.connect(self.ui.searchpushButton, QtCore.SIGNAL('clicked()'), self.searchpushButton)
-        self.connect(self.ui.METARpushButton, QtCore.SIGNAL('clicked()'), self.metar)
+        self.connect(self.ui.METARFindButton, QtCore.SIGNAL('clicked()'), self.metar)
         self.connect(self.ui.country_list, QtCore.SIGNAL('activated(QString)'), self.country_view)
+        self.connect(self.ui.METARHelpButton, QtCore.SIGNAL('clicked()'), self.metarHelp)
         self.ui.PILOT_FullList.setColumnWidth(0, 90)
         self.ui.PILOT_FullList.setColumnWidth(1, 65)
         self.ui.PILOT_FullList.setColumnWidth(2, 60)
@@ -98,12 +99,16 @@ class Main(QtGui.QMainWindow):
             self.ui.country_list.addItem(country)
 
         connection.close()
+        
+        self.timer = Qt.QTimer(self)
+        self.timer.setInterval(300000)
+        self.timer.timeout.connect(self.UpdateDB)
+        self.timer.start()
 
     def UpdateDB(self):
 
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
-
         cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM status_ivao;")
 
@@ -192,7 +197,6 @@ class Main(QtGui.QMainWindow):
              , time_last_atis_received, time_connected, client_software_name, client_software_version \
              , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
              , onground))
-
         connection.commit()
         
         cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
@@ -240,7 +244,6 @@ class Main(QtGui.QMainWindow):
         rows_atcs = cursor.fetchall()
                 
         startrow = 0
-       
         self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
         while self.ui.ATC_FullList.rowCount () > 0:
             self.ui.ATC_FullList.removeRow(0)
@@ -305,8 +308,7 @@ class Main(QtGui.QMainWindow):
                       where clienttype='PILOT' order by vid desc;")
         rows_pilots = cursor.fetchall()
 
-        startrow = 0
-        
+        startrow = 0        
         self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
         while self.ui.PILOT_FullList.rowCount () > 0:
             self.ui.PILOT_FullList.removeRow(0)
@@ -379,7 +381,6 @@ class Main(QtGui.QMainWindow):
         self.ui.action_update.setText("Ready")
         
     def  country_view(self):
-
         country_selected = self.ui.country_list.currentText()
         connection = sqlite3.connect('database/ivao.db')
         cursor = connection.cursor()
@@ -414,7 +415,7 @@ class Main(QtGui.QMainWindow):
         self.ui.SearchtableWidget.insertRow(self.ui.SearchtableWidget.rowCount())
         while self.ui.SearchtableWidget.rowCount () > 0:
             self.ui.SearchtableWidget.removeRow(0)
-        
+
         startrow = 0
         for row in search:
             self.ui.SearchtableWidget.insertRow(self.ui.SearchtableWidget.rowCount())
@@ -441,14 +442,35 @@ class Main(QtGui.QMainWindow):
                     pass
             except:
                 pass
-            
+
             startrow += 1
-            
         connection.close()
      
     def metar(self):
-        pass
+        icao_airport = self.ui.METAREdit.text()
+        METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
+
+        if self.ui.METARtableWidget.rowCount() == 0:
+            self.ui.METARtableWidget.insertRow(self.ui.METARtableWidget.rowCount())
+            col_icao_airport = QtGui.QTableWidgetItem(str(icao_airport), 0)
+            self.ui.METARtableWidget.setItem(0, 0, col_icao_airport)
+            col_metar = QtGui.QTableWidgetItem(str(METAR.readlines()[0]), 0)
+            self.ui.METARtableWidget.setItem(0, 1, col_metar)
+            startrow = 1
+        else:
+            self.ui.METARtableWidget.rowCount() > 0
+            startrow = self.ui.METARtableWidget.rowCount()
+            self.ui.METARtableWidget.insertRow(self.ui.METARtableWidget.rowCount())
+            col_icao_airport = QtGui.QTableWidgetItem(str(icao_airport), 0)
+            self.ui.METARtableWidget.setItem(startrow, 0, col_icao_airport)
+            col_metar = QtGui.QTableWidgetItem(str(METAR.readlines()[0]), 0)
+            self.ui.METARtableWidget.setItem(startrow, 1, col_metar)
+            startrow += 1
     
+    def metarHelp(self):
+        msg = 'Must be entered 4-character alphanumeric code designated for each airport around the world'
+        QtGui.QMessageBox.information(None, 'METAR Help', msg)
+        
 def main():
     app = QtGui.QApplication(sys.argv)
     window = Main()
