@@ -89,6 +89,9 @@ class Main(QtGui.QMainWindow):
         self.ui.SearchtableWidget.setColumnWidth(0, 50)
         self.ui.SearchtableWidget.setColumnWidth(1, 100)
         self.ui.SearchtableWidget.setColumnWidth(2, 170)
+        self.ui.dbTableWidget_2.setColumnWidth(0, 70)
+        self.ui.dbTableWidget_2.setColumnWidth(1, 70)
+        self.ui.dbTableWidget_2.setColumnWidth(2, 110)
         self.ui.PILOT_FullList.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.ui.ATC_FullList.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.ui.FriendstableWidget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
@@ -103,15 +106,58 @@ class Main(QtGui.QMainWindow):
         Pixmap = QtGui.QPixmap('./airlines/ivao.jpg')
         self.ui.logo_ivao.setPixmap(Pixmap)
         self.ui.logo_ivao.show()
+        
         connection = sqlite3.connect('database/ivao.db')
-        cursor = connection.cursor()
-        countries = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes desc;")
+        cursor = connection.cursor()   
+        db_t1 = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes DESC;")
+        db_t1 = cursor.fetchall()
         connection.commit()
-
-        for line in countries:
-            country = "%s" % line
+        startrow_dbt1 = 0
+        
+        db_t2 = cursor.execute("SELECT icao, iata, Airport_Name, Country FROM iata_icao_codes DESC;")
+        db_t2 = cursor.fetchall()
+        connection.commit()
+        startrow_dbt2 = 0
+        
+        for line in db_t1:
+            if line[0] == None:
+                self.ui.dbTableWidget_1.removeRow(self.ui.dbTableWidget_1.rowCount())
+            else:
+                pass
+            country = "%s" % line[0]
             self.ui.country_list.addItem(country)
+            self.ui.dbTableWidget_1.insertRow(self.ui.dbTableWidget_1.rowCount())
+            flagCodePath = ('./flags/%s.png') % line
+            if os.path.exists(flagCodePath) is True:
+                Pixmap = QtGui.QPixmap(flagCodePath)
+                flag_country = QtGui.QLabel()
+                flag_country.setPixmap(Pixmap)
+                self.ui.dbTableWidget_1.setCellWidget(startrow_dbt1, 0, flag_country)
+            else:
+                pass
+            country = QtGui.QTableWidgetItem(str(line[0]).encode('utf-8'), 0)
+            self.ui.dbTableWidget_1.setItem(startrow_dbt1, 1, country)
+            startrow_dbt1 += 1
 
+        for line in db_t2:
+            if line[0] == None:
+                self.ui.dbTableWidget_2.removeRow(self.ui.dbTableWidget_2.rowCount())
+            else:
+                pass
+            self.ui.dbTableWidget_2.insertRow(self.ui.dbTableWidget_2.rowCount())
+            icao = QtGui.QTableWidgetItem(str(line[0]), 0)
+            self.ui.dbTableWidget_2.setItem(startrow_dbt2, 0, icao)
+            iata = QtGui.QTableWidgetItem(str(line[1]), 0)
+            self.ui.dbTableWidget_2.setItem(startrow_dbt2, 1, iata)
+            AirportName = QtGui.QTableWidgetItem(str(line[2].encode('utf-8')), 0)
+            self.ui.dbTableWidget_2.setItem(startrow_dbt2, 2, AirportName)
+            try:
+                Country = QtGui.QTableWidgetItem(str(line[3].encode('utf-8')), 0)
+                self.ui.dbTableWidget_2.setItem(startrow_dbt2, 3, Country)
+            except:
+                pass
+            startrow_dbt2 += 1
+        
         connection.close()
         
         self.timer = Qt.QTimer(self)
