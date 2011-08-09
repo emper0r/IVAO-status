@@ -172,7 +172,12 @@ class Main(QtGui.QMainWindow):
         cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM status_ivao;")
 
-        StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + IVAO_STATUS)
+        try:
+            StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + IVAO_STATUS)
+        except:
+            msg = 'Error!, when trying to download database status from IVAO. Check your connection to Internet.'
+            QtGui.QMessageBox.information(None, 'Updating DB troubles', msg)
+            sys.exit(0)
         
         pilot_list = []
         atc_list = []
