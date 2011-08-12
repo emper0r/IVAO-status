@@ -538,70 +538,70 @@ class Main(QtGui.QMainWindow):
                 self.ui.ATCtableWidget.setItem(startrow, 7, col_time)
                 startrow += 1
     
-                for row_pilot in rows_pilots:
-                    self.ui.PilottableWidget.setCurrentCell(0, 0)
-                    self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
+            for row_pilot in rows_pilots:
+                self.ui.PilottableWidget.setCurrentCell(0, 0)
+                self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
+            
+                code_airline = row_pilot[0][:3]
+                airlineCodePath = './airlines/%s.gif' % code_airline
+                try:
+                    if os.path.exists(airlineCodePath) is True:
+                        Pixmap = QtGui.QPixmap(airlineCodePath)
+                        airline = QtGui.QLabel(self)
+                        airline.setPixmap(Pixmap)
+                        self.ui.PilottableWidget.setCellWidget(startrow_p, 0, airline)
+                    else:
+                        code_airline = '-'
+                        col_airline = QtGui.QTableWidgetItem(code_airline, 0)
+                        self.ui.PilottableWidget.setItem(startrow_p, 0, col_airline)
+                except:
+                    pass
+    
+                col_callsign = QtGui.QTableWidgetItem(str(row_pilot[0]), 0)
+                self.ui.PilottableWidget.setItem(startrow_p, 1, col_callsign)
                 
-                    code_airline = row_pilot[0][:3]
-                    airlineCodePath = './airlines/%s.gif' % code_airline
-                    try:
-                        if os.path.exists(airlineCodePath) is True:
-                            Pixmap = QtGui.QPixmap(airlineCodePath)
-                            airline = QtGui.QLabel(self)
-                            airline.setPixmap(Pixmap)
-                            self.ui.PilottableWidget.setCellWidget(startrow_p, 0, airline)
-                        else:
-                            code_airline = '-'
-                            col_airline = QtGui.QTableWidgetItem(code_airline, 0)
-                            self.ui.PilottableWidget.setItem(startrow_p, 0, col_airline)
-                    except:
+                try:
+                    aircraft = row_pilot[1].split('/')[1]
+                    if aircraft != '-':
                         pass
-        
-                    col_callsign = QtGui.QTableWidgetItem(str(row_pilot[0]), 0)
-                    self.ui.PilottableWidget.setItem(startrow_p, 1, col_callsign)
-                    
-                    try:
-                        aircraft = row_pilot[1].split('/')[1]
-                        if aircraft != '-':
-                            pass
-                    except:
-                        aircraft = '-'
-                    
-                    col_aircraft = QtGui.QTableWidgetItem(aircraft, 0)
-                    self.ui.PilottableWidget.setItem(startrow_p, 2, col_aircraft)
-                    col_realname = QtGui.QTableWidgetItem(str(row_pilot[3][:-5].encode('latin-1')), 0)
-                    self.ui.PilottableWidget.setItem(startrow_p, 3, col_realname)
-                    col_rating = QtGui.QTableWidgetItem(str(rating_pilot[row_pilot[2]]), 0)
-                    self.ui.PilottableWidget.setItem(startrow_p, 4, col_rating)
-        
-                    code_pilot_rating = row_pilot[2]
-                    ratingImagePath = './ratings/pilot_level%d.gif' % int(code_pilot_rating)
-                    try:
-                        if os.path.exists(ratingImagePath) is True:
-                            Pixmap = QtGui.QPixmap(ratingImagePath)
-                            ratingImage = QtGui.QLabel(self)
-                            ratingImage.setPixmap(Pixmap)
-                            self.ui.PilottableWidget.setCellWidget(startrow_p, 5, ratingImage)
-                        else:
-                            pass
-                    except:
-                        pass
-                    
-                    col_departure = QtGui.QTableWidgetItem(str(row_pilot[4]), 0)
-                    self.ui.PilottableWidget.setItem(startrow_p, 6, col_departure)
-                    col_destination = QtGui.QTableWidgetItem(str(row_pilot[5]), 0)
-                    self.ui.PilottableWidget.setItem(startrow_p, 7, col_destination)
-                    start_connected = '%d:%d:%d' % (int(str(row_pilot[6])[-6:-4]), int(str(row_pilot[6])[-4:-2]), int(str(row_pilot[6])[-2:]))
-                    update = time.ctime()
-                    now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
-                    start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
-                    now_time = datetime.datetime.strptime(now, '%H:%M:%S')
-                    diff = (now_time - start)
-                    player_time = str(datetime.timedelta(seconds = diff.seconds))
-                    col_time = QtGui.QTableWidgetItem(str(player_time), 0)
-                    self.ui.PilottableWidget.setItem(startrow_p, 9, col_time)
-                    startrow_p += 1
+                except:
+                    aircraft = '-'
                 
+                col_aircraft = QtGui.QTableWidgetItem(aircraft, 0)
+                self.ui.PilottableWidget.setItem(startrow_p, 2, col_aircraft)
+                col_realname = QtGui.QTableWidgetItem(str(row_pilot[3][:-5].encode('latin-1')), 0)
+                self.ui.PilottableWidget.setItem(startrow_p, 3, col_realname)
+                col_rating = QtGui.QTableWidgetItem(str(rating_pilot[row_pilot[2]]), 0)
+                self.ui.PilottableWidget.setItem(startrow_p, 4, col_rating)
+    
+                code_pilot_rating = row_pilot[2]
+                ratingImagePath = './ratings/pilot_level%d.gif' % int(code_pilot_rating)
+                try:
+                    if os.path.exists(ratingImagePath) is True:
+                        Pixmap = QtGui.QPixmap(ratingImagePath)
+                        ratingImage = QtGui.QLabel(self)
+                        ratingImage.setPixmap(Pixmap)
+                        self.ui.PilottableWidget.setCellWidget(startrow_p, 5, ratingImage)
+                    else:
+                        pass
+                except:
+                    pass
+                
+                col_departure = QtGui.QTableWidgetItem(str(row_pilot[4]), 0)
+                self.ui.PilottableWidget.setItem(startrow_p, 6, col_departure)
+                col_destination = QtGui.QTableWidgetItem(str(row_pilot[5]), 0)
+                self.ui.PilottableWidget.setItem(startrow_p, 7, col_destination)
+                start_connected = '%d:%d:%d' % (int(str(row_pilot[6])[-6:-4]), int(str(row_pilot[6])[-4:-2]), int(str(row_pilot[6])[-2:]))
+                update = time.ctime()
+                now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
+                start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
+                now_time = datetime.datetime.strptime(now, '%H:%M:%S')
+                diff = (now_time - start)
+                player_time = str(datetime.timedelta(seconds = diff.seconds))
+                col_time = QtGui.QTableWidgetItem(str(player_time), 0)
+                self.ui.PilottableWidget.setItem(startrow_p, 9, col_time)
+                startrow_p += 1
+            
         connection.close()
         #self.ui.action_update.setText("Ready")
         
