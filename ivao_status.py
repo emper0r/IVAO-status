@@ -89,7 +89,7 @@ class Main(QtGui.QMainWindow):
         self.ui.SearchtableWidget.setColumnWidth(0, 50)
         self.ui.SearchtableWidget.setColumnWidth(1, 100)
         self.ui.SearchtableWidget.setColumnWidth(2, 170)
-        self.ui.dbTableWidget_2.setColumnWidth(0, 70)
+        self.ui.dbTableWidget_2.setColumnWidth(0, 75)
         self.ui.dbTableWidget_2.setColumnWidth(1, 70)
         self.ui.dbTableWidget_2.setColumnWidth(2, 110)
         self.ui.PILOT_FullList.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
