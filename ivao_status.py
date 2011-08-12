@@ -191,10 +191,6 @@ class Main(QtGui.QMainWindow):
         self.ui.IVAOStatustableWidget.setCurrentCell(0, 0)
         pilots_ivao = QtGui.QTableWidgetItem(str(len(pilot_list)))
         self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
-        atcs_ivao = QtGui.QTableWidgetItem(str(len(atc_list)))
-        self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
-        total_ivao = QtGui.QTableWidgetItem(str(len(atc_list) + len(pilot_list)))
-        self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
         
         for rows in pilot_list:
             fields = rows.split(":")
@@ -442,7 +438,17 @@ class Main(QtGui.QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             startrow += 1
         
-        connection.close()
+	cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC' AND callsign like '%OBS%';")
+	connection.commit()
+	obs = cursor.fetchone()
+	obs_ivao = QtGui.QTableWidgetItem(str(int(obs[0])))
+        atcs_ivao = QtGui.QTableWidgetItem(str((len(atc_list) - int(obs[0]))))
+        self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
+	self.ui.IVAOStatustableWidget.setItem(0, 2, obs_ivao)
+        total_ivao = QtGui.QTableWidgetItem(str(len(atc_list) + len(pilot_list)))
+        self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
+        
+	connection.close()
         self.ui.action_update.setText("Ready")
         
     def  country_view(self):

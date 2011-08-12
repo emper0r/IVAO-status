@@ -263,7 +263,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Callsing</string>
+        <string>Callsign</string>
        </property>
       </column>
       <column>
@@ -374,7 +374,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Callsing</string>
+        <string>Callsign</string>
        </property>
       </column>
       <column>
