@@ -661,6 +661,13 @@ class Main(QtGui.QMainWindow):
                 pass
 
             startrow += 1
+        
+    def addFriend(self, event):
+        menu = Qt.QMenu(self)
+        addFriend = menu.addAction("Quit")
+        addFriend = menu.exec_(self.ui.SearchtableWidget.indexAt(event.pos()))
+        if action == quitAction:
+            qApp.quit()
         connection.close()
 
     def metar(self):
