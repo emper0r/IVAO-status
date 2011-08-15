@@ -659,8 +659,8 @@ class Main(QtGui.QMainWindow):
             startrow += 1
         connection.close()
         
-    def addFriend(self):
-        print self.ui.SearchtableWidget.indexAt()
+    def addFriend(self, event):
+        print "Added"
 
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
