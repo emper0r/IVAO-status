@@ -351,16 +351,14 @@ class Main(QtGui.QMainWindow):
             except:
                 pass
             try:
-                start_connected = '%d:%d:%d' % (int(str(row_atc[5])[-6:-4]), int(str(row_atc[5])[-4:-2]), int(str(row_atc[5])[-2:]))
+                start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]), int(str(row_atc[5])[6:8]) \
+                                                    , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
             except:
                 pass
-            update = time.ctime()
-            now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
-            start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
-            now_time = datetime.datetime.strptime(now, '%H:%M:%S')
-            diff = (now_time - start)
-            player_time = str(datetime.timedelta(seconds = diff.seconds))
-            col_time = QtGui.QTableWidgetItem(str(player_time), 0)
+            start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]), int(str(row_atc[5])[6:8]) \
+                                                , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
+            diff = abs(datetime.datetime.now() - start_connected)
+            col_time = QtGui.QTableWidgetItem(str(diff), 0)
             self.ui.ATC_FullList.setItem(startrow, 7, col_time)
             startrow += 1
 
@@ -427,14 +425,10 @@ class Main(QtGui.QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 6, col_departure)
             col_destination = QtGui.QTableWidgetItem(str(row_pilot[5]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 7, col_destination)
-            start_connected = '%d:%d:%d' % (int(str(row_pilot[6])[-6:-4]), int(str(row_pilot[6])[-4:-2]), int(str(row_pilot[6])[-2:]))
-            update = time.ctime()
-            now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
-            start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
-            now_time = datetime.datetime.strptime(now, '%H:%M:%S')
-            diff = (now_time - start)
-            player_time = str(datetime.timedelta(seconds = diff.seconds))
-            col_time = QtGui.QTableWidgetItem(str(player_time), 0)
+            start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
+                                                , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
+            diff = abs(datetime.datetime.now() - start_connected)
+            col_time = QtGui.QTableWidgetItem(str(diff), 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             startrow += 1
 
@@ -442,8 +436,8 @@ class Main(QtGui.QMainWindow):
         connection.commit()
         obs = cursor.fetchone()
         obs_ivao = QtGui.QTableWidgetItem(str(int(obs[0])))
-        atcs_ivao = QtGui.QTableWidgetItem(str((len(atc_list) - int(obs[0]))))
-        self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
+        #atcs_ivao = QtGui.QTableWidgetItem(str((int(len(atc_list)) - int(obs[0]))))
+        #self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
         self.ui.IVAOStatustableWidget.setItem(0, 2, obs_ivao)
         total_ivao = QtGui.QTableWidgetItem(str(len(atc_list) + len(pilot_list)))
         self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
@@ -531,16 +525,14 @@ class Main(QtGui.QMainWindow):
                 except:
                     pass
                 try:
-                    start_connected = '%d:%d:%d' % (int(str(row_atc[5])[-6:-4]), int(str(row_atc[5])[-4:-2]), int(str(row_atc[5])[-2:]))
+                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]), int(str(row_atc[5])[6:8]) \
+                                                       , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
                 except:
                     pass
-                update = time.ctime()
-                now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
-                start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
-                now_time = datetime.datetime.strptime(now, '%H:%M:%S')
-                diff = (now_time - start)
-                player_time = str(datetime.timedelta(seconds = diff.seconds))
-                col_time = QtGui.QTableWidgetItem(str(player_time), 0)
+                start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]), int(str(row_atc[5])[6:8]) \
+                                                    , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
+                diff = abs(datetime.datetime.now() - start_connected)
+                col_time = QtGui.QTableWidgetItem(str(diff), 0)
                 self.ui.ATCtableWidget.setItem(startrow, 7, col_time)
                 startrow += 1
 
@@ -599,12 +591,10 @@ class Main(QtGui.QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_p, 7, col_destination)
                 start_connected = '%d:%d:%d' % (int(str(row_pilot[6])[-6:-4]), int(str(row_pilot[6])[-4:-2]), int(str(row_pilot[6])[-2:]))
                 update = time.ctime()
-                now = "%d:%d:%d" % (int(str(update)[-13:-11]), int(str(update)[-10:-8]), int(str(update)[-7:-5]))
-                start = datetime.datetime.strptime(start_connected, '%H:%M:%S')
-                now_time = datetime.datetime.strptime(now, '%H:%M:%S')
-                diff = (now_time - start)
-                player_time = str(datetime.timedelta(seconds = diff.seconds))
-                col_time = QtGui.QTableWidgetItem(str(player_time), 0)
+                start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
+                                                    , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
+                diff = abs(datetime.datetime.now() - start_connected)                
+                col_time = QtGui.QTableWidgetItem(str(diff), 0)
                 self.ui.PilottableWidget.setItem(startrow_p, 9, col_time)
                 startrow_p += 1
 
