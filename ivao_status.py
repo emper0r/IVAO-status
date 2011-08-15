@@ -358,7 +358,7 @@ class Main(QtGui.QMainWindow):
             start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]), int(str(row_atc[5])[6:8]) \
                                                 , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
             diff = abs(datetime.datetime.now() - start_connected)
-            col_time = QtGui.QTableWidgetItem(str(diff), 0)
+            col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.ATC_FullList.setItem(startrow, 7, col_time)
             startrow += 1
 
@@ -428,7 +428,7 @@ class Main(QtGui.QMainWindow):
             start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
                                                 , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
             diff = abs(datetime.datetime.now() - start_connected)
-            col_time = QtGui.QTableWidgetItem(str(diff), 0)
+            col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             startrow += 1
 
@@ -535,7 +535,7 @@ class Main(QtGui.QMainWindow):
                 start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]), int(str(row_atc[5])[6:8]) \
                                                     , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
                 diff = abs(datetime.datetime.now() - start_connected)
-                col_time = QtGui.QTableWidgetItem(str(diff), 0)
+                col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.ATCtableWidget.setItem(startrow, 7, col_time)
                 startrow += 1
 
@@ -597,7 +597,7 @@ class Main(QtGui.QMainWindow):
                 start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
                                                     , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
                 diff = abs(datetime.datetime.now() - start_connected)                
-                col_time = QtGui.QTableWidgetItem(str(diff), 0)
+                col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.PilottableWidget.setItem(startrow_p, 9, col_time)
                 startrow_p += 1
 
