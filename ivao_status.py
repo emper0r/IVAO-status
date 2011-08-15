@@ -104,6 +104,10 @@ class Main(QtGui.QMainWindow):
         self.ui.InboundTableView.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.ui.IVAOStatustableWidget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.ui.NearbyATCViewTable.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.ui.SearchtableWidget.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
+        addAction = Qt.QAction("Add Friend", self)
+        addAction.triggered.connect(self.addFriend)
+        self.ui.SearchtableWidget.addAction(addAction)
         Pixmap = QtGui.QPixmap('./airlines/ivao.jpg')
         self.ui.logo_ivao.setPixmap(Pixmap)
         self.ui.logo_ivao.show()
@@ -653,14 +657,10 @@ class Main(QtGui.QMainWindow):
                 pass
 
             startrow += 1
-        
-    def addFriend(self, event):
-        menu = Qt.QMenu(self)
-        addFriend = menu.addAction("Quit")
-        addFriend = menu.exec_(self.ui.SearchtableWidget.indexAt(event.pos()))
-        if action == quitAction:
-            qApp.quit()
         connection.close()
+        
+    def addFriend(self):
+        print self.ui.SearchtableWidget.indexAt()
 
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
