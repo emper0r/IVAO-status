@@ -436,10 +436,13 @@ class Main(QtGui.QMainWindow):
         connection.commit()
         obs = cursor.fetchone()
         obs_ivao = QtGui.QTableWidgetItem(str(int(obs[0])))
-        #atcs_ivao = QtGui.QTableWidgetItem(str((int(len(atc_list)) - int(obs[0]))))
-        #self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
+        cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC';")
+        connection.commit()
+        atc = cursor.fetchone()
+        atcs_ivao = QtGui.QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
+        self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
         self.ui.IVAOStatustableWidget.setItem(0, 2, obs_ivao)
-        total_ivao = QtGui.QTableWidgetItem(str(len(atc_list) + len(pilot_list)))
+        total_ivao = QtGui.QTableWidgetItem(str(atc[0] + len(pilot_list)))
         self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
 
         connection.close()
@@ -479,7 +482,7 @@ class Main(QtGui.QMainWindow):
 
             cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport \
                           , planned_destairport, time_connected FROM status_ivao \
-                          WHERE clienttype='PILOT' AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(codes[0])+'%'),))
+                          WHERE clienttype='PILOT' AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(codes[0])),))
             rows_pilots = cursor.fetchall()       
             connection.commit()
 
@@ -599,7 +602,6 @@ class Main(QtGui.QMainWindow):
                 startrow_p += 1
 
         connection.close()
-        #self.ui.action_update.setText("Ready")
 
     def searchpushButton(self):
         connection = sqlite3.connect(DataBase)
