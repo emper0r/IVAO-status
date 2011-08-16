@@ -655,13 +655,14 @@ class Main(QtGui.QMainWindow):
 
             startrow += 1
         connection.close()
-        
+    
+    def mouseReleaseEvent(self, event):
+        if event.button() == QtCore.Qt.RightButton:
+            self.addFriend(event)
+            
     def addFriend(self, event):
-        rows=[] 
-        for idx in self.table.selectedIndexes():
-            rows.append(idx.row()) 
-            print "Added"
-
+        print self.ui.SearchtableWidget.rowAt(event)
+        
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
         METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
