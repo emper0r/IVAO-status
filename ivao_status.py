@@ -49,7 +49,6 @@ class Main(QtGui.QMainWindow):
         QtGui.QMainWindow.__init__(self)
         self.ui = MainWindow_UI.Ui_MainWindow()
         self.ui.setupUi(self)
-
         screen = QtGui.QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
@@ -126,7 +125,6 @@ class Main(QtGui.QMainWindow):
         db_t1 = cursor.fetchall()
         connection.commit()
         startrow_dbt1 = 0
-
         db_t2 = cursor.execute("SELECT icao, iata, Airport_Name, Country FROM iata_icao_codes DESC;")
         db_t2 = cursor.fetchall()
         connection.commit()
@@ -659,14 +657,14 @@ class Main(QtGui.QMainWindow):
 
             startrow += 1
         connection.close()
-    
+
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.RightButton:
             self.addFriend(event)
-            
+                
     def addFriend(self, event):
-        print self.ui.SearchtableWidget.rowAt(event)
-        
+        print "Added"
+
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
         METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
