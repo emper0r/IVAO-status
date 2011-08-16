@@ -112,7 +112,14 @@ class Main(QtGui.QMainWindow):
         Pixmap = QtGui.QPixmap('./airlines/ivao.jpg')
         self.ui.logo_ivao.setPixmap(Pixmap)
         self.ui.logo_ivao.show()
+        self.timer = Qt.QTimer(self)
+        self.timer.setInterval(300000)
+        self.timer.timeout.connect(self.UpdateDB)
+        self.timer.start()
 
+        QtCore.QTimer.singleShot(1000, self.initial_load)
+        
+    def initial_load(self):
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()   
         db_t1 = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes DESC;")
@@ -165,12 +172,9 @@ class Main(QtGui.QMainWindow):
             startrow_dbt2 += 1
 
         connection.close()
-
-        self.timer = Qt.QTimer(self)
-        self.timer.setInterval(300000)
-        self.timer.timeout.connect(self.UpdateDB)
-        self.timer.start()
-
+        
+        QtGui.qApp.restoreOverrideCursor()
+        
     def UpdateDB(self):
 
         connection = sqlite3.connect(DataBase)
