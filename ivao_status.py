@@ -104,6 +104,7 @@ class Main(QtGui.QMainWindow):
         self.ui.InboundTableView.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.ui.IVAOStatustableWidget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.ui.NearbyATCViewTable.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.ui.SearchtableWidget.selectionModel().selectedRows()
         self.ui.SearchtableWidget.setContextMenuPolicy(QtCore.Qt.ActionsContextMenu)
         addAction = Qt.QAction("Add Friend", self)
         addAction.triggered.connect(self.addFriend)
@@ -359,8 +360,6 @@ class Main(QtGui.QMainWindow):
                                                     , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
             except:
                 pass
-            start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]), int(str(row_atc[5])[6:8]) \
-                                                , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
             diff = abs(datetime.datetime.now() - start_connected)
             col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.ATC_FullList.setItem(startrow, 7, col_time)
@@ -536,8 +535,6 @@ class Main(QtGui.QMainWindow):
                                                        , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
                 except:
                     pass
-                start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]), int(str(row_atc[5])[6:8]) \
-                                                    , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
                 diff = abs(datetime.datetime.now() - start_connected)
                 col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.ATCtableWidget.setItem(startrow, 7, col_time)
@@ -660,7 +657,10 @@ class Main(QtGui.QMainWindow):
         connection.close()
         
     def addFriend(self, event):
-        print "Added"
+        rows=[] 
+        for idx in self.table.selectedIndexes():
+            rows.append(idx.row()) 
+            print "Added"
 
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
