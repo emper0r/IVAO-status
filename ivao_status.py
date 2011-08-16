@@ -663,8 +663,13 @@ class Main(QtGui.QMainWindow):
             self.addFriend(event)
                 
     def addFriend(self, event):
-        print "Added"
-
+        '''called when user clicks the "add friend" menu item raised by the 
+           SearchTableWidget'''
+        current_row = self.ui.SearchtableWidget.currentRow()
+        current_name = self.ui.SearchtableWidget.item(current_row, 2)
+        if current_name:
+            print "Added Friend", current_name.text()
+        
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
         METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
