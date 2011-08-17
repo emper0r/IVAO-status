@@ -678,9 +678,10 @@ class Main(QtGui.QMainWindow):
             self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
             col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
             self.ui.FriendstableWidget.setItem(startrow, 0, col_vid)
-            col_realname = QtGui.QTableWidgetItem(str(row[2]), 0)
+            col_realname = QtGui.QTableWidgetItem(str(row[2].encode('latin-1')), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
             startrow += 1
+        connection.close()
                     
     def addFriend(self, event):
         connection = sqlite3.connect(DataBase)
@@ -688,14 +689,13 @@ class Main(QtGui.QMainWindow):
         current_row = self.ui.SearchtableWidget.currentRow()
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)
         current_realname = self.ui.SearchtableWidget.item(current_row, 2)
-        if current_row > 0:
+        if current_row >= 0:
             vid = current_vid.text()
             realname = unicode(current_realname.text(), 'latin-1')
             cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
             connection.commit()
         self.ivao_friend()
         connection.close()
-        self.ivao_friend()
         
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
