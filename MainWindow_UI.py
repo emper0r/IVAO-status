@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Sat Aug 13 09:39:32 2011
+# Created: Wed Aug 17 12:49:48 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -602,8 +602,8 @@ class Ui_MainWindow(object):
         self.IVAOStatusLabel.setText(QtGui.QApplication.translate("MainWindow", "IVAO Status", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendstableWidget.setSortingEnabled(True)
         self.FriendstableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "VID", None, QtGui.QApplication.UnicodeUTF8))
-        self.FriendstableWidget.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Callsign", None, QtGui.QApplication.UnicodeUTF8))
-        self.FriendstableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Realname", None, QtGui.QApplication.UnicodeUTF8))
+        self.FriendstableWidget.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Realname", None, QtGui.QApplication.UnicodeUTF8))
+        self.FriendstableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Callsign", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendstableWidget.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendstableWidget.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("MainWindow", "On-Line", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendsLabel.setText(QtGui.QApplication.translate("MainWindow", "Friends", None, QtGui.QApplication.UnicodeUTF8))
