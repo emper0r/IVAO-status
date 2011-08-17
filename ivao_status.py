@@ -89,6 +89,9 @@ class Main(QtGui.QMainWindow):
         self.ui.SearchtableWidget.setColumnWidth(0, 50)
         self.ui.SearchtableWidget.setColumnWidth(1, 100)
         self.ui.SearchtableWidget.setColumnWidth(2, 170)
+        self.ui.FriendstableWidget.setColumnWidth(0, 50)
+        self.ui.FriendstableWidget.setColumnWidth(1, 170)
+        self.ui.FriendstableWidget.setColumnWidth(2, 100)
         self.ui.dbTableWidget_2.setColumnWidth(0, 75)
         self.ui.dbTableWidget_2.setColumnWidth(1, 70)
         self.ui.dbTableWidget_2.setColumnWidth(2, 110)
@@ -665,8 +668,8 @@ class Main(QtGui.QMainWindow):
     def ivao_friend(self):
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
-        cursor.execute('SELECT * FROM ivao_friends;')
-        roster.fetchall()
+        cursor.execute('SELECT * FROM friends_ivao;')
+        roster = cursor.fetchall()
         self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
         while self.ui.FriendstableWidget.rowCount () > 0:
             self.ui.FriendstableWidget.removeRow(0)
@@ -675,19 +678,23 @@ class Main(QtGui.QMainWindow):
             self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
             col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
             self.ui.FriendstableWidget.setItem(startrow, 0, col_vid)
+            col_realname = QtGui.QTableWidgetItem(str(row[2]), 0)
+            self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
+            startrow += 1
                     
     def addFriend(self, event):
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
         current_row = self.ui.SearchtableWidget.currentRow()
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)
-        current_callsign = self.ui.SearchtableWidget.item(current_row, 1)
         current_realname = self.ui.SearchtableWidget.item(current_row, 2)
-        current_rating = self.ui.SearchtableWidget.item(current_row, 3)
         if current_row > 0:
             vid = current_vid.text()
             realname = unicode(current_realname.text(), 'latin-1')
-            cursor.execute('INSERT INTO ivao_friend (vid, realname, online) VALUES (?, ?, ?);', (vid, realname, '1'))
+            cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
+            connection.commit()
+        self.ivao_friend()
+        connection.close()
         self.ivao_friend()
         
     def metar(self):
