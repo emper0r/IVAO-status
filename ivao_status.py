@@ -170,7 +170,7 @@ class Main(QtGui.QMainWindow):
             startrow_dbt2 += 1
 
         connection.close()
-        
+        self.ivao_friend()
         QtGui.qApp.restoreOverrideCursor()
         
     def UpdateDB(self):
@@ -661,10 +661,35 @@ class Main(QtGui.QMainWindow):
     def mouseReleaseEvent(self, event):
         if event.button() == QtCore.Qt.RightButton:
             self.addFriend(event)
-                
+    
+    def ivao_friend(self):
+        connection = sqlite3.connect(DataBase)
+        cursor = connection.cursor()
+        cursor.execute('SELECT * FROM friends_ivao;')
+        roster = cursor.fetchall()
+        self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
+        while self.ui.FriendstableWidget.rowCount () > 0:
+            self.ui.FriendstableWidget.removeRow(0)
+        startrow = 0        
+        for row in roster:
+            self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
+            col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
+            self.ui.FriendstableWidget.setItem(startrow, 0, col_vid)
+                    
     def addFriend(self, event):
-        print "Added"
-
+        connection = sqlite3.connect(DataBase)
+        cursor = connection.cursor()
+        current_row = self.ui.SearchtableWidget.currentRow()
+        current_vid = self.ui.SearchtableWidget.item(current_row, 0)
+        current_callsign = self.ui.SearchtableWidget.item(current_row, 1)
+        current_realname = self.ui.SearchtableWidget.item(current_row, 2)
+        current_rating = self.ui.SearchtableWidget.item(current_row, 3)
+        if current_row > 0:
+            vid = current_vid.text()
+            realname = unicode(current_realname.text(), 'latin-1')
+            cursor.execute('INSERT INTO friends_ivao (vid, realname, online) VALUES (?, ?, ?);', (vid, realname, '1'))
+        self.ivao_friend()
+        
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
         METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
