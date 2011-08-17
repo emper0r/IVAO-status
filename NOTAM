@@ -85,8 +85,9 @@ Can be:
 2 - Clearance Delivery
 3 - Ground
 4 - Tower
-5 - Approach/Departure
+5 - Approach
 6 - Center
+7 - Departure
 
 visualrange : range of visibility set by a ATC. Only for controllers
 planned_revision : revision of flight plan submitted (not sure...). Only for pilots. Available only after the pilot has submitted a flight plan
