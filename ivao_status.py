@@ -686,15 +686,20 @@ class Main(QtGui.QMainWindow):
     def addFriend(self, event):
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
+        cursor.execute("SELECT vid from friends_ivao;")
+        vid = cursor.fetchall()
         current_row = self.ui.SearchtableWidget.currentRow()
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)
         current_realname = self.ui.SearchtableWidget.item(current_row, 2)
         if current_row >= 0:
-            vid = current_vid.text()
-            realname = unicode(current_realname.text(), 'latin-1')
-            cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
-            connection.commit()
-        self.ivao_friend()
+            if int(str(current_vid.text())) == vid[vid_range][0]:
+                print "Ya esta en la lista"
+            else:
+                vid = current_vid.text()
+                realname = unicode(current_realname.text(), 'latin-1')
+                cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
+                connection.commit()
+                self.ivao_friend()
         connection.close()
         
     def metar(self):
