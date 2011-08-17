@@ -42,7 +42,7 @@ rating_atc = {"1":"OBS - Observer", "2":"S1 - Student 1", "3":"S2 - Student 2" \
               , "10":"I3 - Instructor 3", "11":"SUP - Supervisor", "12":"ADM - Administrator"}
 
 position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
-                , "3":"Ground", "4":"Tower", "5":"Approach/Departure", "6":"Center"}
+                , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
 
 class Main(QtGui.QMainWindow):
     def __init__(self,):
