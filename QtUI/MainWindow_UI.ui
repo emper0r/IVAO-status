@@ -278,12 +278,12 @@
       </column>
       <column>
        <property name="text">
-        <string>Callsign</string>
+        <string>Realname</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Realname</string>
+        <string>Callsign</string>
        </property>
       </column>
       <column>

@@ -341,8 +341,11 @@ class Main(QtGui.QMainWindow):
                     self.ui.ATC_FullList.setItem(startrow, 2, col_country)
             except:
                 pass
-            col_facility = QtGui.QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
-            self.ui.ATC_FullList.setItem(startrow, 3, col_facility)
+            try:
+                col_facility = QtGui.QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
+                self.ui.ATC_FullList.setItem(startrow, 3, col_facility)
+            except:
+                pass
             col_realname = QtGui.QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
             self.ui.ATC_FullList.setItem(startrow, 4, col_realname)            
             code_atc_rating = row_atc[3]
@@ -673,16 +676,23 @@ class Main(QtGui.QMainWindow):
         self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
         while self.ui.FriendstableWidget.rowCount () > 0:
             self.ui.FriendstableWidget.removeRow(0)
-        startrow = 0        
+        startrow = 0
         for row in roster:
             self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
             col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
             self.ui.FriendstableWidget.setItem(startrow, 0, col_vid)
             col_realname = QtGui.QTableWidgetItem(str(row[2].encode('latin-1')), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
+            col_callsign = QtGui.QTableWidgetItem('-', 0)
+            self.ui.FriendstableWidget.setItem(startrow, 2, col_callsign)
+            col_rating = QtGui.QTableWidgetItem('-', 0)
+            self.ui.FriendstableWidget.setItem(startrow, 3, col_rating)
             startrow += 1
+        cursor.execute('select friends_ivao.vid, status_ivao.vid from status_ivao \
+        , friends_ivao where status_ivao.vid=friends_ivao.vid;')
+        friends_parts = cursor.fetchall()
         connection.close()
-                    
+
     def addFriend(self, event):
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
@@ -691,17 +701,23 @@ class Main(QtGui.QMainWindow):
         current_row = self.ui.SearchtableWidget.currentRow()
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)
         current_realname = self.ui.SearchtableWidget.item(current_row, 2)
-        if current_row >= 0:
-            if int(str(current_vid.text())) == vid[vid_range][0]:
-                print "Ya esta en la lista"
-            else:
+        total_vid = len(vid)
+        insert = True
+        if total_vid >= 0:
+            for i in range(0, total_vid):
+                if int(str(current_vid.text())) == vid[i][0]:
+                    msg = 'The friend is already in the list'
+                    QtGui.QMessageBox.information(None, 'Friend of IVAO list', msg)
+                    i += 1
+                    insert = False
+            if insert is True:
                 vid = current_vid.text()
                 realname = unicode(current_realname.text(), 'latin-1')
                 cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
                 connection.commit()
                 self.ivao_friend()
         connection.close()
-        
+
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
         METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
