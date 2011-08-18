@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Thu Aug 18 08:29:36 2011
+# Created: Thu Aug 18 14:34:42 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -402,6 +402,9 @@ class Ui_MainWindow(object):
         self.pilots.setObjectName(_fromUtf8("pilots"))
         self.PILOT_FullList = QtGui.QTableWidget(self.pilots)
         self.PILOT_FullList.setGeometry(QtCore.QRect(5, 8, 1001, 591))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.PILOT_FullList.setFont(font)
         self.PILOT_FullList.setProperty(_fromUtf8("cursor"), QtCore.Qt.PointingHandCursor)
         self.PILOT_FullList.setAutoFillBackground(True)
         self.PILOT_FullList.setTabKeyNavigation(False)
