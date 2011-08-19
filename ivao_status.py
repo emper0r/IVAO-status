@@ -710,12 +710,15 @@ class Main(QtGui.QMainWindow):
                     QtGui.QMessageBox.information(None, 'Friend of IVAO list', msg)
                     i += 1
                     insert = False
-            if insert is True:
-                vid = current_vid.text()
-                realname = unicode(current_realname.text(), 'latin-1')
-                cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
-                connection.commit()
-                self.ivao_friend()
+            try:
+                if insert is True:
+                    vid = current_vid.text()
+                    realname = unicode(current_realname.text(), 'latin-1')
+                    cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
+                    connection.commit()
+                    self.ivao_friend()
+            except:
+                pass                
         connection.close()
 
     def metar(self):
