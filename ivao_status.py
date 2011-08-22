@@ -52,9 +52,7 @@ class Main(QtGui.QMainWindow):
         screen = QtGui.QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QtGui.QIcon('./airlines/ivao.jpg'))
-        self.connect(self.ui.ExitBtn, QtCore.SIGNAL('clicked()'), QtGui.qApp, QtCore.SLOT("quit()"))
-        self.connect(self.ui.UpdateBtn, QtCore.SIGNAL('clicked()'), self.UpdateDB)
+        self.setWindowIcon(QtGui.QIcon('./images/ivao.jpg'))
         self.connect(self.ui.searchpushButton, QtCore.SIGNAL('clicked()'), self.searchpushButton)
         self.connect(self.ui.METARFindButton, QtCore.SIGNAL('clicked()'), self.metar)
         self.connect(self.ui.country_list, QtCore.SIGNAL('activated(QString)'), self.country_view)
@@ -67,7 +65,7 @@ class Main(QtGui.QMainWindow):
         self.ui.PILOT_FullList.setColumnWidth(5, 105)
         self.ui.PILOT_FullList.setColumnWidth(6, 70)
         self.ui.PILOT_FullList.setColumnWidth(7, 75)
-        self.ui.PILOT_FullList.setColumnWidth(8, 65)
+        self.ui.PILOT_FullList.setColumnWidth(8, 70)
         self.ui.PilottableWidget.setColumnWidth(0, 90)
         self.ui.PilottableWidget.setColumnWidth(1, 65)
         self.ui.PilottableWidget.setColumnWidth(2, 60)
@@ -118,7 +116,6 @@ class Main(QtGui.QMainWindow):
         self.timer.setInterval(300000)
         self.timer.timeout.connect(self.UpdateDB)
         self.timer.start()
-
         QtCore.QTimer.singleShot(1000, self.initial_load)
         
     def initial_load(self):
@@ -132,7 +129,7 @@ class Main(QtGui.QMainWindow):
         db_t2 = cursor.fetchall()
         connection.commit()
         startrow_dbt2 = 0
-
+        
         for line in db_t1:
             if line[0] == None:
                 self.ui.dbTableWidget_1.removeRow(self.ui.dbTableWidget_1.rowCount())
@@ -177,22 +174,21 @@ class Main(QtGui.QMainWindow):
         QtGui.qApp.restoreOverrideCursor()
         
     def UpdateDB(self):
-
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
         cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM status_ivao;")
-
+        
         try:
             StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + IVAO_STATUS)
         except:
             msg = 'Error!, when trying to download database status from IVAO. Check your connection to Internet.'
             QtGui.QMessageBox.information(None, 'Updating DB troubles', msg)
             sys.exit(0)
-
+        
         pilot_list = []
         atc_list = []
-
+        
         for logged_users in StatusURL.readlines():
             if "PILOT" in logged_users:
                 pilot_list.append(logged_users)
@@ -270,7 +266,6 @@ class Main(QtGui.QMainWindow):
              , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
              , onground))
         connection.commit()
-
         cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
         connection.commit()
         pob = cursor.fetchone()
@@ -309,11 +304,9 @@ class Main(QtGui.QMainWindow):
              , protrevision, rating, facilitytype, visualrange, time_last_atis_received, time_connected \
              , client_software_name, client_software_version, adminrating, atc_or_pilotrating))
         connection.commit()
-
         cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
                         WHERE clienttype='ATC' ORDER BY vid DESC;")
         rows_atcs = cursor.fetchall()
-
         startrow = 0
         self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
         while self.ui.ATC_FullList.rowCount () > 0:
@@ -341,8 +334,11 @@ class Main(QtGui.QMainWindow):
                     self.ui.ATC_FullList.setItem(startrow, 2, col_country)
             except:
                 pass
-            col_facility = QtGui.QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
-            self.ui.ATC_FullList.setItem(startrow, 3, col_facility)
+            try:
+                col_facility = QtGui.QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
+                self.ui.ATC_FullList.setItem(startrow, 3, col_facility)
+            except:
+                pass
             col_realname = QtGui.QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
             self.ui.ATC_FullList.setItem(startrow, 4, col_realname)            
             code_atc_rating = row_atc[3]
@@ -369,21 +365,20 @@ class Main(QtGui.QMainWindow):
             col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.ATC_FullList.setItem(startrow, 7, col_time)
             startrow += 1
-
+        
         cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport \
-                      , planned_destairport, time_connected FROM status_ivao \
+                      , planned_destairport, onground, time_connected FROM status_ivao \
                       where clienttype='PILOT' order by vid desc;")
         rows_pilots = cursor.fetchall()
-
-        startrow = 0        
+        startrow = 0
         self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
+        
         while self.ui.PILOT_FullList.rowCount () > 0:
             self.ui.PILOT_FullList.removeRow(0)
 
         for row_pilot in rows_pilots:
             self.ui.PILOT_FullList.setCurrentCell(0, 0)
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
-
             code_airline = row_pilot[0][:3]
             airlineCodePath = './airlines/%s.gif' % code_airline
             try:
@@ -398,7 +393,6 @@ class Main(QtGui.QMainWindow):
                     self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
             except:
                 pass
-
             col_callsign = QtGui.QTableWidgetItem(str(row_pilot[0]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 1, col_callsign)
 
@@ -408,7 +402,6 @@ class Main(QtGui.QMainWindow):
                     pass
             except:
                 aircraft = '-'
-
             col_aircraft = QtGui.QTableWidgetItem(aircraft, 0)
             self.ui.PILOT_FullList.setItem(startrow, 2, col_aircraft)
             col_realname = QtGui.QTableWidgetItem(str(row_pilot[3][:-5].encode('latin-1')), 0)
@@ -433,8 +426,18 @@ class Main(QtGui.QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 6, col_departure)
             col_destination = QtGui.QTableWidgetItem(str(row_pilot[5]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 7, col_destination)
-            start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
-                                                , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
+            try:
+                if int(str(row_pilot[6])) == 0:
+                    col_status = 'On Ground'
+                else:
+                    col_status = 'On route'
+            except:
+                if not row_pilot[6]:
+                    col_status = '-'
+            col_status = QtGui.QTableWidgetItem(col_status, 0)
+            self.ui.PILOT_FullList.setItem(startrow, 8, col_status)
+            start_connected = datetime.datetime(int(str(row_pilot[7])[:4]), int(str(row_pilot[7])[4:6]), int(str(row_pilot[7])[6:8]) \
+                , int(str(row_pilot[7])[8:10]), int(str(row_pilot[7])[10:12]), int(str(row_pilot[7])[12:14]))
             diff = abs(datetime.datetime.now() - start_connected)
             col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
@@ -452,9 +455,7 @@ class Main(QtGui.QMainWindow):
         self.ui.IVAOStatustableWidget.setItem(0, 2, obs_ivao)
         total_ivao = QtGui.QTableWidgetItem(str(atc[0] + len(pilot_list)))
         self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
-
         connection.close()
-        self.ui.action_update.setText("Ready")
 
     def  country_view(self):
         country_selected = self.ui.country_list.currentText()
@@ -463,22 +464,22 @@ class Main(QtGui.QMainWindow):
         cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE Country=?", (str(country_selected),))
         flagCode = cursor.fetchone()
         connection.commit()
-
         flagCodePath = ('./flags/%s.png') % country_selected
         Pixmap = QtGui.QPixmap(flagCodePath)
         self.ui.flagIcon.setPixmap(Pixmap)
-
         cursor.execute("SELECT icao FROM iata_icao_codes where country=?;", (str(country_selected),))
         icao_country = cursor.fetchall()
         connection.commit()
 
         startrow = 0
         self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
+        
         while self.ui.ATCtableWidget.rowCount () > 0:
             self.ui.ATCtableWidget.removeRow(0)
 
         startrow_p = 0        
         self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
+        
         while self.ui.PilottableWidget.rowCount () > 0:
             self.ui.PilottableWidget.removeRow(0)
 
@@ -489,7 +490,7 @@ class Main(QtGui.QMainWindow):
             connection.commit()
 
             cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport \
-                          , planned_destairport, time_connected FROM status_ivao \
+                          , planned_destairport, onground, time_connected FROM status_ivao \
                           WHERE clienttype='PILOT' AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(codes[0])),))
             rows_pilots = cursor.fetchall()       
             connection.commit()
@@ -598,10 +599,20 @@ class Main(QtGui.QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_p, 6, col_departure)
                 col_destination = QtGui.QTableWidgetItem(str(row_pilot[5]), 0)
                 self.ui.PilottableWidget.setItem(startrow_p, 7, col_destination)
-                start_connected = '%d:%d:%d' % (int(str(row_pilot[6])[-6:-4]), int(str(row_pilot[6])[-4:-2]), int(str(row_pilot[6])[-2:]))
+                try:
+                    if int(str(row_pilot[6])) == 0:
+                        col_status = 'On Ground'
+                    else:
+                        col_status = 'On route'
+                except:
+                    if not row_pilot[6]:
+                        col_status = '-'
+                col_status = QtGui.QTableWidgetItem(col_status, 0)
+                self.ui.PilottableWidget.setItem(startrow, 8, col_status)
+                start_connected = '%d:%d:%d' % (int(str(row_pilot[7])[-6:-4]), int(str(row_pilot[7])[-4:-2]), int(str(row_pilot[7])[-2:]))
                 update = time.ctime()
-                start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
-                                                    , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
+                start_connected = datetime.datetime(int(str(row_pilot[7])[:4]), int(str(row_pilot[7])[4:6]), int(str(row_pilot[7])[6:8]) \
+                                                    , int(str(row_pilot[7])[8:10]), int(str(row_pilot[7])[10:12]), int(str(row_pilot[7])[12:14]))
                 diff = abs(datetime.datetime.now() - start_connected)                
                 col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.PilottableWidget.setItem(startrow_p, 9, col_time)
@@ -626,7 +637,7 @@ class Main(QtGui.QMainWindow):
                            , ('%'+str(arg)+'%',))
         connection.commit()
         search = cursor.fetchall()
-
+        
         self.ui.SearchtableWidget.insertRow(self.ui.SearchtableWidget.rowCount())
         while self.ui.SearchtableWidget.rowCount () > 0:
             self.ui.SearchtableWidget.removeRow(0)
@@ -670,37 +681,60 @@ class Main(QtGui.QMainWindow):
         cursor = connection.cursor()
         cursor.execute('SELECT * FROM friends_ivao;')
         roster = cursor.fetchall()
+        
         self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
         while self.ui.FriendstableWidget.rowCount () > 0:
             self.ui.FriendstableWidget.removeRow(0)
-        startrow = 0        
+        
+        startrow = 0
         for row in roster:
             self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
             col_vid = QtGui.QTableWidgetItem(str(row[0]), 0)
             self.ui.FriendstableWidget.setItem(startrow, 0, col_vid)
             col_realname = QtGui.QTableWidgetItem(str(row[2].encode('latin-1')), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
+            col_callsign = QtGui.QTableWidgetItem('-', 0)
+            self.ui.FriendstableWidget.setItem(startrow, 2, col_callsign)
+            col_rating = QtGui.QTableWidgetItem('-', 0)
+            self.ui.FriendstableWidget.setItem(startrow, 3, col_rating)
             startrow += 1
+        cursor.execute('select friends_ivao.vid, status_ivao.vid from status_ivao \
+        , friends_ivao where status_ivao.vid=friends_ivao.vid;')
+        friends_parts = cursor.fetchall()
         connection.close()
-                    
+
     def addFriend(self, event):
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
+        cursor.execute("SELECT vid from friends_ivao;")
+        vid = cursor.fetchall()
         current_row = self.ui.SearchtableWidget.currentRow()
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)
         current_realname = self.ui.SearchtableWidget.item(current_row, 2)
-        if current_row >= 0:
-            vid = current_vid.text()
-            realname = unicode(current_realname.text(), 'latin-1')
-            cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
-            connection.commit()
-        self.ivao_friend()
+        total_vid = len(vid)
+        insert = True
+        if total_vid >= 0:
+            for i in range(0, total_vid):
+                if int(str(current_vid.text())) == vid[i][0]:
+                    msg = 'The friend is already in the list'
+                    QtGui.QMessageBox.information(None, 'Friend of IVAO list', msg)
+                    i += 1
+                    insert = False
+            try:
+                if insert is True:
+                    vid = current_vid.text()
+                    realname = unicode(current_realname.text(), 'latin-1')
+                    cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
+                    connection.commit()
+                    self.ivao_friend()
+            except:
+                pass                
         connection.close()
-        
+
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
         METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
-
+        
         if self.ui.METARtableWidget.rowCount() == 0:
             self.ui.METARtableWidget.insertRow(self.ui.METARtableWidget.rowCount())
             col_icao_airport = QtGui.QTableWidgetItem(str(icao_airport), 0)
