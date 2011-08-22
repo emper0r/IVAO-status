@@ -490,7 +490,7 @@ class Main(QtGui.QMainWindow):
             connection.commit()
 
             cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport \
-                          , planned_destairport, time_connected FROM status_ivao \
+                          , planned_destairport, onground, time_connected FROM status_ivao \
                           WHERE clienttype='PILOT' AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(codes[0])),))
             rows_pilots = cursor.fetchall()       
             connection.commit()
@@ -599,10 +599,20 @@ class Main(QtGui.QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_p, 6, col_departure)
                 col_destination = QtGui.QTableWidgetItem(str(row_pilot[5]), 0)
                 self.ui.PilottableWidget.setItem(startrow_p, 7, col_destination)
-                start_connected = '%d:%d:%d' % (int(str(row_pilot[6])[-6:-4]), int(str(row_pilot[6])[-4:-2]), int(str(row_pilot[6])[-2:]))
+                try:
+                    if int(str(row_pilot[6])) == 0:
+                        col_status = 'On Ground'
+                    else:
+                        col_status = 'On route'
+                except:
+                    if not row_pilot[6]:
+                        col_status = '-'
+                col_status = QtGui.QTableWidgetItem(col_status, 0)
+                self.ui.PilottableWidget.setItem(startrow, 8, col_status)
+                start_connected = '%d:%d:%d' % (int(str(row_pilot[7])[-6:-4]), int(str(row_pilot[7])[-4:-2]), int(str(row_pilot[7])[-2:]))
                 update = time.ctime()
-                start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
-                                                    , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
+                start_connected = datetime.datetime(int(str(row_pilot[7])[:4]), int(str(row_pilot[7])[4:6]), int(str(row_pilot[7])[6:8]) \
+                                                    , int(str(row_pilot[7])[8:10]), int(str(row_pilot[7])[10:12]), int(str(row_pilot[7])[12:14]))
                 diff = abs(datetime.datetime.now() - start_connected)                
                 col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.PilottableWidget.setItem(startrow_p, 9, col_time)
