@@ -955,6 +955,11 @@
       </column>
      </widget>
     </widget>
+    <widget class="QWidget" name="map">
+     <attribute name="title">
+      <string>Map</string>
+     </attribute>
+    </widget>
     <widget class="QWidget" name="controllers">
      <attribute name="title">
       <string>Controllers</string>
@@ -1562,9 +1567,7 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="../airlines/ivao.jpg"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>actionExit</sender>

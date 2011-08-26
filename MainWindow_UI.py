@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Fri Aug 19 16:12:08 2011
+# Created: Fri Aug 26 11:23:18 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -356,6 +356,9 @@ class Ui_MainWindow(object):
         self.PilottableWidget.verticalHeader().setDefaultSectionSize(20)
         self.PilottableWidget.verticalHeader().setMinimumSectionSize(20)
         self.tabWidget.addTab(self.countries, _fromUtf8(""))
+        self.map = QtGui.QWidget()
+        self.map.setObjectName(_fromUtf8("map"))
+        self.tabWidget.addTab(self.map, _fromUtf8(""))
         self.controllers = QtGui.QWidget()
         self.controllers.setObjectName(_fromUtf8("controllers"))
         self.ATC_FullList = QtGui.QTableWidget(self.controllers)
@@ -593,6 +596,8 @@ class Ui_MainWindow(object):
         self.country_list.setCurrentIndex(-1)
         QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
         QtCore.QObject.connect(self.actionUpdate, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.UpdateDB)
+        QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.about)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "IVAO :: Status of IVAN", None, QtGui.QApplication.UnicodeUTF8))
@@ -649,6 +654,7 @@ class Ui_MainWindow(object):
         self.PilottableWidget.horizontalHeaderItem(8).setText(QtGui.QApplication.translate("MainWindow", "Status", None, QtGui.QApplication.UnicodeUTF8))
         self.PilottableWidget.horizontalHeaderItem(9).setText(QtGui.QApplication.translate("MainWindow", "Time", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.countries), QtGui.QApplication.translate("MainWindow", "Countries", None, QtGui.QApplication.UnicodeUTF8))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.map), QtGui.QApplication.translate("MainWindow", "Map", None, QtGui.QApplication.UnicodeUTF8))
         self.ATC_FullList.setSortingEnabled(True)
         self.ATC_FullList.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "CallSign", None, QtGui.QApplication.UnicodeUTF8))
         self.ATC_FullList.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Frequency", None, QtGui.QApplication.UnicodeUTF8))
