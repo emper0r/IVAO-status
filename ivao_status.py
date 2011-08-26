@@ -31,13 +31,13 @@ data_access = 'whazzup.txt'
 DataBase = './database/ivao.db'
 __version__ = '1.0'
 
-rating_pilot = {"1":"OBS - Observer", "2":"SFO - Second Flight Officer", "3":"FFO - First Flight Officer" \
+rating_pilot = {"0":"OBS - Observer", "2":"SFO - Second Flight Officer", "3":"FFO - First Flight Officer" \
                 , "4":"C - Captain", "5":"FC - Flight Captain", "6":"SC - Senior Captain" \
                 , "7":"SFC - Senior Flight Captain", "8":"CC - Commercial Captain" \
                 , "9":"CFC - Commercial Flight Captain", "10":"CSC - Commercial Senior Captain" \
                 , "11":"SUP - Supervisor", "12":"ADM - Administrator"}
 
-rating_atc = {"1":"OBS - Observer", "2":"S1 - Student 1", "3":"S2 - Student 2" \
+rating_atc = {"0":"OBS - Observer", "2":"S1 - Student 1", "3":"S2 - Student 2" \
               , "4":"S3 - Student 3", "5":"C1 - Controller 1", "6":"C2 - Controller 2" \
               , "7":"C3 - Controller 3", "8":"I1 - Instructor 1", "9":"I2 - Instructor 2" \
               , "10":"I3 - Instructor 3", "11":"SUP - Supervisor", "12":"ADM - Administrator"}
@@ -280,11 +280,6 @@ class Main(QtGui.QMainWindow):
              , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
              , onground))
         connection.commit()
-        cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
-        connection.commit()
-        pob = cursor.fetchone()
-        pob_ivao = QtGui.QTableWidgetItem(str(int(pob[0])))
-        self.ui.IVAOStatustableWidget.setItem(0, 5, pob_ivao)
 
         for rows in atc_list:
             fields = rows.split(":")
@@ -318,6 +313,30 @@ class Main(QtGui.QMainWindow):
              , protrevision, rating, facilitytype, visualrange, time_last_atis_received, time_connected \
              , client_software_name, client_software_version, adminrating, atc_or_pilotrating))
         connection.commit()
+        
+        cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
+        connection.commit()
+        pob = cursor.fetchone()
+        pob_ivao = QtGui.QTableWidgetItem(str(int(pob[0])))
+        self.ui.IVAOStatustableWidget.setItem(0, 5, pob_ivao)
+        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND callsign like '%OBS%';")
+        connection.commit()
+        obs = cursor.fetchone()
+        obs_ivao = QtGui.QTableWidgetItem(str(int(obs[0])))
+        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC';")
+        connection.commit()
+        atc = cursor.fetchone()
+        atcs_ivao = QtGui.QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
+        self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
+        self.ui.IVAOStatustableWidget.setItem(0, 2, obs_ivao)
+        total_ivao = QtGui.QTableWidgetItem(str(atc[0] + len(pilot_list)))
+        self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
+        connection.close()
+        self.show_tables()
+        
+    def show_tables(self):
+        connection = sqlite3.connect(DataBase)
+        cursor = connection.cursor()
         cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
                         WHERE clienttype='ATC' ORDER BY vid DESC;")
         rows_atcs = cursor.fetchall()
@@ -459,19 +478,6 @@ class Main(QtGui.QMainWindow):
             col_time = QtGui.QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             startrow += 1
-
-        cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC' AND callsign like '%OBS%';")
-        connection.commit()
-        obs = cursor.fetchone()
-        obs_ivao = QtGui.QTableWidgetItem(str(int(obs[0])))
-        cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC';")
-        connection.commit()
-        atc = cursor.fetchone()
-        atcs_ivao = QtGui.QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
-        self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
-        self.ui.IVAOStatustableWidget.setItem(0, 2, obs_ivao)
-        total_ivao = QtGui.QTableWidgetItem(str(atc[0] + len(pilot_list)))
-        self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
         connection.close()
 
     def country_view(self):
