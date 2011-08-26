@@ -406,7 +406,7 @@ class Main(QMainWindow):
             startrow += 1
 
         cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport \
-                      , planned_destairport, onground, time_connected FROM status_ivao \
+                      , planned_destairport, onground, time_connected, groundspeed FROM status_ivao \
                       where clienttype='PILOT' order by vid desc;")
         rows_pilots = cursor.fetchall()
         startrow = 0
@@ -467,13 +467,19 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 7, col_destination)
             try:
                 if int(str(row_pilot[6])) == 0:
-                    col_status = 'On Ground'
+                    if (row_pilot[8] > 20) and (row_pilot[8] < 100):
+                        groundspeed = 'Taking Off'
+                    if (row_pilot[8] > 100):
+                        groundspeed = 'On Route'
                 else:
-                    col_status = 'On route'
+                    if (row_pilot[8] > 0) and (row_pilot[8] < 20):
+                        groundspeed = 'Taxing'
+                    if (row_pilot[8] == 0):
+                        groundspeed = 'On Blocks'
             except:
                 if not row_pilot[6]:
-                    col_status = '-'
-            col_status = QTableWidgetItem(col_status, 0)
+                    groundspeed = '-'
+            col_status = QTableWidgetItem(groundspeed, 0)
             self.ui.PILOT_FullList.setItem(startrow, 8, col_status)
             start_connected = datetime.datetime(int(str(row_pilot[7])[:4]), int(str(row_pilot[7])[4:6]), int(str(row_pilot[7])[6:8]) \
                 , int(str(row_pilot[7])[8:10]), int(str(row_pilot[7])[10:12]), int(str(row_pilot[7])[12:14]))
@@ -516,7 +522,7 @@ class Main(QMainWindow):
             connection.commit()
 
             cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport \
-                          , planned_destairport, onground, time_connected FROM status_ivao \
+                          , planned_destairport, onground, time_connected, groundspeed FROM status_ivao \
                           WHERE clienttype='PILOT' AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(codes[0])),))
             rows_pilots = cursor.fetchall()
             connection.commit()
@@ -627,13 +633,19 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_p, 7, col_destination)
                 try:
                     if int(str(row_pilot[6])) == 0:
-                        col_status = 'On Ground'
+                        if (row_pilot[8] > 20) and (row_pilot[8] < 100):
+                            groundspeed = 'Taking Off'
+                        if (row_pilot[8] > 100):
+                            groundspeed = 'On Route'
                     else:
-                        col_status = 'On route'
+                        if (row_pilot[8] > 0) and (row_pilot[8] < 20):
+                            groundspeed = 'Taxing'
+                        if (row_pilot[8] == 0):
+                            groundspeed = 'On Blocks'
                 except:
                     if not row_pilot[6]:
                         col_status = '-'
-                col_status = QTableWidgetItem(col_status, 0)
+                col_status = QTableWidgetItem(groundspeed, 0)
                 self.ui.PilottableWidget.setItem(startrow, 8, col_status)
                 start_connected = '%d:%d:%d' % (int(str(row_pilot[7])[-6:-4]), int(str(row_pilot[7])[-4:-2]), int(str(row_pilot[7])[-2:]))
                 update = time.ctime()
