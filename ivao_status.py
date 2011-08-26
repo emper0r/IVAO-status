@@ -735,30 +735,9 @@ class Main(QMainWindow):
         cursor = connection.cursor()
         cursor.execute("SELECT vid from friends_ivao;")
         vid = cursor.fetchall()
-        if sender == self.ui.SearchtableWidget.sender():
-            tablename = 'SearchtableWidget'
-            self.adding_friend(tablename, vid)
-        if sender == self.ui.PilottableWidget.sender():
-            tablename = 'PilottableWidget'
-            self.adding_friend(tablename, vid)
-        if sender == self.ui.ATCtableWidget.sender():
-            tablename = 'ATCtableWidget'
-            self.adding_friend(tablename, vid)
-        if sender == self.ui.ATC_FullList.sender():
-            tablename = 'ATC_FullList'
-            self.adding_friend(tablename, vid)
-        if sender == self.ui.PILOT_FullList.sender():
-            tablename = 'PILOT_FullList'
-            self.adding_friend(tablename, vid)
-        connection.close()
-    
-    def adding_friend(self, tablename, vid):
-        connection = sqlite3.connect(DataBase)
-        cursor = connection.cursor()
-        table_obj = getattr(self.ui, tablename)
-        current_row = table_obj.currentRow()
-        current_vid = table_obj.item(current_row, 0)
-        current_realname = table_obj.item(current_row, 2)
+        current_row = self.ui.SearchtableWidget.currentRow()
+        current_vid = self.ui.SearchtableWidget.item(current_row, 0)
+        current_realname = self.ui.SearchtableWidget.item(current_row, 2)
         total_vid = len(vid)
         insert = True
         if total_vid >= 0:
