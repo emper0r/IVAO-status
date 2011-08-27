@@ -802,16 +802,17 @@ class Main(QMainWindow):
         latitude, longitude = latlon[0][0], latlon[0][1]
         player_location = open('./player_location.html', 'w')
         player_location.write('<html><body>\n')
-        player_location.write('<div id="mapdiv"></div>\n')
+        player_location.write('  <div id="mapdiv"></div>\n')
         player_location.write('  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>\n')
         player_location.write('  <script>\n')
         player_location.write('    map = new OpenLayers.Map("mapdiv");\n')
         player_location.write('    map.addLayer(new OpenLayers.Layer.OSM());\n')
-        player_location.write('    var lonLat = new OpenLayers.LonLat( %f , %f)\n' % (latitude, longitude))
+        player_location.write('    var lonLat = new OpenLayers.LonLat( %f ,%f )\n' % (longitude, latitude))
         player_location.write('         .transform(\n')
-        player_location.write('           new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984\n')
-        player_location.write('            map.getProjectionObject() // to Spherical Mercator Projection);\n')
-        player_location.write('    var zoom=16;\n')
+        player_location.write('            new OpenLayers.Projection("EPSG:4326"),\n')
+        player_location.write('            map.getProjectionObject()\n')
+        player_location.write('            );\n')
+        player_location.write('    var zoom=5;\n')
         player_location.write('    var markers = new OpenLayers.Layer.Markers( "Markers" );\n')
         player_location.write('    map.addLayer(markers);\n')
         player_location.write('    markers.addMarker(new OpenLayers.Marker(lonLat));\n')
@@ -820,10 +821,8 @@ class Main(QMainWindow):
         player_location.write('</body></html>\n')
         player_location.close()
         maptab = QWebView()
-        maptab.load(QUrl('player_location.html'))
-        maptab.show()
-        print "Latitude: %f" % latitude
-        print "Longitude: %f" % longitude
+        self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.addTab(maptab, 'loading...'))
+        maptab.load(QUrl('./player_location.html'))
 
     def metarHelp(self):
         msg = 'Must be entered 4-character alphanumeric code designated for each airport around the world'
