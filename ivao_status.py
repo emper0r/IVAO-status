@@ -114,18 +114,17 @@ class Main(QMainWindow):
         self.ui.PILOT_FullList.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.ATCtableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.PilottableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
-        addAction = QAction("Add Friend", self)
-        addAction.triggered.connect(self.addFriend)
+        addFriend_Action = QAction("Add Friend", self)
+        show_PlayerAtMap_Action = QAction("Show in the Map", self)
+        addFriend_Action.triggered.connect(self.addFriend)
+        show_PlayerAtMap_Action.triggered.connect(self.ShowAtMap)
         QObject.connect(self.ui.SearchtableWidget, SIGNAL("clicked()"), self.addFriend)
         QObject.connect(self.ui.ATC_FullList, SIGNAL("clicked()"), self.addFriend)
         QObject.connect(self.ui.PILOT_FullList, SIGNAL("clicked()"), self.addFriend)
         QObject.connect(self.ui.ATCtableWidget, SIGNAL("clicked()"), self.addFriend)
         QObject.connect(self.ui.PilottableWidget, SIGNAL("clicked()"), self.addFriend)
-        self.ui.SearchtableWidget.addAction(addAction)
-        self.ui.ATC_FullList.addAction(addAction)
-        self.ui.PILOT_FullList.addAction(addAction)
-        self.ui.ATCtableWidget.addAction(addAction)
-        self.ui.PilottableWidget.addAction(addAction)
+        self.ui.SearchtableWidget.addAction(addFriend_Action)
+        self.ui.SearchtableWidget.addAction(show_PlayerAtMap_Action)
         Pixmap = QPixmap('./airlines/ivao.jpg')
         self.ui.logo_ivao.setPixmap(Pixmap)
         self.ui.logo_ivao.show()
@@ -465,6 +464,7 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 6, col_departure)
             col_destination = QTableWidgetItem(str(row_pilot[5]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 7, col_destination)
+            groundspeed = '-'
             try:
                 if int(str(row_pilot[6])) == 0:
                     if (row_pilot[8] > 20) and (row_pilot[8] < 100):
@@ -712,7 +712,8 @@ class Main(QMainWindow):
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.RightButton:
-            self.addFriend(event)
+            self.addFriend_Action(event)
+            self.ShowAtMap(event)
 
     def ivao_friend(self):
         connection = sqlite3.connect(DataBase)
@@ -742,7 +743,6 @@ class Main(QMainWindow):
         connection.close()
 
     def addFriend(self, event):
-        sender = QObject.sender(self)
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
         cursor.execute("SELECT vid from friends_ivao;")
@@ -790,6 +790,40 @@ class Main(QMainWindow):
             col_metar = QTableWidgetItem(str(METAR.readlines()[0]), 0)
             self.ui.METARtableWidget.setItem(startrow, 1, col_metar)
             startrow += 1
+            
+    def ShowAtMap(self, event):
+        self.ui.tabWidget.setCurrentIndex(2)
+        current_row = self.ui.SearchtableWidget.currentRow()
+        current_vid = self.ui.SearchtableWidget.item(current_row, 0)        
+        connection = sqlite3.connect(DataBase)
+        cursor = connection.cursor()
+        cursor.execute("SELECT latitude, longitude from status_ivao where vid=?;",  (int(current_vid.text()),))
+        latlon = cursor.fetchall()
+        latitude, longitude = latlon[0][0], latlon[0][1]
+        player_location = open('./player_location.html', 'w')
+        player_location.write('<html><body>\n')
+        player_location.write('<div id="mapdiv"></div>\n')
+        player_location.write('  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>\n')
+        player_location.write('  <script>\n')
+        player_location.write('    map = new OpenLayers.Map("mapdiv");\n')
+        player_location.write('    map.addLayer(new OpenLayers.Layer.OSM());\n')
+        player_location.write('    var lonLat = new OpenLayers.LonLat( %f , %f)\n' % (latitude, longitude))
+        player_location.write('         .transform(\n')
+        player_location.write('           new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984\n')
+        player_location.write('            map.getProjectionObject() // to Spherical Mercator Projection);\n')
+        player_location.write('    var zoom=16;\n')
+        player_location.write('    var markers = new OpenLayers.Layer.Markers( "Markers" );\n')
+        player_location.write('    map.addLayer(markers);\n')
+        player_location.write('    markers.addMarker(new OpenLayers.Marker(lonLat));\n')
+        player_location.write('    map.setCenter (lonLat, zoom);\n')
+        player_location.write('  </script>\n')
+        player_location.write('</body></html>\n')
+        player_location.close()
+        maptab = QWebView()
+        maptab.load(QUrl('player_location.html'))
+        maptab.show()
+        print "Latitude: %f" % latitude
+        print "Longitude: %f" % longitude
 
     def metarHelp(self):
         msg = 'Must be entered 4-character alphanumeric code designated for each airport around the world'
