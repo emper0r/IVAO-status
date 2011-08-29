@@ -105,8 +105,8 @@ class Main(QMainWindow):
         self.ui.ATCtableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.SearchtableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.METARtableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.ui.OutboundTableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.ui.InboundTableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ui.OutboundTableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ui.InboundTableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.IVAOStatustableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.SearchtableWidget.selectionModel().selectedRows()
         self.ui.SearchtableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
@@ -500,18 +500,18 @@ class Main(QMainWindow):
         cursor.execute("SELECT icao FROM iata_icao_codes where country=?;", (str(country_selected),))
         icao_country = cursor.fetchall()
         connection.commit()
-
-        startrow = 0
+        self.ui.Inbound_traffic.setText('Inbound Traffic in %s Airports' % (country_selected))
+        self.ui.Outbound_traffic.setText('Outbound Traffic in %s Airports' % (country_selected))
+        
+        self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
         self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
         
-        while self.ui.ATCtableWidget.rowCount () > 0:
+        while self.ui.ATCtableWidget.rowCount () > 0 and self.ui.PilottableWidget.rowCount () > 0:
             self.ui.ATCtableWidget.removeRow(0)
-
-        startrow_p = 0
-        self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
-
-        while self.ui.PilottableWidget.rowCount () > 0:
             self.ui.PilottableWidget.removeRow(0)
+
+        startrow_atc = 0
+        startrow_pilot = 0
 
         for codes in icao_country:
             cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
@@ -528,9 +528,9 @@ class Main(QMainWindow):
             for row_atc in rows_atcs:
                 self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
                 col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
-                self.ui.ATCtableWidget.setItem(startrow, 0, col_callsign)
+                self.ui.ATCtableWidget.setItem(startrow_atc, 0, col_callsign)
                 col_frequency = QTableWidgetItem(str(row_atc[1]), 0)
-                self.ui.ATCtableWidget.setItem(startrow, 1, col_frequency)
+                self.ui.ATCtableWidget.setItem(startrow_atc, 1, col_frequency)
                 code_icao = str(row_atc[0][:4])
                 cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE ICAO=?", (str(code_icao),))
                 flagCode = cursor.fetchone()
@@ -541,16 +541,16 @@ class Main(QMainWindow):
                         Pixmap = QPixmap(flagCodePath)
                         flag_country = QQLabel()
                         flag_country.setPixmap(Pixmap)
-                        self.ui.ATCtableWidget.setCellWidget(startrow, 2, flag_country)
+                        self.ui.ATCtableWidget.setCellWidget(startrow_atc, 2, flag_country)
                     else:
                         col_country = QTableWidgetItem(str(flagCode).encode('latin-1'), 0)
-                        self.ui.ATCtableWidget.setItem(startrow, 2, col_country)
+                        self.ui.ATCtableWidget.setItem(startrow_atc, 2, col_country)
                 except:
                     pass
                 col_facility = QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
-                self.ui.ATCtableWidget.setItem(startrow, 3, col_facility)
+                self.ui.ATCtableWidget.setItem(startrow_atc, 3, col_facility)
                 col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
-                self.ui.ATCtableWidget.setItem(startrow, 4, col_realname)
+                self.ui.ATCtableWidget.setItem(startrow_atc, 4, col_realname)
                 code_atc_rating = row_atc[3]
                 ratingImagePath = './ratings/atc_level%d.gif' % int(code_atc_rating)
                 try:
@@ -558,12 +558,12 @@ class Main(QMainWindow):
                         Pixmap = QPixmap(ratingImagePath)
                         ratingImage = QLabel(self)
                         ratingImage.setPixmap(Pixmap)
-                        self.ui.ATCtableWidget.setCellWidget(startrow, 6, ratingImage)
+                        self.ui.ATCtableWidget.setCellWidget(startrow_atc, 6, ratingImage)
                         col_rating = QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
-                        self.ui.ATCtableWidget.setItem(startrow, 5, col_rating)
+                        self.ui.ATCtableWidget.setItem(startrow_atc, 5, col_rating)
                     else:
                         col_rating = QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
-                        self.ui.ATCtableWidget.setItem(startrow, 5, col_rating)
+                        self.ui.ATCtableWidget.setItem(startrow_atc, 5, col_rating)
                 except:
                     pass
                 try:
@@ -573,8 +573,8 @@ class Main(QMainWindow):
                     pass
                 diff = abs(datetime.datetime.now() - start_connected)
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
-                self.ui.ATCtableWidget.setItem(startrow, 7, col_time)
-                startrow += 1
+                self.ui.ATCtableWidget.setItem(startrow_atc, 7, col_time)
+                startrow_atc += 1
 
             for row_pilot in rows_pilots:
                 self.ui.PilottableWidget.setCurrentCell(0, 0)
@@ -587,16 +587,16 @@ class Main(QMainWindow):
                         Pixmap = QPixmap(airlineCodePath)
                         airline = QLabel(self)
                         airline.setPixmap(Pixmap)
-                        self.ui.PilottableWidget.setCellWidget(startrow_p, 0, airline)
+                        self.ui.PilottableWidget.setCellWidget(startrow_pilot, 0, airline)
                     else:
                         code_airline = '-'
                         col_airline = QTableWidgetItem(code_airline, 0)
-                        self.ui.PilottableWidget.setItem(startrow_p, 0, col_airline)
+                        self.ui.PilottableWidget.setItem(startrow_pilot, 0, col_airline)
                 except:
                     pass
 
                 col_callsign = QTableWidgetItem(str(row_pilot[0]), 0)
-                self.ui.PilottableWidget.setItem(startrow_p, 1, col_callsign)
+                self.ui.PilottableWidget.setItem(startrow_pilot, 1, col_callsign)
 
                 try:
                     aircraft = row_pilot[1].split('/')[1]
@@ -606,11 +606,11 @@ class Main(QMainWindow):
                     aircraft = '-'
 
                 col_aircraft = QTableWidgetItem(aircraft, 0)
-                self.ui.PilottableWidget.setItem(startrow_p, 2, col_aircraft)
+                self.ui.PilottableWidget.setItem(startrow_pilot, 2, col_aircraft)
                 col_realname = QTableWidgetItem(str(row_pilot[3][:-5].encode('latin-1')), 0)
-                self.ui.PilottableWidget.setItem(startrow_p, 3, col_realname)
+                self.ui.PilottableWidget.setItem(startrow_pilot, 3, col_realname)
                 col_rating = QTableWidgetItem(str(rating_pilot[row_pilot[2]]), 0)
-                self.ui.PilottableWidget.setItem(startrow_p, 4, col_rating)
+                self.ui.PilottableWidget.setItem(startrow_pilot, 4, col_rating)
 
                 code_pilot_rating = row_pilot[2]
                 ratingImagePath = './ratings/pilot_level%d.gif' % int(code_pilot_rating)
@@ -619,16 +619,16 @@ class Main(QMainWindow):
                         Pixmap = QPixmap(ratingImagePath)
                         ratingImage = QLabel(self)
                         ratingImage.setPixmap(Pixmap)
-                        self.ui.PilottableWidget.setCellWidget(startrow_p, 5, ratingImage)
+                        self.ui.PilottableWidget.setCellWidget(startrow_pilot, 5, ratingImage)
                     else:
                         pass
                 except:
                     pass
 
                 col_departure = QTableWidgetItem(str(row_pilot[4]), 0)
-                self.ui.PilottableWidget.setItem(startrow_p, 6, col_departure)
+                self.ui.PilottableWidget.setItem(startrow_pilot, 6, col_departure)
                 col_destination = QTableWidgetItem(str(row_pilot[5]), 0)
-                self.ui.PilottableWidget.setItem(startrow_p, 7, col_destination)
+                self.ui.PilottableWidget.setItem(startrow_pilot, 7, col_destination)
                 groundspeed = '-'
                 try:
                     if int(str(row_pilot[6])) == 0:
@@ -647,15 +647,15 @@ class Main(QMainWindow):
                     if not row_pilot[6]:
                         col_status = '-'
                 col_status = QTableWidgetItem(groundspeed, 0)
-                self.ui.PilottableWidget.setItem(startrow, 8, col_status)
+                self.ui.PilottableWidget.setItem(startrow_pilot, 8, col_status)
                 start_connected = '%d:%d:%d' % (int(str(row_pilot[7])[-6:-4]), int(str(row_pilot[7])[-4:-2]), int(str(row_pilot[7])[-2:]))
                 update = time.ctime()
                 start_connected = datetime.datetime(int(str(row_pilot[7])[:4]), int(str(row_pilot[7])[4:6]), int(str(row_pilot[7])[6:8]) \
                                                     , int(str(row_pilot[7])[8:10]), int(str(row_pilot[7])[10:12]), int(str(row_pilot[7])[12:14]))
                 diff = abs(datetime.datetime.now() - start_connected)
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
-                self.ui.PilottableWidget.setItem(startrow_p, 9, col_time)
-                startrow_p += 1
+                self.ui.PilottableWidget.setItem(startrow_pilot, 9, col_time)
+                startrow_pilot += 1
 
         connection.close()
 
