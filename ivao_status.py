@@ -469,8 +469,10 @@ class Main(QMainWindow):
                 if int(str(row_pilot[6])) == 0:
                     if (row_pilot[8] > 20) and (row_pilot[8] < 100):
                         groundspeed = 'Taking Off'
-                    if (row_pilot[8] > 100):
-                        groundspeed = 'On Route'
+                    if (row_pilot[8] > 100) and (row_pilot[8] < 150):
+                        groundspeed = 'Initial Climbing'
+                    if (row_pilot[8] > 150):
+                        groundspeed = 'Climbing'
                 else:
                     if (row_pilot[8] > 0) and (row_pilot[8] < 20):
                         groundspeed = 'Taxing'
@@ -635,8 +637,10 @@ class Main(QMainWindow):
                     if int(str(row_pilot[6])) == 0:
                         if (row_pilot[8] > 20) and (row_pilot[8] < 100):
                             groundspeed = 'Taking Off'
-                        if (row_pilot[8] > 100):
-                            groundspeed = 'On Route'
+                        if (row_pilot[8] > 100) and (row_pilot[8] < 150):
+                            groundspeed = 'Initial Climbing'
+                        if (row_pilot[8] > 150):
+                            groundspeed = 'Climbing'
                     else:
                         if (row_pilot[8] > 0) and (row_pilot[8] < 20):
                             groundspeed = 'Taxing'
@@ -797,9 +801,9 @@ class Main(QMainWindow):
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)        
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
-        cursor.execute("SELECT latitude, longitude from status_ivao where vid=?;",  (int(current_vid.text()),))
-        latlon = cursor.fetchall()
-        latitude, longitude = latlon[0][0], latlon[0][1]
+        cursor.execute("SELECT latitude, longitude, callsign from status_ivao where vid=?;",  (int(current_vid.text()),))
+        player = cursor.fetchall()
+        latitude, longitude = player[0][0], player[0][1]
         player_location = open('./player_location.html', 'w')
         player_location.write('<html><body>\n')
         player_location.write('  <div id="mapdiv"></div>\n')
@@ -812,7 +816,14 @@ class Main(QMainWindow):
         player_location.write('            new OpenLayers.Projection("EPSG:4326"),\n')
         player_location.write('            map.getProjectionObject()\n')
         player_location.write('            );\n')
-        player_location.write('    var zoom=5;\n')
+        if player[0][2][-4:] == '_OBS' or player[0][2][-4:] == '_DEP' or player[0][2][-4:] == '_GND':
+            player_location.write('    var zoom = 15;\n')
+        elif player[0][2][-4:] == '_TWR' or player[0][2][-4:] == '_APP':
+            player_location.write('    var zoom = 14;\n')
+        elif player[0][2][-4:] == '_CTR':
+            player_location.write('    var zoom = 12;\n')
+        else:
+            player_location.write('    var zoom = 6;\n')
         player_location.write('    var markers = new OpenLayers.Layer.Markers( "Markers" );\n')
         player_location.write('    map.addLayer(markers);\n')
         player_location.write('    markers.addMarker(new OpenLayers.Marker(lonLat));\n')
@@ -821,7 +832,7 @@ class Main(QMainWindow):
         player_location.write('</body></html>\n')
         player_location.close()
         maptab = QWebView()
-        self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.addTab(maptab, 'loading...'))
+        self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.addTab(maptab, 'Geolocation player on the map'))
         maptab.load(QUrl('./player_location.html'))
 
     def metarHelp(self):
