@@ -94,6 +94,7 @@ class Main(QMainWindow):
         self.ui.FriendstableWidget.setColumnWidth(0, 50)
         self.ui.FriendstableWidget.setColumnWidth(1, 170)
         self.ui.FriendstableWidget.setColumnWidth(2, 100)
+        self.ui.dbTableWidget_1.setColumnWidth(0, 30)
         self.ui.dbTableWidget_2.setColumnWidth(0, 75)
         self.ui.dbTableWidget_2.setColumnWidth(1, 70)
         self.ui.dbTableWidget_2.setColumnWidth(2, 110)
@@ -107,7 +108,6 @@ class Main(QMainWindow):
         self.ui.OutboundTableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.InboundTableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.IVAOStatustableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.ui.NearbyATCViewTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.SearchtableWidget.selectionModel().selectedRows()
         self.ui.SearchtableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.ATC_FullList.setContextMenuPolicy(Qt.ActionsContextMenu)
@@ -629,6 +629,7 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_p, 6, col_departure)
                 col_destination = QTableWidgetItem(str(row_pilot[5]), 0)
                 self.ui.PilottableWidget.setItem(startrow_p, 7, col_destination)
+                groundspeed = '-'
                 try:
                     if int(str(row_pilot[6])) == 0:
                         if (row_pilot[8] > 20) and (row_pilot[8] < 100):
