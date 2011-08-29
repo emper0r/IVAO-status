@@ -119,10 +119,6 @@ class Main(QMainWindow):
         addFriend_Action.triggered.connect(self.addFriend)
         show_PlayerAtMap_Action.triggered.connect(self.ShowAtMap)
         QObject.connect(self.ui.SearchtableWidget, SIGNAL("clicked()"), self.addFriend)
-        QObject.connect(self.ui.ATC_FullList, SIGNAL("clicked()"), self.addFriend)
-        QObject.connect(self.ui.PILOT_FullList, SIGNAL("clicked()"), self.addFriend)
-        QObject.connect(self.ui.ATCtableWidget, SIGNAL("clicked()"), self.addFriend)
-        QObject.connect(self.ui.PilottableWidget, SIGNAL("clicked()"), self.addFriend)
         self.ui.SearchtableWidget.addAction(addFriend_Action)
         self.ui.SearchtableWidget.addAction(show_PlayerAtMap_Action)
         Pixmap = QPixmap('./airlines/ivao.jpg')
@@ -715,8 +711,8 @@ class Main(QMainWindow):
         connection.close()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == Qt.RightButton:
-            self.addFriend_Action(event)
+        if event.button() == Qt.RightButton and self.ui.SearchtableWidget.selectRow(self.ui.SearchtableWidget.currentRow()):
+            self.addFriend(event)
             self.ShowAtMap(event)
 
     def ivao_friend(self):
