@@ -129,8 +129,14 @@ class Main(QMainWindow):
         self.timer.timeout.connect(self.UpdateDB)
         self.timer.start()
         QTimer.singleShot(1000, self.initial_load)
+        self.progress = QProgressBar()
+        self.statusBar().addPermanentWidget(self.progress)
+        self.progress.hide()
+        self.progress.setValue(0)
+
 
     def initial_load(self):
+        self.statusBar().showMessage('Populating Database', 2000)
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
         db_t1 = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes DESC;")
@@ -182,10 +188,13 @@ class Main(QMainWindow):
             startrow_dbt2 += 1
 
         connection.close()
+        self.statusBar().showMessage('Show friends online', 2000)
         self.ivao_friend()
         qApp.restoreOverrideCursor()
 
     def UpdateDB(self):
+        self.statusBar().showMessage('Downloading info from IVAO', 2000)
+        qApp.processEvents()
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
         cursor.execute("BEGIN TRANSACTION;")
@@ -194,8 +203,8 @@ class Main(QMainWindow):
         try:
             StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + data_access)
         except:
-            msg = 'Error!, when trying to download database status from IVAO. Check your connection to Internet.'
-            QMessageBox.information(None, 'Updating DB troubles', msg)
+            self.statusBar().showMessage('Error!, when trying to download database status from IVAO. Check your connection to Internet.' \
+                                         , 5000)
             sys.exit(1)
 
         pilot_list = []
@@ -330,9 +339,13 @@ class Main(QMainWindow):
         total_ivao = QTableWidgetItem(str(atc[0] + len(pilot_list)))
         self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
         connection.close()
+        self.statusBar().showMessage('Done', 1000)
+        qApp.processEvents()
         self.show_tables()
         
     def show_tables(self):
+        self.statusBar().showMessage('Populating Controllers and Pilots', 2000)
+        self.progress.show()
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
         cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
@@ -399,6 +412,8 @@ class Main(QMainWindow):
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.ATC_FullList.setItem(startrow, 7, col_time)
             startrow += 1
+            self.progress.setValue(int(float(startrow) / float(self.ui.ATC_FullList.rowCount()) * 100.0))
+            qApp.processEvents()
 
         cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport \
                       , planned_destairport, onground, time_connected, groundspeed FROM status_ivao \
@@ -485,6 +500,7 @@ class Main(QMainWindow):
             col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             startrow += 1
+            qApp.processEvents()
         connection.close()
 
     def country_view(self):
@@ -574,6 +590,7 @@ class Main(QMainWindow):
                 diff = abs(datetime.datetime.now() - start_connected)
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.ATCtableWidget.setItem(startrow_atc, 7, col_time)
+                qApp.processEvents()
                 startrow_atc += 1
 
             for row_pilot in rows_pilots:
@@ -656,7 +673,8 @@ class Main(QMainWindow):
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 9, col_time)
                 startrow_pilot += 1
-
+                qApp.processEvents()
+            qApp.processEvents()
         connection.close()
 
     def searchpushButton(self):
@@ -709,6 +727,7 @@ class Main(QMainWindow):
                 pass
 
             startrow += 1
+            qApp.processEvents()
         connection.close()
 
     def mouseReleaseEvent(self, event):
@@ -770,6 +789,7 @@ class Main(QMainWindow):
             except:
                 pass
         connection.close()
+        self.statusBar().showMessage('Friend Added', 2000)
 
     def metar(self):
         icao_airport = self.ui.METAREdit.text()
