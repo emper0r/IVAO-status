@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Mon Aug 29 14:26:51 2011
+# Created: Tue Aug 30 14:07:57 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -442,9 +442,6 @@ class Ui_MainWindow(object):
         self.OutboundTableWidget.verticalHeader().setDefaultSectionSize(20)
         self.OutboundTableWidget.verticalHeader().setMinimumSectionSize(20)
         self.tabWidget.addTab(self.countries, _fromUtf8(""))
-        self.map = QtGui.QWidget()
-        self.map.setObjectName(_fromUtf8("map"))
-        self.tabWidget.addTab(self.map, _fromUtf8(""))
         self.controllers = QtGui.QWidget()
         self.controllers.setObjectName(_fromUtf8("controllers"))
         self.ATC_FullList = QtGui.QTableWidget(self.controllers)
@@ -702,7 +699,6 @@ class Ui_MainWindow(object):
         self.OutboundTableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Destination", None, QtGui.QApplication.UnicodeUTF8))
         self.OutboundTableWidget.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Flight", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.countries), QtGui.QApplication.translate("MainWindow", "Countries", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.map), QtGui.QApplication.translate("MainWindow", "Map", None, QtGui.QApplication.UnicodeUTF8))
         self.ATC_FullList.setSortingEnabled(True)
         self.ATC_FullList.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "CallSign", None, QtGui.QApplication.UnicodeUTF8))
         self.ATC_FullList.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Frequency", None, QtGui.QApplication.UnicodeUTF8))

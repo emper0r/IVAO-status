@@ -1189,11 +1189,6 @@
       </column>
      </widget>
     </widget>
-    <widget class="QWidget" name="map">
-     <attribute name="title">
-      <string>Map</string>
-     </attribute>
-    </widget>
     <widget class="QWidget" name="controllers">
      <attribute name="title">
       <string>Controllers</string>

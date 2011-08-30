@@ -134,6 +134,16 @@ class Main(QMainWindow):
         self.progress.hide()
         self.progress.setValue(0)
 
+        self._maptab = None
+        
+    @property
+    def maptab(self):
+        if self._maptab is None:
+            self._maptab = QWebView()
+            self.ui.tabWidget.insertTab(5, self.maptab, 'Map')
+        if self.ui.tabWidget.currentIndex() == 0:
+            self.ui.tabWidget.setCurrentIndex(5)
+        return self._maptab
 
     def initial_load(self):
         self.statusBar().showMessage('Populating Database', 2000)
@@ -856,9 +866,7 @@ class Main(QMainWindow):
         player_location.write('  </script>\n')
         player_location.write('</body></html>\n')
         player_location.close()
-        maptab = QWebView()
-        self.ui.tabWidget.insertTab(2, maptab, 'Map')
-        maptab.load(QUrl('./player_location.html'))
+        self.maptab.load(QUrl('./player_location.html'))
 
     def metarHelp(self):
         msg = 'Must be entered 4-character alphanumeric code designated for each airport around the world'
