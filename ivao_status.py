@@ -188,7 +188,6 @@ class Main(QMainWindow):
             startrow_dbt2 += 1
 
         connection.close()
-        self.statusBar().showMessage('Show friends online', 2000)
         self.ivao_friend()
         qApp.restoreOverrideCursor()
 
@@ -339,12 +338,12 @@ class Main(QMainWindow):
         total_ivao = QTableWidgetItem(str(atc[0] + len(pilot_list)))
         self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
         connection.close()
-        self.statusBar().showMessage('Done', 1000)
+        self.statusBar().showMessage('Done', 2000)
         qApp.processEvents()
         self.show_tables()
         
     def show_tables(self):
-        self.statusBar().showMessage('Populating Controllers and Pilots', 2000)
+        self.statusBar().showMessage('Populating Controllers and Pilots', 4000)
         self.progress.show()
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
@@ -411,8 +410,8 @@ class Main(QMainWindow):
                 diff = abs(datetime.datetime.now() - start_connected)
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.ATC_FullList.setItem(startrow, 7, col_time)
-            startrow += 1
             self.progress.setValue(int(float(startrow) / float(self.ui.ATC_FullList.rowCount()) * 100.0))
+            startrow += 1
             qApp.processEvents()
 
         cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport \
@@ -499,9 +498,13 @@ class Main(QMainWindow):
             diff = abs(datetime.datetime.now() - start_connected)
             col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
+            self.progress.setValue(int(float(startrow) / float(self.ui.PILOT_FullList.rowCount()) * 100.0))
             startrow += 1
             qApp.processEvents()
         connection.close()
+        self.progress.hide()
+        self.statusBar().showMessage('Done', 2000)
+        qApp.processEvents()
 
     def country_view(self):
         country_selected = self.ui.country_list.currentText()
@@ -522,8 +525,10 @@ class Main(QMainWindow):
         self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
         self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
         
-        while self.ui.ATCtableWidget.rowCount () > 0 and self.ui.PilottableWidget.rowCount () > 0:
+        while self.ui.ATCtableWidget.rowCount() > 0:
             self.ui.ATCtableWidget.removeRow(0)
+            
+        while self.ui.PilottableWidget.rowCount() > 0:
             self.ui.PilottableWidget.removeRow(0)
 
         startrow_atc = 0
@@ -736,6 +741,8 @@ class Main(QMainWindow):
             self.ShowAtMap(event)
 
     def ivao_friend(self):
+        self.statusBar().showMessage('Showing friends list', 2000)
+        qApp.processEvents()
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
         cursor.execute('SELECT * FROM friends_ivao;')
@@ -786,12 +793,14 @@ class Main(QMainWindow):
                     cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
                     connection.commit()
                     self.ivao_friend()
+                    self.statusBar().showMessage('Friend Added', 2000)
             except:
                 pass
         connection.close()
-        self.statusBar().showMessage('Friend Added', 2000)
 
     def metar(self):
+        self.statusBar().showMessage('Downloading METAR', 2000)
+        qApp.processEvents()
         icao_airport = self.ui.METAREdit.text()
         METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
 
@@ -839,7 +848,7 @@ class Main(QMainWindow):
         elif player[0][2][-4:] == '_CTR':
             player_location.write('    var zoom = 12;\n')
         else:
-            player_location.write('    var zoom = 7;\n')
+            player_location.write('    var zoom = 6;\n')
         player_location.write('    var markers = new OpenLayers.Layer.Markers( "Markers" );\n')
         player_location.write('    map.addLayer(markers);\n')
         player_location.write('    markers.addMarker(new OpenLayers.Marker(lonLat));\n')
