@@ -506,8 +506,10 @@ class Main(QMainWindow):
         self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
         self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
         
-        while self.ui.ATCtableWidget.rowCount () > 0 and self.ui.PilottableWidget.rowCount () > 0:
+        while self.ui.ATCtableWidget.rowCount () > 0:
             self.ui.ATCtableWidget.removeRow(0)
+        
+        while self.ui.PilottableWidget.rowCount () > 0:
             self.ui.PilottableWidget.removeRow(0)
 
         startrow_atc = 0
