@@ -48,9 +48,9 @@
     <property name="geometry">
      <rect>
       <x>4</x>
-      <y>10</y>
+      <y>4</y>
       <width>1015</width>
-      <height>631</height>
+      <height>641</height>
      </rect>
     </property>
     <property name="font">
@@ -80,7 +80,7 @@
         <x>5</x>
         <y>22</y>
         <width>451</width>
-        <height>211</height>
+        <height>221</height>
        </rect>
       </property>
       <property name="font">
@@ -209,7 +209,7 @@
         <x>461</x>
         <y>22</y>
         <width>541</width>
-        <height>211</height>
+        <height>221</height>
        </rect>
       </property>
       <property name="font">
@@ -222,9 +222,6 @@
       </property>
       <property name="autoFillBackground">
        <bool>true</bool>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
       </property>
       <property name="tabKeyNavigation">
        <bool>false</bool>
@@ -326,7 +323,7 @@
       <property name="geometry">
        <rect>
         <x>6</x>
-        <y>270</y>
+        <y>280</y>
         <width>451</width>
         <height>321</height>
        </rect>
@@ -344,9 +341,6 @@
       </property>
       <property name="autoFillBackground">
        <bool>true</bool>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
       </property>
       <property name="tabKeyNavigation">
        <bool>false</bool>
@@ -373,7 +367,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -418,7 +412,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>248</y>
+        <y>258</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -440,7 +434,7 @@
       <property name="geometry">
        <rect>
         <x>461</x>
-        <y>270</y>
+        <y>280</y>
         <width>541</width>
         <height>321</height>
        </rect>
@@ -455,9 +449,6 @@
       </property>
       <property name="autoFillBackground">
        <bool>true</bool>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
       </property>
       <property name="tabKeyNavigation">
        <bool>false</bool>
@@ -484,7 +475,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -528,7 +519,7 @@
       <property name="geometry">
        <rect>
         <x>465</x>
-        <y>249</y>
+        <y>258</y>
         <width>51</width>
         <height>16</height>
        </rect>
@@ -550,7 +541,7 @@
       <property name="geometry">
        <rect>
         <x>91</x>
-        <y>244</y>
+        <y>254</y>
         <width>80</width>
         <height>24</height>
        </rect>
@@ -578,9 +569,9 @@
       <property name="geometry">
        <rect>
         <x>171</x>
-        <y>245</y>
+        <y>254</y>
         <width>113</width>
-        <height>22</height>
+        <height>23</height>
        </rect>
       </property>
       <property name="cursor">
@@ -591,9 +582,9 @@
       <property name="geometry">
        <rect>
         <x>517</x>
-        <y>246</y>
+        <y>254</y>
         <width>61</width>
-        <height>22</height>
+        <height>24</height>
        </rect>
       </property>
       <property name="cursor">
@@ -604,7 +595,7 @@
       <property name="geometry">
        <rect>
         <x>286</x>
-        <y>245</y>
+        <y>254</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -619,8 +610,8 @@
      <widget class="QPushButton" name="METARFindButton">
       <property name="geometry">
        <rect>
-        <x>581</x>
-        <y>244</y>
+        <x>580</x>
+        <y>254</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -636,7 +627,7 @@
       <property name="geometry">
        <rect>
         <x>674</x>
-        <y>244</y>
+        <y>254</y>
         <width>20</width>
         <height>24</height>
        </rect>
@@ -675,10 +666,10 @@
      <widget class="QLabel" name="atc_label">
       <property name="geometry">
        <rect>
-        <x>464</x>
+        <x>396</x>
         <y>13</y>
-        <width>61</width>
-        <height>16</height>
+        <width>191</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="font">
@@ -691,16 +682,16 @@
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="text">
-       <string>ATC List</string>
+       <string>Controller's connected from</string>
       </property>
      </widget>
      <widget class="QLabel" name="pilot_list">
       <property name="geometry">
        <rect>
-        <x>455</x>
+        <x>417</x>
         <y>193</y>
-        <width>81</width>
-        <height>16</height>
+        <width>141</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="font">
@@ -713,7 +704,7 @@
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="text">
-       <string>PILOT List</string>
+       <string>Pilot's conected from</string>
       </property>
      </widget>
      <widget class="QLabel" name="flagIcon">
@@ -735,9 +726,9 @@
      <widget class="QTableWidget" name="ATCtableWidget">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>5</x>
         <y>30</y>
-        <width>991</width>
+        <width>1000</width>
         <height>161</height>
        </rect>
       </property>
@@ -777,7 +768,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -847,10 +838,10 @@
      <widget class="QTableWidget" name="PilottableWidget">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>5</x>
         <y>210</y>
-        <width>991</width>
-        <height>381</height>
+        <width>1000</width>
+        <height>191</height>
        </rect>
       </property>
       <property name="font">
@@ -886,13 +877,13 @@
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
       <property name="textElideMode">
-       <enum>Qt::ElideMiddle</enum>
+       <enum>Qt::ElideRight</enum>
       </property>
       <property name="gridStyle">
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -920,7 +911,7 @@
       </attribute>
       <column>
        <property name="text">
-        <string>Airline</string>
+        <string>Airlines</string>
        </property>
       </column>
       <column>
@@ -969,18 +960,51 @@
        </property>
       </column>
      </widget>
-    </widget>
-    <widget class="QWidget" name="controllers">
-     <attribute name="title">
-      <string>Controllers</string>
-     </attribute>
-     <widget class="QTableWidget" name="ATC_FullList">
+     <widget class="QLabel" name="Inbound_traffic">
+      <property name="geometry">
+       <rect>
+        <x>8</x>
+        <y>403</y>
+        <width>471</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Inbound Traffic</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="Outbound_traffic">
+      <property name="geometry">
+       <rect>
+        <x>495</x>
+        <y>403</y>
+        <width>341</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Outbound Traffic</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="InboundTableWidget">
       <property name="geometry">
        <rect>
         <x>5</x>
-        <y>8</y>
-        <width>1001</width>
-        <height>591</height>
+        <y>422</y>
+        <width>479</width>
+        <height>191</height>
        </rect>
       </property>
       <property name="font">
@@ -1015,11 +1039,208 @@
       <property name="selectionBehavior">
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
+      <property name="textElideMode">
+       <enum>Qt::ElideMiddle</enum>
+      </property>
       <property name="gridStyle">
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="wordWrap">
        <bool>false</bool>
+      </property>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>110</number>
+      </attribute>
+      <attribute name="horizontalHeaderHighlightSections">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>110</number>
+      </attribute>
+      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>20</number>
+      </attribute>
+      <attribute name="verticalHeaderMinimumSectionSize">
+       <number>20</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Airlines</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Departure</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Destination</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Flight</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTableWidget" name="OutboundTableWidget">
+      <property name="geometry">
+       <rect>
+        <x>492</x>
+        <y>422</y>
+        <width>512</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="tabKeyNavigation">
+       <bool>false</bool>
+      </property>
+      <property name="showDropIndicator" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="dragDropOverwriteMode">
+       <bool>false</bool>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="textElideMode">
+       <enum>Qt::ElideMiddle</enum>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::DotLine</enum>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>110</number>
+      </attribute>
+      <attribute name="horizontalHeaderHighlightSections">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>110</number>
+      </attribute>
+      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>20</number>
+      </attribute>
+      <attribute name="verticalHeaderMinimumSectionSize">
+       <number>20</number>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Airlines</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Departure</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Destination</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Flight</string>
+       </property>
+      </column>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="map">
+     <attribute name="title">
+      <string>Map</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="controllers">
+     <attribute name="title">
+      <string>Controllers</string>
+     </attribute>
+     <widget class="QTableWidget" name="ATC_FullList">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>8</y>
+        <width>1001</width>
+        <height>591</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="tabKeyNavigation">
+       <bool>false</bool>
+      </property>
+      <property name="showDropIndicator" stdset="0">
+       <bool>false</bool>
+      </property>
+      <property name="dragDropOverwriteMode">
+       <bool>false</bool>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::DotLine</enum>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -1105,9 +1326,6 @@
       <property name="autoFillBackground">
        <bool>true</bool>
       </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
       <property name="tabKeyNavigation">
        <bool>false</bool>
       </property>
@@ -1133,7 +1351,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -1155,7 +1373,7 @@
       </attribute>
       <column>
        <property name="text">
-        <string>Airline</string>
+        <string>Airlines</string>
        </property>
       </column>
       <column>
@@ -1246,7 +1464,7 @@
        <enum>Qt::ElideMiddle</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -1258,7 +1476,7 @@
        <number>50</number>
       </attribute>
       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-       <bool>false</bool>
+       <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
@@ -1317,7 +1535,7 @@
        <enum>Qt::ElideMiddle</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -1360,167 +1578,6 @@
         <string>Country</string>
        </property>
       </column>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="actual_user">
-     <attribute name="title">
-      <string>Actual User</string>
-     </attribute>
-     <widget class="QTableView" name="InboundTableView">
-      <property name="geometry">
-       <rect>
-        <x>5</x>
-        <y>20</y>
-        <width>1001</width>
-        <height>193</height>
-       </rect>
-      </property>
-      <property name="cursor" stdset="0">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="tabKeyNavigation">
-       <bool>false</bool>
-      </property>
-      <property name="showDropIndicator" stdset="0">
-       <bool>false</bool>
-      </property>
-      <property name="dragDropOverwriteMode">
-       <bool>false</bool>
-      </property>
-      <property name="alternatingRowColors">
-       <bool>true</bool>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <property name="gridStyle">
-       <enum>Qt::DotLine</enum>
-      </property>
-      <property name="wordWrap">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="Inbound_traffic">
-      <property name="geometry">
-       <rect>
-        <x>435</x>
-        <y>4</y>
-        <width>111</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Inbound Traffic</string>
-      </property>
-     </widget>
-     <widget class="QTableView" name="OutboundTableView">
-      <property name="geometry">
-       <rect>
-        <x>5</x>
-        <y>227</y>
-        <width>1001</width>
-        <height>192</height>
-       </rect>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="wordWrap">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="outbound_traffic">
-      <property name="geometry">
-       <rect>
-        <x>431</x>
-        <y>211</y>
-        <width>121</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Outbound Traffic</string>
-      </property>
-     </widget>
-     <widget class="QTableView" name="NearbyATCViewTable">
-      <property name="geometry">
-       <rect>
-        <x>5</x>
-        <y>440</y>
-        <width>1001</width>
-        <height>161</height>
-       </rect>
-      </property>
-      <property name="cursor" stdset="0">
-       <cursorShape>PointingHandCursor</cursorShape>
-      </property>
-      <property name="editTriggers">
-       <set>QAbstractItemView::NoEditTriggers</set>
-      </property>
-      <property name="tabKeyNavigation">
-       <bool>false</bool>
-      </property>
-      <property name="showDropIndicator" stdset="0">
-       <bool>false</bool>
-      </property>
-      <property name="dragDropOverwriteMode">
-       <bool>false</bool>
-      </property>
-      <property name="alternatingRowColors">
-       <bool>true</bool>
-      </property>
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-      <property name="gridStyle">
-       <enum>Qt::DotLine</enum>
-      </property>
-      <property name="wordWrap">
-       <bool>false</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="nearby_controllers">
-      <property name="geometry">
-       <rect>
-        <x>434</x>
-        <y>419</y>
-        <width>111</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Nearby Controllers</string>
-      </property>
      </widget>
     </widget>
    </widget>
@@ -1601,9 +1658,7 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="../airlines/ivao.jpg"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>actionExit</sender>
