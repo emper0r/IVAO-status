@@ -793,7 +793,6 @@ class Main(QMainWindow):
             startrow += 1
             
     def ShowAtMap(self, event):
-        self.ui.tabWidget.setCurrentIndex(2)
         current_row = self.ui.SearchtableWidget.currentRow()
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)        
         connection = sqlite3.connect(DataBase)
@@ -820,7 +819,7 @@ class Main(QMainWindow):
         elif player[0][2][-4:] == '_CTR':
             player_location.write('    var zoom = 12;\n')
         else:
-            player_location.write('    var zoom = 6;\n')
+            player_location.write('    var zoom = 7;\n')
         player_location.write('    var markers = new OpenLayers.Layer.Markers( "Markers" );\n')
         player_location.write('    map.addLayer(markers);\n')
         player_location.write('    markers.addMarker(new OpenLayers.Marker(lonLat));\n')
@@ -829,7 +828,7 @@ class Main(QMainWindow):
         player_location.write('</body></html>\n')
         player_location.close()
         maptab = QWebView()
-        self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.addTab(maptab, 'Geolocation player on the map'))
+        self.ui.tabWidget.insertTab(2, maptab, 'Map')
         maptab.load(QUrl('./player_location.html'))
 
     def metarHelp(self):
