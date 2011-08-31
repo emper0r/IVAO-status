@@ -98,6 +98,8 @@ class Main(QMainWindow):
         self.ui.dbTableWidget_2.setColumnWidth(0, 75)
         self.ui.dbTableWidget_2.setColumnWidth(1, 70)
         self.ui.dbTableWidget_2.setColumnWidth(2, 110)
+        self.ui.InboundTableWidget.setColumnWidth(0, 90)
+        self.ui.OutboundTableWidget.setColumnWidth(0, 90)
         self.ui.PILOT_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.ATC_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.FriendstableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
