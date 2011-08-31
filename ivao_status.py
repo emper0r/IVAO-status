@@ -133,7 +133,6 @@ class Main(QMainWindow):
         self.statusBar().addPermanentWidget(self.progress)
         self.progress.hide()
         self.progress.setValue(0)
-
         self._maptab = None
         
     @property
@@ -492,7 +491,7 @@ class Main(QMainWindow):
                     if (row_pilot[8] > 100) and (row_pilot[8] < 150):
                         groundspeed = 'Initial Climbing'
                     if (row_pilot[8] > 150):
-                        groundspeed = 'Climbing'
+                        groundspeed = 'On Route'
                 else:
                     if (row_pilot[8] > 0) and (row_pilot[8] < 20):
                         groundspeed = 'Taxing'
@@ -541,8 +540,16 @@ class Main(QMainWindow):
         while self.ui.PilottableWidget.rowCount() > 0:
             self.ui.PilottableWidget.removeRow(0)
 
+        while self.ui.InboundTableWidget.rowCount() > 0:
+            self.ui.InboundTableWidget.removeRow(0)
+            
+        while self.ui.OutboundTableWidget.rowCount() > 0:
+            self.ui.OutboundTableWidget.removeRow(0)
+            
         startrow_atc = 0
         startrow_pilot = 0
+        startrow_in = 0
+        startrow_out = 0
 
         for codes in icao_country:
             cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
@@ -554,6 +561,15 @@ class Main(QMainWindow):
                           , planned_destairport, onground, time_connected, groundspeed FROM status_ivao \
                           WHERE clienttype='PILOT' AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(codes[0])),))
             rows_pilots = cursor.fetchall()
+            
+            cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM status_ivao WHERE planned_depairport LIKE ?", \
+                           (('%'+str(codes[0])),))
+            OutboundTrafficAirport = cursor.fetchall()
+            
+            cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM status_ivao WHERE planned_destairport LIKE ?", \
+                           (('%'+str(codes[0])),))
+            InboundTrafficAirport = cursor.fetchall()
+
             connection.commit()
 
             for row_atc in rows_atcs:
@@ -669,7 +685,7 @@ class Main(QMainWindow):
                         if (row_pilot[8] > 100) and (row_pilot[8] < 150):
                             groundspeed = 'Initial Climbing'
                         if (row_pilot[8] > 150):
-                            groundspeed = 'Climbing'
+                            groundspeed = 'On Route'
                     else:
                         if (row_pilot[8] > 0) and (row_pilot[8] < 20):
                             groundspeed = 'Taxing'
@@ -689,6 +705,91 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_pilot, 9, col_time)
                 startrow_pilot += 1
                 qApp.processEvents()
+                
+            for inbound in InboundTrafficAirport:
+                self.ui.InboundTableWidget.insertRow(self.ui.InboundTableWidget.rowCount())
+                col_callsign = QTableWidgetItem(str(inbound[0]), 0)
+                self.ui.InboundTableWidget.setItem(startrow_in, 0, col_callsign)
+                code_airline = inbound[0][:3]
+                airlineCodePath = './airlines/%s.gif' % code_airline
+                try:
+                    if os.path.exists(airlineCodePath) is True:
+                        Pixmap = QPixmap(airlineCodePath)
+                        airline = QLabel(self)
+                        airline.setPixmap(Pixmap)
+                        self.ui.InboundTableWidget.setCellWidget(startrow_in, 0, airline)
+                    else:
+                        code_airline = '-'
+                        col_airline = QTableWidgetItem(code_airline, 0)
+                        self.ui.InboundTableWidget.setItem(startrow_in, 0, col_airline)
+                except:
+                    pass
+                cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE icao=?", (str(inbound[1]),))
+                flagCode = cursor.fetchone()
+                connection.commit()
+                flagCodePath_orig = ('./flags/%s.png') % flagCode
+                Pixmap = QPixmap(flagCodePath_orig)
+                flag_country = QLabel()
+                flag_country.setPixmap(Pixmap)
+                self.ui.InboundTableWidget.setCellWidget(startrow_in, 1, flag_country)
+                cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE icao=?", (str(inbound[2]),))
+                flagCode = cursor.fetchone()
+                connection.commit()
+                flagCodePath_dest = ('./flags/%s.png') % flagCode
+                Pixmap = QPixmap(flagCodePath_dest)
+                flag_country = QLabel()
+                flag_country.setPixmap(Pixmap)
+                self.ui.InboundTableWidget.setCellWidget(startrow_in, 2, flag_country)
+                if  flagCodePath_orig == flagCodePath_dest:
+                    status_flight = 'National'
+                else:
+                    status_flight = 'International'
+                col_flight = QTableWidgetItem(status_flight, 0)
+                self.ui.InboundTableWidget.setItem(startrow_in, 3, col_flight)
+                startrow_in += 1
+            
+            for outbound in OutboundTrafficAirport:
+                self.ui.OutboundTableWidget.insertRow(self.ui.OutboundTableWidget.rowCount())
+                col_callsign = QTableWidgetItem(str(outbound[0]), 0)
+                self.ui.OutboundTableWidget.setItem(startrow_out, 0, col_callsign)
+                code_airline = outbound[0][:3]
+                airlineCodePath = './airlines/%s.gif' % code_airline
+                try:
+                    if os.path.exists(airlineCodePath) is True:
+                        Pixmap = QPixmap(airlineCodePath)
+                        airline = QLabel(self)
+                        airline.setPixmap(Pixmap)
+                        self.ui.OutboundTableWidget.setCellWidget(startrow_out, 0, airline)
+                    else:
+                        code_airline = '-'
+                        col_airline = QTableWidgetItem(code_airline, 0)
+                        self.ui.OutboundTableWidget.setItem(startrow_out, 0, col_airline)
+                except:
+                    pass
+                cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE icao=?", (str(outbound[1]),))
+                flagCode = cursor.fetchone()
+                connection.commit()
+                flagCodePath_orig = ('./flags/%s.png') % flagCode
+                Pixmap = QPixmap(flagCodePath_orig)
+                flag_country = QLabel()
+                flag_country.setPixmap(Pixmap)
+                self.ui.OutboundTableWidget.setCellWidget(startrow_out, 1, flag_country)
+                cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE icao=?", (str(outbound[2]),))
+                flagCode = cursor.fetchone()
+                connection.commit()
+                flagCodePath_dest = ('./flags/%s.png') % flagCode
+                Pixmap = QPixmap(flagCodePath_dest)
+                flag_country = QLabel()
+                flag_country.setPixmap(Pixmap)
+                self.ui.OutboundTableWidget.setCellWidget(startrow_out, 2, flag_country)
+                if  flagCodePath_orig == flagCodePath_dest:
+                    status_flight = 'National'
+                else:
+                    status_flight = 'International'
+                col_flight = QTableWidgetItem(status_flight, 0)
+                self.ui.OutboundTableWidget.setItem(startrow_out, 3, col_flight)
+                startrow_out += 1
+            
             qApp.processEvents()
         connection.close()
 
