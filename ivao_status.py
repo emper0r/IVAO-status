@@ -27,7 +27,6 @@ import MainWindow_UI
 import urllib2
 import sqlite3
 import os
-import time
 import datetime
 
 data_access = 'whazzup.txt'
@@ -85,8 +84,8 @@ class Main(QMainWindow):
         self.ui.ATC_FullList.setColumnWidth(4, 190)
         self.ui.ATCtableWidget.setColumnWidth(1, 70)
         self.ui.ATCtableWidget.setColumnWidth(2, 60)
-        self.ui.ATCtableWidget.setColumnWidth(3, 140)
-        self.ui.ATCtableWidget.setColumnWidth(4, 190)
+        self.ui.ATCtableWidget.setColumnWidth(3, 240)
+        self.ui.ATCtableWidget.setColumnWidth(4, 110)
         self.ui.ATCtableWidget.setColumnWidth(6, 110)
         self.ui.SearchtableWidget.setColumnWidth(0, 50)
         self.ui.SearchtableWidget.setColumnWidth(1, 100)
@@ -158,7 +157,7 @@ class Main(QMainWindow):
         db_t1 = cursor.fetchall()
         connection.commit()
         startrow_dbt1 = 0
-        db_t2 = cursor.execute("SELECT icao, iata, Airport_Name, Country FROM iata_icao_codes DESC;")
+        db_t2 = cursor.execute("SELECT icao, iata, City, Country FROM iata_icao_codes DESC;")
         db_t2 = cursor.fetchall()
         connection.commit()
         startrow_dbt2 = 0
@@ -418,8 +417,9 @@ class Main(QMainWindow):
                 except:
                     pass
                 try:
-                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]), int(str(row_atc[5])[6:8]) \
-                                                        , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
+                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]) \
+                                                        , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10]) \
+                                                        , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
                 except:
                     pass
                 diff = abs(datetime.datetime.now() - start_connected)
@@ -584,26 +584,10 @@ class Main(QMainWindow):
                 self.ui.ATCtableWidget.setItem(startrow_atc, 0, col_callsign)
                 col_frequency = QTableWidgetItem(str(row_atc[1]), 0)
                 self.ui.ATCtableWidget.setItem(startrow_atc, 1, col_frequency)
-                code_icao = str(row_atc[0][:4])
-                cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE ICAO=?", (str(code_icao),))
-                flagCode = cursor.fetchone()
-                connection.commit()
-                flagCodePath = ('./flags/%s.png') % flagCode
-                try:
-                    if os.path.exists(flagCodePath) is True:
-                        Pixmap = QPixmap(flagCodePath)
-                        flag_country = QQLabel()
-                        flag_country.setPixmap(Pixmap)
-                        self.ui.ATCtableWidget.setCellWidget(startrow_atc, 2, flag_country)
-                    else:
-                        col_country = QTableWidgetItem(str(flagCode).encode('latin-1'), 0)
-                        self.ui.ATCtableWidget.setItem(startrow_atc, 2, col_country)
-                except:
-                    pass
                 col_facility = QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
-                self.ui.ATCtableWidget.setItem(startrow_atc, 3, col_facility)
+                self.ui.ATCtableWidget.setItem(startrow_atc, 2, col_facility)
                 col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
-                self.ui.ATCtableWidget.setItem(startrow_atc, 4, col_realname)
+                self.ui.ATCtableWidget.setItem(startrow_atc, 3, col_realname)
                 code_atc_rating = row_atc[3]
                 ratingImagePath = './ratings/atc_level%d.gif' % int(code_atc_rating)
                 try:
@@ -613,20 +597,21 @@ class Main(QMainWindow):
                         ratingImage.setPixmap(Pixmap)
                         self.ui.ATCtableWidget.setCellWidget(startrow_atc, 6, ratingImage)
                         col_rating = QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
-                        self.ui.ATCtableWidget.setItem(startrow_atc, 5, col_rating)
+                        self.ui.ATCtableWidget.setItem(startrow_atc, 4, col_rating)
                     else:
                         col_rating = QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
-                        self.ui.ATCtableWidget.setItem(startrow_atc, 5, col_rating)
+                        self.ui.ATCtableWidget.setItem(startrow_atc, 4, col_rating)
                 except:
                     pass
                 try:
-                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]), int(str(row_atc[5])[6:8]) \
-                                                       , int(str(row_atc[5])[8:10]), int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
+                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]) \
+                                                        , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10]) \
+                                                        , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
                 except:
                     pass
                 diff = abs(datetime.datetime.now() - start_connected)
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
-                self.ui.ATCtableWidget.setItem(startrow_atc, 7, col_time)
+                self.ui.ATCtableWidget.setItem(startrow_atc, 5, col_time)
                 qApp.processEvents()
                 startrow_atc += 1
 
@@ -702,10 +687,9 @@ class Main(QMainWindow):
                         col_status = '-'
                 col_status = QTableWidgetItem(groundspeed, 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 8, col_status)
-                start_connected = '%d:%d:%d' % (int(str(row_pilot[7])[-6:-4]), int(str(row_pilot[7])[-4:-2]), int(str(row_pilot[7])[-2:]))
-                update = time.ctime()
-                start_connected = datetime.datetime(int(str(row_pilot[7])[:4]), int(str(row_pilot[7])[4:6]), int(str(row_pilot[7])[6:8]) \
-                                                    , int(str(row_pilot[7])[8:10]), int(str(row_pilot[7])[10:12]), int(str(row_pilot[7])[12:14]))
+                start_connected = datetime.datetime(int(str(row_pilot[7])[:4]), int(str(row_pilot[7])[4:6]) \
+                                                    , int(str(row_pilot[7])[6:8]), int(str(row_pilot[7])[8:10]) \
+                                                    , int(str(row_pilot[7])[10:12]), int(str(row_pilot[7])[12:14]))
                 diff = abs(datetime.datetime.now() - start_connected)
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 9, col_time)
@@ -730,7 +714,7 @@ class Main(QMainWindow):
                         self.ui.InboundTableWidget.setItem(startrow_in, 0, col_airline)
                 except:
                     pass
-                cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE icao=?", (str(inbound[1]),))
+                cursor.execute("SELECT Country FROM iata_icao_codes WHERE icao=?", (str(inbound[1]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
                 flagCodePath_orig = ('./flags/%s.png') % flagCode
@@ -738,10 +722,16 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 1, flag_country)
-                col_icao = str(inbound[1])
-                col_country = QTableWidgetItem(col_icao, 0)
+                cursor.execute("SELECT City FROM iata_icao_codes WHERE icao=?", (str(inbound[1]),))
+                city = cursor.fetchone()
+                col_city = ''
+                if city == None:
+                    col_city = '-'
+                else:
+                    col_city = str(city[0].encode('latin-1'))
+                col_country = QTableWidgetItem(col_city, 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 2, col_country)
-                cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE icao=?", (str(inbound[2]),))
+                cursor.execute("SELECT Country FROM iata_icao_codes WHERE icao=?", (str(inbound[2]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
                 flagCodePath_dest = ('./flags/%s.png') % flagCode
@@ -749,8 +739,14 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 3, flag_country)
-                col_icao = str(inbound[2])
-                col_country = QTableWidgetItem(col_icao, 0)
+                cursor.execute("SELECT City FROM iata_icao_codes WHERE icao=?", (str(inbound[2]),))
+                city = cursor.fetchone()
+                col_city = ''
+                if city == None:
+                    col_city = '-'
+                else:
+                    col_city = str(city[0].encode('latin-1'))
+                col_country = QTableWidgetItem(col_city, 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 4, col_country)
                 if  flagCodePath_orig == flagCodePath_dest:
                     status_flight = 'National'
@@ -778,7 +774,7 @@ class Main(QMainWindow):
                         self.ui.OutboundTableWidget.setItem(startrow_out, 0, col_airline)
                 except:
                     pass
-                cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE icao=?", (str(outbound[1]),))
+                cursor.execute("SELECT Country FROM iata_icao_codes WHERE icao=?", (str(outbound[1]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
                 flagCodePath_orig = ('./flags/%s.png') % flagCode
@@ -786,10 +782,16 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 1, flag_country)
-                col_icao = str(outbound[1])
-                col_country = QTableWidgetItem(col_icao, 0)
+                cursor.execute("SELECT City FROM iata_icao_codes WHERE icao=?", (str(outbound[1]),))
+                city = cursor.fetchone()
+                col_city = ''
+                if city == None:
+                    col_city = '-'
+                else:
+                    col_city = str(city[0].encode('latin-1'))
+                col_country = QTableWidgetItem(col_city, 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 2, col_country)
-                cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE icao=?", (str(outbound[2]),))
+                cursor.execute("SELECT Country FROM iata_icao_codes WHERE icao=?", (str(outbound[2]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
                 flagCodePath_dest = ('./flags/%s.png') % flagCode
@@ -797,8 +799,14 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 3, flag_country)
-                col_icao = str(outbound[2])
-                col_country = QTableWidgetItem(col_icao, 0)
+                cursor.execute("SELECT City FROM iata_icao_codes WHERE icao=?", (str(outbound[2]),))
+                city = cursor.fetchone()
+                col_city = ''
+                if city == None:
+                    col_city = '-'
+                else:
+                    col_city = str(city[0].encode('latin-1'))
+                col_country = QTableWidgetItem(col_city, 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 4, col_country)
                 if  flagCodePath_orig == flagCodePath_dest:
                     status_flight = 'National'

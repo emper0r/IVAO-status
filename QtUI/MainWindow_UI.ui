@@ -806,11 +806,6 @@
       </column>
       <column>
        <property name="text">
-        <string>Country</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
         <string>Position</string>
        </property>
       </column>

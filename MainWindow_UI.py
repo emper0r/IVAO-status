@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Thu Sep  1 08:35:22 2011
+# Created: Thu Sep  1 11:29:03 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -285,7 +285,7 @@ class Ui_MainWindow(object):
         self.ATCtableWidget.setGridStyle(QtCore.Qt.DotLine)
         self.ATCtableWidget.setWordWrap(False)
         self.ATCtableWidget.setObjectName(_fromUtf8("ATCtableWidget"))
-        self.ATCtableWidget.setColumnCount(8)
+        self.ATCtableWidget.setColumnCount(7)
         self.ATCtableWidget.setRowCount(0)
         item = QtGui.QTableWidgetItem()
         self.ATCtableWidget.setHorizontalHeaderItem(0, item)
@@ -301,8 +301,6 @@ class Ui_MainWindow(object):
         self.ATCtableWidget.setHorizontalHeaderItem(5, item)
         item = QtGui.QTableWidgetItem()
         self.ATCtableWidget.setHorizontalHeaderItem(6, item)
-        item = QtGui.QTableWidgetItem()
-        self.ATCtableWidget.setHorizontalHeaderItem(7, item)
         self.ATCtableWidget.horizontalHeader().setDefaultSectionSize(120)
         self.ATCtableWidget.horizontalHeader().setHighlightSections(True)
         self.ATCtableWidget.horizontalHeader().setMinimumSectionSize(120)
@@ -679,11 +677,10 @@ class Ui_MainWindow(object):
         self.ATCtableWidget.setSortingEnabled(True)
         self.ATCtableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "CallSign", None, QtGui.QApplication.UnicodeUTF8))
         self.ATCtableWidget.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Frequency", None, QtGui.QApplication.UnicodeUTF8))
-        self.ATCtableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Country", None, QtGui.QApplication.UnicodeUTF8))
-        self.ATCtableWidget.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Position", None, QtGui.QApplication.UnicodeUTF8))
-        self.ATCtableWidget.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("MainWindow", "Controller", None, QtGui.QApplication.UnicodeUTF8))
-        self.ATCtableWidget.horizontalHeaderItem(5).setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
-        self.ATCtableWidget.horizontalHeaderItem(7).setText(QtGui.QApplication.translate("MainWindow", "Time", None, QtGui.QApplication.UnicodeUTF8))
+        self.ATCtableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Position", None, QtGui.QApplication.UnicodeUTF8))
+        self.ATCtableWidget.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Controller", None, QtGui.QApplication.UnicodeUTF8))
+        self.ATCtableWidget.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
+        self.ATCtableWidget.horizontalHeaderItem(6).setText(QtGui.QApplication.translate("MainWindow", "Time", None, QtGui.QApplication.UnicodeUTF8))
         self.PilottableWidget.setSortingEnabled(True)
         self.PilottableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "Airlines", None, QtGui.QApplication.UnicodeUTF8))
         self.PilottableWidget.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "CallSign", None, QtGui.QApplication.UnicodeUTF8))
