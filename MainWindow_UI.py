@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Thu Sep  1 11:29:03 2011
+# Created: Thu Sep  1 14:50:56 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -356,14 +356,14 @@ class Ui_MainWindow(object):
         self.PilottableWidget.verticalHeader().setDefaultSectionSize(20)
         self.PilottableWidget.verticalHeader().setMinimumSectionSize(20)
         self.Inbound_traffic = QtGui.QLabel(self.countries)
-        self.Inbound_traffic.setGeometry(QtCore.QRect(7, 403, 491, 20))
+        self.Inbound_traffic.setGeometry(QtCore.QRect(44, 403, 451, 20))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
         self.Inbound_traffic.setFont(font)
         self.Inbound_traffic.setObjectName(_fromUtf8("Inbound_traffic"))
         self.Outbound_traffic = QtGui.QLabel(self.countries)
-        self.Outbound_traffic.setGeometry(QtCore.QRect(505, 403, 491, 20))
+        self.Outbound_traffic.setGeometry(QtCore.QRect(545, 403, 451, 20))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
@@ -447,6 +447,16 @@ class Ui_MainWindow(object):
         self.OutboundTableWidget.horizontalHeader().setStretchLastSection(True)
         self.OutboundTableWidget.verticalHeader().setDefaultSectionSize(20)
         self.OutboundTableWidget.verticalHeader().setMinimumSectionSize(20)
+        self.arrivals_icon = QtGui.QLabel(self.countries)
+        self.arrivals_icon.setGeometry(QtCore.QRect(10, 400, 31, 21))
+        self.arrivals_icon.setCursor(QtCore.Qt.PointingHandCursor)
+        self.arrivals_icon.setText(_fromUtf8(""))
+        self.arrivals_icon.setObjectName(_fromUtf8("arrivals_icon"))
+        self.departures_icon = QtGui.QLabel(self.countries)
+        self.departures_icon.setGeometry(QtCore.QRect(510, 400, 31, 21))
+        self.departures_icon.setCursor(QtCore.Qt.PointingHandCursor)
+        self.departures_icon.setText(_fromUtf8(""))
+        self.departures_icon.setObjectName(_fromUtf8("departures_icon"))
         self.tabWidget.addTab(self.countries, _fromUtf8(""))
         self.controllers = QtGui.QWidget()
         self.controllers.setObjectName(_fromUtf8("controllers"))
@@ -605,7 +615,7 @@ class Ui_MainWindow(object):
         self.logo_ivao.setObjectName(_fromUtf8("logo_ivao"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 19))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 20))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuMenu = QtGui.QMenu(self.menuBar)
         self.menuMenu.setObjectName(_fromUtf8("menuMenu"))

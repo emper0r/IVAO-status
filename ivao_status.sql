@@ -5381,7 +5381,7 @@ INSERT INTO iata_icao_codes VALUES(NULL,'PTI','-','Greensboro');
 INSERT INTO iata_icao_codes VALUES('Australia','PTJ','YPOD','Portland');
 INSERT INTO iata_icao_codes VALUES('United_States','PTK','KPTK','Pontiac');
 INSERT INTO iata_icao_codes VALUES('United_States','PTN','KPTN','Patterson');
-INSERT INTO iata_icao_codes VALUES(NULL,'PTP','TFFR','Pointe-à-Pitre');
+INSERT INTO iata_icao_codes VALUES('France','PTP','TFFR','Pointe-à-Pitre');
 INSERT INTO iata_icao_codes VALUES('United_States','PTS','KPTS','Pittsburg');
 INSERT INTO iata_icao_codes VALUES('United_States','PTT','KPTT','Pratt');
 INSERT INTO iata_icao_codes VALUES('United_States','PTU','PAPM','Platinum');
