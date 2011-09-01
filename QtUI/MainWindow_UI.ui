@@ -373,10 +373,10 @@
        <bool>false</bool>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>60</number>
+       <number>65</number>
       </attribute>
       <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>60</number>
+       <number>65</number>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
@@ -1052,13 +1052,13 @@
        <bool>false</bool>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>122</number>
+       <number>81</number>
       </attribute>
       <attribute name="horizontalHeaderHighlightSections">
        <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>122</number>
+       <number>81</number>
       </attribute>
       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
        <bool>true</bool>
@@ -1079,7 +1079,17 @@
       </column>
       <column>
        <property name="text">
+        <string>From</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
         <string>Departure</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>To</string>
        </property>
       </column>
       <column>
@@ -1147,13 +1157,13 @@
        <bool>false</bool>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>124</number>
+       <number>82</number>
       </attribute>
       <attribute name="horizontalHeaderHighlightSections">
        <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>124</number>
+       <number>82</number>
       </attribute>
       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
        <bool>true</bool>
@@ -1174,7 +1184,17 @@
       </column>
       <column>
        <property name="text">
+        <string>From</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
         <string>Departure</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>To</string>
        </property>
       </column>
       <column>

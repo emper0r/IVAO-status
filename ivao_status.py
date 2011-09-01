@@ -99,7 +99,11 @@ class Main(QMainWindow):
         self.ui.dbTableWidget_2.setColumnWidth(1, 70)
         self.ui.dbTableWidget_2.setColumnWidth(2, 110)
         self.ui.InboundTableWidget.setColumnWidth(0, 90)
+        self.ui.InboundTableWidget.setColumnWidth(1, 34)
+        self.ui.InboundTableWidget.setColumnWidth(3, 30)
         self.ui.OutboundTableWidget.setColumnWidth(0, 90)
+        self.ui.OutboundTableWidget.setColumnWidth(1, 34)
+        self.ui.OutboundTableWidget.setColumnWidth(3, 30)
         self.ui.PILOT_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.ATC_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.FriendstableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -734,6 +738,9 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 1, flag_country)
+                col_icao = str(inbound[1])
+                col_country = QTableWidgetItem(col_icao, 0)
+                self.ui.InboundTableWidget.setItem(startrow_in, 2, col_country)
                 cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE icao=?", (str(inbound[2]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
@@ -741,13 +748,16 @@ class Main(QMainWindow):
                 Pixmap = QPixmap(flagCodePath_dest)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
-                self.ui.InboundTableWidget.setCellWidget(startrow_in, 2, flag_country)
+                self.ui.InboundTableWidget.setCellWidget(startrow_in, 3, flag_country)
+                col_icao = str(inbound[2])
+                col_country = QTableWidgetItem(col_icao, 0)
+                self.ui.InboundTableWidget.setItem(startrow_in, 4, col_country)
                 if  flagCodePath_orig == flagCodePath_dest:
                     status_flight = 'National'
                 else:
                     status_flight = 'International'
                 col_flight = QTableWidgetItem(status_flight, 0)
-                self.ui.InboundTableWidget.setItem(startrow_in, 3, col_flight)
+                self.ui.InboundTableWidget.setItem(startrow_in, 5, col_flight)
                 startrow_in += 1
             
             for outbound in OutboundTrafficAirport:
@@ -776,6 +786,9 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 1, flag_country)
+                col_icao = str(outbound[1])
+                col_country = QTableWidgetItem(col_icao, 0)
+                self.ui.OutboundTableWidget.setItem(startrow_out, 2, col_country)
                 cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE icao=?", (str(outbound[2]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
@@ -783,13 +796,16 @@ class Main(QMainWindow):
                 Pixmap = QPixmap(flagCodePath_dest)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
-                self.ui.OutboundTableWidget.setCellWidget(startrow_out, 2, flag_country)
+                self.ui.OutboundTableWidget.setCellWidget(startrow_out, 3, flag_country)
+                col_icao = str(outbound[2])
+                col_country = QTableWidgetItem(col_icao, 0)
+                self.ui.OutboundTableWidget.setItem(startrow_out, 4, col_country)
                 if  flagCodePath_orig == flagCodePath_dest:
                     status_flight = 'National'
                 else:
                     status_flight = 'International'
                 col_flight = QTableWidgetItem(status_flight, 0)
-                self.ui.OutboundTableWidget.setItem(startrow_out, 3, col_flight)
+                self.ui.OutboundTableWidget.setItem(startrow_out, 5, col_flight)
                 startrow_out += 1
             
             qApp.processEvents()
