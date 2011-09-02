@@ -1474,7 +1474,7 @@
        <rect>
         <x>6</x>
         <y>10</y>
-        <width>485</width>
+        <width>331</width>
         <height>591</height>
        </rect>
       </property>
@@ -1543,9 +1543,9 @@
      <widget class="QTableWidget" name="dbTableWidget_2">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>340</x>
         <y>10</y>
-        <width>501</width>
+        <width>661</width>
         <height>591</height>
        </rect>
       </property>
@@ -1583,13 +1583,13 @@
        <bool>false</bool>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>110</number>
+       <number>85</number>
       </attribute>
       <attribute name="horizontalHeaderHighlightSections">
        <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>110</number>
+       <number>85</number>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
@@ -1602,12 +1602,17 @@
       </attribute>
       <column>
        <property name="text">
-        <string>ICAO code</string>
+        <string>ICAO</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>IATA code</string>
+        <string>Latitude</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Longitude</string>
        </property>
       </column>
       <column>

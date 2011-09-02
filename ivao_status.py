@@ -94,9 +94,10 @@ class Main(QMainWindow):
         self.ui.FriendstableWidget.setColumnWidth(1, 170)
         self.ui.FriendstableWidget.setColumnWidth(2, 100)
         self.ui.dbTableWidget_1.setColumnWidth(0, 30)
-        self.ui.dbTableWidget_2.setColumnWidth(0, 75)
-        self.ui.dbTableWidget_2.setColumnWidth(1, 70)
-        self.ui.dbTableWidget_2.setColumnWidth(2, 110)
+        self.ui.dbTableWidget_2.setColumnWidth(0, 45)
+        self.ui.dbTableWidget_2.setColumnWidth(1, 80)
+        self.ui.dbTableWidget_2.setColumnWidth(2, 80)
+        self.ui.dbTableWidget_2.setColumnWidth(3, 140)
         self.ui.InboundTableWidget.setColumnWidth(0, 90)
         self.ui.InboundTableWidget.setColumnWidth(1, 34)
         self.ui.InboundTableWidget.setColumnWidth(3, 30)
@@ -157,13 +158,14 @@ class Main(QMainWindow):
 
     def initial_load(self):
         self.statusBar().showMessage('Populating Database', 2000)
+        qApp.processEvents()
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
-        db_t1 = cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes DESC;")
+        db_t1 = cursor.execute("SELECT DISTINCT(Country) FROM icao_codes DESC;")
         db_t1 = cursor.fetchall()
         connection.commit()
         startrow_dbt1 = 0
-        db_t2 = cursor.execute("SELECT icao, iata, City, Country FROM iata_icao_codes DESC;")
+        db_t2 = cursor.execute("SELECT icao, Latitude, Longitude, City_Airport, Country FROM icao_codes DESC;")
         db_t2 = cursor.fetchall()
         connection.commit()
         startrow_dbt2 = 0
@@ -196,13 +198,15 @@ class Main(QMainWindow):
             self.ui.dbTableWidget_2.insertRow(self.ui.dbTableWidget_2.rowCount())
             icao = QTableWidgetItem(str(line[0]), 0)
             self.ui.dbTableWidget_2.setItem(startrow_dbt2, 0, icao)
-            iata = QTableWidgetItem(str(line[1]), 0)
-            self.ui.dbTableWidget_2.setItem(startrow_dbt2, 1, iata)
-            AirportName = QTableWidgetItem(str(line[2].encode('utf-8')), 0)
-            self.ui.dbTableWidget_2.setItem(startrow_dbt2, 2, AirportName)
+            latitude = QTableWidgetItem(str(line[1]), 0)
+            self.ui.dbTableWidget_2.setItem(startrow_dbt2, 1, latitude)
+            longitude = QTableWidgetItem(str(line[2]), 0)
+            self.ui.dbTableWidget_2.setItem(startrow_dbt2, 2, longitude)
+            AirportName = QTableWidgetItem(str(line[3].encode('utf-8')), 0)
+            self.ui.dbTableWidget_2.setItem(startrow_dbt2, 3, AirportName)
             try:
-                Country = QTableWidgetItem(str(line[3].encode('utf-8')), 0)
-                self.ui.dbTableWidget_2.setItem(startrow_dbt2, 3, Country)
+                Country = QTableWidgetItem(str(line[4].encode('utf-8')), 0)
+                self.ui.dbTableWidget_2.setItem(startrow_dbt2, 4, Country)
             except:
                 pass
             startrow_dbt2 += 1
@@ -382,7 +386,7 @@ class Main(QMainWindow):
             col_frequency = QTableWidgetItem(str(row_atc[1]), 0)
             self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
             code_icao = str(row_atc[0][:4])
-            cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE ICAO=?", (str(code_icao),))
+            cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE ICAO=?", (str(code_icao),))
             flagCode = cursor.fetchone()
             connection.commit()
             flagCodePath = ('./flags/%s.png') % flagCode
@@ -720,7 +724,7 @@ class Main(QMainWindow):
                         self.ui.InboundTableWidget.setItem(startrow_in, 0, col_airline)
                 except:
                     pass
-                cursor.execute("SELECT Country FROM iata_icao_codes WHERE icao=?", (str(inbound[1]),))
+                cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(inbound[1]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
                 flagCodePath_orig = ('./flags/%s.png') % flagCode
@@ -728,7 +732,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 1, flag_country)
-                cursor.execute("SELECT City FROM iata_icao_codes WHERE icao=?", (str(inbound[1]),))
+                cursor.execute("SELECT Airport_City FROM icao_codes WHERE icao=?", (str(inbound[1]),))
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
@@ -737,7 +741,7 @@ class Main(QMainWindow):
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 2, col_country)
-                cursor.execute("SELECT Country FROM iata_icao_codes WHERE icao=?", (str(inbound[2]),))
+                cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(inbound[2]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
                 flagCodePath_dest = ('./flags/%s.png') % flagCode
@@ -745,7 +749,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 3, flag_country)
-                cursor.execute("SELECT City FROM iata_icao_codes WHERE icao=?", (str(inbound[2]),))
+                cursor.execute("SELECT Airport_City FROM icao_codes WHERE icao=?", (str(inbound[2]),))
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
@@ -780,7 +784,7 @@ class Main(QMainWindow):
                         self.ui.OutboundTableWidget.setItem(startrow_out, 0, col_airline)
                 except:
                     pass
-                cursor.execute("SELECT Country FROM iata_icao_codes WHERE icao=?", (str(outbound[1]),))
+                cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(outbound[1]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
                 flagCodePath_orig = ('./flags/%s.png') % flagCode
@@ -788,7 +792,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 1, flag_country)
-                cursor.execute("SELECT City FROM iata_icao_codes WHERE icao=?", (str(outbound[1]),))
+                cursor.execute("SELECT Airport_City FROM icao_codes WHERE icao=?", (str(outbound[1]),))
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
@@ -797,7 +801,7 @@ class Main(QMainWindow):
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 2, col_country)
-                cursor.execute("SELECT Country FROM iata_icao_codes WHERE icao=?", (str(outbound[2]),))
+                cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(outbound[2]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
                 flagCodePath_dest = ('./flags/%s.png') % flagCode
@@ -805,7 +809,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 3, flag_country)
-                cursor.execute("SELECT City FROM iata_icao_codes WHERE icao=?", (str(outbound[2]),))
+                cursor.execute("SELECT Airport_City FROM icao_codes WHERE icao=?", (str(outbound[2]),))
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:

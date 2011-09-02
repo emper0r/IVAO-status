@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Thu Sep  1 14:50:56 2011
+# Created: Fri Sep  2 11:45:39 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -550,7 +550,7 @@ class Ui_MainWindow(object):
         self.database = QtGui.QWidget()
         self.database.setObjectName(_fromUtf8("database"))
         self.dbTableWidget_1 = QtGui.QTableWidget(self.database)
-        self.dbTableWidget_1.setGeometry(QtCore.QRect(6, 10, 485, 591))
+        self.dbTableWidget_1.setGeometry(QtCore.QRect(6, 10, 331, 591))
         self.dbTableWidget_1.setProperty(_fromUtf8("cursor"), QtCore.Qt.PointingHandCursor)
         self.dbTableWidget_1.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.dbTableWidget_1.setTabKeyNavigation(False)
@@ -575,7 +575,7 @@ class Ui_MainWindow(object):
         self.dbTableWidget_1.verticalHeader().setDefaultSectionSize(20)
         self.dbTableWidget_1.verticalHeader().setMinimumSectionSize(20)
         self.dbTableWidget_2 = QtGui.QTableWidget(self.database)
-        self.dbTableWidget_2.setGeometry(QtCore.QRect(500, 10, 501, 591))
+        self.dbTableWidget_2.setGeometry(QtCore.QRect(340, 10, 661, 591))
         self.dbTableWidget_2.setProperty(_fromUtf8("cursor"), QtCore.Qt.PointingHandCursor)
         self.dbTableWidget_2.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.dbTableWidget_2.setTabKeyNavigation(False)
@@ -587,7 +587,7 @@ class Ui_MainWindow(object):
         self.dbTableWidget_2.setTextElideMode(QtCore.Qt.ElideMiddle)
         self.dbTableWidget_2.setWordWrap(False)
         self.dbTableWidget_2.setObjectName(_fromUtf8("dbTableWidget_2"))
-        self.dbTableWidget_2.setColumnCount(4)
+        self.dbTableWidget_2.setColumnCount(5)
         self.dbTableWidget_2.setRowCount(0)
         item = QtGui.QTableWidgetItem()
         self.dbTableWidget_2.setHorizontalHeaderItem(0, item)
@@ -597,9 +597,11 @@ class Ui_MainWindow(object):
         self.dbTableWidget_2.setHorizontalHeaderItem(2, item)
         item = QtGui.QTableWidgetItem()
         self.dbTableWidget_2.setHorizontalHeaderItem(3, item)
-        self.dbTableWidget_2.horizontalHeader().setDefaultSectionSize(110)
+        item = QtGui.QTableWidgetItem()
+        self.dbTableWidget_2.setHorizontalHeaderItem(4, item)
+        self.dbTableWidget_2.horizontalHeader().setDefaultSectionSize(85)
         self.dbTableWidget_2.horizontalHeader().setHighlightSections(True)
-        self.dbTableWidget_2.horizontalHeader().setMinimumSectionSize(110)
+        self.dbTableWidget_2.horizontalHeader().setMinimumSectionSize(85)
         self.dbTableWidget_2.horizontalHeader().setStretchLastSection(True)
         self.dbTableWidget_2.verticalHeader().setDefaultSectionSize(20)
         self.dbTableWidget_2.verticalHeader().setMinimumSectionSize(20)
@@ -742,10 +744,11 @@ class Ui_MainWindow(object):
         self.dbTableWidget_1.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "Flag", None, QtGui.QApplication.UnicodeUTF8))
         self.dbTableWidget_1.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Country", None, QtGui.QApplication.UnicodeUTF8))
         self.dbTableWidget_2.setSortingEnabled(True)
-        self.dbTableWidget_2.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "ICAO code", None, QtGui.QApplication.UnicodeUTF8))
-        self.dbTableWidget_2.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "IATA code", None, QtGui.QApplication.UnicodeUTF8))
-        self.dbTableWidget_2.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "City of Airport", None, QtGui.QApplication.UnicodeUTF8))
-        self.dbTableWidget_2.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Country", None, QtGui.QApplication.UnicodeUTF8))
+        self.dbTableWidget_2.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "ICAO", None, QtGui.QApplication.UnicodeUTF8))
+        self.dbTableWidget_2.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Latitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.dbTableWidget_2.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Longitude", None, QtGui.QApplication.UnicodeUTF8))
+        self.dbTableWidget_2.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "City of Airport", None, QtGui.QApplication.UnicodeUTF8))
+        self.dbTableWidget_2.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("MainWindow", "Country", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.database), QtGui.QApplication.translate("MainWindow", "Database", None, QtGui.QApplication.UnicodeUTF8))
         self.menuMenu.setTitle(QtGui.QApplication.translate("MainWindow", "Menu", None, QtGui.QApplication.UnicodeUTF8))
         self.menuAbout.setTitle(QtGui.QApplication.translate("MainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
