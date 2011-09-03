@@ -1628,34 +1628,6 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QLabel" name="logo_ivao">
-    <property name="geometry">
-     <rect>
-      <x>945</x>
-      <y>0</y>
-      <width>71</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="textFormat">
-     <enum>Qt::PlainText</enum>
-    </property>
-    <property name="pixmap">
-     <pixmap>../airlines/ivao.jpg</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-    <property name="textInteractionFlags">
-     <set>Qt::NoTextInteraction</set>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

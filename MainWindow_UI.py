@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Fri Sep  2 11:45:39 2011
+# Created: Sat Sep  3 10:40:38 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -606,15 +606,6 @@ class Ui_MainWindow(object):
         self.dbTableWidget_2.verticalHeader().setDefaultSectionSize(20)
         self.dbTableWidget_2.verticalHeader().setMinimumSectionSize(20)
         self.tabWidget.addTab(self.database, _fromUtf8(""))
-        self.logo_ivao = QtGui.QLabel(self.centralwidget)
-        self.logo_ivao.setGeometry(QtCore.QRect(945, 0, 71, 51))
-        self.logo_ivao.setCursor(QtCore.Qt.PointingHandCursor)
-        self.logo_ivao.setText(_fromUtf8(""))
-        self.logo_ivao.setTextFormat(QtCore.Qt.PlainText)
-        self.logo_ivao.setPixmap(QtGui.QPixmap(_fromUtf8("../airlines/ivao.jpg")))
-        self.logo_ivao.setScaledContents(True)
-        self.logo_ivao.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
-        self.logo_ivao.setObjectName(_fromUtf8("logo_ivao"))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 20))

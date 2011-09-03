@@ -55,7 +55,7 @@ class Main(QMainWindow):
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QIcon('./images/ivao.jpg'))
+        self.setWindowIcon(QIcon('./images/ivao.png'))
         self.connect(self.ui.searchpushButton, SIGNAL('clicked()'), self.searchpushButton)
         self.connect(self.ui.METARFindButton, SIGNAL('clicked()'), self.metar)
         self.connect(self.ui.country_list, SIGNAL('activated(QString)'), self.country_view)
@@ -131,9 +131,6 @@ class Main(QMainWindow):
         QObject.connect(self.ui.SearchtableWidget, SIGNAL("clicked()"), self.addFriend)
         self.ui.SearchtableWidget.addAction(addFriend_Action)
         self.ui.SearchtableWidget.addAction(show_PlayerAtMap_Action)
-        Pixmap = QPixmap('./airlines/ivao.jpg')
-        self.ui.logo_ivao.setPixmap(Pixmap)
-        self.ui.logo_ivao.show()
         Pixmap = QPixmap('./images/departures.png')
         self.ui.departures_icon.setPixmap(Pixmap)
         self.ui.departures_icon.show()
@@ -977,7 +974,7 @@ class Main(QMainWindow):
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)        
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
-        cursor.execute("SELECT latitude, longitude, callsign from status_ivao where vid=?;",  (int(current_vid.text()),))
+        cursor.execute("SELECT latitude, longitude, callsign, clienttype from status_ivao where vid=?;",  (int(current_vid.text()),))
         player = cursor.fetchall()
         latitude, longitude = player[0][0], player[0][1]
         player_location = open('./player_location.html', 'w')
@@ -1001,8 +998,12 @@ class Main(QMainWindow):
         else:
             player_location.write('    var zoom = 6;\n')
         player_location.write('    var markers = new OpenLayers.Layer.Markers( "Markers" );\n')
+        if player[0][3] == 'PILOT':
+            player_location.write('    var icon = new OpenLayers.Icon("./images/airplane.png");\n')
+        else:
+            player_location.write('    var icon = new OpenLayers.Icon("./images/tower.png");\n')
         player_location.write('    map.addLayer(markers);\n')
-        player_location.write('    markers.addMarker(new OpenLayers.Marker(lonLat));\n')
+        player_location.write('    markers.addMarker(new OpenLayers.Marker(lonLat, icon));\n')
         player_location.write('    map.setCenter (lonLat, zoom);\n')
         player_location.write('  </script>\n')
         player_location.write('</body></html>\n')
