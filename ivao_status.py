@@ -535,13 +535,13 @@ class Main(QMainWindow):
         country_selected = self.ui.country_list.currentText()
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
-        cursor.execute("SELECT DISTINCT(Country) FROM iata_icao_codes WHERE Country=?", (str(country_selected),))
+        cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE Country=?", (str(country_selected),))
         flagCode = cursor.fetchone()
         connection.commit()
         flagCodePath = ('./flags/%s.png') % country_selected
         Pixmap = QPixmap(flagCodePath)
         self.ui.flagIcon.setPixmap(Pixmap)
-        cursor.execute("SELECT icao FROM iata_icao_codes where country=?;", (str(country_selected),))
+        cursor.execute("SELECT icao FROM icao_codes where country=?;", (str(country_selected),))
         icao_country = cursor.fetchall()
         connection.commit()
         self.ui.Inbound_traffic.setText('Inbound Traffic in %s Airports' % (country_selected))
@@ -732,7 +732,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 1, flag_country)
-                cursor.execute("SELECT Airport_City FROM icao_codes WHERE icao=?", (str(inbound[1]),))
+                cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(inbound[1]),))
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
@@ -749,7 +749,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 3, flag_country)
-                cursor.execute("SELECT Airport_City FROM icao_codes WHERE icao=?", (str(inbound[2]),))
+                cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(inbound[2]),))
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
@@ -792,7 +792,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 1, flag_country)
-                cursor.execute("SELECT Airport_City FROM icao_codes WHERE icao=?", (str(outbound[1]),))
+                cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(outbound[1]),))
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
@@ -809,7 +809,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 3, flag_country)
-                cursor.execute("SELECT Airport_City FROM icao_codes WHERE icao=?", (str(outbound[2]),))
+                cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(outbound[2]),))
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
