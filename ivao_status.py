@@ -974,9 +974,10 @@ class Main(QMainWindow):
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)        
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
-        cursor.execute("SELECT latitude, longitude, callsign, clienttype from status_ivao where vid=?;",  (int(current_vid.text()),))
+        cursor.execute("SELECT latitude, longitude, callsign, true_heading, clienttype from status_ivao where vid=?;" \
+                       ,  (int(current_vid.text()),))
         player = cursor.fetchall()
-        latitude, longitude = player[0][0], player[0][1]
+        latitude, longitude, heading = player[0][0], player[0][1], player[0][3]
         player_location = open('./player_location.html', 'w')
         player_location.write('<html><body>\n')
         player_location.write('  <div id="mapdiv"></div>\n')
@@ -997,13 +998,29 @@ class Main(QMainWindow):
             player_location.write('    var zoom = 12;\n')
         else:
             player_location.write('    var zoom = 6;\n')
-        player_location.write('    var markers = new OpenLayers.Layer.Markers( "Markers" );\n')
-        if player[0][3] == 'PILOT':
-            player_location.write('    var icon = new OpenLayers.Icon("./images/airplane.png");\n')
+        player_location.write('var planes=new OpenLayers.Layer.Vector("Player",\n')
+        player_location.write('    {\n')
+        player_location.write('    styleMap: new OpenLayers.StyleMap({\n')
+        player_location.write('         "default": {\n')
+        if player[0][4] == 'PILOT':
+            player_location.write('         externalGraphic: "./images/airplane.png",\n')
         else:
-            player_location.write('    var icon = new OpenLayers.Icon("./images/tower.png");\n')
-        player_location.write('    map.addLayer(markers);\n')
-        player_location.write('    markers.addMarker(new OpenLayers.Marker(lonLat, icon));\n')
+            player_location.write('         externalGraphic: "./images/tower.png",\n')
+        player_location.write('         graphicWidth: 28,\n')
+        player_location.write('         graphicHeight: 28,\n')
+        player_location.write('         graphicYOffset: 0,\n')
+        player_location.write('         rotation: "${angle}",\n')
+        player_location.write('         fillOpacity: "${opacity}"\n')
+        player_location.write('         }\n')
+        player_location.write('     })\n')
+        player_location.write(' });\n')
+        player_location.write('var feature=new OpenLayers.Feature.Vector(\n')
+        if player[0][4] == 'PILOT':
+            player_location.write('  new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": %d, opacity: 100});\n' % (heading))
+        else:
+            player_location.write('  new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": 0, opacity: 100});\n')
+        player_location.write('planes.addFeatures([feature]);\n')
+        player_location.write('map.addLayer(planes);\n')
         player_location.write('    map.setCenter (lonLat, zoom);\n')
         player_location.write('  </script>\n')
         player_location.write('</body></html>\n')
