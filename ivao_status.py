@@ -998,12 +998,12 @@ class Main(QMainWindow):
             player_location.write('    var zoom = 12;\n')
         else:
             player_location.write('    var zoom = 6;\n')
-        player_location.write('var planes=new OpenLayers.Layer.Vector("Player",\n')
+        player_location.write('    var planes=new OpenLayers.Layer.Vector("Player",\n')
         player_location.write('    {\n')
         player_location.write('    styleMap: new OpenLayers.StyleMap({\n')
         player_location.write('         "default": {\n')
         if player[0][4] == 'PILOT':
-            player_location.write('         externalGraphic: "./images/airplane.png",\n')
+            player_location.write('         externalGraphic: "./images/airplane.gif",\n')
         else:
             player_location.write('         externalGraphic: "./images/tower.png",\n')
         player_location.write('         graphicWidth: 28,\n')
@@ -1014,13 +1014,13 @@ class Main(QMainWindow):
         player_location.write('         }\n')
         player_location.write('     })\n')
         player_location.write(' });\n')
-        player_location.write('var feature=new OpenLayers.Feature.Vector(\n')
+        player_location.write(' var feature=new OpenLayers.Feature.Vector(\n')
         if player[0][4] == 'PILOT':
-            player_location.write('  new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": %d, opacity: 100});\n' % (heading))
+            player_location.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": %d, opacity: 100});\n' % (heading))
         else:
-            player_location.write('  new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": 0, opacity: 100});\n')
-        player_location.write('planes.addFeatures([feature]);\n')
-        player_location.write('map.addLayer(planes);\n')
+            player_location.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": 0, opacity: 100});\n')
+        player_location.write('    planes.addFeatures([feature]);\n')
+        player_location.write('    map.addLayer(planes);\n')
         player_location.write('    map.setCenter (lonLat, zoom);\n')
         player_location.write('  </script>\n')
         player_location.write('</body></html>\n')
