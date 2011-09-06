@@ -283,11 +283,6 @@
       </column>
       <column>
        <property name="text">
-        <string>Callsign</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
         <string>Rating</string>
        </property>
       </column>
@@ -1635,7 +1630,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>20</height>
+     <height>16</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">

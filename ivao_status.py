@@ -24,6 +24,8 @@ from PyQt4.QtGui import *
 from PyQt4.QtWebKit import *
 from PyQt4.Qt import *
 import MainWindow_UI
+import PlayerInfoWindow_UI
+import SettingWindow_UI
 import urllib2
 import sqlite3
 import os
@@ -124,13 +126,13 @@ class Main(QMainWindow):
         self.ui.PILOT_FullList.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.ATCtableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.PilottableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
-        addFriend_Action = QAction("Add Friend", self)
-        show_PlayerAtMap_Action = QAction("Show in the Map", self)
-        addFriend_Action.triggered.connect(self.addFriend)
-        show_PlayerAtMap_Action.triggered.connect(self.ShowAtMap)
-        QObject.connect(self.ui.SearchtableWidget, SIGNAL("clicked()"), self.addFriend)
-        self.ui.SearchtableWidget.addAction(addFriend_Action)
-        self.ui.SearchtableWidget.addAction(show_PlayerAtMap_Action)
+        showInfo_Action = QAction("Show Info", self)
+        showInfo_Action.triggered.connect(self.show_player_info)
+        self.ui.SearchtableWidget.addAction(showInfo_Action)
+        self.ui.ATC_FullList.addAction(showInfo_Action)
+        self.ui.PILOT_FullList.addAction(showInfo_Action)
+        self.ui.ATCtableWidget.addAction(showInfo_Action)
+        self.ui.PilottableWidget.addAction(showInfo_Action)
         Pixmap = QPixmap('./images/departures.png')
         self.ui.departures_icon.setPixmap(Pixmap)
         self.ui.departures_icon.show()
@@ -884,9 +886,9 @@ class Main(QMainWindow):
         connection.close()
 
     def mouseReleaseEvent(self, event):
-        if event.button() == Qt.RightButton and self.ui.SearchtableWidget.selectRow(self.ui.SearchtableWidget.currentRow()):
-            self.addFriend(event)
-            self.ShowAtMap(event)
+        if event.button() == Qt.RightButton and self.ui.SearchtableWidget.selectRow(self.ui.SearchtableWidget.currentRow()) \
+           or Qt.RightButton and self.ui.ATC_FullList.selectRow(self.ui.ATC_FullList.currentRow()):
+            self.show_player_info()
 
     def ivao_friend(self):
         self.statusBar().showMessage('Showing friends list', 2000)
@@ -907,10 +909,8 @@ class Main(QMainWindow):
             self.ui.FriendstableWidget.setItem(startrow, 0, col_vid)
             col_realname = QTableWidgetItem(str(row[2].encode('latin-1')), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
-            col_callsign = QTableWidgetItem('-', 0)
-            self.ui.FriendstableWidget.setItem(startrow, 2, col_callsign)
             col_rating = QTableWidgetItem('-', 0)
-            self.ui.FriendstableWidget.setItem(startrow, 3, col_rating)
+            self.ui.FriendstableWidget.setItem(startrow, 2, col_rating)
             startrow += 1
         cursor.execute('select friends_ivao.vid, status_ivao.vid from status_ivao \
         , friends_ivao where status_ivao.vid=friends_ivao.vid;')
@@ -938,7 +938,7 @@ class Main(QMainWindow):
                 if insert is True:
                     vid = current_vid.text()
                     realname = unicode(current_realname.text(), 'latin-1')
-                    cursor.execute('INSERT INTO friends_ivao (vid, realname) VALUES (?, ?);', (int(str(vid)), str(realname)))
+                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating) VALUES (?, ?);', (int(str(vid)), str(realname)), int(rating))
                     connection.commit()
                     self.ivao_friend()
                     self.statusBar().showMessage('Friend Added', 2000)
@@ -998,7 +998,7 @@ class Main(QMainWindow):
             player_location.write('    var zoom = 12;\n')
         else:
             player_location.write('    var zoom = 6;\n')
-        player_location.write('    var planes=new OpenLayers.Layer.Vector("Player",\n')
+        player_location.write('    var player=new OpenLayers.Layer.Vector("Player",\n')
         player_location.write('    {\n')
         player_location.write('    styleMap: new OpenLayers.StyleMap({\n')
         player_location.write('         "default": {\n')
@@ -1014,13 +1014,13 @@ class Main(QMainWindow):
         player_location.write('         }\n')
         player_location.write('     })\n')
         player_location.write(' });\n')
-        player_location.write(' var feature=new OpenLayers.Feature.Vector(\n')
+        player_location.write('   var feature=new OpenLayers.Feature.Vector(\n')
         if player[0][4] == 'PILOT':
             player_location.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": %d, opacity: 100});\n' % (heading))
         else:
             player_location.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": 0, opacity: 100});\n')
-        player_location.write('    planes.addFeatures([feature]);\n')
-        player_location.write('    map.addLayer(planes);\n')
+        player_location.write('    player.addFeatures([feature]);\n')
+        player_location.write('    map.addLayer(player);\n')
         player_location.write('    map.setCenter (lonLat, zoom);\n')
         player_location.write('  </script>\n')
         player_location.write('</body></html>\n')
@@ -1037,7 +1037,51 @@ class Main(QMainWindow):
                                 This Aplication can be used to see IVAO operational network.<p>
                                 July 2011 Tony P. Diaz  --  emperor.cu@gmail.com <p>"""
                                 % (__version__))
+    
+    def show_player_info(self):
+        self.player_window = PlayerInfo(self)
+        self.player_window.closed.connect(self.show)
+        self.player_window.show()
 
+    def show_settings(self):
+        self.setting_window = Settings(self)
+        self.setting_window.closed.connect(self.show)
+        self.setting_window.show()
+
+class PlayerInfo(QMainWindow):
+    closed = pyqtSignal()
+
+    def __init__(self, parent=None):
+        QMainWindow.__init__(self, parent)
+        self.ui = PlayerInfoWindow_UI.Ui_QPlayerInfo()
+        self.ui.setupUi(self)
+        self.parent = parent
+        screen = QDesktopWidget().screenGeometry()
+        size =  self.geometry()
+        self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+        self.setWindowIcon(QIcon('./images/ivao.png'))
+
+    def closeEvent(self, event):
+        self.closed.emit()
+        event.accept()
+        
+class Settings(QMainWindow):
+    closed = pyqtSignal()
+
+    def __init__(self, parent=None):
+        QMainWindow.__init__(self, parent)
+        self.ui = SettingWindow_UI.Ui_SettingWindow()
+        self.ui.setupUi(self)
+        self.parent = parent
+        screen = QDesktopWidget().screenGeometry()
+        size =  self.geometry()
+        self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+        self.setWindowIcon(QIcon('./images/ivao.png'))
+    
+    def closeEvent(self, event):
+        self.closed.emit()
+        event.accept()
+        
 def main():
     app = QApplication(sys.argv)
     window = Main()

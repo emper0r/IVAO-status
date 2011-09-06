@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Sat Sep  3 10:40:38 2011
+# Created: Mon Sep  5 22:32:31 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -106,7 +106,7 @@ class Ui_MainWindow(object):
         self.FriendstableWidget.setGridStyle(QtCore.Qt.DotLine)
         self.FriendstableWidget.setWordWrap(False)
         self.FriendstableWidget.setObjectName(_fromUtf8("FriendstableWidget"))
-        self.FriendstableWidget.setColumnCount(5)
+        self.FriendstableWidget.setColumnCount(4)
         self.FriendstableWidget.setRowCount(0)
         item = QtGui.QTableWidgetItem()
         self.FriendstableWidget.setHorizontalHeaderItem(0, item)
@@ -116,8 +116,6 @@ class Ui_MainWindow(object):
         self.FriendstableWidget.setHorizontalHeaderItem(2, item)
         item = QtGui.QTableWidgetItem()
         self.FriendstableWidget.setHorizontalHeaderItem(3, item)
-        item = QtGui.QTableWidgetItem()
-        self.FriendstableWidget.setHorizontalHeaderItem(4, item)
         self.FriendstableWidget.horizontalHeader().setDefaultSectionSize(90)
         self.FriendstableWidget.horizontalHeader().setHighlightSections(True)
         self.FriendstableWidget.horizontalHeader().setMinimumSectionSize(90)
@@ -608,7 +606,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.database, _fromUtf8(""))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 20))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 16))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuMenu = QtGui.QMenu(self.menuBar)
         self.menuMenu.setObjectName(_fromUtf8("menuMenu"))
@@ -639,6 +637,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
         QtCore.QObject.connect(self.actionUpdate, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.UpdateDB)
         QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.about)
+        QtCore.QObject.connect(self.actionSetting, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.show_settings)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -654,9 +653,8 @@ class Ui_MainWindow(object):
         self.FriendstableWidget.setSortingEnabled(True)
         self.FriendstableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "VID", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendstableWidget.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Realname", None, QtGui.QApplication.UnicodeUTF8))
-        self.FriendstableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Callsign", None, QtGui.QApplication.UnicodeUTF8))
-        self.FriendstableWidget.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
-        self.FriendstableWidget.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("MainWindow", "On-Line", None, QtGui.QApplication.UnicodeUTF8))
+        self.FriendstableWidget.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
+        self.FriendstableWidget.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "On-Line", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendsLabel.setText(QtGui.QApplication.translate("MainWindow", "Friends", None, QtGui.QApplication.UnicodeUTF8))
         self.SearchtableWidget.setSortingEnabled(True)
         self.SearchtableWidget.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "VID", None, QtGui.QApplication.UnicodeUTF8))
