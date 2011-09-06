@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/SettingWindow_UI.ui'
 #
-# Created: Tue Sep  6 13:38:55 2011
+# Created: Tue Sep  6 16:12:18 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,12 +17,14 @@ except AttributeError:
 class Ui_SettingWindow(object):
     def setupUi(self, SettingWindow):
         SettingWindow.setObjectName(_fromUtf8("SettingWindow"))
-        SettingWindow.resize(320, 293)
+        SettingWindow.resize(320, 290)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(SettingWindow.sizePolicy().hasHeightForWidth())
         SettingWindow.setSizePolicy(sizePolicy)
+        SettingWindow.setMinimumSize(QtCore.QSize(320, 290))
+        SettingWindow.setMaximumSize(QtCore.QSize(320, 290))
         SettingWindow.setCursor(QtCore.Qt.PointingHandCursor)
         SettingWindow.setAnimated(False)
         self.centralwidget = QtGui.QWidget(SettingWindow)
