@@ -1080,14 +1080,39 @@ class Settings(QMainWindow):
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.setWindowIcon(QIcon('./images/ivao.png'))
         self.connect(self.ui.SettingAccepButton, SIGNAL('clicked()'), self.settings)
+        self.connect(self.ui.Setting_checkBox, SIGNAL("clicked()"), self.set_proxy)
+        self.connect(self.ui.Setting_auth, SIGNAL("clicked()"), self.set_auth)
+    
+    def set_proxy(self):
+        if self.ui.Setting_checkBox.isChecked() is True:
+            self.ui.proxy_host.setEnabled(True)
+            self.ui.proxy_port.setEnabled(True)
+            self.ui.lineEdit_host.setEnabled(True)
+            self.ui.lineEdit_port.setEnabled(True)
+            self.ui.Setting_auth.setEnabled(True)
+        else:
+            self.ui.proxy_host.setEnabled(False)
+            self.ui.proxy_port.setEnabled(False)
+            self.ui.lineEdit_host.setEnabled(False)
+            self.ui.lineEdit_port.setEnabled(False)
+            self.ui.Setting_auth.setEnabled(False)
+    
+    def set_auth(self):
+        if self.ui.Setting_auth.isChecked() is True:
+            self.ui.proxy_user.setEnabled(True)
+            self.ui.proxy_pass.setEnabled(True)
+            self.ui.lineEdit_user.setEnabled(True)
+            self.ui.lineEdit_pass.setEnabled(True)
+        else:
+            self.ui.proxy_user.setEnabled(False)
+            self.ui.proxy_pass.setEnabled(False)
+            self.ui.lineEdit_user.setEnabled(False)
+            self.ui.lineEdit_pass.setEnabled(False)
+            
     
     def settings(self):
         minutes = self.ui.spinBox.value()
         time_update = minutes * 60 * 1000
-        if self.ui.Setting_checkBox.checkState() == Qt.Checked:
-            self.ui.proxy_host.setEnabled(True)
-        else:
-            self.ui.proxy_host.setEnabled(False)
         self.close()
     
     def closeEvent(self, event):
