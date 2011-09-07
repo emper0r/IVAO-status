@@ -24,7 +24,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtWebKit import *
 from PyQt4.Qt import *
 import MainWindow_UI
-import PlayerInfoWindow_UI
+import PilotInfo_UI
 import SettingWindow_UI
 import urllib2
 import sqlite3
@@ -33,6 +33,8 @@ import datetime
 
 data_access = 'whazzup.txt'
 DataBase = './database/ivao.db'
+time_update = 300000
+
 __version__ = '1.0'
 
 rating_pilot = {"0":"OBS - Observer", "2":"SFO - Second Flight Officer", "3":"FFO - First Flight Officer" \
@@ -127,7 +129,7 @@ class Main(QMainWindow):
         self.ui.ATCtableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.PilottableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
         showInfo_Action = QAction("Show Info", self)
-        showInfo_Action.triggered.connect(self.show_player_info)
+        showInfo_Action.triggered.connect(self.show_pilot_info)
         self.ui.SearchtableWidget.addAction(showInfo_Action)
         self.ui.ATC_FullList.addAction(showInfo_Action)
         self.ui.PILOT_FullList.addAction(showInfo_Action)
@@ -140,7 +142,7 @@ class Main(QMainWindow):
         self.ui.arrivals_icon.setPixmap(Pixmap)
         self.ui.arrivals_icon.show()
         self.timer = QTimer(self)
-        self.timer.setInterval(300000)
+        self.timer.setInterval(time_update)
         self.timer.timeout.connect(self.UpdateDB)
         self.timer.start()
         QTimer.singleShot(1000, self.initial_load)
@@ -1038,22 +1040,22 @@ class Main(QMainWindow):
                                 July 2011 Tony P. Diaz  --  emperor.cu@gmail.com <p>"""
                                 % (__version__))
     
-    def show_player_info(self):
-        self.player_window = PlayerInfo(self)
-        self.player_window.closed.connect(self.show)
-        self.player_window.show()
+    def show_pilot_info(self):
+        self.pilot_window = PilotInfo(self)
+        self.pilot_window.closed.connect(self.show)
+        self.pilot_window.show()
 
     def show_settings(self):
         self.setting_window = Settings(self)
         self.setting_window.closed.connect(self.show)
         self.setting_window.show()
 
-class PlayerInfo(QMainWindow):
+class PilotInfo(QMainWindow):
     closed = pyqtSignal()
 
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
-        self.ui = PlayerInfoWindow_UI.Ui_QPlayerInfo()
+        self.ui = PilotInfo_UI.Ui_QPilotInfo()
         self.ui.setupUi(self)
         self.parent = parent
         screen = QDesktopWidget().screenGeometry()
@@ -1077,6 +1079,16 @@ class Settings(QMainWindow):
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.setWindowIcon(QIcon('./images/ivao.png'))
+        self.connect(self.ui.SettingAccepButton, SIGNAL('clicked()'), self.settings)
+    
+    def settings(self):
+        minutes = self.ui.spinBox.value()
+        time_update = minutes * 60 * 1000
+        if self.ui.Setting_checkBox.checkState() == Qt.Checked:
+            self.ui.proxy_host.setEnabled(True)
+        else:
+            self.ui.proxy_host.setEnabled(False)
+        self.close()
     
     def closeEvent(self, event):
         self.closed.emit()
