@@ -32,24 +32,7 @@ import os
 import datetime
 import ConfigParser
 
-data_access = 'whazzup.txt'
-DataBase = './database/ivao.db'
-time_update = 300000
 __version__ = '1.0'
-
-rating_pilot = {"0":"OBS - Observer", "2":"SFO - Second Flight Officer", "3":"FFO - First Flight Officer" \
-                , "4":"C - Captain", "5":"FC - Flight Captain", "6":"SC - Senior Captain" \
-                , "7":"SFC - Senior Flight Captain", "8":"CC - Commercial Captain" \
-                , "9":"CFC - Commercial Flight Captain", "10":"CSC - Commercial Senior Captain" \
-                , "11":"SUP - Supervisor", "12":"ADM - Administrator"}
-
-rating_atc = {"0":"OBS - Observer", "2":"S1 - Student 1", "3":"S2 - Student 2" \
-              , "4":"S3 - Student 3", "5":"C1 - Controller 1", "6":"C2 - Controller 2" \
-              , "7":"C3 - Controller 3", "8":"I1 - Instructor 1", "9":"I2 - Instructor 2" \
-              , "10":"I3 - Instructor 3", "11":"SUP - Supervisor", "12":"ADM - Administrator"}
-
-position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
-                , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
 
 class Main(QMainWindow):
     def __init__(self,):
@@ -141,19 +124,33 @@ class Main(QMainWindow):
         Pixmap = QPixmap('./images/arrivals.png')
         self.ui.arrivals_icon.setPixmap(Pixmap)
         self.ui.arrivals_icon.show()
-        self.timer = QTimer(self)
-        self.timer.setInterval(time_update)
-        self.timer.timeout.connect(self.update_db)
-        self.timer.start()
         QTimer.singleShot(1000, self.initial_load)
         self.progress = QProgressBar()
         self.statusBar().addPermanentWidget(self.progress)
         self.progress.hide()
         self.progress.setValue(0)
         self._maptab = None
+        self.rating_pilot = {"0":"OBS - Observer", "2":"SFO - Second Flight Officer", "3":"FFO - First Flight Officer" \
+                , "4":"C - Captain", "5":"FC - Flight Captain", "6":"SC - Senior Captain" \
+                , "7":"SFC - Senior Flight Captain", "8":"CC - Commercial Captain" \
+                , "9":"CFC - Commercial Flight Captain", "10":"CSC - Commercial Senior Captain" \
+                , "11":"SUP - Supervisor", "12":"ADM - Administrator"}
+
+        self.rating_atc = {"0":"OBS - Observer", "2":"S1 - Student 1", "3":"S2 - Student 2" \
+                      , "4":"S3 - Student 3", "5":"C1 - Controller 1", "6":"C2 - Controller 2" \
+                      , "7":"C3 - Controller 3", "8":"I1 - Instructor 1", "9":"I2 - Instructor 2" \
+                      , "10":"I3 - Instructor 3", "11":"SUP - Supervisor", "12":"ADM - Administrator"}
+        
+        self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
+                        , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
+
         config = ConfigParser.RawConfigParser()
         if os.path.exists('Config.cfg'):
             config.read('Config.cfg')
+            self.timer = QTimer(self)
+            self.timer.setInterval(config.getint('Time_Update', 'time'))
+            self.timer.timeout.connect(self.update_db)
+            self.timer.start()
         else:
             config.add_section('Settings')
             config.set('Settings', 'use_proxy', '0')
@@ -162,6 +159,12 @@ class Main(QMainWindow):
             config.set('Settings', 'auth', '0')
             config.set('Settings', 'user', '')
             config.set('Settings', 'pass', '')
+            config.add_section('Info')
+            config.set('Info', 'data_access', 'whazzup.txt')
+            config.add_section('Database')
+            config.set('Database', 'db', 'ivao.db')
+            config.add_section('Time_Update')
+            config.set('Time_Update', 'time', '3000000')
             with open('Config.cfg', 'wb') as configfile:
                 config.write(configfile)
         
@@ -177,7 +180,9 @@ class Main(QMainWindow):
     def initial_load(self):
         self.statusBar().showMessage('Populating Database', 2000)
         qApp.processEvents()
-        connection = sqlite3.connect(DataBase)
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         db_t1 = cursor.execute("SELECT DISTINCT(Country) FROM icao_codes DESC;")
         db_t1 = cursor.fetchall()
@@ -236,28 +241,25 @@ class Main(QMainWindow):
     def update_db(self):
         self.statusBar().showMessage('Downloading info from IVAO', 2000)
         qApp.processEvents()
-        connection = sqlite3.connect(DataBase)
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM status_ivao;")
-        self.args = Settings()
-        print self.args.options()
+        pilot_list = []
+        atc_list = []
         
         try:
-            StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + data_access)
+            StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + config.get('Info', 'data_access'))
+            for logged_users in StatusURL.readlines():
+                if "PILOT" in logged_users:
+                    pilot_list.append(logged_users)
+                if "ATC" in logged_users:
+                    atc_list.append(logged_users)
         except:
             self.statusBar().showMessage('Error!, when trying to download database status from IVAO. Check your connection to Internet.' \
                                          , 5000)
-            sys.exit(1)
-
-        pilot_list = []
-        atc_list = []
-
-        for logged_users in StatusURL.readlines():
-            if "PILOT" in logged_users:
-                pilot_list.append(logged_users)
-            if "ATC" in logged_users:
-                atc_list.append(logged_users)
 
         self.ui.IVAOStatustableWidget.setCurrentCell(0, 0)
         pilots_ivao = QTableWidgetItem(str(len(pilot_list)))
@@ -389,7 +391,9 @@ class Main(QMainWindow):
     def show_tables(self):
         self.statusBar().showMessage('Populating Controllers and Pilots', 4000)
         self.progress.show()
-        connection = sqlite3.connect(DataBase)
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
                         WHERE clienttype='ATC' ORDER BY vid DESC;")
@@ -425,7 +429,7 @@ class Main(QMainWindow):
                 except:
                     pass
                 try:
-                    col_facility = QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
+                    col_facility = QTableWidgetItem(str(self.position_atc[row_atc[4]]), 0)
                     self.ui.ATC_FullList.setItem(startrow, 3, col_facility)
                 except:
                     pass
@@ -439,10 +443,10 @@ class Main(QMainWindow):
                         ratingImage = QLabel(self)
                         ratingImage.setPixmap(Pixmap)
                         self.ui.ATC_FullList.setCellWidget(startrow, 6, ratingImage)
-                        col_rating = QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
+                        col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
                         self.ui.ATC_FullList.setItem(startrow, 5, col_rating)
                     else:
-                        col_rating = QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
+                        col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
                         self.ui.ATC_FullList.setItem(startrow, 5, col_rating)
                 except:
                     pass
@@ -499,7 +503,7 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 2, col_aircraft)
             col_realname = QTableWidgetItem(str(row_pilot[3][:-5].encode('latin-1')), 0)
             self.ui.PILOT_FullList.setItem(startrow, 3, col_realname)
-            col_rating = QTableWidgetItem(str(rating_pilot[row_pilot[2]]), 0)
+            col_rating = QTableWidgetItem(str(self.rating_pilot[row_pilot[2]]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)
 
             code_pilot_rating = row_pilot[2]
@@ -553,7 +557,9 @@ class Main(QMainWindow):
 
     def country_view(self):
         country_selected = self.ui.country_list.currentText()
-        connection = sqlite3.connect(DataBase)
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE Country=?", (str(country_selected),))
         flagCode = cursor.fetchone()
@@ -614,7 +620,7 @@ class Main(QMainWindow):
                 self.ui.ATCtableWidget.setItem(startrow_atc, 0, col_callsign)
                 col_frequency = QTableWidgetItem(str(row_atc[1]), 0)
                 self.ui.ATCtableWidget.setItem(startrow_atc, 1, col_frequency)
-                col_facility = QTableWidgetItem(str(position_atc[row_atc[4]]), 0)
+                col_facility = QTableWidgetItem(str(self.position_atc[row_atc[4]]), 0)
                 self.ui.ATCtableWidget.setItem(startrow_atc, 2, col_facility)
                 col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
                 self.ui.ATCtableWidget.setItem(startrow_atc, 3, col_realname)
@@ -625,11 +631,11 @@ class Main(QMainWindow):
                         Pixmap = QPixmap(ratingImagePath)
                         ratingImage = QLabel(self)
                         ratingImage.setPixmap(Pixmap)
-                        self.ui.ATCtableWidget.setCellWidget(startrow_atc, 6, ratingImage)
-                        col_rating = QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
+                        self.ui.ATCtableWidget.setCellWidget(startrow_atc, 5, ratingImage)
+                        col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
                         self.ui.ATCtableWidget.setItem(startrow_atc, 4, col_rating)
                     else:
-                        col_rating = QTableWidgetItem(str(rating_atc[row_atc[3]]), 0)
+                        col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
                         self.ui.ATCtableWidget.setItem(startrow_atc, 4, col_rating)
                 except:
                     pass
@@ -641,7 +647,7 @@ class Main(QMainWindow):
                     pass
                 diff = abs(datetime.datetime.now() - start_connected)
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
-                self.ui.ATCtableWidget.setItem(startrow_atc, 5, col_time)
+                self.ui.ATCtableWidget.setItem(startrow_atc, 6, col_time)
                 qApp.processEvents()
                 startrow_atc += 1
 
@@ -678,7 +684,7 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_pilot, 2, col_aircraft)
                 col_realname = QTableWidgetItem(str(row_pilot[3][:-5].encode('latin-1')), 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 3, col_realname)
-                col_rating = QTableWidgetItem(str(rating_pilot[row_pilot[2]]), 0)
+                col_rating = QTableWidgetItem(str(self.rating_pilot[row_pilot[2]]), 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 4, col_rating)
 
                 code_pilot_rating = row_pilot[2]
@@ -850,7 +856,9 @@ class Main(QMainWindow):
         connection.close()
 
     def search_button(self):
-        connection = sqlite3.connect(DataBase)
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         arg = self.ui.SearchEdit.text()
         item = self.ui.SearchcomboBox.currentIndex()
@@ -910,7 +918,9 @@ class Main(QMainWindow):
     def ivao_friend(self):
         self.statusBar().showMessage('Showing friends list', 2000)
         qApp.processEvents()
-        connection = sqlite3.connect(DataBase)
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute('SELECT * FROM friends_ivao;')
         roster = cursor.fetchall()
@@ -935,7 +945,9 @@ class Main(QMainWindow):
         connection.close()
 
     def add_friend(self, event):
-        connection = sqlite3.connect(DataBase)
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute("SELECT vid from friends_ivao;")
         vid = cursor.fetchall()
@@ -989,7 +1001,9 @@ class Main(QMainWindow):
     def view_map(self, event):
         current_row = self.ui.SearchtableWidget.currentRow()
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)        
-        connection = sqlite3.connect(DataBase)
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute("SELECT latitude, longitude, callsign, true_heading, clienttype from status_ivao where vid=?;" \
                        ,  (int(current_vid.text()),))
@@ -1052,7 +1066,7 @@ class Main(QMainWindow):
         QMessageBox.about(self, "About IVAO :: Status",
                                 """<b>IVAO::Status</b>  version %s<p>License: GPL3+<p>
                                 This Aplication can be used to see IVAO operational network.<p>
-                                July 2011 Tony P. Diaz  --  emperor.cu@gmail.com <p>"""
+                                July 2011 Tony Peña  --  emperor.cu@gmail.com <p>"""
                                 % (__version__))
     
     def show_pilot_info(self):
@@ -1097,6 +1111,7 @@ class Settings(QMainWindow):
         self.connect(self.ui.SettingAccepButton, SIGNAL('clicked()'), self.options)
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
+        self.ui.spinBox.setValue(config.getint('Time_Update', 'time') / 60000)
         use_proxy = config.getint('Settings', 'use_proxy')
         if use_proxy == 2:
             self.ui.Setting_checkBox.setChecked(True)
@@ -1118,7 +1133,7 @@ class Settings(QMainWindow):
     
     def options(self):
         minutes = self.ui.spinBox.value()
-        time_update = minutes * 60 * 1000
+        time_update = minutes * 60000
         config = ConfigParser.RawConfigParser()
         config.add_section('Settings')
         config.set('Settings', 'use_proxy', self.ui.Setting_checkBox.checkState())
@@ -1127,6 +1142,12 @@ class Settings(QMainWindow):
         config.set('Settings', 'auth', self.ui.Setting_auth.checkState())
         config.set('Settings', 'user', self.ui.lineEdit_user.text())
         config.set('Settings', 'pass', self.ui.lineEdit_pass.text())
+        config.add_section('Info')
+        config.set('Info', 'data_access', 'whazzup.txt')
+        config.add_section('Database')
+        config.set('Database', 'db', 'ivao.db')
+        config.add_section('Time_Update')
+        config.set('Time_Update', 'time', time_update)
         with open ('Config.cfg', 'wb') as configfile:
             config.write(configfile)
         
