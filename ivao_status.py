@@ -1,5 +1,6 @@
-#!/bin/python
-# Copyright (c) 2011 by Antonio (emper0r) P. Diaz <emperor.cu@gmail.com>
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+# Copyright (c) 2011 by Antonio (emper0r) Peña Diaz <emperor.cu@gmail.com>
 #
 # GNU General Public Licence (GPL)
 # 
@@ -16,7 +17,6 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 #
 # IVAO-status :: License GPLv3+
-# -*- coding: utf-8 -*-
 
 import sys
 from PyQt4.QtCore import *
@@ -30,11 +30,11 @@ import urllib2
 import sqlite3
 import os
 import datetime
+import ConfigParser
 
 data_access = 'whazzup.txt'
 DataBase = './database/ivao.db'
 time_update = 300000
-
 __version__ = '1.0'
 
 rating_pilot = {"0":"OBS - Observer", "2":"SFO - Second Flight Officer", "3":"FFO - First Flight Officer" \
@@ -60,7 +60,7 @@ class Main(QMainWindow):
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.setWindowIcon(QIcon('./images/ivao.png'))
-        self.connect(self.ui.searchpushButton, SIGNAL('clicked()'), self.searchpushButton)
+        self.connect(self.ui.searchpushButton, SIGNAL('clicked()'), self.search_button)
         self.connect(self.ui.METARFindButton, SIGNAL('clicked()'), self.metar)
         self.connect(self.ui.country_list, SIGNAL('activated(QString)'), self.country_view)
         self.connect(self.ui.METARHelpButton, SIGNAL('clicked()'), self.metarHelp)
@@ -143,7 +143,7 @@ class Main(QMainWindow):
         self.ui.arrivals_icon.show()
         self.timer = QTimer(self)
         self.timer.setInterval(time_update)
-        self.timer.timeout.connect(self.UpdateDB)
+        self.timer.timeout.connect(self.update_db)
         self.timer.start()
         QTimer.singleShot(1000, self.initial_load)
         self.progress = QProgressBar()
@@ -151,6 +151,19 @@ class Main(QMainWindow):
         self.progress.hide()
         self.progress.setValue(0)
         self._maptab = None
+        config = ConfigParser.RawConfigParser()
+        if os.path.exists('Config.cfg'):
+            config.read('Config.cfg')
+        else:
+            config.add_section('Settings')
+            config.set('Settings', 'use_proxy', '0')
+            config.set('Settings', 'host', '')
+            config.set('Settings', 'port', '')
+            config.set('Settings', 'auth', '0')
+            config.set('Settings', 'user', '')
+            config.set('Settings', 'pass', '')
+            with open('Config.cfg', 'wb') as configfile:
+                config.write(configfile)
         
     @property
     def maptab(self):
@@ -220,14 +233,16 @@ class Main(QMainWindow):
         self.ivao_friend()
         qApp.restoreOverrideCursor()
 
-    def UpdateDB(self):
+    def update_db(self):
         self.statusBar().showMessage('Downloading info from IVAO', 2000)
         qApp.processEvents()
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
         cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM status_ivao;")
-
+        self.args = Settings()
+        print self.args.options()
+        
         try:
             StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + data_access)
         except:
@@ -834,7 +849,7 @@ class Main(QMainWindow):
             qApp.processEvents()
         connection.close()
 
-    def searchpushButton(self):
+    def search_button(self):
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
         arg = self.ui.SearchEdit.text()
@@ -887,7 +902,7 @@ class Main(QMainWindow):
             qApp.processEvents()
         connection.close()
 
-    def mouseReleaseEvent(self, event):
+    def mouse_revelan_event(self, event):
         if event.button() == Qt.RightButton and self.ui.SearchtableWidget.selectRow(self.ui.SearchtableWidget.currentRow()) \
            or Qt.RightButton and self.ui.ATC_FullList.selectRow(self.ui.ATC_FullList.currentRow()):
             self.show_player_info()
@@ -919,7 +934,7 @@ class Main(QMainWindow):
         friends_parts = cursor.fetchall()
         connection.close()
 
-    def addFriend(self, event):
+    def add_friend(self, event):
         connection = sqlite3.connect(DataBase)
         cursor = connection.cursor()
         cursor.execute("SELECT vid from friends_ivao;")
@@ -971,7 +986,7 @@ class Main(QMainWindow):
             self.ui.METARtableWidget.setItem(startrow, 1, col_metar)
             startrow += 1
             
-    def ShowAtMap(self, event):
+    def view_map(self, event):
         current_row = self.ui.SearchtableWidget.currentRow()
         current_vid = self.ui.SearchtableWidget.item(current_row, 0)        
         connection = sqlite3.connect(DataBase)
@@ -1079,40 +1094,42 @@ class Settings(QMainWindow):
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.setWindowIcon(QIcon('./images/ivao.png'))
-        self.connect(self.ui.SettingAccepButton, SIGNAL('clicked()'), self.settings)
-        self.connect(self.ui.Setting_checkBox, SIGNAL("clicked()"), self.set_proxy)
-        self.connect(self.ui.Setting_auth, SIGNAL("clicked()"), self.set_auth)
-    
-    def set_proxy(self):
-        if self.ui.Setting_checkBox.isChecked() is True:
-            self.ui.proxy_host.setEnabled(True)
-            self.ui.proxy_port.setEnabled(True)
-            self.ui.lineEdit_host.setEnabled(True)
-            self.ui.lineEdit_port.setEnabled(True)
-            self.ui.Setting_auth.setEnabled(True)
+        self.connect(self.ui.SettingAccepButton, SIGNAL('clicked()'), self.options)
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        use_proxy = config.getint('Settings', 'use_proxy')
+        if use_proxy == 2:
+            self.ui.Setting_checkBox.setChecked(True)
         else:
-            self.ui.proxy_host.setEnabled(False)
-            self.ui.proxy_port.setEnabled(False)
-            self.ui.lineEdit_host.setEnabled(False)
-            self.ui.lineEdit_port.setEnabled(False)
-            self.ui.Setting_auth.setEnabled(False)
-    
-    def set_auth(self):
-        if self.ui.Setting_auth.isChecked() is True:
-            self.ui.proxy_user.setEnabled(True)
-            self.ui.proxy_pass.setEnabled(True)
-            self.ui.lineEdit_user.setEnabled(True)
-            self.ui.lineEdit_pass.setEnabled(True)
+            self.ui.Setting_checkBox.setChecked(False)
+        host = config.get('Settings', 'host')
+        self.ui.lineEdit_host.setText(host)
+        port = config.get('Settings', 'port')
+        self.ui.lineEdit_port.setText(port)
+        auth = config.getint('Settings', 'auth')
+        if auth == 2:
+            self.ui.Setting_auth.setChecked(True)
         else:
-            self.ui.proxy_user.setEnabled(False)
-            self.ui.proxy_pass.setEnabled(False)
-            self.ui.lineEdit_user.setEnabled(False)
-            self.ui.lineEdit_pass.setEnabled(False)
-            
+            self.ui.Setting_auth.setChecked(False)
+        user = config.get('Settings', 'user')
+        self.ui.lineEdit_user.setText(user)
+        pswd = config.get('Settings', 'pass')
+        self.ui.lineEdit_pass.setText(pswd)
     
-    def settings(self):
+    def options(self):
         minutes = self.ui.spinBox.value()
         time_update = minutes * 60 * 1000
+        config = ConfigParser.RawConfigParser()
+        config.add_section('Settings')
+        config.set('Settings', 'use_proxy', self.ui.Setting_checkBox.checkState())
+        config.set('Settings', 'host', self.ui.lineEdit_host.text())
+        config.set('Settings', 'port', self.ui.lineEdit_port.text())
+        config.set('Settings', 'auth', self.ui.Setting_auth.checkState())
+        config.set('Settings', 'user', self.ui.lineEdit_user.text())
+        config.set('Settings', 'pass', self.ui.lineEdit_pass.text())
+        with open ('Config.cfg', 'wb') as configfile:
+            config.write(configfile)
+        
         self.close()
     
     def closeEvent(self, event):

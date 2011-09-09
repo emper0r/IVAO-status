@@ -635,7 +635,7 @@ class Ui_MainWindow(object):
         self.tabWidget.setCurrentIndex(0)
         self.country_list.setCurrentIndex(-1)
         QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
-        QtCore.QObject.connect(self.actionUpdate, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.UpdateDB)
+        QtCore.QObject.connect(self.actionUpdate, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.update_db)
         QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.about)
         QtCore.QObject.connect(self.actionSetting, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.show_settings)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
