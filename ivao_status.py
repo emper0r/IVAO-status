@@ -43,10 +43,6 @@ class Main(QMainWindow):
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.setWindowIcon(QIcon('./images/ivao.png'))
-        self.connect(self.ui.searchpushButton, SIGNAL('clicked()'), self.search_button)
-        self.connect(self.ui.METARFindButton, SIGNAL('clicked()'), self.metar)
-        self.connect(self.ui.country_list, SIGNAL('activated(QString)'), self.country_view)
-        self.connect(self.ui.METARHelpButton, SIGNAL('clicked()'), self.metarHelp)
         self.ui.PILOT_FullList.setColumnWidth(0, 90)
         self.ui.PILOT_FullList.setColumnWidth(1, 65)
         self.ui.PILOT_FullList.setColumnWidth(2, 60)
@@ -149,7 +145,7 @@ class Main(QMainWindow):
             config.read('Config.cfg')
             self.timer = QTimer(self)
             self.timer.setInterval(config.getint('Time_Update', 'time'))
-            self.timer.timeout.connect(self.update_db)
+            self.timer.timeout.connect(self.connect)
             self.timer.start()
         else:
             config.add_section('Settings')
@@ -167,6 +163,8 @@ class Main(QMainWindow):
             config.set('Time_Update', 'time', '3000000')
             with open('Config.cfg', 'wb') as configfile:
                 config.write(configfile)
+        self.pilot_list = []
+        self.atc_list = []
         
     @property
     def maptab(self):
@@ -238,34 +236,63 @@ class Main(QMainWindow):
         self.ivao_friend()
         qApp.restoreOverrideCursor()
 
-    def update_db(self):
-        self.statusBar().showMessage('Downloading info from IVAO', 2000)
+    def connect(self):
+        self.statusBar().showMessage('Trying connecting to IVAO', 3000)
         qApp.processEvents()
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')        
+        try:
+            use_proxy = config.getint('Settings', 'use_proxy')
+            auth = config.getint('Settings', 'auth')
+            host = config.get('Settings', 'host')
+            port = config.get('Settings', 'port')
+            user = config.get('Settings', 'user')
+            pswd = config.get('Settings', 'pass')
+            if use_proxy == 2 and auth == 2:
+                passmgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+                passmgr.add_password(None, 'http://' + host + ':' + port, user, pswd)
+                authinfo = urllib2.ProxyBasicAuthHandler(passmgr)
+                proxy_support = urllib2.ProxyHandler({"http" : "http://" + host + ':' + port})
+                opener = urllib2.build_opener(proxy_support, authinfo)
+                urllib2.install_opener(opener)
+                StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + config.get('Info', 'data_access'))
+                qApp.processEvents()
+            if use_proxy == 2 and auth == 0:
+                proxy_support = urllib2.ProxyHandler({"http" : "http://" + host + ':' + port})
+                opener = urllib2.build_opener(proxy_support)
+                urllib2.install_opener(opener)
+                StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + config.get('Info', 'data_access'))
+                qApp.processEvents()
+            if use_proxy == 0 and auth == 0:
+                StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + config.get('Info', 'data_access'))
+                qApp.processEvents()
+            
+            self.statusBar().showMessage('Downloading info from IVAO', 2000)
+            qApp.processEvents()
+            for logged_users in StatusURL.readlines():
+                if "PILOT" in logged_users:
+                    self.pilot_list.append(logged_users)
+                if "ATC" in logged_users:
+                    self.atc_list.append(logged_users)
+            
+            self.update_db()
+                    
+        except IOError:
+            self.statusBar().showMessage('Error! when trying to download info from IVAO. Check your connection to Internet.')
+    
+    def update_db(self):
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM status_ivao;")
-        pilot_list = []
-        atc_list = []
-        
-        try:
-            StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + config.get('Info', 'data_access'))
-            for logged_users in StatusURL.readlines():
-                if "PILOT" in logged_users:
-                    pilot_list.append(logged_users)
-                if "ATC" in logged_users:
-                    atc_list.append(logged_users)
-        except:
-            self.statusBar().showMessage('Error!, when trying to download database status from IVAO. Check your connection to Internet.' \
-                                         , 5000)
-
         self.ui.IVAOStatustableWidget.setCurrentCell(0, 0)
-        pilots_ivao = QTableWidgetItem(str(len(pilot_list)))
+        pilots_ivao = QTableWidgetItem(str(len(self.pilot_list)))
         self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
-
-        for rows in pilot_list:
+        qApp.processEvents()
+        
+        for rows in self.pilot_list:
             fields = rows.split(":")
             callsign = fields[0]
             vid = fields[1]
@@ -333,7 +360,7 @@ class Main(QMainWindow):
              , onground))
         connection.commit()
 
-        for rows in atc_list:
+        for rows in self.atc_list:
             fields = rows.split(":")
             callsign = fields[0]
             vid = fields[1]
@@ -381,7 +408,7 @@ class Main(QMainWindow):
         atcs_ivao = QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
         self.ui.IVAOStatustableWidget.setItem(0, 1, atcs_ivao)
         self.ui.IVAOStatustableWidget.setItem(0, 2, obs_ivao)
-        total_ivao = QTableWidgetItem(str(atc[0] + len(pilot_list)))
+        total_ivao = QTableWidgetItem(str(atc[0] + len(self.pilot_list)))
         self.ui.IVAOStatustableWidget.setItem(0, 3, total_ivao)
         connection.close()
         self.statusBar().showMessage('Done', 2000)
@@ -389,7 +416,7 @@ class Main(QMainWindow):
         self.show_tables()
         
     def show_tables(self):
-        self.statusBar().showMessage('Populating Controllers and Pilots', 4000)
+        self.statusBar().showMessage('Populating Controllers and Pilots', 8000)
         self.progress.show()
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')

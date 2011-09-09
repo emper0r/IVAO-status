@@ -635,9 +635,13 @@ class Ui_MainWindow(object):
         self.tabWidget.setCurrentIndex(0)
         self.country_list.setCurrentIndex(-1)
         QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
-        QtCore.QObject.connect(self.actionUpdate, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.update_db)
+        QtCore.QObject.connect(self.actionUpdate, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.connect)
         QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.about)
         QtCore.QObject.connect(self.actionSetting, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.show_settings)
+        QtCore.QObject.connect(self.searchpushButton, QtCore.SIGNAL('clicked()'), MainWindow.search_button)
+        QtCore.QObject.connect(self.METARFindButton, QtCore.SIGNAL('clicked()'), MainWindow.metar)
+        QtCore.QObject.connect(self.country_list, QtCore.SIGNAL('activated(QString)'), MainWindow.country_view)
+        QtCore.QObject.connect(self.METARHelpButton, QtCore.SIGNAL('clicked()'), MainWindow.metarHelp)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
