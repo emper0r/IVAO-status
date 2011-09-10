@@ -634,7 +634,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
         self.country_list.setCurrentIndex(-1)
-        QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
+        QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), QtGui.qApp.quit)
         QtCore.QObject.connect(self.actionUpdate, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.connect)
         QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.about)
         QtCore.QObject.connect(self.actionSetting, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.show_settings)

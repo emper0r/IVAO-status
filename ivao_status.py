@@ -108,12 +108,12 @@ class Main(QMainWindow):
         self.ui.ATCtableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.PilottableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
         showInfo_Action = QAction("Show Info", self)
-        showInfo_Action.triggered.connect(self.show_pilot_info)
         self.ui.SearchtableWidget.addAction(showInfo_Action)
         self.ui.ATC_FullList.addAction(showInfo_Action)
         self.ui.PILOT_FullList.addAction(showInfo_Action)
         self.ui.ATCtableWidget.addAction(showInfo_Action)
         self.ui.PilottableWidget.addAction(showInfo_Action)
+        showInfo_Action.triggered.connect(self.action_click)
         Pixmap = QPixmap('./images/departures.png')
         self.ui.departures_icon.setPixmap(Pixmap)
         self.ui.departures_icon.show()
@@ -937,10 +937,49 @@ class Main(QMainWindow):
             qApp.processEvents()
         connection.close()
 
-    def mouse_revelan_event(self, event):
-        if event.button() == Qt.RightButton and self.ui.SearchtableWidget.selectRow(self.ui.SearchtableWidget.currentRow()) \
-           or Qt.RightButton and self.ui.ATC_FullList.selectRow(self.ui.ATC_FullList.currentRow()):
-            self.show_player_info()
+    def action_click(self):
+        if self.ui.SearchtableWidget.currentRow() >= 0:
+            row = self.ui.SearchtableWidget.currentIndex().row()
+            if row == -1:
+                pass
+            else:
+                current_row = self.ui.SearchtableWidget.currentRow()
+                current_callsign = self.ui.SearchtableWidget.item(current_row, 0)
+                self.ui.SearchtableWidget.setCurrentCell(-1, -1)
+        if self.ui.ATC_FullList.currentRow() >= 0:
+            row = self.ui.ATC_FullList.currentIndex().row()
+            if row == -1:
+                pass
+            else:
+                current_row = self.ui.ATC_FullList.currentRow()
+                current_callsign = self.ui.ATC_FullList.item(current_row, 0)
+                self.ui.ATC_FullList.setCurrentCell(-1, -1)
+        if self.ui.ATCtableWidget.currentRow() >= 0:
+            row = self.ui.ATCtableWidget.currentIndex().row()
+            if row == -1:
+                pass
+            else:
+                current_row = self.ui.ATCtableWidget.currentRow()
+                current_callsign = self.ui.ATCtableWidget.item(current_row, 0)
+                self.ui.ATCtableWidget.setCurrentCell(-1, -1)
+        if self.ui.PILOT_FullList.currentRow() >= 0:
+            row = self.ui.PILOT_FullList.currentIndex().row()
+            if row == -1:
+                pass
+            else:
+                current_row = self.ui.PILOT_FullList.currentRow()
+                current_callsign = self.ui.PILOT_FullList.item(current_row, 1)
+                self.show_pilot_info(current_callsign.text())
+                self.ui.PILOT_FullList.setCurrentCell(-1, -1)
+        if self.ui.PilottableWidget.currentRow() >= 0:
+            row = self.ui.PilottableWidget.currentIndex().row()
+            if row == -1:
+                pass
+            else:
+                current_row = self.ui.PilottableWidget.currentRow()
+                current_callsign = self.ui.PilottableWidget.item(current_row, 1)
+                self.show_pilot_info(current_callsign.text())
+                self.ui.PilottableWidget.setCurrentCell(-1, -1)
 
     def ivao_friend(self):
         self.statusBar().showMessage('Showing friends list', 2000)
@@ -969,37 +1008,6 @@ class Main(QMainWindow):
         cursor.execute('select friends_ivao.vid, status_ivao.vid from status_ivao \
         , friends_ivao where status_ivao.vid=friends_ivao.vid;')
         friends_parts = cursor.fetchall()
-        connection.close()
-
-    def add_friend(self, event):
-        config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
-        cursor = connection.cursor()
-        cursor.execute("SELECT vid from friends_ivao;")
-        vid = cursor.fetchall()
-        current_row = self.ui.SearchtableWidget.currentRow()
-        current_vid = self.ui.SearchtableWidget.item(current_row, 0)
-        current_realname = self.ui.SearchtableWidget.item(current_row, 2)
-        total_vid = len(vid)
-        insert = True
-        if total_vid >= 0:
-            for i in range(0, total_vid):
-                if int(str(current_vid.text())) == vid[i][0]:
-                    msg = 'The friend is already in the list'
-                    QMessageBox.information(None, 'Friend of IVAO list', msg)
-                    i += 1
-                    insert = False
-            try:
-                if insert is True:
-                    vid = current_vid.text()
-                    realname = unicode(current_realname.text(), 'latin-1')
-                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating) VALUES (?, ?);', (int(str(vid)), str(realname)), int(rating))
-                    connection.commit()
-                    self.ivao_friend()
-                    self.statusBar().showMessage('Friend Added', 2000)
-            except:
-                pass
         connection.close()
 
     def metar(self):
@@ -1096,8 +1104,9 @@ class Main(QMainWindow):
                                 July 2011 Tony Peña  --  emperor.cu@gmail.com <p>"""
                                 % (__version__))
     
-    def show_pilot_info(self):
-        self.pilot_window = PilotInfo(self)
+    def show_pilot_info(self, callsign):
+        self.pilot_window = PilotInfo()
+        self.pilot_window.status(callsign)
         self.pilot_window.closed.connect(self.show)
         self.pilot_window.show()
 
@@ -1109,20 +1118,85 @@ class Main(QMainWindow):
 class PilotInfo(QMainWindow):
     closed = pyqtSignal()
 
-    def __init__(self, parent=None):
-        QMainWindow.__init__(self, parent)
+    def __init__(self):
+        QMainWindow.__init__(self)
         self.ui = PilotInfo_UI.Ui_QPilotInfo()
         self.ui.setupUi(self)
-        self.parent = parent
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.setWindowIcon(QIcon('./images/ivao.png'))
+        self.callsign = ''
+    
+    def add_friend(self):
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        cursor = connection.cursor()
+        cursor.execute("SELECT vid from friends_ivao;")
+        vid = cursor.fetchall()
+        total_vid = len(vid)
+        insert = True
+        if total_vid >= 0:
+            for i in range(0, total_vid):
+                if int(str(current_vid.text())) == vid[i][0]:
+                    msg = 'The friend is already in the list'
+                    QMessageBox.information(None, 'Friend of IVAO list', msg)
+                    i += 1
+                    insert = False
+            try:
+                if insert is True:
+                    realname = unicode(str(self.callsign), 'latin-1')
+                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating) VALUES (?, ?);' \
+                                   , (int(str(self.callsign)), str(realname)), int(rating))
+                    connection.commit()
+                    self.ivao_friend()
+                    self.statusBar().showMessage('Friend Added', 2000)
+            except:
+                pass
+        connection.close()
+
+    def status(self, callsign):
+        self.callsign = callsign
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        cursor = connection.cursor()
+        cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
+        planned_destairport, planned_altitude, planned_pob, planned_route, adminrating, transponder, \
+        onground FROM status_ivao WHERE callsign = ? AND clienttype='PILOT' ;", (str(callsign),))
+        info = cursor.fetchall()
+        cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][5]),))
+        flagCodeOrig = cursor.fetchone()
+        connection.commit()
+        cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][6]),))
+        flagCodeDest = cursor.fetchone()
+        connection.commit()
+        flagCodePath_orig = ('./flags/%s.png') % flagCodeOrig
+        Pixmap = QPixmap(flagCodePath_orig)
+        self.ui.DepartureImage.setPixmap(Pixmap)
+        flagCodePath_dest = ('./flags/%s.png') % flagCodeDest
+        Pixmap = QPixmap(flagCodePath_dest)
+        self.ui.DestinationImage.setPixmap(Pixmap)
+        cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][5]),))
+        city_orig = cursor.fetchone()
+        self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
+        cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][6]),))
+        city_dest = cursor.fetchone()
+        self.ui.callsign_text.setText(callsign)
+        self.ui.PilotNameText.setText(str(info[0][1][:-4].encode('latin-1')))
+        self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
+        self.ui.DestinationText.setText(str(city_dest[0].encode('latin-1')))
+        self.ui.RouteText.setText(str(info[0][9]))
+        self.ui.GroundSpeedNumber.setText(str(info[0][3]))
+        self.ui.AltitudeNumber.setText(str(info[0][2]))
+        self.ui.PobText.setText(str(info[0][8]))
+        self.ui.TransponderText.setText(str(info[0][11]))
 
     def closeEvent(self, event):
         self.closed.emit()
         event.accept()
-        
+
 class Settings(QMainWindow):
     closed = pyqtSignal()
 
@@ -1157,7 +1231,7 @@ class Settings(QMainWindow):
         self.ui.lineEdit_user.setText(user)
         pswd = config.get('Settings', 'pass')
         self.ui.lineEdit_pass.setText(pswd)
-    
+
     def options(self):
         minutes = self.ui.spinBox.value()
         time_update = minutes * 60000
@@ -1177,13 +1251,13 @@ class Settings(QMainWindow):
         config.set('Time_Update', 'time', time_update)
         with open ('Config.cfg', 'wb') as configfile:
             config.write(configfile)
-        
+
         self.close()
     
     def closeEvent(self, event):
         self.closed.emit()
         event.accept()
-        
+
 def main():
     app = QApplication(sys.argv)
     window = Main()
