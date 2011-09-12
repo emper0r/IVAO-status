@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Mon Sep 12 02:23:31 2011
+# Created: Mon Sep 12 04:31:02 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -58,7 +58,7 @@ class Ui_QPilotInfo(object):
         self.rating_img.setText(_fromUtf8(""))
         self.rating_img.setObjectName(_fromUtf8("rating_img"))
         self.rating_label = QtGui.QLabel(self.centralwidget)
-        self.rating_label.setGeometry(QtCore.QRect(273, 47, 51, 16))
+        self.rating_label.setGeometry(QtCore.QRect(265, 47, 51, 16))
         font = QtGui.QFont()
         font.setPointSize(8)
         font.setWeight(75)
@@ -247,7 +247,7 @@ class Ui_QPilotInfo(object):
         self.PilotNameText.setText(_fromUtf8(""))
         self.PilotNameText.setObjectName(_fromUtf8("PilotNameText"))
         self.Home = QtGui.QLabel(self.centralwidget)
-        self.Home.setGeometry(QtCore.QRect(365, 10, 41, 16))
+        self.Home.setGeometry(QtCore.QRect(357, 10, 41, 16))
         font = QtGui.QFont()
         font.setPointSize(8)
         font.setWeight(75)
@@ -272,7 +272,7 @@ class Ui_QPilotInfo(object):
         self.airline_image.setText(_fromUtf8(""))
         self.airline_image.setObjectName(_fromUtf8("airline_image"))
         self.PobText = QtGui.QLabel(self.centralwidget)
-        self.PobText.setGeometry(QtCore.QRect(160, 248, 51, 20))
+        self.PobText.setGeometry(QtCore.QRect(424, 245, 51, 20))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.PobText.setFont(font)
@@ -280,7 +280,7 @@ class Ui_QPilotInfo(object):
         self.PobText.setText(_fromUtf8(""))
         self.PobText.setObjectName(_fromUtf8("PobText"))
         self.TransponderText = QtGui.QLabel(self.centralwidget)
-        self.TransponderText.setGeometry(QtCore.QRect(320, 248, 41, 20))
+        self.TransponderText.setGeometry(QtCore.QRect(420, 265, 41, 20))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.TransponderText.setFont(font)
@@ -288,7 +288,7 @@ class Ui_QPilotInfo(object):
         self.TransponderText.setText(_fromUtf8(""))
         self.TransponderText.setObjectName(_fromUtf8("TransponderText"))
         self.TransponderLabel = QtGui.QLabel(self.centralwidget)
-        self.TransponderLabel.setGeometry(QtCore.QRect(230, 250, 91, 16))
+        self.TransponderLabel.setGeometry(QtCore.QRect(360, 267, 71, 16))
         font = QtGui.QFont()
         font.setPointSize(8)
         font.setWeight(75)
@@ -297,7 +297,7 @@ class Ui_QPilotInfo(object):
         self.TransponderLabel.setCursor(QtCore.Qt.PointingHandCursor)
         self.TransponderLabel.setObjectName(_fromUtf8("TransponderLabel"))
         self.POBLabel = QtGui.QLabel(self.centralwidget)
-        self.POBLabel.setGeometry(QtCore.QRect(16, 250, 141, 16))
+        self.POBLabel.setGeometry(QtCore.QRect(320, 248, 111, 16))
         font = QtGui.QFont()
         font.setPointSize(8)
         font.setWeight(75)
@@ -305,6 +305,23 @@ class Ui_QPilotInfo(object):
         self.POBLabel.setFont(font)
         self.POBLabel.setCursor(QtCore.Qt.PointingHandCursor)
         self.POBLabel.setObjectName(_fromUtf8("POBLabel"))
+        self.AirplaneLabel = QtGui.QLabel(self.centralwidget)
+        self.AirplaneLabel.setGeometry(QtCore.QRect(15, 250, 51, 16))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setWeight(75)
+        font.setBold(True)
+        self.AirplaneLabel.setFont(font)
+        self.AirplaneLabel.setCursor(QtCore.Qt.PointingHandCursor)
+        self.AirplaneLabel.setObjectName(_fromUtf8("AirplaneLabel"))
+        self.AirplaneText = QtGui.QLabel(self.centralwidget)
+        self.AirplaneText.setGeometry(QtCore.QRect(17, 260, 311, 20))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.AirplaneText.setFont(font)
+        self.AirplaneText.setCursor(QtCore.Qt.PointingHandCursor)
+        self.AirplaneText.setText(_fromUtf8(""))
+        self.AirplaneText.setObjectName(_fromUtf8("AirplaneText"))
         QPilotInfo.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(QPilotInfo)
@@ -329,4 +346,5 @@ class Ui_QPilotInfo(object):
         self.Home.setText(QtGui.QApplication.translate("QPilotInfo", "Home", None, QtGui.QApplication.UnicodeUTF8))
         self.TransponderLabel.setText(QtGui.QApplication.translate("QPilotInfo", "Transponder", None, QtGui.QApplication.UnicodeUTF8))
         self.POBLabel.setText(QtGui.QApplication.translate("QPilotInfo", "Passengers on Board", None, QtGui.QApplication.UnicodeUTF8))
+        self.AirplaneLabel.setText(QtGui.QApplication.translate("QPilotInfo", "Airplane", None, QtGui.QApplication.UnicodeUTF8))
 

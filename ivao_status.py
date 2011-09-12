@@ -1202,6 +1202,12 @@ class PilotInfo(QMainWindow):
         self.ui.AltitudeNumber.setText(str(info[0][2]))
         self.ui.PobText.setText(str(info[0][8]))
         self.ui.TransponderText.setText(str(info[0][11]))
+        if str(info[0][4]) != '':
+            cursor.execute("SELECT Model, Fabricant, Description FROM icao_aircraft WHERE Model=?;", ((info[0][4].split('/')[1]),))
+            data = cursor.fetchall()
+            self.ui.AirplaneText.setText('Model: %s Fabricant: %s Description: %s' % (str(data[0][0]), str(data[0][1]), str(data[0][2])))
+        else:
+            self.ui.AirplaneText.setText('Pending...')
         cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][1][-4:]),))
         flagCodeHome = cursor.fetchone()
         connection.commit()

@@ -681,8 +681,8 @@
    <widget class="QLabel" name="PobText">
     <property name="geometry">
      <rect>
-      <x>160</x>
-      <y>248</y>
+      <x>424</x>
+      <y>245</y>
       <width>51</width>
       <height>20</height>
      </rect>
@@ -702,8 +702,8 @@
    <widget class="QLabel" name="TransponderText">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>248</y>
+      <x>420</x>
+      <y>265</y>
       <width>41</width>
       <height>20</height>
      </rect>
@@ -723,9 +723,9 @@
    <widget class="QLabel" name="TransponderLabel">
     <property name="geometry">
      <rect>
-      <x>230</x>
-      <y>250</y>
-      <width>91</width>
+      <x>360</x>
+      <y>267</y>
+      <width>71</width>
       <height>16</height>
      </rect>
     </property>
@@ -746,9 +746,9 @@
    <widget class="QLabel" name="POBLabel">
     <property name="geometry">
      <rect>
-      <x>16</x>
-      <y>250</y>
-      <width>141</width>
+      <x>320</x>
+      <y>248</y>
+      <width>111</width>
       <height>16</height>
      </rect>
     </property>
@@ -764,6 +764,50 @@
     </property>
     <property name="text">
      <string>Passengers on Board</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="AirplaneLabel">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>250</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string>Airplane</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="AirplaneText">
+    <property name="geometry">
+     <rect>
+      <x>17</x>
+      <y>260</y>
+      <width>311</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>
