@@ -165,7 +165,8 @@ class Main(QMainWindow):
                 config.write(configfile)
         self.pilot_list = []
         self.atc_list = []
-        
+        self.ui.tabWidget.currentChanged.connect(self.ivao_friend)
+            
     @property
     def maptab(self):
         if self._maptab is None:
@@ -417,6 +418,7 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Done', 2000)
         qApp.processEvents()
         self.show_tables()
+        self.ivao_friend()
         
     def show_tables(self):
         self.statusBar().showMessage('Populating Controllers and Pilots', 8000)
@@ -584,7 +586,6 @@ class Main(QMainWindow):
         self.progress.hide()
         self.statusBar().showMessage('Done', 2000)
         qApp.processEvents()
-        self.ivao_friend()
 
     def country_view(self):
         country_selected = self.ui.country_list.currentText()
@@ -884,7 +885,6 @@ class Main(QMainWindow):
                 startrow_out += 1
             qApp.processEvents()
         connection.close()
-        self.ivao_friend()
 
     def search_button(self):
         config = ConfigParser.RawConfigParser()
@@ -940,7 +940,6 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
         connection.close()
-        self.ivao_friend()
 
     def action_click(self):
         if self.ui.SearchtableWidget.currentRow() >= 0:
