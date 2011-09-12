@@ -59,7 +59,7 @@ class Main(QMainWindow):
         self.ui.PilottableWidget.setColumnWidth(4, 160)
         self.ui.PilottableWidget.setColumnWidth(5, 105)
         self.ui.PilottableWidget.setColumnWidth(6, 70)
-        self.ui.PilottableWidget.setColumnWidth(7, 75)
+        self.ui.PilottableWidget.setColumnWidth(7, 80)
         self.ui.PilottableWidget.setColumnWidth(8, 65)
         self.ui.ATC_FullList.setColumnWidth(1, 70)
         self.ui.ATC_FullList.setColumnWidth(2, 60)
@@ -234,6 +234,7 @@ class Main(QMainWindow):
 
         connection.close()
         self.ivao_friend()
+        self.connect()
         qApp.restoreOverrideCursor()
 
     def connect(self):
@@ -269,6 +270,8 @@ class Main(QMainWindow):
             
             self.statusBar().showMessage('Downloading info from IVAO', 2000)
             qApp.processEvents()
+            self.pilot_list = []
+            self.atc_list = []
             for logged_users in StatusURL.readlines():
                 if "PILOT" in logged_users:
                     self.pilot_list.append(logged_users)
@@ -1163,30 +1166,37 @@ class PilotInfo(QMainWindow):
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
-        planned_destairport, planned_altitude, planned_pob, planned_route, adminrating, transponder, \
+        planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, \
         onground FROM status_ivao WHERE callsign = ? AND clienttype='PILOT' ;", (str(callsign),))
         info = cursor.fetchall()
-        cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][5]),))
-        flagCodeOrig = cursor.fetchone()
-        connection.commit()
-        cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][6]),))
-        flagCodeDest = cursor.fetchone()
-        connection.commit()
-        flagCodePath_orig = ('./flags/%s.png') % flagCodeOrig
-        Pixmap = QPixmap(flagCodePath_orig)
-        self.ui.DepartureImage.setPixmap(Pixmap)
-        flagCodePath_dest = ('./flags/%s.png') % flagCodeDest
-        Pixmap = QPixmap(flagCodePath_dest)
-        self.ui.DestinationImage.setPixmap(Pixmap)
-        cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][5]),))
-        city_orig = cursor.fetchone()
-        self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
-        cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][6]),))
-        city_dest = cursor.fetchone()
+        try:
+            cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][5]),))
+            flagCodeOrig = cursor.fetchone()
+            connection.commit()
+            flagCodePath_orig = ('./flags/%s.png') % flagCodeOrig
+            Pixmap = QPixmap(flagCodePath_orig)
+            self.ui.DepartureImage.setPixmap(Pixmap)
+            cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][5]),))
+            city_orig = cursor.fetchone()
+            self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
+        except:
+            self.ui.DepartureText.setText('Pending...')
+        
+        try:
+            cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][6]),))
+            flagCodeDest = cursor.fetchone()
+            connection.commit()
+            flagCodePath_dest = ('./flags/%s.png') % flagCodeDest
+            Pixmap = QPixmap(flagCodePath_dest)
+            self.ui.DestinationImage.setPixmap(Pixmap)
+            cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][6]),))
+            city_dest = cursor.fetchone()
+            self.ui.DestinationText.setText(str(city_dest[0].encode('latin-1')))
+        except:
+            self.ui.DestinationText.setText('Pending...')
+        
         self.ui.callsign_text.setText(callsign)
         self.ui.PilotNameText.setText(str(info[0][1][:-4].encode('latin-1')))
-        self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
-        self.ui.DestinationText.setText(str(city_dest[0].encode('latin-1')))
         self.ui.RouteText.setText(str(info[0][9]))
         self.ui.GroundSpeedNumber.setText(str(info[0][3]))
         self.ui.AltitudeNumber.setText(str(info[0][2]))
