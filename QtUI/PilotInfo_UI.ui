@@ -115,7 +115,7 @@
    <widget class="QLabel" name="rating_label">
     <property name="geometry">
      <rect>
-      <x>253</x>
+      <x>273</x>
       <y>47</y>
       <width>51</width>
       <height>16</height>
@@ -616,7 +616,7 @@
    <widget class="QLabel" name="Home">
     <property name="geometry">
      <rect>
-      <x>350</x>
+      <x>365</x>
       <y>10</y>
       <width>41</width>
       <height>16</height>

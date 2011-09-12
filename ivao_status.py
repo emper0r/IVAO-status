@@ -1192,6 +1192,15 @@ class PilotInfo(QMainWindow):
         self.ui.AltitudeNumber.setText(str(info[0][2]))
         self.ui.PobText.setText(str(info[0][8]))
         self.ui.TransponderText.setText(str(info[0][11]))
+        cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][1][-4:]),))
+        flagCodeHome = cursor.fetchone()
+        connection.commit()
+        flagCodePath_orig = ('./flags/%s.png') % flagCodeHome
+        Pixmap = QPixmap(flagCodePath_orig)
+        self.ui.HomeFlag.setPixmap(Pixmap)
+        ratingPath = ('./ratings/pilot_level%d.gif') % int(info[0][10])
+        Pixmap = QPixmap(ratingPath)
+        self.ui.rating_img.setPixmap(Pixmap)
 
     def closeEvent(self, event):
         self.closed.emit()

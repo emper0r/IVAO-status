@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Sat Sep 10 13:40:08 2011
+# Created: Mon Sep 12 02:23:31 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -58,7 +58,7 @@ class Ui_QPilotInfo(object):
         self.rating_img.setText(_fromUtf8(""))
         self.rating_img.setObjectName(_fromUtf8("rating_img"))
         self.rating_label = QtGui.QLabel(self.centralwidget)
-        self.rating_label.setGeometry(QtCore.QRect(253, 47, 51, 16))
+        self.rating_label.setGeometry(QtCore.QRect(273, 47, 51, 16))
         font = QtGui.QFont()
         font.setPointSize(8)
         font.setWeight(75)
@@ -247,7 +247,7 @@ class Ui_QPilotInfo(object):
         self.PilotNameText.setText(_fromUtf8(""))
         self.PilotNameText.setObjectName(_fromUtf8("PilotNameText"))
         self.Home = QtGui.QLabel(self.centralwidget)
-        self.Home.setGeometry(QtCore.QRect(350, 10, 41, 16))
+        self.Home.setGeometry(QtCore.QRect(365, 10, 41, 16))
         font = QtGui.QFont()
         font.setPointSize(8)
         font.setWeight(75)
