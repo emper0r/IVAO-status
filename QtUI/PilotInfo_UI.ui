@@ -329,7 +329,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>470</y>
+      <y>450</y>
       <width>99</width>
       <height>23</height>
      </rect>
@@ -350,7 +350,7 @@
     <property name="geometry">
      <rect>
       <x>200</x>
-      <y>470</y>
+      <y>450</y>
       <width>99</width>
       <height>23</height>
      </rect>
@@ -371,7 +371,7 @@
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>470</y>
+      <y>450</y>
       <width>99</width>
       <height>23</height>
      </rect>
@@ -810,7 +810,52 @@
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="vid_label">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>28</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string>VID</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="vidText">
+    <property name="geometry">
+     <rect>
+      <x>32</x>
+      <y>28</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <resources/>
  <connections>

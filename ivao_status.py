@@ -1130,30 +1130,32 @@ class PilotInfo(QMainWindow):
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         self.setWindowIcon(QIcon('./images/ivao.png'))
         self.callsign = ''
+        QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
     
-    def add_friend(self):
+    def add_friend(self, vid2add):
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
-        cursor.execute("SELECT vid from friends_ivao;")
+        cursor.execute("SELECT vid FROM friends_ivao;")
         vid = cursor.fetchall()
         total_vid = len(vid)
         insert = True
         if total_vid >= 0:
             for i in range(0, total_vid):
-                if int(str(current_vid.text())) == vid[i][0]:
+                if int(vid2add) == vid[i][0]:
                     msg = 'The friend is already in the list'
                     QMessageBox.information(None, 'Friend of IVAO list', msg)
                     i += 1
                     insert = False
             try:
                 if insert is True:
-                    realname = unicode(str(self.callsign), 'latin-1')
-                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating) VALUES (?, ?);' \
-                                   , (int(str(self.callsign)), str(realname)), int(rating))
+                    cursor.execute("SELECT vid, realname, rating from status_ivao WHERE vid=?;", ((int(vid2add),)))
+                    data = cursor.fetchall()
+                    realname = unicode(str(data[0][1]), 'latin-1')
+                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating) VALUES (?, ?, ?);' \
+                                   , (int(str(data[0][0])), realname, int(data[0][2])))
                     connection.commit()
-                    self.ivao_friend()
                     self.statusBar().showMessage('Friend Added', 2000)
             except:
                 pass
@@ -1195,6 +1197,7 @@ class PilotInfo(QMainWindow):
         except:
             self.ui.DestinationText.setText('Pending...')
         
+        self.ui.vidText.setText(str(info[0][0]))
         self.ui.callsign_text.setText(callsign)
         self.ui.PilotNameText.setText(str(info[0][1][:-4].encode('latin-1')))
         self.ui.RouteText.setText(str(info[0][9]))
@@ -1217,6 +1220,9 @@ class PilotInfo(QMainWindow):
         ratingPath = ('./ratings/pilot_level%d.gif') % int(info[0][10])
         Pixmap = QPixmap(ratingPath)
         self.ui.rating_img.setPixmap(Pixmap)
+        
+    def add_button(self):
+        self.add_friend(self.ui.vidText.text())
 
     def closeEvent(self, event):
         self.closed.emit()

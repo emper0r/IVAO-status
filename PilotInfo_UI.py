@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Mon Sep 12 04:31:02 2011
+# Created: Mon Sep 12 06:51:15 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -139,21 +139,21 @@ class Ui_QPilotInfo(object):
         self.Route_label.setCursor(QtCore.Qt.PointingHandCursor)
         self.Route_label.setObjectName(_fromUtf8("Route_label"))
         self.AddFriend = QtGui.QPushButton(self.centralwidget)
-        self.AddFriend.setGeometry(QtCore.QRect(90, 470, 99, 23))
+        self.AddFriend.setGeometry(QtCore.QRect(90, 450, 99, 23))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.AddFriend.setFont(font)
         self.AddFriend.setCursor(QtCore.Qt.PointingHandCursor)
         self.AddFriend.setObjectName(_fromUtf8("AddFriend"))
         self.ShowMap = QtGui.QPushButton(self.centralwidget)
-        self.ShowMap.setGeometry(QtCore.QRect(200, 470, 99, 23))
+        self.ShowMap.setGeometry(QtCore.QRect(200, 450, 99, 23))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.ShowMap.setFont(font)
         self.ShowMap.setCursor(QtCore.Qt.PointingHandCursor)
         self.ShowMap.setObjectName(_fromUtf8("ShowMap"))
         self.Close = QtGui.QPushButton(self.centralwidget)
-        self.Close.setGeometry(QtCore.QRect(310, 470, 99, 23))
+        self.Close.setGeometry(QtCore.QRect(310, 450, 99, 23))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.Close.setFont(font)
@@ -322,7 +322,27 @@ class Ui_QPilotInfo(object):
         self.AirplaneText.setCursor(QtCore.Qt.PointingHandCursor)
         self.AirplaneText.setText(_fromUtf8(""))
         self.AirplaneText.setObjectName(_fromUtf8("AirplaneText"))
+        self.vid_label = QtGui.QLabel(self.centralwidget)
+        self.vid_label.setGeometry(QtCore.QRect(11, 28, 21, 16))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setWeight(75)
+        font.setBold(True)
+        self.vid_label.setFont(font)
+        self.vid_label.setCursor(QtCore.Qt.PointingHandCursor)
+        self.vid_label.setObjectName(_fromUtf8("vid_label"))
+        self.vidText = QtGui.QLabel(self.centralwidget)
+        self.vidText.setGeometry(QtCore.QRect(32, 28, 51, 16))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.vidText.setFont(font)
+        self.vidText.setCursor(QtCore.Qt.PointingHandCursor)
+        self.vidText.setText(_fromUtf8(""))
+        self.vidText.setObjectName(_fromUtf8("vidText"))
         QPilotInfo.setCentralWidget(self.centralwidget)
+        self.statusBar = QtGui.QStatusBar(QPilotInfo)
+        self.statusBar.setObjectName(_fromUtf8("statusBar"))
+        QPilotInfo.setStatusBar(self.statusBar)
 
         self.retranslateUi(QPilotInfo)
         QtCore.QObject.connect(self.Close, QtCore.SIGNAL(_fromUtf8("clicked()")), QPilotInfo.close)
@@ -347,4 +367,5 @@ class Ui_QPilotInfo(object):
         self.TransponderLabel.setText(QtGui.QApplication.translate("QPilotInfo", "Transponder", None, QtGui.QApplication.UnicodeUTF8))
         self.POBLabel.setText(QtGui.QApplication.translate("QPilotInfo", "Passengers on Board", None, QtGui.QApplication.UnicodeUTF8))
         self.AirplaneLabel.setText(QtGui.QApplication.translate("QPilotInfo", "Airplane", None, QtGui.QApplication.UnicodeUTF8))
+        self.vid_label.setText(QtGui.QApplication.translate("QPilotInfo", "VID", None, QtGui.QApplication.UnicodeUTF8))
 
