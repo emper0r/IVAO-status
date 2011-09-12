@@ -277,7 +277,7 @@ class Main(QMainWindow):
                     self.pilot_list.append(logged_users)
                 if "ATC" in logged_users:
                     self.atc_list.append(logged_users)
-            
+
             self.update_db()
                     
         except IOError:
@@ -584,6 +584,7 @@ class Main(QMainWindow):
         self.progress.hide()
         self.statusBar().showMessage('Done', 2000)
         qApp.processEvents()
+        self.ivao_friend()
 
     def country_view(self):
         country_selected = self.ui.country_list.currentText()
@@ -881,9 +882,9 @@ class Main(QMainWindow):
                 col_flight = QTableWidgetItem(status_flight, 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 5, col_flight)
                 startrow_out += 1
-            
             qApp.processEvents()
         connection.close()
+        self.ivao_friend()
 
     def search_button(self):
         config = ConfigParser.RawConfigParser()
@@ -939,6 +940,7 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
         connection.close()
+        self.ivao_friend()
 
     def action_click(self):
         if self.ui.SearchtableWidget.currentRow() >= 0:
@@ -991,7 +993,7 @@ class Main(QMainWindow):
         config.read('Config.cfg')
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
-        cursor.execute('SELECT * FROM friends_ivao;')
+        cursor.execute('SELECT vid, realname, rating FROM friends_ivao;')
         roster = cursor.fetchall()
 
         self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
@@ -1003,11 +1005,15 @@ class Main(QMainWindow):
             self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
             col_vid = QTableWidgetItem(str(row[0]), 0)
             self.ui.FriendstableWidget.setItem(startrow, 0, col_vid)
-            col_realname = QTableWidgetItem(str(row[2].encode('latin-1')), 0)
+            col_realname = QTableWidgetItem(str(row[1].encode('latin-1')), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
-            col_rating = QTableWidgetItem('-', 0)
+            if str(row[2]) != '-':
+                col_rating = QTableWidgetItem(str(row[2]), 0)
+            else:
+                col_rating = QTableWidgetItem('-', 0)
             self.ui.FriendstableWidget.setItem(startrow, 2, col_rating)
             startrow += 1
+            qApp.processEvents()
         cursor.execute('select friends_ivao.vid, status_ivao.vid from status_ivao \
         , friends_ivao where status_ivao.vid=friends_ivao.vid;')
         friends_parts = cursor.fetchall()
@@ -1152,9 +1158,8 @@ class PilotInfo(QMainWindow):
                 if insert is True:
                     cursor.execute("SELECT vid, realname, rating from status_ivao WHERE vid=?;", ((int(vid2add),)))
                     data = cursor.fetchall()
-                    realname = unicode(str(data[0][1]), 'latin-1')
                     cursor.execute('INSERT INTO friends_ivao (vid, realname, rating) VALUES (?, ?, ?);' \
-                                   , (int(str(data[0][0])), realname, int(data[0][2])))
+                                   , (int(str(data[0][0])), str(data[0][1][:-4].encode('latin-1')), int(data[0][2])))
                     connection.commit()
                     self.statusBar().showMessage('Friend Added', 2000)
             except:
