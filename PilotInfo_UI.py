@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Tue Sep 13 11:07:18 2011
+# Created: Tue Sep 13 14:53:03 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -127,7 +127,10 @@ class Ui_QPilotInfo(object):
         self.DestinationText.setObjectName(_fromUtf8("DestinationText"))
         self.RouteText = QtGui.QTextEdit(self.centralwidget)
         self.RouteText.setGeometry(QtCore.QRect(8, 352, 476, 111))
+        self.RouteText.setProperty(_fromUtf8("cursor"), QtCore.Qt.PointingHandCursor)
         self.RouteText.setReadOnly(True)
+        self.RouteText.setAcceptRichText(False)
+        self.RouteText.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.RouteText.setObjectName(_fromUtf8("RouteText"))
         self.Route_label = QtGui.QLabel(self.centralwidget)
         self.Route_label.setGeometry(QtCore.QRect(15, 332, 41, 16))
@@ -210,6 +213,7 @@ class Ui_QPilotInfo(object):
         self.line1.setObjectName(_fromUtf8("line1"))
         self.line2 = QtGui.QFrame(self.centralwidget)
         self.line2.setGeometry(QtCore.QRect(10, 467, 461, 16))
+        self.line2.setCursor(QtCore.Qt.PointingHandCursor)
         self.line2.setFrameShape(QtGui.QFrame.HLine)
         self.line2.setFrameShadow(QtGui.QFrame.Sunken)
         self.line2.setObjectName(_fromUtf8("line2"))

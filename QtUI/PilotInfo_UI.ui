@@ -298,8 +298,17 @@
       <height>111</height>
      </rect>
     </property>
+    <property name="cursor" stdset="0">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="readOnly">
      <bool>true</bool>
+    </property>
+    <property name="acceptRichText">
+     <bool>false</bool>
+    </property>
+    <property name="textInteractionFlags">
+     <set>Qt::NoTextInteraction</set>
     </property>
    </widget>
    <widget class="QLabel" name="Route_label">
@@ -520,6 +529,9 @@
       <width>461</width>
       <height>16</height>
      </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Mon Sep 12 09:21:35 2011
+# Created: Tue Sep 13 12:21:28 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -513,7 +513,7 @@ class Ui_MainWindow(object):
         self.PILOT_FullList.setAlternatingRowColors(True)
         self.PILOT_FullList.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self.PILOT_FullList.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.PILOT_FullList.setTextElideMode(QtCore.Qt.ElideMiddle)
+        self.PILOT_FullList.setTextElideMode(QtCore.Qt.ElideRight)
         self.PILOT_FullList.setGridStyle(QtCore.Qt.DotLine)
         self.PILOT_FullList.setWordWrap(False)
         self.PILOT_FullList.setObjectName(_fromUtf8("PILOT_FullList"))
@@ -642,6 +642,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.METARFindButton, QtCore.SIGNAL('clicked()'), MainWindow.metar)
         QtCore.QObject.connect(self.country_list, QtCore.SIGNAL('activated(QString)'), MainWindow.country_view)
         QtCore.QObject.connect(self.METARHelpButton, QtCore.SIGNAL('clicked()'), MainWindow.metarHelp)
+        QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):

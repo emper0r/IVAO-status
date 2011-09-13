@@ -1382,7 +1382,7 @@
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
       <property name="textElideMode">
-       <enum>Qt::ElideMiddle</enum>
+       <enum>Qt::ElideRight</enum>
       </property>
       <property name="gridStyle">
        <enum>Qt::DotLine</enum>

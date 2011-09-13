@@ -25,6 +25,7 @@ from PyQt4.QtWebKit import *
 from PyQt4.Qt import *
 import MainWindow_UI
 import PilotInfo_UI
+import ControllerInfo_UI
 import SettingWindow_UI
 import urllib2
 import sqlite3
@@ -388,7 +389,7 @@ class Main(QMainWindow):
             rating = fields[16]
             facilitytype = fields[18]
             visualrange = fields[19]
-            atis_message = fields[35]
+            atis_message = fields[35].decode('latin-1')
             time_last_atis_received = fields[36]
             time_connected = fields[37]
             client_software_name = fields[38]
@@ -397,13 +398,12 @@ class Main(QMainWindow):
             atc_or_atcrating = fields[41]
 
             cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, server, clienttype, frequency \
-            , latitude, longitude, altitude, server, protrevision \
-            , rating, facilitytype, visualrange \
+            , latitude, longitude, altitude, server, protrevision, rating, facilitytype, visualrange \
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
-            , adminrating, atc_or_pilotrating) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+            , adminrating, atc_or_pilotrating, atis_message) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
             (callsign, vid, realname, server, clienttype, frequency, latitude, longitude, altitude, server \
              , protrevision, rating, facilitytype, visualrange, time_last_atis_received, time_connected \
-             , client_software_name, client_software_version, adminrating, atc_or_pilotrating))
+             , client_software_name, client_software_version, adminrating, atc_or_pilotrating, atis_message))
         connection.commit()
         
         cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
@@ -952,6 +952,7 @@ class Main(QMainWindow):
 
     def action_click(self, event=None):
         sender = self.sender()
+        print sender, event
         if self.ui.SearchtableWidget.currentRow() >= 0:
             row = self.ui.SearchtableWidget.currentIndex().row()
             if row == -1:
@@ -973,7 +974,7 @@ class Main(QMainWindow):
                 current_callsign = self.ui.ATC_FullList.item(current_row, 0)
                 self.ui.ATC_FullList.setCurrentCell(-1, -1)
                 if sender == self.showInfo_Action:
-                    pass
+                    self.show_controller_info(current_callsign.text())
                 if sender == self.showMap_Action:
                     self.view_map(current_callsign.text())
         if self.ui.ATCtableWidget.currentRow() >= 0:
@@ -984,7 +985,7 @@ class Main(QMainWindow):
                 current_row = self.ui.ATCtableWidget.currentRow()
                 current_callsign = self.ui.ATCtableWidget.item(current_row, 0)
                 if sender == self.showInfo_Action:
-                    pass
+                    self.show_controller_info(current_callsign.text())
                 if sender == self.showMap_Action:
                     self.view_map(current_callsign.text())
                 self.ui.ATCtableWidget.setCurrentCell(-1, -1)
@@ -1014,6 +1015,12 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.setCurrentCell(-1, -1)
 
     def ivao_friend(self):
+        self.ui.PILOT_FullList.setCurrentCell(-1, -1)
+        self.ui.ATC_FullList.setCurrentCell(-1, -1)
+        self.ui.PilottableWidget.setCurrentCell(-1, -1)
+        self.ui.ATCtableWidget.setCurrentCell(-1, -1)
+        self.ui.SearchtableWidget.setCurrentCell(-1, -1)
+        self.ui.FriendstableWidget.setCurrentCell(-1, -1)
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
@@ -1148,6 +1155,12 @@ class Main(QMainWindow):
         self.pilot_window.status(callsign)
         self.pilot_window.closed.connect(self.show)
         self.pilot_window.show()
+        
+    def show_controller_info(self, callsign):
+        self.controller_window = ControllerInfo()
+        self.controller_window.status(callsign)
+        self.controller_window.closed.connect(self.show)
+        self.controller_window.show()
 
     def show_settings(self):
         self.setting_window = Settings(self)
@@ -1256,6 +1269,58 @@ class PilotInfo(QMainWindow):
         Pixmap = QPixmap(ratingPath)
         self.ui.rating_img.setPixmap(Pixmap)
         
+    def add_button(self):
+        self.add_friend(self.ui.vidText.text())
+
+    def closeEvent(self, event):
+        self.closed.emit()
+        event.accept()
+
+class ControllerInfo(QMainWindow):
+    closed = pyqtSignal()
+
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.ui = ControllerInfo_UI.Ui_QControllerInfo()
+        self.ui.setupUi(self)
+        screen = QDesktopWidget().screenGeometry()
+        size =  self.geometry()
+        self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+        self.setWindowIcon(QIcon('./images/ivao.png'))
+        QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
+        
+    def status(self, callsign):
+        self.callsign = callsign
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        cursor = connection.cursor()
+        cursor.execute("SELECT vid, realname, server, clienttype, frequency \
+            , server, protrevision, rating, facilitytype, atis_message \
+            , time_connected, client_software_name, client_software_version \
+            FROM status_ivao WHERE callsign = ? AND clienttype='ATC';", (str(callsign),))
+        info = cursor.fetchall()
+        self.ui.VidText.setText(str(info[0][0]))
+        self.ui.ControllerText.setText(str(info[0][1].encode('latin-1')))
+        self.ui.SoftwareText.setText('%s %s' % (str(info[0][11]), str(info[0][12])))
+        self.ui.ConnectedText.setText(str(info[0][5]))
+        self.ui.ATISInfo.setText(str(info[0][9].encode('latin-1')).replace('^\xa7', '\n'))
+        try:
+            cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
+            flagCodeOrig = cursor.fetchone()
+            connection.commit()
+            flagCodePath_orig = ('./flags/%s.png') % flagCodeOrig
+            Pixmap = QPixmap(flagCodePath_orig)
+            self.ui.Flag.setPixmap(Pixmap)
+            cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
+            city_orig = cursor.fetchone()
+            self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
+        except:
+            self.ui.DepartureText.setText('Pending...')
+        ratingPath = ('./ratings/atc_level%d.gif') % int(info[0][7])
+        Pixmap = QPixmap(ratingPath)
+        self.ui.rating_img.setPixmap(Pixmap)
+    
     def add_button(self):
         self.add_friend(self.ui.vidText.text())
 
