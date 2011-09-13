@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Mon Sep 12 09:19:07 2011
+# Created: Tue Sep 13 11:07:18 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -139,21 +139,14 @@ class Ui_QPilotInfo(object):
         self.Route_label.setCursor(QtCore.Qt.PointingHandCursor)
         self.Route_label.setObjectName(_fromUtf8("Route_label"))
         self.AddFriend = QtGui.QPushButton(self.centralwidget)
-        self.AddFriend.setGeometry(QtCore.QRect(90, 497, 99, 23))
+        self.AddFriend.setGeometry(QtCore.QRect(145, 497, 99, 23))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.AddFriend.setFont(font)
         self.AddFriend.setCursor(QtCore.Qt.PointingHandCursor)
         self.AddFriend.setObjectName(_fromUtf8("AddFriend"))
-        self.ShowMap = QtGui.QPushButton(self.centralwidget)
-        self.ShowMap.setGeometry(QtCore.QRect(200, 497, 99, 23))
-        font = QtGui.QFont()
-        font.setPointSize(8)
-        self.ShowMap.setFont(font)
-        self.ShowMap.setCursor(QtCore.Qt.PointingHandCursor)
-        self.ShowMap.setObjectName(_fromUtf8("ShowMap"))
         self.Close = QtGui.QPushButton(self.centralwidget)
-        self.Close.setGeometry(QtCore.QRect(310, 497, 99, 23))
+        self.Close.setGeometry(QtCore.QRect(250, 497, 99, 23))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.Close.setFont(font)
@@ -353,7 +346,6 @@ class Ui_QPilotInfo(object):
         self.Destination_Info.setText(QtGui.QApplication.translate("QPilotInfo", "Destination", None, QtGui.QApplication.UnicodeUTF8))
         self.Route_label.setText(QtGui.QApplication.translate("QPilotInfo", "Route", None, QtGui.QApplication.UnicodeUTF8))
         self.AddFriend.setText(QtGui.QApplication.translate("QPilotInfo", "Add Friend", None, QtGui.QApplication.UnicodeUTF8))
-        self.ShowMap.setText(QtGui.QApplication.translate("QPilotInfo", "View on Map", None, QtGui.QApplication.UnicodeUTF8))
         self.Close.setText(QtGui.QApplication.translate("QPilotInfo", "Close", None, QtGui.QApplication.UnicodeUTF8))
         self.GroundSpeed_label.setText(QtGui.QApplication.translate("QPilotInfo", "Ground Speed", None, QtGui.QApplication.UnicodeUTF8))
         self.Altitude_label.setText(QtGui.QApplication.translate("QPilotInfo", "Altitude", None, QtGui.QApplication.UnicodeUTF8))

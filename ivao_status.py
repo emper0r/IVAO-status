@@ -74,8 +74,8 @@ class Main(QMainWindow):
         self.ui.SearchtableWidget.setColumnWidth(1, 100)
         self.ui.SearchtableWidget.setColumnWidth(2, 170)
         self.ui.FriendstableWidget.setColumnWidth(0, 50)
-        self.ui.FriendstableWidget.setColumnWidth(1, 170)
-        self.ui.FriendstableWidget.setColumnWidth(2, 100)
+        self.ui.FriendstableWidget.setColumnWidth(1, 230)
+        self.ui.FriendstableWidget.setColumnWidth(2, 105)
         self.ui.dbTableWidget_1.setColumnWidth(0, 30)
         self.ui.dbTableWidget_2.setColumnWidth(0, 45)
         self.ui.dbTableWidget_2.setColumnWidth(1, 80)
@@ -107,13 +107,20 @@ class Main(QMainWindow):
         self.ui.PILOT_FullList.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.ATCtableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.PilottableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
-        showInfo_Action = QAction("Show Info", self)
-        self.ui.SearchtableWidget.addAction(showInfo_Action)
-        self.ui.ATC_FullList.addAction(showInfo_Action)
-        self.ui.PILOT_FullList.addAction(showInfo_Action)
-        self.ui.ATCtableWidget.addAction(showInfo_Action)
-        self.ui.PilottableWidget.addAction(showInfo_Action)
-        showInfo_Action.triggered.connect(self.action_click)
+        self.showInfo_Action = QAction("Show Info", self)
+        self.showMap_Action = QAction("Show at Map", self)
+        self.ui.SearchtableWidget.addAction(self.showInfo_Action)
+        self.ui.SearchtableWidget.addAction(self.showMap_Action)
+        self.ui.ATC_FullList.addAction(self.showInfo_Action)
+        self.ui.ATC_FullList.addAction(self.showMap_Action)
+        self.ui.PILOT_FullList.addAction(self.showInfo_Action)
+        self.ui.PILOT_FullList.addAction(self.showMap_Action)
+        self.ui.ATCtableWidget.addAction(self.showInfo_Action)
+        self.ui.ATCtableWidget.addAction(self.showMap_Action)
+        self.ui.PilottableWidget.addAction(self.showInfo_Action)
+        self.ui.PilottableWidget.addAction(self.showMap_Action)
+        self.showInfo_Action.triggered.connect(self.action_click)
+        self.showMap_Action.triggered.connect(self.action_click)
         Pixmap = QPixmap('./images/departures.png')
         self.ui.departures_icon.setPixmap(Pixmap)
         self.ui.departures_icon.show()
@@ -172,7 +179,7 @@ class Main(QMainWindow):
         if self._maptab is None:
             self._maptab = QWebView()
             self.ui.tabWidget.insertTab(5, self.maptab, 'Map')
-        if self.ui.tabWidget.currentIndex() == 0:
+        if self.ui.tabWidget.currentIndex() != -1:
             self.ui.tabWidget.setCurrentIndex(5)
         return self._maptab
 
@@ -234,6 +241,8 @@ class Main(QMainWindow):
             startrow_dbt2 += 1
 
         connection.close()
+        qApp.processEvents()
+        self.statusBar().showMessage('Showing friends list', 2000)
         self.ivao_friend()
         self.connect()
         qApp.restoreOverrideCursor()
@@ -941,15 +950,20 @@ class Main(QMainWindow):
             qApp.processEvents()
         connection.close()
 
-    def action_click(self):
+    def action_click(self, event=None):
+        sender = self.sender()
         if self.ui.SearchtableWidget.currentRow() >= 0:
             row = self.ui.SearchtableWidget.currentIndex().row()
             if row == -1:
                 pass
             else:
                 current_row = self.ui.SearchtableWidget.currentRow()
-                current_callsign = self.ui.SearchtableWidget.item(current_row, 0)
+                current_callsign = self.ui.SearchtableWidget.item(current_row, 1)
                 self.ui.SearchtableWidget.setCurrentCell(-1, -1)
+                if sender == self.showInfo_Action:
+                    pass
+                if sender == self.showMap_Action:
+                    self.view_map(current_callsign.text())
         if self.ui.ATC_FullList.currentRow() >= 0:
             row = self.ui.ATC_FullList.currentIndex().row()
             if row == -1:
@@ -958,6 +972,10 @@ class Main(QMainWindow):
                 current_row = self.ui.ATC_FullList.currentRow()
                 current_callsign = self.ui.ATC_FullList.item(current_row, 0)
                 self.ui.ATC_FullList.setCurrentCell(-1, -1)
+                if sender == self.showInfo_Action:
+                    pass
+                if sender == self.showMap_Action:
+                    self.view_map(current_callsign.text())
         if self.ui.ATCtableWidget.currentRow() >= 0:
             row = self.ui.ATCtableWidget.currentIndex().row()
             if row == -1:
@@ -965,6 +983,10 @@ class Main(QMainWindow):
             else:
                 current_row = self.ui.ATCtableWidget.currentRow()
                 current_callsign = self.ui.ATCtableWidget.item(current_row, 0)
+                if sender == self.showInfo_Action:
+                    pass
+                if sender == self.showMap_Action:
+                    self.view_map(current_callsign.text())
                 self.ui.ATCtableWidget.setCurrentCell(-1, -1)
         if self.ui.PILOT_FullList.currentRow() >= 0:
             row = self.ui.PILOT_FullList.currentIndex().row()
@@ -973,7 +995,10 @@ class Main(QMainWindow):
             else:
                 current_row = self.ui.PILOT_FullList.currentRow()
                 current_callsign = self.ui.PILOT_FullList.item(current_row, 1)
-                self.show_pilot_info(current_callsign.text())
+                if sender == self.showInfo_Action:
+                    self.show_pilot_info(current_callsign.text())
+                if sender == self.showMap_Action:
+                    self.view_map(current_callsign.text())
                 self.ui.PILOT_FullList.setCurrentCell(-1, -1)
         if self.ui.PilottableWidget.currentRow() >= 0:
             row = self.ui.PilottableWidget.currentIndex().row()
@@ -982,17 +1007,18 @@ class Main(QMainWindow):
             else:
                 current_row = self.ui.PilottableWidget.currentRow()
                 current_callsign = self.ui.PilottableWidget.item(current_row, 1)
-                self.show_pilot_info(current_callsign.text())
+                if sender == self.showInfo_Action:
+                    self.show_pilot_info(current_callsign.text())
+                if sender == self.showMap_Action:
+                    self.view_map(current_callsign.text())
                 self.ui.PilottableWidget.setCurrentCell(-1, -1)
 
     def ivao_friend(self):
-        self.statusBar().showMessage('Showing friends list', 2000)
-        qApp.processEvents()
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
-        cursor.execute('SELECT vid, realname, rating FROM friends_ivao;')
+        cursor.execute('SELECT vid, realname, rating, clienttype FROM friends_ivao;')
         roster = cursor.fetchall()
 
         self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
@@ -1007,10 +1033,17 @@ class Main(QMainWindow):
             col_realname = QTableWidgetItem(str(row[1].encode('latin-1')), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
             if str(row[2]) != '-':
-                col_rating = QTableWidgetItem(str(row[2]), 0)
+                if str(roster[0][3]) == 'ATC':
+                    ratingImagePath = './ratings/atc_level%d.gif' % int(roster[0][2])
+                else:
+                    ratingImagePath = './ratings/pilot_level%d.gif' % int(roster[0][2])
+                Pixmap = QPixmap(ratingImagePath)
+                ratingImage = QLabel(self)
+                ratingImage.setPixmap(Pixmap)
+                col_rating = self.ui.FriendstableWidget.setCellWidget(startrow, 2, ratingImage)
             else:
                 col_rating = QTableWidgetItem('-', 0)
-            self.ui.FriendstableWidget.setItem(startrow, 2, col_rating)
+                self.ui.FriendstableWidget.setItem(startrow, 2, col_rating)
             startrow += 1
             qApp.processEvents()
         cursor.execute('select friends_ivao.vid, status_ivao.vid from status_ivao \
@@ -1041,15 +1074,13 @@ class Main(QMainWindow):
             self.ui.METARtableWidget.setItem(startrow, 1, col_metar)
             startrow += 1
             
-    def view_map(self, event):
-        current_row = self.ui.SearchtableWidget.currentRow()
-        current_vid = self.ui.SearchtableWidget.item(current_row, 0)        
+    def view_map(self, vid):    
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
-        cursor.execute("SELECT latitude, longitude, callsign, true_heading, clienttype from status_ivao where vid=?;" \
-                       ,  (int(current_vid.text()),))
+        cursor.execute("SELECT latitude, longitude, callsign, true_heading, clienttype from status_ivao where callsign=?;" \
+                       ,  (str(vid),))
         player = cursor.fetchall()
         latitude, longitude, heading = player[0][0], player[0][1], player[0][3]
         player_location = open('./player_location.html', 'w')
@@ -1155,10 +1186,10 @@ class PilotInfo(QMainWindow):
                     insert = False
             try:
                 if insert is True:
-                    cursor.execute("SELECT vid, realname, rating from status_ivao WHERE vid=?;", ((int(vid2add),)))
+                    cursor.execute("SELECT vid, realname, rating, clienttype from status_ivao WHERE vid=?;", ((int(vid2add),)))
                     data = cursor.fetchall()
-                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating) VALUES (?, ?, ?);' \
-                                   , (int(str(data[0][0])), str(data[0][1][:-4].encode('latin-1')), int(data[0][2])))
+                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) VALUES (?, ?, ?, ?);' \
+                                   , (int(str(data[0][0])), str(data[0][1][:-4].encode('latin-1')), int(data[0][2]), str(data[0][3])))
                     connection.commit()
                     self.statusBar().showMessage('Friend Added', 2000)
             except:
