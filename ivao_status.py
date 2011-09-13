@@ -1316,7 +1316,7 @@ class ControllerInfo(QMainWindow):
             city_orig = cursor.fetchone()
             self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
         except:
-            self.ui.DepartureText.setText('Pending...')
+            self.ui.ControllingText.setText('Pending...')
         ratingPath = ('./ratings/atc_level%d.gif') % int(info[0][7])
         Pixmap = QPixmap(ratingPath)
         self.ui.rating_img.setPixmap(Pixmap)
