@@ -894,6 +894,8 @@ class Main(QMainWindow):
                 startrow_out += 1
             qApp.processEvents()
         connection.close()
+        self.ui.PilottableWidget.setCurrentCell(-1, -1)
+        self.ui.ATCtableWidget.setCurrentCell(-1, -1)
 
     def search_button(self):
         config = ConfigParser.RawConfigParser()
@@ -1167,20 +1169,7 @@ class Main(QMainWindow):
         self.setting_window.closed.connect(self.show)
         self.setting_window.show()
 
-class PilotInfo(QMainWindow):
-    closed = pyqtSignal()
-
-    def __init__(self):
-        QMainWindow.__init__(self)
-        self.ui = PilotInfo_UI.Ui_QPilotInfo()
-        self.ui.setupUi(self)
-        screen = QDesktopWidget().screenGeometry()
-        size =  self.geometry()
-        self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QIcon('./images/ivao.png'))
-        self.callsign = ''
-        QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
-    
+class AddFriend():
     def add_friend(self, vid2add):
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
@@ -1204,10 +1193,24 @@ class PilotInfo(QMainWindow):
                     cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) VALUES (?, ?, ?, ?);' \
                                    , (int(str(data[0][0])), str(data[0][1][:-4].encode('latin-1')), int(data[0][2]), str(data[0][3])))
                     connection.commit()
-                    self.statusBar().showMessage('Friend Added', 2000)
+                    self.statusBar().showMessage('Friend Added', 3000)
             except:
                 pass
         connection.close()
+
+class PilotInfo(QMainWindow):
+    closed = pyqtSignal()
+
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.ui = PilotInfo_UI.Ui_QPilotInfo()
+        self.ui.setupUi(self)
+        screen = QDesktopWidget().screenGeometry()
+        size =  self.geometry()
+        self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+        self.setWindowIcon(QIcon('./images/ivao.png'))
+        self.callsign = ''
+        QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
 
     def status(self, callsign):
         self.callsign = callsign
@@ -1270,7 +1273,8 @@ class PilotInfo(QMainWindow):
         self.ui.rating_img.setPixmap(Pixmap)
         
     def add_button(self):
-        self.add_friend(self.ui.vidText.text())
+        add2friend = AddFriend()
+        add2friend.add_friend(self.ui.vidText.text())
 
     def closeEvent(self, event):
         self.closed.emit()
@@ -1330,7 +1334,8 @@ class ControllerInfo(QMainWindow):
         self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])
     
     def add_button(self):
-        self.add_friend(self.ui.vidText.text())
+        add2friend = AddFriend()
+        add2friend.add_friend(self.ui.VidText.text())
 
     def closeEvent(self, event):
         self.closed.emit()
