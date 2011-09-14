@@ -245,7 +245,6 @@ class Main(QMainWindow):
         qApp.processEvents()
         self.statusBar().showMessage('Showing friends list', 2000)
         self.ivao_friend()
-        self.connect()
         qApp.restoreOverrideCursor()
 
     def connect(self):
@@ -268,12 +267,14 @@ class Main(QMainWindow):
                 opener = urllib2.build_opener(proxy_support, authinfo)
                 urllib2.install_opener(opener)
                 StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + config.get('Info', 'data_access'))
+                QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port), str(user), str(pswd)))
                 qApp.processEvents()
             if use_proxy == 2 and auth == 0:
                 proxy_support = urllib2.ProxyHandler({"http" : "http://" + host + ':' + port})
                 opener = urllib2.build_opener(proxy_support)
                 urllib2.install_opener(opener)
                 StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + config.get('Info', 'data_access'))
+                QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port)))
                 qApp.processEvents()
             if use_proxy == 0 and auth == 0:
                 StatusURL = urllib2.urlopen('http://de3.www.ivao.aero/' + config.get('Info', 'data_access'))
