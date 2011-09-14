@@ -1291,20 +1291,22 @@ class ControllerInfo(QMainWindow):
         
     def status(self, callsign):
         self.callsign = callsign
+        self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
+                        , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute("SELECT vid, realname, server, clienttype, frequency \
-            , server, protrevision, rating, facilitytype, atis_message \
-            , time_connected, client_software_name, client_software_version \
-            FROM status_ivao WHERE callsign = ? AND clienttype='ATC';", (str(callsign),))
+            , rating, facilitytype, atis_message, time_connected, \
+            client_software_name, client_software_version FROM status_ivao \
+            WHERE callsign = ? AND clienttype='ATC';", (str(callsign),))
         info = cursor.fetchall()
         self.ui.VidText.setText(str(info[0][0]))
         self.ui.ControllerText.setText(str(info[0][1].encode('latin-1')))
-        self.ui.SoftwareText.setText('%s %s' % (str(info[0][11]), str(info[0][12])))
+        self.ui.SoftwareText.setText('%s %s' % (str(info[0][9]), str(info[0][10])))
         self.ui.ConnectedText.setText(str(info[0][5]))
-        self.ui.ATISInfo.setText(str(info[0][9].encode('latin-1')).replace('^\xa7', '\n'))
+        self.ui.ATISInfo.setText(str(info[0][7].encode('latin-1')).replace('^\xa7', '\n'))
         try:
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
             flagCodeOrig = cursor.fetchone()
@@ -1317,9 +1319,15 @@ class ControllerInfo(QMainWindow):
             self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
         except:
             self.ui.ControllingText.setText('Pending...')
-        ratingPath = ('./ratings/atc_level%d.gif') % int(info[0][7])
+        ratingPath = ('./ratings/atc_level%d.gif') % int(info[0][5])
         Pixmap = QPixmap(ratingPath)
         self.ui.rating_img.setPixmap(Pixmap)
+        self.ui.facility_freq_Text.setText(str(self.position_atc[str(info[0][6])]) + ' ' + str(info[0][4]) + ' MHz')
+        start_connected = datetime.datetime(int(str(info[0][8])[:4]), int(str(info[0][8])[4:6]) \
+                            , int(str(info[0][8])[6:8]), int(str(info[0][8])[8:10]) \
+                            , int(str(info[0][8])[10:12]), int(str(info[0][8])[12:14]))
+        diff = abs(datetime.datetime.now() - start_connected)
+        self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])
     
     def add_button(self):
         self.add_friend(self.ui.vidText.text())
