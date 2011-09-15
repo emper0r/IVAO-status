@@ -23,6 +23,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.QtWebKit import *
 from PyQt4.Qt import *
+from geopy import distance
 import MainWindow_UI
 import PilotInfo_UI
 import ControllerInfo_UI
@@ -1221,7 +1222,7 @@ class PilotInfo(QMainWindow):
         cursor = connection.cursor()
         cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
         planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, \
-        onground FROM status_ivao WHERE callsign = ? AND clienttype='PILOT' ;", (str(callsign),))
+        onground, latitude, longitude FROM status_ivao WHERE callsign = ? AND clienttype='PILOT' ;", (str(callsign),))
         info = cursor.fetchall()
         try:
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][5]),))
@@ -1230,9 +1231,10 @@ class PilotInfo(QMainWindow):
             flagCodePath_orig = ('./flags/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
             self.ui.DepartureImage.setPixmap(Pixmap)
-            cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][5]),))
+            cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(info[0][5]),))
             city_orig = cursor.fetchone()
             self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
+            city_orig_point = city_orig[1], city_orig[2]
         except:
             self.ui.DepartureText.setText('Pending...')
         
@@ -1243,9 +1245,10 @@ class PilotInfo(QMainWindow):
             flagCodePath_dest = ('./flags/%s.png') % flagCodeDest
             Pixmap = QPixmap(flagCodePath_dest)
             self.ui.DestinationImage.setPixmap(Pixmap)
-            cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][6]),))
+            cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(info[0][6]),))
             city_dest = cursor.fetchone()
             self.ui.DestinationText.setText(str(city_dest[0].encode('latin-1')))
+            city_dest_point = city_dest[1], city_dest[2]
         except:
             self.ui.DestinationText.setText('Pending...')
         
@@ -1272,6 +1275,11 @@ class PilotInfo(QMainWindow):
         ratingPath = ('./ratings/pilot_level%d.gif') % int(info[0][10])
         Pixmap = QPixmap(ratingPath)
         self.ui.rating_img.setPixmap(Pixmap)
+        player_point = info[0][13], info[0][14]
+        total_miles = distance.distance(city_orig_point, city_dest_point).miles
+        dist_traveled = distance.distance(city_orig_point, player_point).miles
+        self.ui.nauticalmiles.setText('%.1f / %.1f miles' % (float(dist_traveled), float(total_miles)))
+        self.ui.progressBarTrack.setValue(int((dist_traveled / total_miles) * 100.0))
         
     def add_button(self):
         add2friend = AddFriend()

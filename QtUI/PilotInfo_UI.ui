@@ -845,6 +845,30 @@
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="nauticalmiles">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>168</y>
+      <width>101</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

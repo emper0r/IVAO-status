@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Tue Sep 13 14:53:03 2011
+# Created: Wed Sep 14 22:59:04 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -336,6 +336,15 @@ class Ui_QPilotInfo(object):
         self.vidText.setCursor(QtCore.Qt.PointingHandCursor)
         self.vidText.setText(_fromUtf8(""))
         self.vidText.setObjectName(_fromUtf8("vidText"))
+        self.nauticalmiles = QtGui.QLabel(self.centralwidget)
+        self.nauticalmiles.setGeometry(QtCore.QRect(190, 168, 101, 20))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.nauticalmiles.setFont(font)
+        self.nauticalmiles.setCursor(QtCore.Qt.PointingHandCursor)
+        self.nauticalmiles.setText(_fromUtf8(""))
+        self.nauticalmiles.setAlignment(QtCore.Qt.AlignCenter)
+        self.nauticalmiles.setObjectName(_fromUtf8("nauticalmiles"))
         QPilotInfo.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(QPilotInfo)
