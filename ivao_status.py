@@ -968,7 +968,8 @@ class Main(QMainWindow):
                 if sender == self.showInfo_Action:
                     pass
                 if sender == self.showMap_Action:
-                    self.view_map(current_callsign.text())
+                    pass
+                    #self.view_map(current_callsign.text())
         if self.ui.ATC_FullList.currentRow() >= 0:
             row = self.ui.ATC_FullList.currentIndex().row()
             if row == -1:
@@ -980,7 +981,7 @@ class Main(QMainWindow):
                 if sender == self.showInfo_Action:
                     self.show_controller_info(current_callsign.text())
                 if sender == self.showMap_Action:
-                    self.view_map(current_callsign.text())
+                    self.view_map(current_callsign.text(), None, None)
         if self.ui.ATCtableWidget.currentRow() >= 0:
             row = self.ui.ATCtableWidget.currentIndex().row()
             if row == -1:
@@ -991,7 +992,7 @@ class Main(QMainWindow):
                 if sender == self.showInfo_Action:
                     self.show_controller_info(current_callsign.text())
                 if sender == self.showMap_Action:
-                    self.view_map(current_callsign.text())
+                    self.view_map(current_callsign.text(), None, None)
                 self.ui.ATCtableWidget.setCurrentCell(-1, -1)
         if self.ui.PILOT_FullList.currentRow() >= 0:
             row = self.ui.PILOT_FullList.currentIndex().row()
@@ -1000,10 +1001,12 @@ class Main(QMainWindow):
             else:
                 current_row = self.ui.PILOT_FullList.currentRow()
                 current_callsign = self.ui.PILOT_FullList.item(current_row, 1)
+                icao_orig = self.ui.PILOT_FullList.item(current_row, 6)
+                icao_dest = self.ui.PILOT_FullList.item(current_row, 7)
                 if sender == self.showInfo_Action:
                     self.show_pilot_info(current_callsign.text())
                 if sender == self.showMap_Action:
-                    self.view_map(current_callsign.text())
+                    self.view_map(current_callsign.text(), icao_orig.text(), icao_dest.text())
                 self.ui.PILOT_FullList.setCurrentCell(-1, -1)
         if self.ui.PilottableWidget.currentRow() >= 0:
             row = self.ui.PilottableWidget.currentIndex().row()
@@ -1012,10 +1015,12 @@ class Main(QMainWindow):
             else:
                 current_row = self.ui.PilottableWidget.currentRow()
                 current_callsign = self.ui.PilottableWidget.item(current_row, 1)
+                icao_orig = self.ui.PilottableWidget.item(current_row, 6)
+                icao_dest = self.ui.PilottableWidget.item(current_row, 7)
                 if sender == self.showInfo_Action:
                     self.show_pilot_info(current_callsign.text())
                 if sender == self.showMap_Action:
-                    self.view_map(current_callsign.text())
+                    self.view_map(current_callsign.text(), icao_orig.text(), icao_dest.text())
                 self.ui.PilottableWidget.setCurrentCell(-1, -1)
 
     def ivao_friend(self):
@@ -1085,23 +1090,27 @@ class Main(QMainWindow):
             self.ui.METARtableWidget.setItem(startrow, 1, col_metar)
             startrow += 1
             
-    def view_map(self, vid):    
+    def view_map(self, vid, icao_orig=None, icao_dest=None):
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
-        cursor.execute("SELECT latitude, longitude, callsign, true_heading, clienttype from status_ivao where callsign=?;" \
+        cursor.execute("SELECT longitude, latitude FROM icao_codes WHERE ICAO=?;", (str(icao_orig),))
+        icao_orig = cursor.fetchone()
+        cursor.execute("SELECT longitude, latitude FROM icao_codes WHERE ICAO=?;", (str(icao_dest),))
+        icao_dest = cursor.fetchone()
+        cursor.execute("SELECT latitude, longitude, callsign, true_heading, clienttype FROM status_ivao WHERE callsign=?;" \
                        ,  (str(vid),))
         player = cursor.fetchall()
         latitude, longitude, heading = player[0][0], player[0][1], player[0][3]
         player_location = open('./player_location.html', 'w')
         player_location.write('<html><body>\n')
         player_location.write('  <div id="mapdiv"></div>\n')
-        player_location.write('  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>\n')
+        player_location.write('  <script src="./OpenLayers/OpenLayers.js"></script>\n')
         player_location.write('  <script>\n')
         player_location.write('    map = new OpenLayers.Map("mapdiv");\n')
         player_location.write('    map.addLayer(new OpenLayers.Layer.OSM());\n')
-        player_location.write('    var lonLat = new OpenLayers.LonLat( %f ,%f )\n' % (longitude, latitude))
+        player_location.write('    var lonLat = new OpenLayers.LonLat( %f, %f )\n' % (longitude, latitude))
         player_location.write('         .transform(\n')
         player_location.write('            new OpenLayers.Projection("EPSG:4326"),\n')
         player_location.write('            map.getProjectionObject()\n')
@@ -1130,6 +1139,32 @@ class Main(QMainWindow):
         player_location.write('         }\n')
         player_location.write('     })\n')
         player_location.write(' });\n')
+        if player[0][4] == 'PILOT':
+            player_location.write('    var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer");\n')
+            player_location.write('    var style_green =\n')
+            player_location.write('{\n')
+            player_location.write('     strokeColor: "#00FF00",\n')
+            player_location.write('     strokeOpacity: 0.7,\n')
+            player_location.write('     strokeWidth: 2\n')
+            player_location.write('};\n')
+            player_location.write('\n')
+            player_location.write('    var points = [];\n')
+            player_location.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n' % (icao_orig[0], icao_orig[1]))
+            player_location.write('    var point_plane = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
+            player_location.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n' % (icao_dest[0], icao_dest[1]))
+            player_location.write('\n')
+            player_location.write('    points.push(point_orig);\n')
+            player_location.write('    points.push(point_plane);\n')
+            player_location.write('    points.push(point_dest);\n')
+            player_location.write('\n')
+            player_location.write('    var lineString = new OpenLayers.Geometry.LineString(points);\n')
+            player_location.write('    lineString.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()); \n')
+            player_location.write('\n')
+            player_location.write('    var lineFeature = new OpenLayers.Feature.Vector(lineString, null, style_green);\n')
+            player_location.write('    vectorLayer.addFeatures([lineFeature]);\n')
+            player_location.write('\n')
+            player_location.write('   map.addLayer(vectorLayer);\n')
+            player_location.write('\n')
         player_location.write('   var feature=new OpenLayers.Feature.Vector(\n')
         if player[0][4] == 'PILOT':
             player_location.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": %d, opacity: 100});\n' % (heading))
@@ -1137,7 +1172,9 @@ class Main(QMainWindow):
             player_location.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": 0, opacity: 100});\n')
         player_location.write('    player.addFeatures([feature]);\n')
         player_location.write('    map.addLayer(player);\n')
-        player_location.write('    map.setCenter (lonLat, zoom);\n')
+        player_location.write('\n')
+        player_location.write('    \n')
+        player_location.write('   map.setCenter (lonLat, zoom);\n')
         player_location.write('  </script>\n')
         player_location.write('</body></html>\n')
         player_location.close()
