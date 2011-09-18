@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/ControllerInfo_UI.ui'
 #
-# Created: Tue Sep 13 15:05:44 2011
+# Created: Sun Sep 18 10:36:22 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -174,14 +174,14 @@ class Ui_QControllerInfo(object):
         self.ConnectedText.setText(_fromUtf8(""))
         self.ConnectedText.setObjectName(_fromUtf8("ConnectedText"))
         self.Close = QtGui.QPushButton(self.centralwidget)
-        self.Close.setGeometry(QtCore.QRect(200, 400, 99, 23))
+        self.Close.setGeometry(QtCore.QRect(200, 395, 99, 23))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.Close.setFont(font)
         self.Close.setCursor(QtCore.Qt.PointingHandCursor)
         self.Close.setObjectName(_fromUtf8("Close"))
         self.AddFriend = QtGui.QPushButton(self.centralwidget)
-        self.AddFriend.setGeometry(QtCore.QRect(95, 400, 99, 23))
+        self.AddFriend.setGeometry(QtCore.QRect(95, 395, 99, 23))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.AddFriend.setFont(font)
@@ -220,6 +220,9 @@ class Ui_QControllerInfo(object):
         self.rating_img.setText(_fromUtf8(""))
         self.rating_img.setObjectName(_fromUtf8("rating_img"))
         QControllerInfo.setCentralWidget(self.centralwidget)
+        self.statusBar = QtGui.QStatusBar(QControllerInfo)
+        self.statusBar.setObjectName(_fromUtf8("statusBar"))
+        QControllerInfo.setStatusBar(self.statusBar)
 
         self.retranslateUi(QControllerInfo)
         QtCore.QObject.connect(self.Close, QtCore.SIGNAL(_fromUtf8("clicked()")), QControllerInfo.close)

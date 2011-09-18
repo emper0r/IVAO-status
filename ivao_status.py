@@ -246,6 +246,7 @@ class Main(QMainWindow):
         qApp.processEvents()
         self.statusBar().showMessage('Showing friends list', 2000)
         self.ivao_friend()
+        self.country_view()
         qApp.restoreOverrideCursor()
 
     def connect(self):
@@ -955,8 +956,11 @@ class Main(QMainWindow):
         connection.close()
 
     def action_click(self, event=None):
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        cursor = connection.cursor()
         sender = self.sender()
-        print sender, event
         if self.ui.SearchtableWidget.currentRow() >= 0:
             row = self.ui.SearchtableWidget.currentIndex().row()
             if row == -1:
@@ -965,11 +969,18 @@ class Main(QMainWindow):
                 current_row = self.ui.SearchtableWidget.currentRow()
                 current_callsign = self.ui.SearchtableWidget.item(current_row, 1)
                 self.ui.SearchtableWidget.setCurrentCell(-1, -1)
+                cursor.execute('SELECT clienttype FROM status_ivao where callsign=?;', ((str(current_callsign.text())),))
+                clienttype = cursor.fetchone()
                 if sender == self.showInfo_Action:
-                    pass
+                    if str(clienttype[0]) == 'PILOT':
+                        self.show_pilot_info(current_callsign.text())
+                    else:
+                        self.show_controller_info(current_callsign.text())
                 if sender == self.showMap_Action:
-                    pass
-                    #self.view_map(current_callsign.text())
+                    cursor.execute('SELECT planned_depairport, planned_destairport FROM status_ivao WHERE callsign=?;' \
+                                   , ((str(current_callsign.text())),))
+                    icao_depdest = cursor.fetchall()
+                    self.view_map(current_callsign.text(), icao_depdest[0][0], icao_depdest[0][1])
         if self.ui.ATC_FullList.currentRow() >= 0:
             row = self.ui.ATC_FullList.currentIndex().row()
             if row == -1:
@@ -1049,10 +1060,10 @@ class Main(QMainWindow):
             col_realname = QTableWidgetItem(str(row[1].encode('latin-1')), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
             if str(row[2]) != '-':
-                if str(roster[0][3]) == 'ATC':
-                    ratingImagePath = './ratings/atc_level%d.gif' % int(roster[0][2])
+                if str(row[3]) == 'ATC':
+                    ratingImagePath = './ratings/atc_level%d.gif' % int(row[2])
                 else:
-                    ratingImagePath = './ratings/pilot_level%d.gif' % int(roster[0][2])
+                    ratingImagePath = './ratings/pilot_level%d.gif' % int(row[2])
                 Pixmap = QPixmap(ratingImagePath)
                 ratingImage = QLabel(self)
                 ratingImage.setPixmap(Pixmap)
@@ -1232,7 +1243,6 @@ class AddFriend():
                     cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) VALUES (?, ?, ?, ?);' \
                                    , (int(str(data[0][0])), str(data[0][1][:-4].encode('latin-1')), int(data[0][2]), str(data[0][3])))
                     connection.commit()
-                    self.statusBar().showMessage('Friend Added', 3000)
             except:
                 pass
         connection.close()
@@ -1320,7 +1330,8 @@ class PilotInfo(QMainWindow):
         
     def add_button(self):
         add2friend = AddFriend()
-        add2friend.add_friend(self.ui.vidText.text())
+        add2friend.add_friend(str(self.ui.vidText.text()).encode('latin-1'))
+        self.statusBar().showMessage('Friend Added', 3000)
 
     def closeEvent(self, event):
         self.closed.emit()
@@ -1381,7 +1392,8 @@ class ControllerInfo(QMainWindow):
     
     def add_button(self):
         add2friend = AddFriend()
-        add2friend.add_friend(self.ui.VidText.text())
+        add2friend.add_friend(str(self.ui.vidText.text()).encode('latin-1'))
+        self.statusBar().showMessage('Friend Added', 3000)
 
     def closeEvent(self, event):
         self.closed.emit()

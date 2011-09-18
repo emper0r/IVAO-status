@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Thu Sep 15 09:40:30 2011
+# Created: Sun Sep 18 10:36:15 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -346,6 +346,9 @@ class Ui_QPilotInfo(object):
         self.nauticalmiles.setAlignment(QtCore.Qt.AlignCenter)
         self.nauticalmiles.setObjectName(_fromUtf8("nauticalmiles"))
         QPilotInfo.setCentralWidget(self.centralwidget)
+        self.statusBar = QtGui.QStatusBar(QPilotInfo)
+        self.statusBar.setObjectName(_fromUtf8("statusBar"))
+        QPilotInfo.setStatusBar(self.statusBar)
 
         self.retranslateUi(QPilotInfo)
         QtCore.QObject.connect(self.Close, QtCore.SIGNAL(_fromUtf8("clicked()")), QPilotInfo.close)
