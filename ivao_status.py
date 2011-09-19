@@ -529,7 +529,7 @@ class Main(QMainWindow):
                     airline.setPixmap(Pixmap)
                     self.ui.PILOT_FullList.setCellWidget(startrow, 0, airline)
                 else:
-                    code_airline = '-'
+                    code_airline = str(row_pilot[0])
                     col_airline = QTableWidgetItem(code_airline, 0)
                     self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
             except:
@@ -708,7 +708,7 @@ class Main(QMainWindow):
                         airline.setPixmap(Pixmap)
                         self.ui.PilottableWidget.setCellWidget(startrow_pilot, 0, airline)
                     else:
-                        code_airline = '-'
+                        code_airline = str(row_pilot[0])
                         col_airline = QTableWidgetItem(code_airline, 0)
                         self.ui.PilottableWidget.setItem(startrow_pilot, 0, col_airline)
                 except:
@@ -789,7 +789,7 @@ class Main(QMainWindow):
                         airline.setPixmap(Pixmap)
                         self.ui.InboundTableWidget.setCellWidget(startrow_in, 0, airline)
                     else:
-                        code_airline = '-'
+                        code_airline = str(inbound[0])
                         col_airline = QTableWidgetItem(code_airline, 0)
                         self.ui.InboundTableWidget.setItem(startrow_in, 0, col_airline)
                 except:
@@ -806,7 +806,7 @@ class Main(QMainWindow):
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
-                    col_city = '-'
+                    col_city = 'Pending...'
                 else:
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
@@ -823,7 +823,7 @@ class Main(QMainWindow):
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
-                    col_city = '-'
+                    col_city = 'Pending...'
                 else:
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
@@ -849,7 +849,7 @@ class Main(QMainWindow):
                         airline.setPixmap(Pixmap)
                         self.ui.OutboundTableWidget.setCellWidget(startrow_out, 0, airline)
                     else:
-                        code_airline = '-'
+                        code_airline = str(outbound[0])
                         col_airline = QTableWidgetItem(code_airline, 0)
                         self.ui.OutboundTableWidget.setItem(startrow_out, 0, col_airline)
                 except:
@@ -866,7 +866,7 @@ class Main(QMainWindow):
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
-                    col_city = '-'
+                    col_city = 'Pending...'
                 else:
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
@@ -883,7 +883,7 @@ class Main(QMainWindow):
                 city = cursor.fetchone()
                 col_city = ''
                 if city == None:
-                    col_city = '-'
+                    col_city = 'Pending...'
                 else:
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
