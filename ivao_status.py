@@ -1126,7 +1126,7 @@ class Main(QMainWindow):
         player_location.write('            new OpenLayers.Projection("EPSG:4326"),\n')
         player_location.write('            map.getProjectionObject()\n')
         player_location.write('            );\n')
-        if player[0][2][-4:] == '_OBS' or player[0][2][-4:] == '_DEP' or player[0][2][-4:] == '_GND':
+        if player[0][2][-4:] == '_OBS' or player[0][2][-4:] == '_DEP' or player[0][2][-4:] == '_GND' or icao_orig is None or icao_dest is None:
             player_location.write('    var zoom = 15;\n')
         elif player[0][2][-4:] == '_TWR' or player[0][2][-4:] == '_APP':
             player_location.write('    var zoom = 14;\n')
@@ -1160,13 +1160,17 @@ class Main(QMainWindow):
             player_location.write('};\n')
             player_location.write('\n')
             player_location.write('    var points = [];\n')
-            player_location.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n' % (icao_orig[0], icao_orig[1]))
-            player_location.write('    var point_plane = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
-            player_location.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n' % (icao_dest[0], icao_dest[1]))
-            player_location.write('\n')
-            player_location.write('    points.push(point_orig);\n')
-            player_location.write('    points.push(point_plane);\n')
-            player_location.write('    points.push(point_dest);\n')
+            if icao_orig is None or icao_dest is None:
+                player_location.write('    var point_plane = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
+                player_location.write('    points.push(point_plane);\n')
+            else:
+                player_location.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n' % (icao_orig[0], icao_orig[1]))
+                player_location.write('    var point_plane = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
+                player_location.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n' % (icao_dest[0], icao_dest[1]))
+                player_location.write('\n')
+                player_location.write('    points.push(point_orig);\n')
+                player_location.write('    points.push(point_plane);\n')
+                player_location.write('    points.push(point_dest);\n')
             player_location.write('\n')
             player_location.write('    var lineString = new OpenLayers.Geometry.LineString(points);\n')
             player_location.write('    lineString.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()); \n')
@@ -1284,6 +1288,7 @@ class PilotInfo(QMainWindow):
             city_orig_point = city_orig[1], city_orig[2]
         except:
             self.ui.DepartureText.setText('Pending...')
+            city_orig_point = None
         
         try:
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][6]),))
@@ -1298,6 +1303,7 @@ class PilotInfo(QMainWindow):
             city_dest_point = city_dest[1], city_dest[2]
         except:
             self.ui.DestinationText.setText('Pending...')
+            city_dest_point = None
         
         self.ui.vidText.setText(str(info[0][0]))
         self.ui.callsign_text.setText(callsign)
@@ -1323,10 +1329,14 @@ class PilotInfo(QMainWindow):
         Pixmap = QPixmap(ratingPath)
         self.ui.rating_img.setPixmap(Pixmap)
         player_point = info[0][13], info[0][14]
-        total_miles = distance.distance(city_orig_point, city_dest_point).miles
-        dist_traveled = distance.distance(city_orig_point, player_point).miles
-        self.ui.nauticalmiles.setText('%.1f / %.1f miles' % (float(dist_traveled), float(total_miles)))
-        self.ui.progressBarTrack.setValue(int((dist_traveled / total_miles) * 100.0))
+        if city_orig_point is None or city_dest_point is None:
+            self.ui.nauticalmiles.setText('Pending...')
+            self.ui.progressBarTrack.setValue(0)
+        else:
+            total_miles = distance.distance(city_orig_point, city_dest_point).miles
+            dist_traveled = distance.distance(city_orig_point, player_point).miles
+            self.ui.nauticalmiles.setText('%.1f / %.1f miles' % (float(dist_traveled), float(total_miles)))
+            self.ui.progressBarTrack.setValue(int((dist_traveled / total_miles) * 100.0))
         
     def add_button(self):
         add2friend = AddFriend()
