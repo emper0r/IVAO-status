@@ -1283,10 +1283,10 @@
        <bool>false</bool>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>105</number>
+       <number>110</number>
       </attribute>
       <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>105</number>
+       <number>110</number>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
@@ -1305,6 +1305,11 @@
       <column>
        <property name="text">
         <string>Frequency</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Flag</string>
        </property>
       </column>
       <column>

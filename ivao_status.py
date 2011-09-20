@@ -64,9 +64,11 @@ class Main(QMainWindow):
         self.ui.PilottableWidget.setColumnWidth(7, 80)
         self.ui.PilottableWidget.setColumnWidth(8, 65)
         self.ui.ATC_FullList.setColumnWidth(1, 70)
-        self.ui.ATC_FullList.setColumnWidth(2, 60)
+        self.ui.ATC_FullList.setColumnWidth(2, 40)
         self.ui.ATC_FullList.setColumnWidth(3, 140)
-        self.ui.ATC_FullList.setColumnWidth(4, 190)
+        self.ui.ATC_FullList.setColumnWidth(4, 70)
+        self.ui.ATC_FullList.setColumnWidth(5, 190)
+        self.ui.ATC_FullList.setColumnWidth(8, 40)
         self.ui.ATCtableWidget.setColumnWidth(1, 70)
         self.ui.ATCtableWidget.setColumnWidth(2, 60)
         self.ui.ATCtableWidget.setColumnWidth(3, 240)
@@ -85,14 +87,14 @@ class Main(QMainWindow):
         self.ui.dbTableWidget_2.setColumnWidth(3, 140)
         self.ui.InboundTableWidget.setColumnWidth(0, 90)
         self.ui.InboundTableWidget.setColumnWidth(1, 34)
-        self.ui.InboundTableWidget.setColumnWidth(2, 110)
+        self.ui.InboundTableWidget.setColumnWidth(2, 120)
         self.ui.InboundTableWidget.setColumnWidth(3, 30)
-        self.ui.InboundTableWidget.setColumnWidth(4, 110)
+        self.ui.InboundTableWidget.setColumnWidth(4, 120)
         self.ui.OutboundTableWidget.setColumnWidth(0, 90)
         self.ui.OutboundTableWidget.setColumnWidth(1, 34)
-        self.ui.OutboundTableWidget.setColumnWidth(2, 110)
+        self.ui.OutboundTableWidget.setColumnWidth(2, 120)
         self.ui.OutboundTableWidget.setColumnWidth(3, 30)
-        self.ui.OutboundTableWidget.setColumnWidth(4, 110)
+        self.ui.OutboundTableWidget.setColumnWidth(4, 120)
         self.ui.PILOT_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.ATC_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.FriendstableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -447,72 +449,91 @@ class Main(QMainWindow):
         rows_atcs = cursor.fetchall()
         startrow = 0
         self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
+        
         while self.ui.ATC_FullList.rowCount () > 0:
             self.ui.ATC_FullList.removeRow(0)
-
+            
         for row_atc in rows_atcs:
-            if str(row_atc[0][2:3]) == '-' or str(row_atc[0][2:3]) == '_':
-                cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(row_atc[0][:2]),))
-                div_ivao = cursor.fetchone()
-                self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
+            self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
+            
+            if str(row_atc[0][:4]) == 'IVAO':
+                self.ui.ATC_FullList.setColumnWidth(2, 60)
                 col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
-                flagCodePath = ('./flags/%s.png') % str(div_ivao[0])
-            else:
-                self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
-                col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
-                code_icao = str(row_atc[0][:4])
-                cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE ICAO=?", (str(code_icao),))
-                flagCode = cursor.fetchone()
-                connection.commit()
-                flagCodePath = ('./flags/%s.png') % flagCode
-            self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
-            col_frequency = QTableWidgetItem(str(row_atc[1]), 0)
-            self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
-            if row_atc[5] == '1.1.14':
-                pass
-            else:
-                try:
-                    if os.path.exists(flagCodePath) is True:
+                flagCodePath = ('./images/ivao_member.png')
+                Pixmap = QPixmap(flagCodePath)
+                flag_country = QLabel()
+                flag_country.setPixmap(Pixmap)
+                self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
+                
+            elif str(row_atc[0][2:3]) == '-' or str(row_atc[0][2:3]) == '_':
+                    cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(row_atc[0][:2]),))
+                    div_ivao = cursor.fetchone()
+                    if row_atc is None or div_ivao is None:
+                        pass
+                    else:
+                        flagCodePath = ('./flags/%s.png') % str(div_ivao[0])
+                        col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
+                        self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
+                        col_country = QTableWidgetItem(str(div_ivao[0]), 0)
+                        self.ui.ATC_FullList.setItem(startrow, 3, col_country)
                         Pixmap = QPixmap(flagCodePath)
                         flag_country = QLabel()
                         flag_country.setPixmap(Pixmap)
                         self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
-                    else:
-                        col_country = QTableWidgetItem(str(flagCode).encode('latin-1'), 0)
-                        self.ui.ATC_FullList.setItem(startrow, 2, col_country)
-                except:
-                    pass
-                try:
-                    col_facility = QTableWidgetItem(str(self.position_atc[row_atc[4]]), 0)
-                    self.ui.ATC_FullList.setItem(startrow, 3, col_facility)
-                except:
-                    pass
-                col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
-                self.ui.ATC_FullList.setItem(startrow, 4, col_realname)
-                code_atc_rating = row_atc[3]
-                ratingImagePath = './ratings/atc_level%d.gif' % int(code_atc_rating)
-                try:
-                    if os.path.exists(ratingImagePath) is True:
-                        Pixmap = QPixmap(ratingImagePath)
-                        ratingImage = QLabel(self)
-                        ratingImage.setPixmap(Pixmap)
-                        self.ui.ATC_FullList.setCellWidget(startrow, 6, ratingImage)
-                        col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
-                        self.ui.ATC_FullList.setItem(startrow, 5, col_rating)
-                    else:
-                        col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
-                        self.ui.ATC_FullList.setItem(startrow, 5, col_rating)
-                except:
-                    pass
-                try:
-                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]) \
-                                                        , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10]) \
-                                                        , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
-                except:
-                    pass
-                diff = abs(datetime.datetime.now() - start_connected)
-                col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
-                self.ui.ATC_FullList.setItem(startrow, 7, col_time)
+            else:
+                code_icao = str(row_atc[0][:4])
+                cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE ICAO=?", (str(code_icao),))
+                flagCode = cursor.fetchone()
+                connection.commit()
+                col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
+                flagCodePath = ('./flags/%s.png') % flagCode
+                if os.path.exists(flagCodePath) is True:
+                    Pixmap = QPixmap(flagCodePath)
+                    flag_country = QLabel()
+                    flag_country.setPixmap(Pixmap)
+                    self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
+                    col_country = QTableWidgetItem(str(flagCode[0]), 0)
+                    self.ui.ATC_FullList.setItem(startrow, 3, col_country)
+                    self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
+                else:
+                    col_country = QTableWidgetItem(str(flagCode).encode('latin-1'), 0)
+                    self.ui.ATC_FullList.setItem(startrow, 2, col_country)
+                    self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
+            col_frequency = QTableWidgetItem(str(row_atc[1]), 0)
+            self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
+            if row_atc[5] == '1.1.14':
+                pass
+            try:
+                col_facility = QTableWidgetItem(str(self.position_atc[row_atc[4]]), 0)
+                self.ui.ATC_FullList.setItem(startrow, 4, col_facility)
+            except:
+                pass
+            col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
+            self.ui.ATC_FullList.setItem(startrow, 5, col_realname)
+            code_atc_rating = row_atc[3]
+            ratingImagePath = './ratings/atc_level%d.gif' % int(code_atc_rating)
+            try:
+                if os.path.exists(ratingImagePath) is True:
+                    Pixmap = QPixmap(ratingImagePath)
+                    ratingImage = QLabel(self)
+                    ratingImage.setPixmap(Pixmap)
+                    self.ui.ATC_FullList.setCellWidget(startrow, 7, ratingImage)
+                    col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
+                    self.ui.ATC_FullList.setItem(startrow, 6, col_rating)
+                else:
+                    col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
+                    self.ui.ATC_FullList.setItem(startrow, 7, col_rating)
+            except:
+                pass
+            try:
+                start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]) \
+                                                    , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10]) \
+                                                    , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
+            except:
+                pass
+            diff = abs(datetime.datetime.now() - start_connected)
+            col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
+            self.ui.ATC_FullList.setItem(startrow, 8, col_time)
             self.progress.setValue(int(float(startrow) / float(self.ui.ATC_FullList.rowCount()) * 100.0))
             startrow += 1
             qApp.processEvents()
@@ -1410,7 +1431,7 @@ class ControllerInfo(QMainWindow):
         self.ui.VidText.setText(str(info[0][0]))
         self.ui.ControllerText.setText(str(info[0][1].encode('latin-1')))
         self.ui.SoftwareText.setText('%s %s' % (str(info[0][9]), str(info[0][10])))
-        self.ui.ConnectedText.setText(str(info[0][5]))
+        self.ui.ConnectedText.setText(str(info[0][2]))
         self.ui.ATISInfo.setText(str(info[0][7].encode('latin-1')).replace('^\xa7', '\n'))
         try:
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
@@ -1428,11 +1449,14 @@ class ControllerInfo(QMainWindow):
         Pixmap = QPixmap(ratingPath)
         self.ui.rating_img.setPixmap(Pixmap)
         self.ui.facility_freq_Text.setText(str(self.position_atc[str(info[0][6])]) + ' ' + str(info[0][4]) + ' MHz')
-        start_connected = datetime.datetime(int(str(info[0][8])[:4]), int(str(info[0][8])[4:6]) \
+        try:
+            start_connected = datetime.datetime(int(str(info[0][8])[:4]), int(str(info[0][8])[4:6]) \
                             , int(str(info[0][8])[6:8]), int(str(info[0][8])[8:10]) \
                             , int(str(info[0][8])[10:12]), int(str(info[0][8])[12:14]))
-        diff = abs(datetime.datetime.now() - start_connected)
-        self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])
+            diff = abs(datetime.datetime.now() - start_connected)
+            self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])
+        except:
+            self.ui.TimeOnLineText.setText('Pending...')
     
     def add_button(self):
         add2friend = AddFriend()

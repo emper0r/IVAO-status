@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Sun Sep 18 10:59:19 2011
+# Created: Tue Sep 20 13:06:52 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -474,7 +474,7 @@ class Ui_MainWindow(object):
         self.ATC_FullList.setGridStyle(QtCore.Qt.DotLine)
         self.ATC_FullList.setWordWrap(False)
         self.ATC_FullList.setObjectName(_fromUtf8("ATC_FullList"))
-        self.ATC_FullList.setColumnCount(8)
+        self.ATC_FullList.setColumnCount(9)
         self.ATC_FullList.setRowCount(0)
         item = QtGui.QTableWidgetItem()
         self.ATC_FullList.setHorizontalHeaderItem(0, item)
@@ -492,8 +492,10 @@ class Ui_MainWindow(object):
         self.ATC_FullList.setHorizontalHeaderItem(6, item)
         item = QtGui.QTableWidgetItem()
         self.ATC_FullList.setHorizontalHeaderItem(7, item)
-        self.ATC_FullList.horizontalHeader().setDefaultSectionSize(105)
-        self.ATC_FullList.horizontalHeader().setMinimumSectionSize(105)
+        item = QtGui.QTableWidgetItem()
+        self.ATC_FullList.setHorizontalHeaderItem(8, item)
+        self.ATC_FullList.horizontalHeader().setDefaultSectionSize(110)
+        self.ATC_FullList.horizontalHeader().setMinimumSectionSize(110)
         self.ATC_FullList.horizontalHeader().setStretchLastSection(True)
         self.ATC_FullList.verticalHeader().setDefaultSectionSize(25)
         self.ATC_FullList.verticalHeader().setMinimumSectionSize(25)
@@ -634,7 +636,6 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
         self.country_list.setCurrentIndex(-1)
-        QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), QtGui.qApp.quit)
         QtCore.QObject.connect(self.actionUpdate, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.connect)
         QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.about)
         QtCore.QObject.connect(self.actionSetting, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.show_settings)
@@ -717,11 +718,12 @@ class Ui_MainWindow(object):
         self.ATC_FullList.setSortingEnabled(True)
         self.ATC_FullList.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "CallSign", None, QtGui.QApplication.UnicodeUTF8))
         self.ATC_FullList.horizontalHeaderItem(1).setText(QtGui.QApplication.translate("MainWindow", "Frequency", None, QtGui.QApplication.UnicodeUTF8))
-        self.ATC_FullList.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Country", None, QtGui.QApplication.UnicodeUTF8))
-        self.ATC_FullList.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Position", None, QtGui.QApplication.UnicodeUTF8))
-        self.ATC_FullList.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("MainWindow", "Controller", None, QtGui.QApplication.UnicodeUTF8))
-        self.ATC_FullList.horizontalHeaderItem(5).setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
-        self.ATC_FullList.horizontalHeaderItem(7).setText(QtGui.QApplication.translate("MainWindow", "Time", None, QtGui.QApplication.UnicodeUTF8))
+        self.ATC_FullList.horizontalHeaderItem(2).setText(QtGui.QApplication.translate("MainWindow", "Flag", None, QtGui.QApplication.UnicodeUTF8))
+        self.ATC_FullList.horizontalHeaderItem(3).setText(QtGui.QApplication.translate("MainWindow", "Country", None, QtGui.QApplication.UnicodeUTF8))
+        self.ATC_FullList.horizontalHeaderItem(4).setText(QtGui.QApplication.translate("MainWindow", "Position", None, QtGui.QApplication.UnicodeUTF8))
+        self.ATC_FullList.horizontalHeaderItem(5).setText(QtGui.QApplication.translate("MainWindow", "Controller", None, QtGui.QApplication.UnicodeUTF8))
+        self.ATC_FullList.horizontalHeaderItem(6).setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
+        self.ATC_FullList.horizontalHeaderItem(8).setText(QtGui.QApplication.translate("MainWindow", "Time", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.controllers), QtGui.QApplication.translate("MainWindow", "Controllers", None, QtGui.QApplication.UnicodeUTF8))
         self.PILOT_FullList.setSortingEnabled(True)
         self.PILOT_FullList.horizontalHeaderItem(0).setText(QtGui.QApplication.translate("MainWindow", "Airlines", None, QtGui.QApplication.UnicodeUTF8))
