@@ -451,16 +451,23 @@ class Main(QMainWindow):
             self.ui.ATC_FullList.removeRow(0)
 
         for row_atc in rows_atcs:
-            self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
-            col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
+            if str(row_atc[0][2:3]) == '-' or str(row_atc[0][2:3]) == '_':
+                cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(row_atc[0][:2]),))
+                div_ivao = cursor.fetchone()
+                self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
+                col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
+                flagCodePath = ('./flags/%s.png') % str(div_ivao[0])
+            else:
+                self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
+                col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
+                code_icao = str(row_atc[0][:4])
+                cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE ICAO=?", (str(code_icao),))
+                flagCode = cursor.fetchone()
+                connection.commit()
+                flagCodePath = ('./flags/%s.png') % flagCode
             self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
             col_frequency = QTableWidgetItem(str(row_atc[1]), 0)
             self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
-            code_icao = str(row_atc[0][:4])
-            cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE ICAO=?", (str(code_icao),))
-            flagCode = cursor.fetchone()
-            connection.commit()
-            flagCodePath = ('./flags/%s.png') % flagCode
             if row_atc[5] == '1.1.14':
                 pass
             else:
