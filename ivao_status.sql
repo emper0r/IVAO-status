@@ -22450,6 +22450,7 @@ INSERT INTO icao_codes VALUES('SBAA',-8.348604,-49.303055,'Conceicao Do Araguaia
 INSERT INTO icao_codes VALUES('SBMK',-16.704992,-43.820835,'Montes Claros','Brazil');
 INSERT INTO icao_codes VALUES('SBPN',-10.716935,-48.400276,'Porto Nacional','Brazil');
 INSERT INTO icao_codes VALUES('SBYA',0.603333,-69.206389,'S Gabriel Cachoeira/Iauarete','Brazil');
+INSERT INTO icao_codes VALUES('SBXO',-23.3303,-51.1367,'Londrina/TMA','Brazil');
 INSERT INTO icao_codes VALUES('SBXP',-23.435600,-46.473100,'Aeropuerto Intl Andre Franco/Sao Paolo/Cumbica','Brazil');
 INSERT INTO icao_codes VALUES('SBXV',-14.7,-52.35,'Xavantina','Brazil');
 INSERT INTO icao_codes VALUES('SBSA',-22.01667,-47.88333,'F. Pereira Lopez','Brazil');

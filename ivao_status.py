@@ -1476,6 +1476,15 @@ class PilotInfo(QMainWindow):
             city_dest_point = None
         
         self.ui.vidText.setText(str(info[0][0]))
+        try:
+            code_airline = callsign[:3]
+            airlineCodePath = './airlines/%s.gif' % code_airline
+            if os.path.exists(airlineCodePath) is True:
+                Pixmap = QPixmap(airlineCodePath)
+                airline = QLabel(self)
+                self.ui.airline_image.setPixmap(Pixmap)
+        except:
+            pass
         self.ui.callsign_text.setText(callsign)
         self.ui.PilotNameText.setText(str(info[0][1][:-4].encode('latin-1')))
         self.ui.RouteText.setText(str(info[0][9]))
