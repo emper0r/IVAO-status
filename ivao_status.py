@@ -180,10 +180,10 @@ class Main(QMainWindow):
             
     @property
     def maptab(self):
-        if self._maptab is None:
+        if self._maptab is None and self.ui.tabWidget.currentIndex() != 5:
             self._maptab = QWebView()
             self.ui.tabWidget.insertTab(5, self.maptab, 'Map')
-        if self.ui.tabWidget.currentIndex() != -1:
+        else:
             self.ui.tabWidget.setCurrentIndex(5)
         return self._maptab
 
@@ -629,6 +629,7 @@ class Main(QMainWindow):
         self.progress.hide()
         self.statusBar().showMessage('Done', 2000)
         qApp.processEvents()
+        self.all2map()
 
     def country_view(self):
         country_selected = self.ui.country_list.currentText()
@@ -1286,6 +1287,105 @@ class Main(QMainWindow):
         self.setting_window = Settings(self)
         self.setting_window.closed.connect(self.show)
         self.setting_window.show()
+
+    def all2map(self):
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        cursor = connection.cursor()
+        cursor.execute("SELECT longitude, latitude, callsign, true_heading, clienttype FROM status_ivao;")
+        players = cursor.fetchall()
+        self.statusBar().showMessage('Populating all players in the Map', 4000)
+        qApp.processEvents()
+        all_in_map = open('./all_in_map.html', 'w')
+        all_in_map.write('<html><body>\n')
+        all_in_map.write('  <div id="mapdiv"></div>\n')
+        all_in_map.write('  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjpkAC9ePGem0lIq5XcMiuhR_wWLPFku8Ix9i2SXYRVK3e45q1BQUd_beF8dtzKET_EteAjPdGDwqpQ"></script>\n')
+        all_in_map.write('  <script src="./OpenLayers/OpenLayers.js"></script>\n')
+        all_in_map.write('  <script>\n')
+        all_in_map.write('\n')
+        all_in_map.write('    map = new OpenLayers.Map("mapdiv",\n')
+        all_in_map.write('             {   projection : new OpenLayers.Projection("EPSG:900913"),\n')
+        all_in_map.write('                 maxResolution:156543.0339,\n')
+        all_in_map.write('                 maxExtent:new OpenLayers.Bounds(-20037508, -20037508,20037508, 20037508.34)\n')
+        all_in_map.write('             });\n')
+        all_in_map.write('\n')
+        all_in_map.write('    ghyb = new OpenLayers.Layer.Google(\n')
+        all_in_map.write('         "Google Hybrid",\n')
+        all_in_map.write('         {type: G_HYBRID_MAP, sphericalMercator:true, numZoomLevels: 20}\n')
+        all_in_map.write('         );\n')
+        all_in_map.write('\n')
+        all_in_map.write('    map.addLayers([ghyb]);\n')
+        all_in_map.write('\n')
+        for callsign in range(0, len(players)):
+            if str(players[callsign][4]) == 'PILOT':
+                if (str(players[callsign][0]) and str(players[callsign][1])) == '':
+                    pass
+                elif players[callsign][2] is None or players[callsign][3] is None:
+                    pass
+                else:
+                    all_in_map.write('    var lonLat = new OpenLayers.LonLat( %f, %f )\n' % \
+                                     (float(players[callsign][0]), float(players[callsign][1])))
+                    all_in_map.write('         .transform(\n')
+                    all_in_map.write('            new OpenLayers.Projection("EPSG:4326"),\n')
+                    all_in_map.write('            map.getProjectionObject()\n')
+                    all_in_map.write('            );\n')
+                    all_in_map.write('\n')
+                    all_in_map.write('    var player_%s=new OpenLayers.Layer.Vector("Player",\n' % str(players[callsign][2]))
+                    all_in_map.write('    {\n')
+                    all_in_map.write('    styleMap: new OpenLayers.StyleMap({\n')
+                    all_in_map.write('         "default": {\n')
+                    all_in_map.write('         externalGraphic: "./images/airplane.gif",\n')
+                    all_in_map.write('         graphicWidth: 28,\n')
+                    all_in_map.write('         graphicHeight: 28,\n')
+                    all_in_map.write('         graphicYOffset: 0,\n')
+                    all_in_map.write('         rotation: "${angle}",\n')
+                    all_in_map.write('         fillOpacity: "${opacity}"\n')
+                    all_in_map.write('         }\n')
+                    all_in_map.write('      })\n')
+                    all_in_map.write('   });\n')
+                    all_in_map.write('\n')
+                    all_in_map.write('   map.addLayers(player_%s);\n' % str(players[callsign][2]).replace('-',''))
+                    all_in_map.write('\n')
+                    all_in_map.write('   var feature=new OpenLayers.Feature.Vector(\n')
+                    all_in_map.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": %d, opacity: 100});\n' % \
+                                     int(players[callsign][3]))
+                    all_in_map.write('    player_%s.addFeatures([feature]);\n' % str(players[callsign][2]).replace('-',''))
+                    all_in_map.write('    map.addLayer(player_%s);\n' % str(players[callsign][2]).replace('-',''))
+                    all_in_map.write('\n')
+            if str(players[callsign][4]) == 'ATC':
+                all_in_map.write('    var lonLat = new OpenLayers.LonLat( %f, %f )\n' % \
+                                     (float(players[callsign][0]), float(players[callsign][1])))
+                all_in_map.write('         .transform(\n')
+                all_in_map.write('            new OpenLayers.Projection("EPSG:4326"),\n')
+                all_in_map.write('            map.getProjectionObject()\n')
+                all_in_map.write('            );\n')
+                all_in_map.write('\n')
+                all_in_map.write('    var player_%s=new OpenLayers.Layer.Vector("Player",\n' % str(players[callsign][2]).replace('-',''))
+                all_in_map.write('    {\n')
+                all_in_map.write('    styleMap: new OpenLayers.StyleMap({\n')
+                all_in_map.write('         "default": {\n')
+                all_in_map.write('         externalGraphic: "./images/tower.png",\n')
+                all_in_map.write('         graphicWidth: 28,\n')
+                all_in_map.write('         graphicHeight: 28,\n')
+                all_in_map.write('         graphicYOffset: 0,\n')
+                all_in_map.write('         rotation: "${angle}",\n')
+                all_in_map.write('         fillOpacity: "${opacity}"\n')
+                all_in_map.write('         }\n')
+                all_in_map.write('       })\n')
+                all_in_map.write('    });\n')
+                all_in_map.write('\n')
+                all_in_map.write('    var feature=new OpenLayers.Feature.Vector(\n')
+                all_in_map.write('        new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": 0, opacity: 100});\n')
+                all_in_map.write('    player_%s.addFeatures([feature])\n' % str(players[callsign][2]).replace('-',''))
+                all_in_map.write('\n')
+                all_in_map.write('    map.addLayer(player_%s);\n' % str(players[callsign][2]).replace('-',''))
+                all_in_map.write('\n')
+        all_in_map.write('   map.setCenter ((-0, 0), 2);\n')
+        all_in_map.write('  </script>\n')
+        all_in_map.write('</body></html>\n')
+        all_in_map.close()
+        self.maptab.load(QUrl('./all_in_map.html'))
 
 class AddFriend():
     def add_friend(self, vid2add):
