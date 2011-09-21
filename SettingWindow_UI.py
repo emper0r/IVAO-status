@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/SettingWindow_UI.ui'
 #
-# Created: Wed Sep 21 14:55:15 2011
+# Created: Wed Sep 21 15:16:30 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -134,7 +134,7 @@ class Ui_SettingWindow(object):
         self.lineEdit_pass.setEchoMode(QtGui.QLineEdit.Password)
         self.lineEdit_pass.setObjectName(_fromUtf8("lineEdit_pass"))
         self.AutoRefreshMap = QtGui.QCheckBox(self.centralwidget)
-        self.AutoRefreshMap.setGeometry(QtCore.QRect(14, 40, 211, 21))
+        self.AutoRefreshMap.setGeometry(QtCore.QRect(14, 40, 301, 21))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.AutoRefreshMap.setFont(font)
@@ -158,5 +158,5 @@ class Ui_SettingWindow(object):
         self.proxy_pass.setText(QtGui.QApplication.translate("SettingWindow", "Password", None, QtGui.QApplication.UnicodeUTF8))
         self.Setting_auth.setText(QtGui.QApplication.translate("SettingWindow", "Authentication", None, QtGui.QApplication.UnicodeUTF8))
         self.lineEdit_port.setInputMask(QtGui.QApplication.translate("SettingWindow", "00000; ", None, QtGui.QApplication.UnicodeUTF8))
-        self.AutoRefreshMap.setText(QtGui.QApplication.translate("SettingWindow", "Auto Refresh Map when Update", None, QtGui.QApplication.UnicodeUTF8))
+        self.AutoRefreshMap.setText(QtGui.QApplication.translate("SettingWindow", "Auto-Refresh the map when connecting to IVAO", None, QtGui.QApplication.UnicodeUTF8))
 

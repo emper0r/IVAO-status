@@ -347,7 +347,7 @@
      <rect>
       <x>14</x>
       <y>40</y>
-      <width>211</width>
+      <width>301</width>
       <height>21</height>
      </rect>
     </property>
@@ -360,7 +360,7 @@
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="text">
-     <string>Auto Refresh Map when Update</string>
+     <string>Auto-Refresh the map when connecting to IVAO</string>
     </property>
     <property name="checked">
      <bool>true</bool>
