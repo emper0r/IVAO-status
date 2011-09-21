@@ -172,6 +172,8 @@ class Main(QMainWindow):
             config.set('Database', 'db', 'ivao.db')
             config.add_section('Time_Update')
             config.set('Time_Update', 'time', '3000000')
+            config.add_section('Map')
+            config.set('Map', 'auto_refresh', '0')
             with open('Config.cfg', 'wb') as configfile:
                 config.write(configfile)
         self.pilot_list = []
@@ -630,7 +632,10 @@ class Main(QMainWindow):
         self.progress.hide()
         self.statusBar().showMessage('Done', 2000)
         qApp.processEvents()
-        self.all2map()
+        if config.getint('Map', 'auto_refresh') == 2:
+            self.all2map()
+        else:
+            pass
 
     def country_view(self):
         country_selected = self.ui.country_list.currentText()
@@ -1615,6 +1620,11 @@ class Settings(QMainWindow):
         self.ui.lineEdit_user.setText(user)
         pswd = config.get('Settings', 'pass')
         self.ui.lineEdit_pass.setText(pswd)
+        map_refresh = config.getint('Map', 'auto_refresh')
+        if map_refresh == 2:
+            self.ui.AutoRefreshMap.setChecked(True)
+        else:
+            self.ui.AutoRefreshMap.setChecked(False)
 
     def options(self):
         minutes = self.ui.spinBox.value()
@@ -1633,6 +1643,11 @@ class Settings(QMainWindow):
         config.set('Database', 'db', 'ivao.db')
         config.add_section('Time_Update')
         config.set('Time_Update', 'time', time_update)
+        config.add_section('Map')
+        if self.ui.AutoRefreshMap.checkState() == 2:
+            config.set('Map', 'auto_refresh', '2')
+        else:
+            config.set('Map', 'auto_refresh', '0')
         with open ('Config.cfg', 'wb') as configfile:
             config.write(configfile)
 

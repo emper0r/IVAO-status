@@ -1644,6 +1644,8 @@
     </property>
     <addaction name="actionSetting"/>
     <addaction name="actionUpdate"/>
+    <addaction name="actionUpdate_Map"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
@@ -1674,6 +1676,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionUpdate_Map">
+   <property name="text">
+    <string>Update Map</string>
    </property>
   </action>
  </widget>

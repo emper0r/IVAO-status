@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Tue Sep 20 13:06:52 2011
+# Created: Wed Sep 21 14:38:18 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -626,8 +626,12 @@ class Ui_MainWindow(object):
         self.actionAbout.setObjectName(_fromUtf8("actionAbout"))
         self.actionExit = QtGui.QAction(MainWindow)
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
+        self.actionUpdate_Map = QtGui.QAction(MainWindow)
+        self.actionUpdate_Map.setObjectName(_fromUtf8("actionUpdate_Map"))
         self.menuMenu.addAction(self.actionSetting)
         self.menuMenu.addAction(self.actionUpdate)
+        self.menuMenu.addAction(self.actionUpdate_Map)
+        self.menuMenu.addSeparator()
         self.menuMenu.addAction(self.actionExit)
         self.menuAbout.addAction(self.actionAbout)
         self.menuBar.addAction(self.menuMenu.menuAction())
@@ -643,6 +647,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.METARFindButton, QtCore.SIGNAL('clicked()'), MainWindow.metar)
         QtCore.QObject.connect(self.country_list, QtCore.SIGNAL('activated(QString)'), MainWindow.country_view)
         QtCore.QObject.connect(self.METARHelpButton, QtCore.SIGNAL('clicked()'), MainWindow.metarHelp)
+        QtCore.QObject.connect(self.actionUpdate_Map, QtCore.SIGNAL('activated()'), MainWindow.all2map)
         QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -752,4 +757,5 @@ class Ui_MainWindow(object):
         self.actionUpdate.setText(QtGui.QApplication.translate("MainWindow", "Update", None, QtGui.QApplication.UnicodeUTF8))
         self.actionAbout.setText(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExit.setText(QtGui.QApplication.translate("MainWindow", "Exit", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionUpdate_Map.setText(QtGui.QApplication.translate("MainWindow", "Update Map", None, QtGui.QApplication.UnicodeUTF8))
 
