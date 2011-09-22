@@ -563,8 +563,12 @@ class Main(QMainWindow):
                     airline.setPixmap(Pixmap)
                     self.ui.PILOT_FullList.setCellWidget(startrow, 0, airline)
                 else:
-                    code_airline = str(row_pilot[0])
-                    col_airline = QTableWidgetItem(code_airline, 0)
+                    cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?', (str(row_pilot[0][:3]),))
+                    airline_code = cursor.fetchone()
+                    if airline_code is None:
+                        col_airline = QTableWidgetItem(str(row_pilot[0]))
+                    else:
+                        col_airline = QTableWidgetItem(str(airline_code[0]), 0)
                     self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
             except:
                 pass
@@ -636,6 +640,7 @@ class Main(QMainWindow):
             self.all2map()
         else:
             pass
+        self.country_view()
 
     def country_view(self):
         country_selected = self.ui.country_list.currentText()
@@ -746,8 +751,12 @@ class Main(QMainWindow):
                         airline.setPixmap(Pixmap)
                         self.ui.PilottableWidget.setCellWidget(startrow_pilot, 0, airline)
                     else:
-                        code_airline = str(row_pilot[0])
-                        col_airline = QTableWidgetItem(code_airline, 0)
+                        cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?', (str(row_pilot[0][:3]),))
+                        airline_code = cursor.fetchone()
+                        if airline_code is None:
+                            col_airline = QTableWidgetItem(str(row_pilot[0]))
+                        else:
+                            col_airline = QTableWidgetItem(str(airline_code[0]), 0)
                         self.ui.PilottableWidget.setItem(startrow_pilot, 0, col_airline)
                 except:
                     pass
@@ -1274,7 +1283,7 @@ class Main(QMainWindow):
         QMessageBox.about(self, "About IVAO :: Status",
                                 """<b>IVAO::Status</b>  version %s<p>License: GPL3+<p>
                                 This Aplication can be used to see IVAO operational network.<p>
-                                July 2011 Tony Peña  --  emperor.cu@gmail.com <p>"""
+                                July 2011 Tony (emper0r) P. Diaz  --  emperor.cu@gmail.com <p>"""
                                 % (__version__))
     
     def show_pilot_info(self, callsign):
@@ -1483,6 +1492,10 @@ class PilotInfo(QMainWindow):
                 Pixmap = QPixmap(airlineCodePath)
                 airline = QLabel(self)
                 self.ui.airline_image.setPixmap(Pixmap)
+            else:
+                cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?', str(callsign[:3]))
+                airline_code = cursor.fetchone()
+                self.ui.airline_image.setText(str(airline_code[0]))
         except:
             pass
         self.ui.callsign_text.setText(callsign)
