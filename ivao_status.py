@@ -196,7 +196,7 @@ class Main(QMainWindow):
         config.read('Config.cfg')
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
-        db_t1 = cursor.execute("SELECT DISTINCT(Country) FROM icao_codes DESC;")
+        db_t1 = cursor.execute("SELECT DISTINCT(Country) FROM icao_codes ORDER BY Country ASC;")
         db_t1 = cursor.fetchall()
         connection.commit()
         startrow_dbt1 = 0
@@ -356,7 +356,6 @@ class Main(QMainWindow):
             planned_pob = fields[44]
             true_heading = fields[45]
             onground = fields[46]
-
             cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, server, clienttype \
             , latitude, longitude, altitude, groundspeed, planned_aircraft, planned_tascruise \
             , planned_depairport, planned_altitude, planned_destairport, server, protrevision \
@@ -366,7 +365,8 @@ class Main(QMainWindow):
             , planned_depairport_lon, planned_destairport_lat, planned_destairport_lon \
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
             , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
-            , onground) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+            , onground) \
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
             (callsign, vid, realname, server, clienttype, latitude, longitude, altitude, groundspeed, planned_aircraft \
              , planned_tascruise, planned_depairport, planned_altitude, planned_destairport, server, protrevision \
              , rating, transponder, visualrange, planned_revision, planned_flighttype \
@@ -377,7 +377,7 @@ class Main(QMainWindow):
              , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
              , onground))
         connection.commit()
-
+            
         for rows in self.atc_list:
             fields = rows.split(":")
             callsign = fields[0]
@@ -438,7 +438,66 @@ class Main(QMainWindow):
         qApp.processEvents()
         self.show_tables()
         self.ivao_friend()
-        
+    
+    def status_plane(self, callsign):
+        config = ConfigParser.RawConfigParser()
+        config.read('Config.cfg')
+        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        cursor = connection.cursor()
+        cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, planned_depairport \
+                      , planned_destairport, onground, time_connected, groundspeed, planned_altitude, Latitude, Longitude \
+                      FROM status_ivao WHERE clienttype='PILOT' AND callsign = ?;", (str(callsign),))
+        get_status = cursor.fetchone()
+        groundspeed = '-'
+        for row_pilot in get_status:
+            try:
+                cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(get_status[2]),))
+                city_orig = cursor.fetchone()
+                city_orig_point = float(city_orig[1]), float(city_orig[2])
+                cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(get_status[3]),))
+                city_dest = cursor.fetchone()
+                city_dest_point = float(city_dest[1]), float(city_dest[2])
+                pilot_position = get_status[8], get_status[9]
+                total_miles = distance.distance(city_orig_point, city_dest_point).miles
+                dist_traveled = distance.distance(city_orig_point, pilot_position).miles
+                percent = (float(dist_traveled) / float(total_miles)) * 100.0
+                
+                if percent > 105 :
+                    groundspeed = 'Diverted'
+                    return groundspeed
+                else:
+                    if int(str(get_status[4])) == 0:
+                        if (percent >= 0) and (percent <= 5):
+                            groundspeed = 'Taking Off'
+                        if (percent >= 5) and (percent <= 10):
+                            groundspeed = 'Initial Climbing'
+                        if (percent >= 10) and (percent <= 20):
+                            groundspeed = 'Climbing'
+                        if (percent >= 20) and (percent <= 70):
+                            groundspeed = 'On Route'
+                        if (percent >= 70) and (percent <= 80):
+                            groundspeed = 'Descending'
+                        if (percent >= 80) and (percent <= 90):
+                            groundspeed = 'Initial Approach'
+                        if (percent >= 90) and (percent <= 95):
+                            groundspeed = 'On Final'
+                        return groundspeed
+                    else:
+                        if (percent >= 1) and (percent <= 5):
+                            groundspeed = 'Taking Off'
+                        if (percent >= 95) and (percent <= 98):
+                            groundspeed = 'Landed'
+                        if (percent >= 98) and (percent <= 99):
+                            groundspeed = 'Taxing to Gate'
+                        if (get_status[6] == 0) and (percent >= 99 and (percent < 105)):
+                            groundspeed = 'On Blocks'
+                        if (get_status[6] == 0) and (percent <= 1):
+                            groundspeed = 'Boarding'
+                        return groundspeed
+            except:
+                groundspeed = '-'
+                return groundspeed
+            
     def show_tables(self):
         self.statusBar().showMessage('Populating Controllers and Pilots', 8000)
         self.progress.show()
@@ -542,8 +601,8 @@ class Main(QMainWindow):
             qApp.processEvents()
 
         cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport \
-                      , planned_destairport, onground, time_connected, groundspeed FROM status_ivao \
-                      where clienttype='PILOT' order by vid desc;")
+                      , planned_destairport, time_connected FROM status_ivao \
+                      WHERE clienttype='PILOT' ORDER BY vid desc;")
         rows_pilots = cursor.fetchall()
         startrow = 0
         self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
@@ -605,27 +664,11 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 6, col_departure)
             col_destination = QTableWidgetItem(str(row_pilot[5]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 7, col_destination)
-            groundspeed = '-'
-            try:
-                if int(str(row_pilot[6])) == 0:
-                    if (row_pilot[8] > 20) and (row_pilot[8] < 100):
-                        groundspeed = 'Taking Off'
-                    if (row_pilot[8] > 100) and (row_pilot[8] < 150):
-                        groundspeed = 'Initial Climbing'
-                    if (row_pilot[8] > 150):
-                        groundspeed = 'On Route'
-                else:
-                    if (row_pilot[8] > 0) and (row_pilot[8] < 20):
-                        groundspeed = 'Taxing'
-                    if (row_pilot[8] == 0):
-                        groundspeed = 'On Blocks'
-            except:
-                if not row_pilot[6]:
-                    groundspeed = '-'
-            col_status = QTableWidgetItem(groundspeed, 0)
+            status_plane = self.status_plane(row_pilot[0])
+            col_status = QTableWidgetItem(str(status_plane), 0)
             self.ui.PILOT_FullList.setItem(startrow, 8, col_status)
-            start_connected = datetime.datetime(int(str(row_pilot[7])[:4]), int(str(row_pilot[7])[4:6]), int(str(row_pilot[7])[6:8]) \
-                , int(str(row_pilot[7])[8:10]), int(str(row_pilot[7])[10:12]), int(str(row_pilot[7])[12:14]))
+            start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
+                , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
             diff = abs(datetime.datetime.now() - start_connected)
             col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
@@ -687,7 +730,7 @@ class Main(QMainWindow):
             connection.commit()
 
             cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport \
-                          , planned_destairport, onground, time_connected, groundspeed FROM status_ivao \
+                          , planned_destairport, time_connected FROM status_ivao \
                           WHERE clienttype='PILOT' AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(codes[0])),))
             rows_pilots = cursor.fetchall()
             
@@ -795,28 +838,12 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_pilot, 6, col_departure)
                 col_destination = QTableWidgetItem(str(row_pilot[5]), 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 7, col_destination)
-                groundspeed = '-'
-                try:
-                    if int(str(row_pilot[6])) == 0:
-                        if (row_pilot[8] > 20) and (row_pilot[8] < 100):
-                            groundspeed = 'Taking Off'
-                        if (row_pilot[8] > 100) and (row_pilot[8] < 150):
-                            groundspeed = 'Initial Climbing'
-                        if (row_pilot[8] > 150):
-                            groundspeed = 'On Route'
-                    else:
-                        if (row_pilot[8] > 0) and (row_pilot[8] < 20):
-                            groundspeed = 'Taxing'
-                        if (row_pilot[8] == 0):
-                            groundspeed = 'On Blocks'
-                except:
-                    if not row_pilot[6]:
-                        col_status = '-'
-                col_status = QTableWidgetItem(groundspeed, 0)
+                status_plane = self.status_plane(row_pilot[0])
+                col_status = QTableWidgetItem(str(status_plane), 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 8, col_status)
-                start_connected = datetime.datetime(int(str(row_pilot[7])[:4]), int(str(row_pilot[7])[4:6]) \
-                                                    , int(str(row_pilot[7])[6:8]), int(str(row_pilot[7])[8:10]) \
-                                                    , int(str(row_pilot[7])[10:12]), int(str(row_pilot[7])[12:14]))
+                start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]) \
+                                                    , int(str(row_pilot[6])[6:8]), int(str(row_pilot[6])[8:10]) \
+                                                    , int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
                 diff = abs(datetime.datetime.now() - start_connected)
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 9, col_time)
@@ -1533,6 +1560,8 @@ class PilotInfo(QMainWindow):
                 self.ui.nauticalmiles.setText('Local Flight')
             else:
                 self.ui.progressBarTrack.setValue(int((dist_traveled / total_miles) * 100.0))
+        status_plane = Main().status_plane(callsign)
+        self.ui.FlightStatusDetail.setText(str(status_plane))
         
     def add_button(self):
         add2friend = AddFriend()

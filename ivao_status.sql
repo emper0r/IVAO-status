@@ -13041,7 +13041,7 @@ INSERT INTO icao_codes VALUES('FE5',56.413334,-116.879997,'Three Creeks','Canada
 INSERT INTO icao_codes VALUES('FE6',53.274998,-114.449997,'P.K. Farm','Canada');
 INSERT INTO icao_codes VALUES('FF4',66.703049,-119.707222,'Great Bear Lake','Canada');
 INSERT INTO icao_codes VALUES('FF7',52.833328,-110.900002,'Camp','Canada');
-INSERT INTO icao_codes VALUES('FG6',62.166664,-134.066666,'Magundy','YTY0B');
+INSERT INTO icao_codes VALUES('FG6',62.166664,-134.066666,'Magundy','Canada');
 INSERT INTO icao_codes VALUES('F39',33.715103,-96.671104,'Grayson Co','United_States');
 INSERT INTO icao_codes VALUES('FD93',30.685467,-86.747177,'Yellow River Airstrip','United_States');
 INSERT INTO icao_codes VALUES('FD61',30.176605,-82.99791,'Wright Farms','United_States');

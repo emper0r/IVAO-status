@@ -464,7 +464,7 @@
      <string>Altitude</string>
     </property>
    </widget>
-   <widget class="QLabel" name="FlightStatusNumber">
+   <widget class="QLabel" name="FlightStatusDetail">
     <property name="geometry">
      <rect>
       <x>105</x>
