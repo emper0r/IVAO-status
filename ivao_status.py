@@ -33,6 +33,7 @@ import sqlite3
 import os
 import datetime
 import ConfigParser
+import time
 
 __version__ = '1.0'
 
@@ -1709,9 +1710,17 @@ class Settings(QMainWindow):
         event.accept()
 
 def main():
+    import sys, time
     app = QApplication(sys.argv)
+    splash_pix = QPixmap('./images/ivao_status_splash.png')
+    splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
+    splash.setMask(splash_pix.mask())
+    splash.show()
+    qApp.processEvents()
+    time.sleep(4)
     window = Main()
     window.show()
+    splash.finish(window)
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
