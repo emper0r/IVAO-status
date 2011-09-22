@@ -45,7 +45,7 @@ class Main(QMainWindow):
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QIcon('./images/ivao.png'))
+        self.setWindowIcon(QIcon('./images/ivao_status_splash.png'))
         self.ui.PILOT_FullList.setColumnWidth(0, 90)
         self.ui.PILOT_FullList.setColumnWidth(1, 65)
         self.ui.PILOT_FullList.setColumnWidth(2, 60)
@@ -1468,7 +1468,7 @@ class PilotInfo(QMainWindow):
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QIcon('./images/ivao.png'))
+        self.setWindowIcon(QIcon('./images/ivao_status_splash.png'))
         self.callsign = ''
         QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
 
@@ -1583,7 +1583,7 @@ class ControllerInfo(QMainWindow):
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QIcon('./images/ivao.png'))
+        self.setWindowIcon(QIcon('./images/ivao_status_splash.png'))
         QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
         
     def status(self, callsign):
@@ -1649,7 +1649,7 @@ class Settings(QMainWindow):
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QIcon('./images/ivao.png'))
+        self.setWindowIcon(QIcon('./images/ivao_status_splash.png'))
         self.connect(self.ui.SettingAccepButton, SIGNAL('clicked()'), self.options)
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
