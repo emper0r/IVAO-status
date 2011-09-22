@@ -1631,7 +1631,7 @@ class ControllerInfo(QMainWindow):
     
     def add_button(self):
         add2friend = AddFriend()
-        add2friend.add_friend(str(self.ui.vidText.text()).encode('latin-1'))
+        add2friend.add_friend(str(self.ui.VidText.text()).encode('latin-1'))
         self.statusBar().showMessage('Friend Added', 3000)
 
     def closeEvent(self, event):
