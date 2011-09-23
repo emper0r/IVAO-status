@@ -79,7 +79,7 @@ class Main(QMainWindow):
         self.ui.SearchtableWidget.setColumnWidth(1, 100)
         self.ui.SearchtableWidget.setColumnWidth(2, 170)
         self.ui.FriendstableWidget.setColumnWidth(0, 50)
-        self.ui.FriendstableWidget.setColumnWidth(1, 230)
+        self.ui.FriendstableWidget.setColumnWidth(1, 290)
         self.ui.FriendstableWidget.setColumnWidth(2, 105)
         self.ui.dbTableWidget_1.setColumnWidth(0, 30)
         self.ui.dbTableWidget_2.setColumnWidth(0, 45)
@@ -1122,16 +1122,31 @@ class Main(QMainWindow):
         cursor = connection.cursor()
         cursor.execute('SELECT vid, realname, rating, clienttype FROM friends_ivao;')
         roster = cursor.fetchall()
-
         self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
         while self.ui.FriendstableWidget.rowCount () > 0:
             self.ui.FriendstableWidget.removeRow(0)
 
         startrow = 0
+        roster_row = 0
         for row in roster:
             self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
             col_vid = QTableWidgetItem(str(row[0]), 0)
             self.ui.FriendstableWidget.setItem(startrow, 0, col_vid)
+            cursor.execute('SELECT vid FROM status_ivao where vid=?;', (int(row[0]),))
+            check = cursor.fetchone()
+            try:
+                if check[0] == row[0]:
+                    Pixmap = QPixmap('./images/airplane_online.png')
+                    online = QLabel(self)
+                    online.setPixmap(Pixmap)
+                    self.ui.FriendstableWidget.setCellWidget(startrow, 3, online)
+                    roster_row += 1
+            except:
+                Pixmap = QPixmap('./images/airplane_offline.png')
+                offline = QLabel(self)
+                offline.setPixmap(Pixmap)
+                self.ui.FriendstableWidget.setCellWidget(startrow, 3, offline)
+                roster_row += 1
             col_realname = QTableWidgetItem(str(row[1].encode('latin-1')), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
             if str(row[2]) != '-':
@@ -1147,11 +1162,8 @@ class Main(QMainWindow):
                 col_rating = QTableWidgetItem('-', 0)
                 self.ui.FriendstableWidget.setItem(startrow, 2, col_rating)
             startrow += 1
-            qApp.processEvents()
-        cursor.execute('select friends_ivao.vid, status_ivao.vid from status_ivao \
-        , friends_ivao where status_ivao.vid=friends_ivao.vid;')
-        friends_parts = cursor.fetchall()
-        connection.close()
+        qApp.processEvents()
+        connection.close()                
 
     def metar(self):
         self.statusBar().showMessage('Downloading METAR', 2000)
@@ -1452,7 +1464,7 @@ class AddFriend():
                     cursor.execute("SELECT vid, realname, rating, clienttype from status_ivao WHERE vid=?;", ((int(vid2add),)))
                     data = cursor.fetchall()
                     cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) VALUES (?, ?, ?, ?);' \
-                                   , (int(str(data[0][0])), str(data[0][1][:-4].encode('latin-1')), int(data[0][2]), str(data[0][3])))
+                                   , (int(str(data[0][0])), str(data[0][1][:-4].decode('latin-1')), int(data[0][2]), str(data[0][3])))
                     connection.commit()
             except:
                 pass

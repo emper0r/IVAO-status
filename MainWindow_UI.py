@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Wed Sep 21 14:38:18 2011
+# Created: Fri Sep 23 08:21:17 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -116,9 +116,9 @@ class Ui_MainWindow(object):
         self.FriendstableWidget.setHorizontalHeaderItem(2, item)
         item = QtGui.QTableWidgetItem()
         self.FriendstableWidget.setHorizontalHeaderItem(3, item)
-        self.FriendstableWidget.horizontalHeader().setDefaultSectionSize(90)
+        self.FriendstableWidget.horizontalHeader().setDefaultSectionSize(70)
         self.FriendstableWidget.horizontalHeader().setHighlightSections(True)
-        self.FriendstableWidget.horizontalHeader().setMinimumSectionSize(90)
+        self.FriendstableWidget.horizontalHeader().setMinimumSectionSize(70)
         self.FriendstableWidget.horizontalHeader().setStretchLastSection(True)
         self.FriendstableWidget.verticalHeader().setDefaultSectionSize(20)
         self.FriendstableWidget.verticalHeader().setMinimumSectionSize(20)

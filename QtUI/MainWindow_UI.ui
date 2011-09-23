@@ -254,13 +254,13 @@
        <bool>false</bool>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>90</number>
+       <number>70</number>
       </attribute>
       <attribute name="horizontalHeaderHighlightSections">
        <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>90</number>
+       <number>70</number>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
