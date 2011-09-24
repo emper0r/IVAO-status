@@ -44,7 +44,9 @@ or can get it into tool path
 untar tarball
 
     tar zvfx geopy-0.94.1.tar.gz
+
     cd geopy-0.94.1
+
     python setup.py build
 
 and as root:
@@ -91,5 +93,8 @@ SPECIAL THANKS
 - htoothrot at #pyqt in irc.freenode.net to help me sometimes too, and
 
 - Arnd Wippermann to help me at OpenLayers-list 
-  for show me how javascript works and tracking with lines and Google Layer
+  for show me how javascript works and Google Layer with OpenStreetMap
+
+- And all my friends for testing my hobbie and push me to become this for
+  a better app.
 

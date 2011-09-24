@@ -22457,6 +22457,7 @@ INSERT INTO icao_codes VALUES('SBXO',-23.3303,-51.1367,'Londrina/TMA','Brazil');
 INSERT INTO icao_codes VALUES('SBXP',-23.435600,-46.473100,'Aeropuerto Intl Andre Franco/Sao Paolo/Cumbica','Brazil');
 INSERT INTO icao_codes VALUES('SBXR',-20.2578,-40.2876,'Aeropuerto de Victoria','Brazil');
 INSERT INTO icao_codes VALUES('SBXS',-12.909200,-38.338000,'Aeropuerto Eduardo Magalhaes','Brazil');
+INSERT INTO icao_codes VALUES('SBXT',-5.908330,-35.248700,'Aeropuerto Agusto Severo','Brazil');
 INSERT INTO icao_codes VALUES('SBXV',-14.7,-52.35,'Xavantina','Brazil');
 INSERT INTO icao_codes VALUES('SBSA',-22.01667,-47.88333,'F. Pereira Lopez','Brazil');
 INSERT INTO icao_codes VALUES('SBRS',-22.48333,-44.46667,'Resende','Brazil');
