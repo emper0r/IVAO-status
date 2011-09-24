@@ -527,6 +527,8 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
+                col_country = QTableWidgetItem('IVAO Member', 0)
+                self.ui.ATC_FullList.setItem(startrow, 3, col_country)
                 
             elif str(row_atc[0][2:3]) == '-' or str(row_atc[0][2:3]) == '_':
                     cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(row_atc[0][:2]),))
@@ -537,12 +539,12 @@ class Main(QMainWindow):
                         flagCodePath = ('./flags/%s.png') % str(div_ivao[0])
                         col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
                         self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
-                        col_country = QTableWidgetItem(str(div_ivao[0]), 0)
-                        self.ui.ATC_FullList.setItem(startrow, 3, col_country)
                         Pixmap = QPixmap(flagCodePath)
                         flag_country = QLabel()
                         flag_country.setPixmap(Pixmap)
                         self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
+                        col_country = QTableWidgetItem(str(div_ivao[0]), 0)
+                        self.ui.ATC_FullList.setItem(startrow, 3, col_country)
             else:
                 code_icao = str(row_atc[0][:4])
                 cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE ICAO=?", (str(code_icao),))
