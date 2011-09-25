@@ -22463,6 +22463,7 @@ INSERT INTO icao_codes VALUES('SBSA',-22.01667,-47.88333,'F. Pereira Lopez','Bra
 INSERT INTO icao_codes VALUES('SBRS',-22.48333,-44.46667,'Resende','Brazil');
 INSERT INTO icao_codes VALUES('SBWH',-19.624400,-43.971900,'Tancredo Neves','Brazil');
 INSERT INTO icao_codes VALUES('SBWJ',-22.810000,-43.250600,'Aeropuerto Int. Antonio Carlos Jobim','Brazil');
+INSERT INTO icao_codes VALUES('SBWF',-8.126390, -34.922800,'Aeropuerto Ibura','Brazil');
 INSERT INTO icao_codes VALUES('SBWR',-15.862600,-47.912700,'Aeropuerto Intl Juscelino Kubitschek','Brazil');
 INSERT INTO icao_codes VALUES('SBPK',-31.718882,-52.328056,'Pelotas','Brazil');
 INSERT INTO icao_codes VALUES('SBPH',-16.266667,-60.166667,'Porto Velho FIR','Brazil');
@@ -22513,6 +22514,7 @@ INSERT INTO icao_codes VALUES('SBYS',-21.983881,-47.343613,'Campo Fontenelle','B
 INSERT INTO icao_codes VALUES('SBUA',-0.14833,-66.985558,'Sao Gabriel Da Cachoeira','Brazil');
 INSERT INTO icao_codes VALUES('SBSJ',-23.228886,-45.871113,'Sao Jose Dos Campos','Brazil');
 INSERT INTO icao_codes VALUES('SBPG',-25.51667,-48.51667,'Paranagua','Brazil');
+INSERT INTO icao_codes VALUES('SBPJ',-10.849700, -48.414200,'Aeroporto Tomas','Brazil');
 INSERT INTO icao_codes VALUES('SBPV',-8.713607,-63.902779,'Porto Velho','Brazil');
 INSERT INTO icao_codes VALUES('SBQV',-14.863607,-40.863056,'Vitoria Da Conquista','Brazil');
 INSERT INTO icao_codes VALUES('SBRB',-9.992769,-67.804726,'Presidente Medici Intl','Brazil');
@@ -24102,8 +24104,12 @@ INSERT INTO icao_codes VALUES('VYMM',16.440519,97.657791,'Mawlamyine','Myanmar')
 INSERT INTO icao_codes VALUES('VYML',20.883329,95.883331,'Meiktila','Myanmar');
 INSERT INTO icao_codes VALUES('VYTL',20.482908,99.934814,'Tachilek','Myanmar');
 INSERT INTO icao_codes VALUES('WABP',-4.531661,136.888336,'Tembagapura','Indonesia');
+INSERT INTO icao_codes VALUES('WADA',-8.560710,116.095000,'Selaparang Airport','Indonesia');
+INSERT INTO icao_codes VALUES('WADD',-8.743520,115.157000,'Bali Airport','Indonesia');
 INSERT INTO icao_codes VALUES('WAML',-0.916661,119.910278,'Mutiara','Indonesia');
 INSERT INTO icao_codes VALUES('WAJW',-4.097496,138.951385,'Wamena','Indonesia');
+INSERT INTO icao_codes VALUES('WARJ',-7.786790, 110.431000,'Adisucipto','Indonesia');
+INSERT INTO icao_codes VALUES('WARR',-7.383330, 112.782000,'Juanda','Indonesia');
 INSERT INTO icao_codes VALUES('WASS',-0.925551,131.121674,'Jefman','Indonesia');
 INSERT INTO icao_codes VALUES('WASR',-0.893607,134.050278,'Rendani','Indonesia');
 INSERT INTO icao_codes VALUES('WAPP',-3.706937,128.089722,'Pattimura','Indonesia');

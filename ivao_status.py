@@ -484,6 +484,8 @@ class Main(QMainWindow):
                             groundspeed = 'On Final'
                         return groundspeed
                     else:
+                        if (groundspeed > 0) and (groundspeed <= 80):
+                            groundspeed = 'Taking Off'
                         if (percent >= 1) and (percent <= 5):
                             groundspeed = 'Taking Off'
                         if (percent >= 95) and (percent <= 98):
@@ -1466,7 +1468,7 @@ class AddFriend():
                     cursor.execute("SELECT vid, realname, rating, clienttype from status_ivao WHERE vid=?;", ((int(vid2add),)))
                     data = cursor.fetchall()
                     cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) VALUES (?, ?, ?, ?);' \
-                                   , (int(str(data[0][0])), str(data[0][1][:-4].decode('latin-1')), int(data[0][2]), str(data[0][3])))
+                                   , (int(str(data[0][0])), str(data[0][1][:-4].encode('latin-1')), int(data[0][2]), str(data[0][3])))
                     connection.commit()
             except:
                 pass
