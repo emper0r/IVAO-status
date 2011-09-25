@@ -78,7 +78,7 @@ ISSUE TRACKER
 Issues are tracked on github, please feel free to ask any question or suggestion
 I will fix it or make feature as soon as possible ;-)
 
-https://github.com/emper0r/issues
+https://github.com/emper0r/IVAO-status/issues
 
 LICENSE
 =======
