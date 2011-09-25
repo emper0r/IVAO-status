@@ -21208,7 +21208,7 @@ INSERT INTO icao_codes VALUES('MMGM',27.969437,-110.923058,'Gen Jose Ma Yanez In
 INSERT INTO icao_codes VALUES('MMIA',19.273331,-103.576668,'Colima','Mexico');
 INSERT INTO icao_codes VALUES('MMLO',20.991383,-101.480003,'De Guanajuato Intl','Mexico');
 INSERT INTO icao_codes VALUES('MMEX',23,-96,'Mexico FIR','Mexico');
-INSERT INTO icao_codes VALUES('MMGU',20.52113,-103.3096,'-','Mexico');
+INSERT INTO icao_codes VALUES('MMGU',20.52113,-103.3096,'Guanajuato','Mexico');
 INSERT INTO icao_codes VALUES('MMPPE',26.75,-113.5667,'Punta Abreojos','Mexico');
 INSERT INTO icao_codes VALUES('MMSCX',16.2017,-95.1867,'Salina Cruz','Mexico');
 INSERT INTO icao_codes VALUES('MMTL',20.08333,-98.36667,'Tulancingo','Mexico');
@@ -22464,7 +22464,9 @@ INSERT INTO icao_codes VALUES('SBRS',-22.48333,-44.46667,'Resende','Brazil');
 INSERT INTO icao_codes VALUES('SBWH',-19.624400,-43.971900,'Tancredo Neves','Brazil');
 INSERT INTO icao_codes VALUES('SBWJ',-22.810000,-43.250600,'Aeropuerto Int. Antonio Carlos Jobim','Brazil');
 INSERT INTO icao_codes VALUES('SBWF',-8.126390, -34.922800,'Aeropuerto Ibura','Brazil');
+INSERT INTO icao_codes VALUES('SBWP',-29.993900,-51.171100,'Aeropuerto Sao Joao','Brazil');
 INSERT INTO icao_codes VALUES('SBWR',-15.862600,-47.912700,'Aeropuerto Intl Juscelino Kubitschek','Brazil');
+INSERT INTO icao_codes VALUES('SBWY',-15.652900,-56.116700,'Aeropuerto Mal Rondon','Brazil');
 INSERT INTO icao_codes VALUES('SBPK',-31.718882,-52.328056,'Pelotas','Brazil');
 INSERT INTO icao_codes VALUES('SBPH',-16.266667,-60.166667,'Porto Velho FIR','Brazil');
 INSERT INTO icao_codes VALUES('SBPF',-28.245274,-52.328609,'Lauro Kurtz','Brazil');

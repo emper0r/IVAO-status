@@ -494,6 +494,8 @@ class Main(QMainWindow):
                             groundspeed = 'Taxing to Gate'
                         if (get_status[6] == 0) and (percent >= 99 and (percent < 105)):
                             groundspeed = 'On Blocks'
+                        if (get_status[6] <= 25) and (percent >= 99 and (percent < 105)):
+                            groundspeed = 'On Blocks'
                         if (get_status[6] == 0) and (percent <= 1):
                             groundspeed = 'Boarding'
                         return groundspeed
