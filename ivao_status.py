@@ -500,11 +500,11 @@ class Main(QMainWindow):
                             groundspeed = 'Boarding'
                         return groundspeed
             except:
-                groundspeed = '-'
+                groundspeed = 'Fill Flight Plan'
                 return groundspeed
             
     def show_tables(self):
-        self.statusBar().showMessage('Populating Controllers and Pilots', 8000)
+        self.statusBar().showMessage('Populating Controllers and Pilots', 10000)
         self.progress.show()
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
@@ -603,7 +603,7 @@ class Main(QMainWindow):
             diff = abs(datetime.datetime.now() - start_connected)
             col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.ATC_FullList.setItem(startrow, 8, col_time)
-            self.progress.setValue(int(float(startrow) / float(self.ui.ATC_FullList.rowCount()) * 100.0))
+            self.progress.setValue(int(float(startrow) / float(len(rows_atcs)) * 100.0))
             startrow += 1
             qApp.processEvents()
 
@@ -679,7 +679,7 @@ class Main(QMainWindow):
             diff = abs(datetime.datetime.now() - start_connected)
             col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
-            self.progress.setValue(int(float(startrow) / float(self.ui.PILOT_FullList.rowCount()) * 100.0))
+            self.progress.setValue(int(float(startrow) / float(len(rows_pilots)) * 100.0))
             startrow += 1
             qApp.processEvents()
         connection.close()
