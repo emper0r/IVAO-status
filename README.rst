@@ -2,10 +2,10 @@
  IVAO - STATUS
 ===============
 
-Author: Antonio Peña
-E-mail: <emperor.cu@gmail.com>
-License: GPLv3+
-Date: Jul 2011
+:Author: Antonio Peña
+:E-mail: <emperor.cu@gmail.com>
+:License: GPLv3+
+:Date: Jul 2011
 
 IVAO (International Virtual Aviation Organisation ™) for its acronym in English, 
 is one of the most successful networks for flight simulation. 
@@ -79,6 +79,23 @@ Issues are tracked on github, please feel free to ask any question or suggestion
 I will fix it or make feature as soon as possible ;-)
 
 https://github.com/emper0r/IVAO-status/issues
+
+SCREENSHOTS
+===========
+
+Here can see some screenshots located into screenshots path to can show you how
+works the app.
+
+.. image:: screenshots/screenshot-ivaos3.png
+
+.. image:: screenshots/screenshot-ivaos4.png
+
+.. image:: screenshots/screenshot-ivaos5.png
+
+.. image:: screenshots/screenshot-ivaos6.png
+
+.. image:: screenshots/screenshot-ivaos8.png
+
 
 LICENSE
 =======
