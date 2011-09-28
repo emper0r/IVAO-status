@@ -83,18 +83,7 @@ https://github.com/emper0r/IVAO-status/issues
 SCREENSHOTS
 ===========
 
-Here can see some screenshots located into screenshots path to can show you how
-works the app.
-
-.. image:: screenshots/screenshot-ivaos3.png
-
-.. image:: screenshots/screenshot-ivaos4.png
-
-.. image:: screenshots/screenshot-ivaos5.png
-
-.. image:: screenshots/screenshot-ivaos6.png
-
-.. image:: screenshots/screenshot-ivaos8.png
+I put some screenshots to can show you how works the app at screenshots path
 
 
 LICENSE
