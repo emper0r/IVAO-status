@@ -66,14 +66,15 @@ class Main(QMainWindow):
         self.ui.PilottableWidget.setColumnWidth(8, 65)
         self.ui.ATC_FullList.setColumnWidth(1, 70)
         self.ui.ATC_FullList.setColumnWidth(2, 40)
-        self.ui.ATC_FullList.setColumnWidth(3, 140)
+        self.ui.ATC_FullList.setColumnWidth(3, 190)
         self.ui.ATC_FullList.setColumnWidth(4, 70)
-        self.ui.ATC_FullList.setColumnWidth(5, 190)
+        self.ui.ATC_FullList.setColumnWidth(5, 108)
         self.ui.ATC_FullList.setColumnWidth(8, 40)
         self.ui.ATCtableWidget.setColumnWidth(1, 70)
         self.ui.ATCtableWidget.setColumnWidth(2, 60)
         self.ui.ATCtableWidget.setColumnWidth(3, 240)
         self.ui.ATCtableWidget.setColumnWidth(4, 110)
+        self.ui.ATCtableWidget.setColumnWidth(5, 108)
         self.ui.ATCtableWidget.setColumnWidth(6, 110)
         self.ui.SearchtableWidget.setColumnWidth(0, 50)
         self.ui.SearchtableWidget.setColumnWidth(1, 100)
@@ -1232,7 +1233,8 @@ class Main(QMainWindow):
         player_location.write('            new OpenLayers.Projection("EPSG:4326"),\n')
         player_location.write('            map.getProjectionObject()\n')
         player_location.write('            );\n')
-        if player[0][2][-4:] == '_OBS' or player[0][2][-4:] == '_DEP' or player[0][2][-4:] == '_GND' or icao_orig is None or icao_dest is None:
+        if player[0][2][-4:] == '_OBS' or player[0][2][-4:] == '_DEP' or player[0][2][-4:] == '_GND' \
+           or icao_orig is None or icao_dest is None:
             player_location.write('    var zoom = 15;\n')
         elif player[0][2][-4:] == '_TWR' or player[0][2][-4:] == '_APP':
             player_location.write('    var zoom = 14;\n')
@@ -1252,11 +1254,34 @@ class Main(QMainWindow):
         player_location.write('         graphicHeight: 20,\n')
         player_location.write('         graphicYOffset: 0,\n')
         player_location.write('         rotation: "${angle}",\n')
-        player_location.write('         fillOpacity: "${opacity}"\n')
+        if player[0][4] == 'ATC':
+            player_location.write('         fillColor: "orange",\n')
+            player_location.write('         strokeColor: "orange",\n')
+            player_location.write('         fillOpacity: "0.05",\n')
+        else:
+            player_location.write('         fillOpacity: "${opacity}",\n')
         player_location.write('         }\n')
-        player_location.write('     })\n')
-        player_location.write(' });\n')
-        if player[0][4] == 'PILOT':
+        player_location.write('      })\n')
+        player_location.write('   });\n')
+        if str(player[0][4]) == 'ATC':
+            player_location.write('     var ratio = OpenLayers.Geometry.Polygon.createRegularPolygon(\n')
+            player_location.write('        new OpenLayers.Geometry.Point(lonLat.lon, lonLat.lat),\n')
+            if str(player[0][2][-4:]) == '_OBS' or str(player[0][2][-4:]) == '_DEP' or str(player[0][2][-4:]) == '_GND':
+                player_location.write('        3500,\n')
+            elif str(player[0][2][-4:]) == '_TWR':
+                player_location.write('        7000,\n')
+            elif str(player[0][2][-4:]) == '_APP':
+                player_location.write('        10500,\n')
+            elif str(player[0][2][-4:]) == '_CTR':
+                player_location.write('        14000,\n')
+            else:
+                player_location.write('        80000,\n')
+            player_location.write('        360\n')
+            player_location.write('     );\n')
+            player_location.write('   var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')
+            player_location.write('   player.addFeatures([controller_ratio]);\n')
+        player_location.write('\n')
+        if str(player[0][4]) == 'PILOT':
             player_location.write('    var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer");\n')
             player_location.write('    var style_green = {\n')
             player_location.write('     strokeColor: "#00FF00",\n')
@@ -1267,7 +1292,7 @@ class Main(QMainWindow):
             player_location.write('     strokeColor: "#FF0000",\n')
             player_location.write('     strokeOpacity: 0.7,\n')
             player_location.write('     strokeWidth: 2\n')
-            player_location.write('    }\n')
+            player_location.write('    };\n')
             if icao_orig is None or icao_dest is None:
                 player_location.write('    var points = [];\n')
                 player_location.write('    var point_plane = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
@@ -1307,14 +1332,13 @@ class Main(QMainWindow):
             player_location.write('   map.addLayer(vectorLayer);\n')
             player_location.write('\n')
         player_location.write('   var feature=new OpenLayers.Feature.Vector(\n')
-        if player[0][4] == 'PILOT':
-            player_location.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": %d, opacity: 100});\n' % (heading))
+        if str(player[0][4]) == 'PILOT':
+            player_location.write('     new OpenLayers.Geometry.Point(lonLat.lon, lonLat.lat), {"angle": %d, opacity: 100});\n' % (heading))
         else:
-            player_location.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": 0, opacity: 100});\n')
-        player_location.write('    player.addFeatures([feature]);\n')
-        player_location.write('    map.addLayer(player);\n')
+            player_location.write('     new OpenLayers.Geometry.Point(lonLat.lon, lonLat.lat), {"angle": 0, opacity: 100});\n')
+        player_location.write('   player.addFeatures([feature]);\n')
+        player_location.write('   map.addLayer(player);\n')
         player_location.write('\n')
-        player_location.write('    \n')
         player_location.write('   map.setCenter (lonLat, zoom);\n')
         player_location.write('  </script>\n')
         player_location.write('</body></html>\n')
@@ -1401,7 +1425,7 @@ class Main(QMainWindow):
                     all_in_map.write('         graphicHeight: 15,\n')
                     all_in_map.write('         graphicYOffset: 0,\n')
                     all_in_map.write('         rotation: "${angle}",\n')
-                    all_in_map.write('         fillOpacity: "${opacity}"\n')
+                    all_in_map.write('         fillOpacity: 100\n')
                     all_in_map.write('         }\n')
                     all_in_map.write('      })\n')
                     all_in_map.write('   });\n')
@@ -1409,7 +1433,7 @@ class Main(QMainWindow):
                     all_in_map.write('   map.addLayers(player_%s);\n' % str(players[callsign][2]).replace('-',''))
                     all_in_map.write('\n')
                     all_in_map.write('   var feature=new OpenLayers.Feature.Vector(\n')
-                    all_in_map.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": %d, opacity: 100});\n' % \
+                    all_in_map.write('    new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": %d});\n' % \
                                      int(players[callsign][3]))
                     all_in_map.write('    player_%s.addFeatures([feature]);\n' % str(players[callsign][2]).replace('-',''))
                     all_in_map.write('    map.addLayer(player_%s);\n' % str(players[callsign][2]).replace('-',''))
@@ -1430,19 +1454,34 @@ class Main(QMainWindow):
                 all_in_map.write('         graphicWidth: 15,\n')
                 all_in_map.write('         graphicHeight: 15,\n')
                 all_in_map.write('         graphicYOffset: 0,\n')
-                all_in_map.write('         rotation: "${angle}",\n')
-                all_in_map.write('         fillOpacity: "${opacity}"\n')
                 all_in_map.write('         }\n')
                 all_in_map.write('       })\n')
                 all_in_map.write('    });\n')
                 all_in_map.write('\n')
+                all_in_map.write('     var ratio = OpenLayers.Geometry.Polygon.createRegularPolygon(\n')
+                if str(players[callsign][4][-4:]) == '_OBS' or str(players[callsign][4][-4:]) == '_DEP' \
+                   or str(players[callsign][4][-4:]) == '_GND':
+                    all_in_map.write('        3500,\n')
+                elif str(players[callsign][4][-4:]) == '_TWR':
+                    all_in_map.write('        7000,\n')
+                elif str(players[callsign][4][-4:]) == '_APP':
+                    all_in_map.write('        10500,\n')
+                elif str(players[callsign][4][-4:]) == '_CTR':
+                    all_in_map.write('        14000,\n')
+                else:
+                    all_in_map.write('        80000,\n')
+                all_in_map.write('        360\n')
+                all_in_map.write('     );\n')
+                all_in_map.write('    var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')
+                all_in_map.write('    player_%s.addFeatures([controller_ratio]);\n' % str(players[callsign][2]).replace('-',''))
+                all_in_map.write('\n')
                 all_in_map.write('    var feature=new OpenLayers.Feature.Vector(\n')
-                all_in_map.write('        new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": 0, opacity: 100});\n')
-                all_in_map.write('    player_%s.addFeatures([feature])\n' % str(players[callsign][2]).replace('-',''))
+                all_in_map.write('        new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat));\n')
+                all_in_map.write('    player_%s.addFeatures([feature]);\n' % str(players[callsign][2]).replace('-',''))
                 all_in_map.write('\n')
                 all_in_map.write('    map.addLayer(player_%s);\n' % str(players[callsign][2]).replace('-',''))
                 all_in_map.write('\n')
-        all_in_map.write('   map.setCenter ((-0, 0), 2);\n')
+        all_in_map.write('   map.setCenter ((0, 0), 2);\n')
         all_in_map.write('  </script>\n')
         all_in_map.write('</body></html>\n')
         all_in_map.close()

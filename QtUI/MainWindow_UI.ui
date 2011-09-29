@@ -784,10 +784,10 @@
        <bool>true</bool>
       </attribute>
       <attribute name="verticalHeaderDefaultSectionSize">
-       <number>20</number>
+       <number>27</number>
       </attribute>
       <attribute name="verticalHeaderMinimumSectionSize">
-       <number>20</number>
+       <number>27</number>
       </attribute>
       <column>
        <property name="text">
@@ -894,10 +894,10 @@
        <bool>true</bool>
       </attribute>
       <attribute name="verticalHeaderDefaultSectionSize">
-       <number>20</number>
+       <number>27</number>
       </attribute>
       <attribute name="verticalHeaderMinimumSectionSize">
-       <number>20</number>
+       <number>27</number>
       </attribute>
       <column>
        <property name="text">
@@ -1292,10 +1292,10 @@
        <bool>true</bool>
       </attribute>
       <attribute name="verticalHeaderDefaultSectionSize">
-       <number>25</number>
+       <number>27</number>
       </attribute>
       <attribute name="verticalHeaderMinimumSectionSize">
-       <number>25</number>
+       <number>27</number>
       </attribute>
       <column>
        <property name="text">

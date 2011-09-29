@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Fri Sep 23 08:21:17 2011
+# Created: Thu Sep 29 11:40:56 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -304,8 +304,8 @@ class Ui_MainWindow(object):
         self.ATCtableWidget.horizontalHeader().setMinimumSectionSize(120)
         self.ATCtableWidget.horizontalHeader().setSortIndicatorShown(False)
         self.ATCtableWidget.horizontalHeader().setStretchLastSection(True)
-        self.ATCtableWidget.verticalHeader().setDefaultSectionSize(20)
-        self.ATCtableWidget.verticalHeader().setMinimumSectionSize(20)
+        self.ATCtableWidget.verticalHeader().setDefaultSectionSize(27)
+        self.ATCtableWidget.verticalHeader().setMinimumSectionSize(27)
         self.PilottableWidget = QtGui.QTableWidget(self.countries)
         self.PilottableWidget.setGeometry(QtCore.QRect(5, 210, 1000, 191))
         font = QtGui.QFont()
@@ -351,8 +351,8 @@ class Ui_MainWindow(object):
         self.PilottableWidget.horizontalHeader().setMinimumSectionSize(95)
         self.PilottableWidget.horizontalHeader().setSortIndicatorShown(False)
         self.PilottableWidget.horizontalHeader().setStretchLastSection(True)
-        self.PilottableWidget.verticalHeader().setDefaultSectionSize(20)
-        self.PilottableWidget.verticalHeader().setMinimumSectionSize(20)
+        self.PilottableWidget.verticalHeader().setDefaultSectionSize(27)
+        self.PilottableWidget.verticalHeader().setMinimumSectionSize(27)
         self.Inbound_traffic = QtGui.QLabel(self.countries)
         self.Inbound_traffic.setGeometry(QtCore.QRect(44, 403, 451, 20))
         font = QtGui.QFont()
@@ -497,8 +497,8 @@ class Ui_MainWindow(object):
         self.ATC_FullList.horizontalHeader().setDefaultSectionSize(110)
         self.ATC_FullList.horizontalHeader().setMinimumSectionSize(110)
         self.ATC_FullList.horizontalHeader().setStretchLastSection(True)
-        self.ATC_FullList.verticalHeader().setDefaultSectionSize(25)
-        self.ATC_FullList.verticalHeader().setMinimumSectionSize(25)
+        self.ATC_FullList.verticalHeader().setDefaultSectionSize(27)
+        self.ATC_FullList.verticalHeader().setMinimumSectionSize(27)
         self.tabWidget.addTab(self.controllers, _fromUtf8(""))
         self.pilots = QtGui.QWidget()
         self.pilots.setObjectName(_fromUtf8("pilots"))
