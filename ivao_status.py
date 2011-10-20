@@ -1097,7 +1097,10 @@ class Main(QMainWindow):
                 current_callsign = self.ui.ATC_FullList.item(current_row, 0)
                 self.ui.ATC_FullList.setCurrentCell(-1, -1)
                 if sender == self.showInfo_Action:
-                    self.show_controller_info(current_callsign.text())
+		    if current_callsign is None:
+			pass
+		    else:
+			self.show_controller_info(current_callsign.text())
                 if sender == self.showMap_Action:
                     self.view_map(current_callsign.text(), None, None)
         if self.ui.ATCtableWidget.currentRow() >= 0:
@@ -1295,15 +1298,15 @@ class Main(QMainWindow):
             player_location.write('     var ratio = OpenLayers.Geometry.Polygon.createRegularPolygon(\n')
             player_location.write('        new OpenLayers.Geometry.Point(lonLat.lon, lonLat.lat),\n')
             if str(player[0][2][-4:]) == '_OBS' or str(player[0][2][-4:]) == '_DEP' or str(player[0][2][-4:]) == '_GND':
-                player_location.write('        35000,\n')
+                player_location.write('        180000,\n')
             elif str(player[0][2][-4:]) == '_TWR':
-                player_location.write('        70000,\n')
+                player_location.write('        360000,\n')
             elif str(player[0][2][-4:]) == '_APP':
-                player_location.write('        105000,\n')
+                player_location.write('        720000,\n')
             elif str(player[0][2][-4:]) == '_CTR':
-                player_location.write('        140000,\n')
+                player_location.write('        1400000,\n')
             else:
-                player_location.write('        800000,\n')
+                player_location.write('        8000000,\n')
             player_location.write('        360\n')
             player_location.write('     );\n')
             player_location.write('   var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')
@@ -1489,15 +1492,15 @@ class Main(QMainWindow):
                 all_in_map.write('     var ratio = OpenLayers.Geometry.Polygon.createRegularPolygon(\n')
                 if str(players[callsign][4][-4:]) == '_OBS' or str(players[callsign][4][-4:]) == '_DEP' \
                    or str(players[callsign][4][-4:]) == '_GND':
-                    all_in_map.write('        35000,\n')
+                    all_in_map.write('        180000,\n')
                 elif str(players[callsign][4][-4:]) == '_TWR':
-                    all_in_map.write('        70000,\n')
+                    all_in_map.write('        360000,\n')
                 elif str(players[callsign][4][-4:]) == '_APP':
-                    all_in_map.write('        105000,\n')
+                    all_in_map.write('        720000,\n')
                 elif str(players[callsign][4][-4:]) == '_CTR':
-                    all_in_map.write('        140000,\n')
+                    all_in_map.write('        1400000,\n')
                 else:
-                    all_in_map.write('        800000,\n')
+                    all_in_map.write('        8000000,\n')
                 all_in_map.write('        360\n')
                 all_in_map.write('     );\n')
                 all_in_map.write('    var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')

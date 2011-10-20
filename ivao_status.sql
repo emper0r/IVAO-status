@@ -20494,7 +20494,7 @@ INSERT INTO icao_codes VALUES('LGTG',38.333328,23.549999,'Tanagra AB','Greece');
 INSERT INTO icao_codes VALUES('LGTL',35.193047,25.329166,'Kasteli AB','Greece');
 INSERT INTO icao_codes VALUES('LGSK',39.178326,23.504166,'Skiathos','Greece');
 INSERT INTO icao_codes VALUES('LGSV',39.474995,22.783333,'Stefanovikion Army','Greece');
-INSERT INTO icao_codes VALUES('LGST',35.221664,26.103333,'Sitia','Greece');
+INSERT INTO icao_codes VALUES('LGST',35.221664,26.103333,'Siteia','Greece');
 INSERT INTO icao_codes VALUES('LGSR',36.401382,25.479166,'Santorini','Greece');
 INSERT INTO icao_codes VALUES('LGSP',36.966663,22.516666,'Sparti','Greece');
 INSERT INTO icao_codes VALUES('LGSO',37.423603,24.950001,'Syros','Greece');
