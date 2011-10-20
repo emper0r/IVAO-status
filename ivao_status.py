@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Copyright (c) 2011 by Antonio (emper0r) Peña Diaz <emperor.cu@gmail.com>
 #
@@ -521,6 +522,8 @@ class Main(QMainWindow):
                             groundspeed = 'Taxing to Gate'
                         if (get_status[6] == 0) and (percent <= 1):
                             groundspeed = 'Boarding'
+			if (get_status[6] == 0) and (percent >= 10 and percent <= 90):
+			    groundspeed = 'Altern Airport'
                         return groundspeed
             except:
                 groundspeed = 'Fill Flight Plan'
@@ -1562,7 +1565,8 @@ class PilotInfo(QMainWindow):
         cursor = connection.cursor()
         cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
         planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, \
-        onground, latitude, longitude FROM status_ivao WHERE callsign = ? AND clienttype='PILOT' ;", (str(callsign),))
+        onground, latitude, longitude, planned_altairport, planned_altairport2 \
+	FROM status_ivao WHERE callsign = ? AND clienttype='PILOT' ;", (str(callsign),))
         info = cursor.fetchall()
         try:
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][5]),))
@@ -1615,6 +1619,18 @@ class PilotInfo(QMainWindow):
         self.ui.AltitudeNumber.setText(str(info[0][2]))
         self.ui.PobText.setText(str(info[0][8]))
         self.ui.TransponderText.setText(str(info[0][11]))
+	altern_airport_1 = cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][15]),))
+	altern_city_1 = cursor.fetchone()
+	altern_airport_2 = cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][16]),))
+	altern_city_2 = cursor.fetchone()
+	if altern_city_1 is None:
+	    self.ui.Altern_Airport_Text.setText(str('-'))
+	else:
+	    self.ui.Altern_Airport_Text.setText(str(altern_city_1[0]))
+	if altern_city_2 is None:
+	    self.ui.Altern_Airport_Text_2.setText(str('-'))
+	else:
+	    self.ui.Altern_Airport_Text_2.setText(str(altern_city_2[0]))
         if str(info[0][4]) != '':
             cursor.execute("SELECT Model, Fabricant, Description FROM icao_aircraft WHERE Model=?;", ((info[0][4].split('/')[1]),))
             data = cursor.fetchall()
@@ -1637,12 +1653,13 @@ class PilotInfo(QMainWindow):
         else:
             total_miles = distance.distance(city_orig_point, city_dest_point).miles
             dist_traveled = distance.distance(city_orig_point, player_point).miles
-            self.ui.nauticalmiles.setText('%.1f / %.1f miles' % (float(dist_traveled), float(total_miles)))
+	    percent = float((dist_traveled / total_miles) * 100.0)
+            self.ui.nauticalmiles.setText('%.1f / %.1f miles - %.1f%%' % (float(dist_traveled), float(total_miles), float(percent)))
             if str(info[0][5]) == str(info[0][6]):
                 self.ui.progressBarTrack.setValue(0)
                 self.ui.nauticalmiles.setText('Local Flight')
             else:
-                self.ui.progressBarTrack.setValue(int((dist_traveled / total_miles) * 100.0))
+                self.ui.progressBarTrack.setValue(int(percent))
         status_plane = Main().status_plane(callsign)
         self.ui.FlightStatusDetail.setText(str(status_plane))
         
