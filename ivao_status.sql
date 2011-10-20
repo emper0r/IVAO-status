@@ -5677,6 +5677,7 @@ INSERT INTO icao_codes VALUES('GCRR',28.945459,-13.605225,'Lanzarote','Canary_Is
 INSERT INTO icao_codes VALUES('GCTS',28.044474,-16.572489,'Reina Sofia','Canary_Islands_(Spain)');
 INSERT INTO icao_codes VALUES('GCXO',28.482653,-16.341536,'Los Rodeos','Canary_Islands_(Spain)');
 INSERT INTO icao_codes VALUES('GCFV',28.452715,-13.863761,'Fuerteventura','Canary_Islands_(Spain)');
+INSERT INTO icao_codes VALUES('GCCA',28.858400,-13.723400,'Spain Airspace','Canary_Islands_(Spain)');
 INSERT INTO icao_codes VALUES('GCCC',30,-25,'Canarias FIR','Canary_Islands_(Spain)');
 INSERT INTO icao_codes VALUES('GEML',35.279812,-2.956255,'Melilla','Ceuta_and_Melilla_(Spain)');
 INSERT INTO icao_codes VALUES('GESA',40.9533,-5.5017,'Salamanca AB','Ceuta_and_Melilla_(Spain)');
@@ -20745,6 +20746,7 @@ INSERT INTO icao_codes VALUES('LKPI',49.580551,15.762777,'Pribyslav','Czech_Repu
 INSERT INTO icao_codes VALUES('LKPD',50.013329,15.738611,'Pardubice','Czech_Republic');
 INSERT INTO icao_codes VALUES('LKMT',49.696106,18.110834,'Mosnov','Czech_Republic');
 INSERT INTO icao_codes VALUES('LKPA',49.736618,16.266684,'Policka','Czech_Republic');
+INSERT INTO icao_codes VALUES('LKNA',49.165800,16.124900,'Letiste Namestnad Oslavou','Czech_Republic');
 INSERT INTO icao_codes VALUES('LKNM',50.364159,16.113611,'Nove Mesto','Czech_Republic');
 INSERT INTO icao_codes VALUES('LKZA',49.928329,18.08,'Zabreh','Czech_Republic');
 INSERT INTO icao_codes VALUES('LKSK',49.82777,16.005833,'Skutec','Czech_Republic');
@@ -21703,6 +21705,7 @@ INSERT INTO icao_codes VALUES('OIBJ',27.821943,52.352222,'Tohid','Iran');
 INSERT INTO icao_codes VALUES('OIBK',26.527214,53.979721,'Kish','Iran');
 INSERT INTO icao_codes VALUES('OIBL',26.531939,54.824165,'Bandar Lengeh','Iran');
 INSERT INTO icao_codes VALUES('OIBQ',29.260288,50.323879,'Khark','Iran');
+INSERT INTO icao_codes VALUES('OIIE',35.416100,51.152200,'Imam Khomeini Intl Airport','Iran');
 INSERT INTO icao_codes VALUES('OIIK',36.23333,50.033333,'Ghazvin','Iran');
 INSERT INTO icao_codes VALUES('OIBS',25.909166,54.555832,'Sirri Island','Iran');
 INSERT INTO icao_codes VALUES('OIID',35.704159,51.473888,'Doshan Tappeh AB','Iran');

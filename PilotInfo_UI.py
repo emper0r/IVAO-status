@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Thu Sep 22 11:26:27 2011
+# Created: Thu Oct 20 08:48:28 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -156,7 +156,7 @@ class Ui_QPilotInfo(object):
         self.Close.setCursor(QtCore.Qt.PointingHandCursor)
         self.Close.setObjectName(_fromUtf8("Close"))
         self.GroundSpeed_label = QtGui.QLabel(self.centralwidget)
-        self.GroundSpeed_label.setGeometry(QtCore.QRect(195, 210, 101, 16))
+        self.GroundSpeed_label.setGeometry(QtCore.QRect(198, 210, 101, 16))
         font = QtGui.QFont()
         font.setPointSize(8)
         font.setWeight(75)
@@ -165,7 +165,7 @@ class Ui_QPilotInfo(object):
         self.GroundSpeed_label.setCursor(QtCore.Qt.PointingHandCursor)
         self.GroundSpeed_label.setObjectName(_fromUtf8("GroundSpeed_label"))
         self.GroundSpeedNumber = QtGui.QLabel(self.centralwidget)
-        self.GroundSpeedNumber.setGeometry(QtCore.QRect(290, 208, 41, 20))
+        self.GroundSpeedNumber.setGeometry(QtCore.QRect(293, 208, 41, 20))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.GroundSpeedNumber.setFont(font)
@@ -190,7 +190,7 @@ class Ui_QPilotInfo(object):
         self.Altitude_label.setCursor(QtCore.Qt.PointingHandCursor)
         self.Altitude_label.setObjectName(_fromUtf8("Altitude_label"))
         self.FlightStatusDetail = QtGui.QLabel(self.centralwidget)
-        self.FlightStatusDetail.setGeometry(QtCore.QRect(105, 208, 51, 20))
+        self.FlightStatusDetail.setGeometry(QtCore.QRect(105, 208, 91, 20))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.FlightStatusDetail.setFont(font)

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 # Copyright (c) 2011 by Antonio (emper0r) Peña Diaz <emperor.cu@gmail.com>
 #
@@ -19,23 +18,43 @@
 # IVAO-status :: License GPLv3+
 
 import sys
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
-from PyQt4.QtWebKit import *
-from PyQt4.Qt import *
-from geopy import distance
+
+try:
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    from PyQt4.QtWebKit import *
+    from PyQt4.Qt import *
+except:
+    print ('Not Have Qt Module for Python, please run command as root: "aptitude install python-qt4"\n')
+    print ('with all dependencies')
+    sys.exit(2)
+try:
+    from geopy import distance
+except:
+    print ('Not Have GeoPy installed, please download from "http://code.google.com/p/geopy/" or can hit it\n')
+    print ('into tools path, read README.rst for more info to install it')
+    sys.exit(2)
+
 import MainWindow_UI
 import PilotInfo_UI
 import ControllerInfo_UI
 import SettingWindow_UI
 import urllib2
-import sqlite3
+
+try:
+    import sqlite3
+except:
+    print ('Not have installed sqlite3 module for Python, please runn command \n')
+    print ('as root: "aptitude install sqlite3 libsqlite3-0"')
+    sys.exit(2)
+
 import os
 import datetime
 import ConfigParser
 import time
 
 __version__ = '1.0'
+url = 'http://de1.www.ivao.aero/'
 
 class Main(QMainWindow):
     def __init__(self,):
@@ -170,7 +189,7 @@ class Main(QMainWindow):
             config.set('Settings', 'pass', '')
             config.add_section('Info')
             config.set('Info', 'data_access', 'whazzup.txt')
-            config.set('Info', 'url', 'http://de3.www.ivao.aero/')
+            config.set('Info', 'url', url)
             config.add_section('Database')
             config.set('Database', 'db', 'ivao.db')
             config.add_section('Time_Update')
@@ -430,7 +449,11 @@ class Main(QMainWindow):
         atcs_ivao = QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
         obs_ivao = QTableWidgetItem(str(int(obs[0])))
         total_ivao = QTableWidgetItem(str(atc[0] + pilots[0]))
-        pob_ivao = QTableWidgetItem(str(int(pob[0])))
+        if pob[0] is None:
+            pob_ivao = QTableWidgetItem(str(0))
+        else:
+            pob_ivao = QTableWidgetItem(str(int(pob[0])))
+
         self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
         self.ui.IVAOStatustableWidget.setItem(1, 0, atcs_ivao)
         self.ui.IVAOStatustableWidget.setItem(2, 0, obs_ivao)
@@ -486,18 +509,16 @@ class Main(QMainWindow):
                             groundspeed = 'On Final'
                         return groundspeed
                     else:
-                        if (groundspeed > 0) and (groundspeed <= 80):
+                        if (groundspeed > 0) and (groundspeed <= 80) and (percent < 2):
+                            groundspeed = 'Taxing to Runaway'
+                        if (percent >= 2) and (percent <= 5):
                             groundspeed = 'Taking Off'
-                        if (percent >= 1) and (percent <= 5):
-                            groundspeed = 'Taking Off'
-                        if (percent >= 95) and (percent <= 98):
+                        if (percent >= 97) and (percent <= 99):
                             groundspeed = 'Landed'
-                        if (percent >= 98) and (percent <= 99):
-                            groundspeed = 'Taxing to Gate'
                         if (get_status[6] == 0) and (percent >= 99 and (percent < 105)):
                             groundspeed = 'On Blocks'
                         if (get_status[6] <= 25) and (percent >= 99 and (percent < 105)):
-                            groundspeed = 'On Blocks'
+                            groundspeed = 'Taxing to Gate'
                         if (get_status[6] == 0) and (percent <= 1):
                             groundspeed = 'Boarding'
                         return groundspeed
@@ -1177,24 +1198,27 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Downloading METAR', 2000)
         qApp.processEvents()
         icao_airport = self.ui.METAREdit.text()
-        METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
+        try:
+            METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
 
-        if self.ui.METARtableWidget.rowCount() == 0:
-            self.ui.METARtableWidget.insertRow(self.ui.METARtableWidget.rowCount())
-            col_icao_airport = QTableWidgetItem(str(icao_airport), 0)
-            self.ui.METARtableWidget.setItem(0, 0, col_icao_airport)
-            col_metar = QTableWidgetItem(str(METAR.readlines()[0]), 0)
-            self.ui.METARtableWidget.setItem(0, 1, col_metar)
-            startrow = 1
-        else:
-            self.ui.METARtableWidget.rowCount() > 0
-            startrow = self.ui.METARtableWidget.rowCount()
-            self.ui.METARtableWidget.insertRow(self.ui.METARtableWidget.rowCount())
-            col_icao_airport = QTableWidgetItem(str(icao_airport), 0)
-            self.ui.METARtableWidget.setItem(startrow, 0, col_icao_airport)
-            col_metar = QTableWidgetItem(str(METAR.readlines()[0]), 0)
-            self.ui.METARtableWidget.setItem(startrow, 1, col_metar)
-            startrow += 1
+            if self.ui.METARtableWidget.rowCount() == 0:
+                self.ui.METARtableWidget.insertRow(self.ui.METARtableWidget.rowCount())
+                col_icao_airport = QTableWidgetItem(str(icao_airport), 0)
+                self.ui.METARtableWidget.setItem(0, 0, col_icao_airport)
+                col_metar = QTableWidgetItem(str(METAR.readlines()[0]), 0)
+                self.ui.METARtableWidget.setItem(0, 1, col_metar)
+                startrow = 1
+            else:
+                self.ui.METARtableWidget.rowCount() > 0
+                startrow = self.ui.METARtableWidget.rowCount()
+                self.ui.METARtableWidget.insertRow(self.ui.METARtableWidget.rowCount())
+                col_icao_airport = QTableWidgetItem(str(icao_airport), 0)
+                self.ui.METARtableWidget.setItem(startrow, 0, col_icao_airport)
+                col_metar = QTableWidgetItem(str(METAR.readlines()[0]), 0)
+                self.ui.METARtableWidget.setItem(startrow, 1, col_metar)
+                startrow += 1
+	except:
+	    self.statusBar().showMessage('Error! during try get Metar info, check your internet connection...', 4000)
             
     def view_map(self, vid, icao_orig=None, icao_dest=None):
         config = ConfigParser.RawConfigParser()
@@ -1268,15 +1292,15 @@ class Main(QMainWindow):
             player_location.write('     var ratio = OpenLayers.Geometry.Polygon.createRegularPolygon(\n')
             player_location.write('        new OpenLayers.Geometry.Point(lonLat.lon, lonLat.lat),\n')
             if str(player[0][2][-4:]) == '_OBS' or str(player[0][2][-4:]) == '_DEP' or str(player[0][2][-4:]) == '_GND':
-                player_location.write('        3500,\n')
+                player_location.write('        35000,\n')
             elif str(player[0][2][-4:]) == '_TWR':
-                player_location.write('        7000,\n')
+                player_location.write('        70000,\n')
             elif str(player[0][2][-4:]) == '_APP':
-                player_location.write('        10500,\n')
+                player_location.write('        105000,\n')
             elif str(player[0][2][-4:]) == '_CTR':
-                player_location.write('        14000,\n')
+                player_location.write('        140000,\n')
             else:
-                player_location.write('        80000,\n')
+                player_location.write('        800000,\n')
             player_location.write('        360\n')
             player_location.write('     );\n')
             player_location.write('   var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')
@@ -1462,15 +1486,15 @@ class Main(QMainWindow):
                 all_in_map.write('     var ratio = OpenLayers.Geometry.Polygon.createRegularPolygon(\n')
                 if str(players[callsign][4][-4:]) == '_OBS' or str(players[callsign][4][-4:]) == '_DEP' \
                    or str(players[callsign][4][-4:]) == '_GND':
-                    all_in_map.write('        3500,\n')
+                    all_in_map.write('        35000,\n')
                 elif str(players[callsign][4][-4:]) == '_TWR':
-                    all_in_map.write('        7000,\n')
+                    all_in_map.write('        70000,\n')
                 elif str(players[callsign][4][-4:]) == '_APP':
-                    all_in_map.write('        10500,\n')
+                    all_in_map.write('        105000,\n')
                 elif str(players[callsign][4][-4:]) == '_CTR':
-                    all_in_map.write('        14000,\n')
+                    all_in_map.write('        140000,\n')
                 else:
-                    all_in_map.write('        80000,\n')
+                    all_in_map.write('        800000,\n')
                 all_in_map.write('        360\n')
                 all_in_map.write('     );\n')
                 all_in_map.write('    var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')
@@ -1749,7 +1773,7 @@ class Settings(QMainWindow):
         config.set('Settings', 'pass', self.ui.lineEdit_pass.text())
         config.add_section('Info')
         config.set('Info', 'data_access', 'whazzup.txt')
-        config.set('Info', 'url', 'http://de3.www.ivao.aero/')
+        config.set('Info', 'url', url)
         config.add_section('Database')
         config.set('Database', 'db', 'ivao.db')
         config.add_section('Time_Update')
