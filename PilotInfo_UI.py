@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Thu Oct 20 11:00:07 2011
+# Created: Thu Oct 27 11:45:56 2011
 #      by: PyQt4 UI code generator 4.8.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -142,14 +142,14 @@ class Ui_QPilotInfo(object):
         self.Route_label.setCursor(QtCore.Qt.PointingHandCursor)
         self.Route_label.setObjectName(_fromUtf8("Route_label"))
         self.AddFriend = QtGui.QPushButton(self.centralwidget)
-        self.AddFriend.setGeometry(QtCore.QRect(145, 497, 99, 23))
+        self.AddFriend.setGeometry(QtCore.QRect(145, 492, 99, 23))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.AddFriend.setFont(font)
         self.AddFriend.setCursor(QtCore.Qt.PointingHandCursor)
         self.AddFriend.setObjectName(_fromUtf8("AddFriend"))
         self.Close = QtGui.QPushButton(self.centralwidget)
-        self.Close.setGeometry(QtCore.QRect(250, 497, 99, 23))
+        self.Close.setGeometry(QtCore.QRect(250, 492, 99, 23))
         font = QtGui.QFont()
         font.setPointSize(8)
         self.Close.setFont(font)
