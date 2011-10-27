@@ -26,14 +26,14 @@ try:
     from PyQt4.QtWebKit import *
     from PyQt4.Qt import *
 except:
-    print ('Not Have Qt Module for Python, please run command as root: "aptitude install python-qt4"\n')
-    print ('with all dependencies')
+    print ('\nNot Have Qt Module for Python, please run command as root: "aptitude install python-qt4"')
+    print ('with all dependencies.\n')
     sys.exit(2)
 try:
     from geopy import distance
 except:
-    print ('Not Have GeoPy installed, please download from "http://code.google.com/p/geopy/" or can hit it\n')
-    print ('into tools path, read README.rst for more info to install it')
+    print ('\nNot Have GeoPy installed, please download from "http://code.google.com/p/geopy/" or can hit it')
+    print ('into tools path, read README.rst for more info to install it.\n')
     sys.exit(2)
 
 import MainWindow_UI
@@ -45,8 +45,8 @@ import urllib2
 try:
     import sqlite3
 except:
-    print ('Not have installed sqlite3 module for Python, please runn command \n')
-    print ('as root: "aptitude install sqlite3 libsqlite3-0"')
+    print ('\nNot have installed sqlite3 module for Python, please runn command')
+    print ('as root: "aptitude install sqlite3 libsqlite3-0"\n')
     sys.exit(2)
 
 import os
