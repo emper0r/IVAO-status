@@ -1481,6 +1481,9 @@ class Main(QMainWindow):
             if str(players[callsign][4]) == 'ATC':
                 if players[callsign][0] == '' or players[callsign][1] == '':
                     continue
+            if str(players[callsign][2][-4:]) == '_OBS' \
+               or str(players[callsign][4][-4:]) == '_DEP' or str(players[callsign][2][-4:]) == '_GND' \
+               or str(players[callsign][2][-4:]) == '_TWR' or str(players[callsign][2][-4:]) == '_APP':
                 all_in_map.write('    var lonLat = new OpenLayers.LonLat( %f, %f )\n' % \
                                  (float(players[callsign][0]), float(players[callsign][1])))
                 all_in_map.write('         .transform(\n')
@@ -1488,7 +1491,7 @@ class Main(QMainWindow):
                 all_in_map.write('            map.getProjectionObject()\n')
                 all_in_map.write('            );\n')
                 all_in_map.write('\n')
-                all_in_map.write('    var player_%s=new OpenLayers.Layer.Vector("Player",\n' % str(players[callsign][2]).replace('-',''))
+                all_in_map.write('    var player_%s = new OpenLayers.Layer.Vector("Player",\n' % str(players[callsign][2]).replace('-',''))
                 all_in_map.write('    {\n')
                 all_in_map.write('    styleMap: new OpenLayers.StyleMap({\n')
                 all_in_map.write('         "default": {\n')
@@ -1507,8 +1510,6 @@ class Main(QMainWindow):
                 elif str(players[callsign][2][-4:]) == '_APP':
                     all_in_map.write('         fillColor: "#0099CC",\n')
                     all_in_map.write('         strokeColor: "#0099CC",\n')
-                elif str(players[callsign][2][-4:]) == '_CTR':
-                    pass
                 all_in_map.write('         fillOpacity: "0.05",\n')
                 all_in_map.write('         }\n')
                 all_in_map.write('       })\n')
@@ -1523,19 +1524,64 @@ class Main(QMainWindow):
                     all_in_map.write('        40000,\n')
                 elif str(players[callsign][2][-4:]) == '_APP':
                     all_in_map.write('        60000,\n')
-                elif str(players[callsign][2][-4:]) == '_CTR':
-                    pass
                 all_in_map.write('        360\n')
-                all_in_map.write('     );\n')
+                all_in_map.write('    );\n')
                 all_in_map.write('    var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')
                 all_in_map.write('    player_%s.addFeatures([controller_ratio]);\n' % str(players[callsign][2]).replace('-',''))
                 all_in_map.write('\n')
-                all_in_map.write('    var feature=new OpenLayers.Feature.Vector(\n')
+                all_in_map.write('    var feature = new OpenLayers.Feature.Vector(\n')
                 all_in_map.write('        new OpenLayers.Geometry.Point( lonLat.lon, lonLat.lat), {"angle": 0, opacity: 100});\n')
                 all_in_map.write('    player_%s.addFeatures([feature]);\n' % str(players[callsign][2]).replace('-',''))
                 all_in_map.write('\n')
                 all_in_map.write('    map.addLayer(player_%s);\n' % str(players[callsign][2]).replace('-',''))
                 all_in_map.write('\n')
+            if str(players[callsign][2][-4:]) == '_CTR':
+                all_in_map.write('    var player_%s = new OpenLayers.Layer.Vector("Player",\n' % str(players[callsign][2]).replace('-',''))
+                all_in_map.write('    {\n')
+                all_in_map.write('    styleMap: new OpenLayers.StyleMap({\n')
+                all_in_map.write('         "default": {\n')
+                all_in_map.write('         externalGraphic: "./images/tower.png",\n')
+                all_in_map.write('         rotation: "${angle}",\n')
+                all_in_map.write('         graphicWidth: 15,\n')
+                all_in_map.write('         graphicHeight: 15,\n')
+                all_in_map.write('         graphicYOffset: 0,\n')
+                all_in_map.write('         fillColor: "#FF99CC",\n')
+                all_in_map.write('         strokeColor: "#FF99CC",\n')
+                all_in_map.write('         fillOpacity: "1.00",\n')
+                all_in_map.write('         }\n')
+                all_in_map.write('       })\n')
+                all_in_map.write('    });\n')
+                all_in_map.write('\n')
+                all_in_map.write('    var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer");\n')
+                all_in_map.write('    var style_controller = {\n')
+                all_in_map.write('        strokeColor: "#CC9900",\n')
+                all_in_map.write('        strokeOpacity: 0.7,\n')
+                all_in_map.write('        strokeWidth: 2\n')
+                all_in_map.write('    };\n\n')
+                try:
+                    cursor.execute("SELECT ID_FIRCOASTLINE FROM fir_data_list WHERE ICAO = ?;", (str(players[callsign][2][:-4]),))
+                except:
+                    cursor.execute("SELECT ID_FIRCOASTLINE FROM fir_data_list WHERE ICAO = ?;", (str(players[callsign][2][:4]),))
+                id_ctr = cursor.fetchone()
+                cursor.execute("SELECT Longitude, Latitude FROM fir_coastlines_list where ID_FIRCOASTLINE = ?;", (int(id_ctr[0]),))
+                points_ctr = cursor.fetchall()
+                all_in_map.write('    var points = [];\n')
+                for position in range(0, len(points_ctr)):
+                    all_in_map.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n' % (points_ctr[position][0], points_ctr[position][1]))
+                    if position == len(points_ctr) - 1:
+                        continue
+                    else:
+                        all_in_map.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n' % (points_ctr[position+1][0], points_ctr[position+1][1]))
+                    all_in_map.write('    points.push(point_orig);\n')
+                    all_in_map.write('    points.push(point_dest);\n')
+                all_in_map.write('\n')
+                all_in_map.write('    var %s_String = new OpenLayers.Geometry.LineString(points);\n' % str(players[callsign][2][:-4]))
+                all_in_map.write('    %s_String.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()); \n' % str(players[callsign][2][:-4]))
+                all_in_map.write('\n')
+                all_in_map.write('    var DrawFeature = new OpenLayers.Feature.Vector(%s_String, null, style_controller);\n' % str(players[callsign][2][:-4]))
+                all_in_map.write('    vectorLayer.addFeatures([DrawFeature]);\n')
+                all_in_map.write('    map.addLayer(vectorLayer);\n')
+                all_in_map.write('    map.addLayer(player_%s);\n' % str(players[callsign][2]).replace('-',''))
         all_in_map.write('   map.setCenter ((0, 0), 2);\n')
         all_in_map.write('  </script>\n')
         all_in_map.write('</body></html>\n')
