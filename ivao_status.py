@@ -194,7 +194,7 @@ class Main(QMainWindow):
             config.add_section('Database')
             config.set('Database', 'db', 'ivao.db')
             config.add_section('Time_Update')
-            config.set('Time_Update', 'time', '3000000')
+            config.set('Time_Update', 'time', '300000')
             config.add_section('Map')
             config.set('Map', 'auto_refresh', '0')
             config.set('Map', 'label_Pilots', '0')
