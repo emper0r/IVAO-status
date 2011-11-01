@@ -197,6 +197,8 @@ class Main(QMainWindow):
             config.set('Time_Update', 'time', '3000000')
             config.add_section('Map')
             config.set('Map', 'auto_refresh', '0')
+            config.set('Map', 'label_Pilots', '0')
+            config.set('Map', 'label_ATCs', '0')
             with open('Config.cfg', 'wb') as configfile:
                 config.write(configfile)
         self.pilot_list = []
@@ -1427,6 +1429,8 @@ class Main(QMainWindow):
     def all2map(self):
         config = ConfigParser.RawConfigParser()
         config.read('Config.cfg')
+        label_Pilots = config.getint('Map', 'label_Pilots')
+        label_ATCs = config.getint('Map', 'label_ATCs')
         connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute("SELECT longitude, latitude, callsign, true_heading, clienttype FROM status_ivao;")
@@ -1477,13 +1481,14 @@ class Main(QMainWindow):
                     all_in_map.write('          graphicYOffset: 0,\n')
                     all_in_map.write('          rotation: "${angle}",\n')
                     all_in_map.write('          fillOpacity: 100,\n')
-                    all_in_map.write('          label: "%s",\n' % str(players[callsign][2]))
-                    all_in_map.write('          fontColor: "white",\n')
-                    all_in_map.write('          fontSize: "10px",\n')
-                    all_in_map.write('          fontFamily: "Courier New, monospace",\n')
-                    all_in_map.write('          labelAlign: "cm",\n')
-                    all_in_map.write('          labelXOffset: 30,\n')
-                    all_in_map.write('          labelYOffset: 5\n')
+                    if label_Pilots == 2:
+                        all_in_map.write('          label: "%s",\n' % str(players[callsign][2]))
+                        all_in_map.write('          fontColor: "white",\n')
+                        all_in_map.write('          fontSize: "10px",\n')
+                        all_in_map.write('          fontFamily: "Courier New, monospace",\n')
+                        all_in_map.write('          labelAlign: "cm",\n')
+                        all_in_map.write('          labelXOffset: 30,\n')
+                        all_in_map.write('          labelYOffset: 5\n')
                     all_in_map.write('         }\n')
                     all_in_map.write('      })\n')
                     all_in_map.write('   });\n')
@@ -1527,13 +1532,14 @@ class Main(QMainWindow):
                     all_in_map.write('         fillColor: "#0099CC",\n')
                     all_in_map.write('         strokeColor: "#0099CC",\n')
                 all_in_map.write('         fillOpacity: "0.05",\n')
-                all_in_map.write('         label: "%s",\n' % str(players[callsign][2]))
-                all_in_map.write('         fontColor: "white",\n')
-                all_in_map.write('         fontSize: "10px",\n')
-                all_in_map.write('         fontFamily: "Courier New, monospace",\n')
-                all_in_map.write('         labelAlign: "cm",\n')
-                all_in_map.write('         labelXOffset: 30,\n')
-                all_in_map.write('         labelYOffset: 5\n')
+                if label_ATCs == 2:
+                    all_in_map.write('         label: "%s",\n' % str(players[callsign][2]))
+                    all_in_map.write('         fontColor: "white",\n')
+                    all_in_map.write('         fontSize: "10px",\n')
+                    all_in_map.write('         fontFamily: "Courier New, monospace",\n')
+                    all_in_map.write('         labelAlign: "cm",\n')
+                    all_in_map.write('         labelXOffset: 30,\n')
+                    all_in_map.write('         labelYOffset: 5\n')
                 all_in_map.write('         }\n')
                 all_in_map.write('       })\n')
                 all_in_map.write('    });\n')
@@ -1579,14 +1585,15 @@ class Main(QMainWindow):
                 all_in_map.write('        strokeColor: "#00FFFF",\n')
                 all_in_map.write('        strokeOpacity: 0.7,\n')
                 all_in_map.write('        strokeWidth: 2,\n')
-                all_in_map.write('        label: "%s",\n' % str(players[callsign][2]))
-                all_in_map.write('        fontColor: "white",\n')
-                all_in_map.write('        fontSize: "12px",\n')
-                all_in_map.write('        fontWeight: "bold",\n')                
-                all_in_map.write('        fontFamily: "Courier New, monospace",\n')
-                all_in_map.write('        labelAlign: "cm",\n')
-                all_in_map.write('        labelXOffset: 30,\n')
-                all_in_map.write('        labelYOffset: 5\n')
+                if label_ATCs == 2:
+                    all_in_map.write('        label: "%s",\n' % str(players[callsign][2]))
+                    all_in_map.write('        fontColor: "white",\n')
+                    all_in_map.write('        fontSize: "12px",\n')
+                    all_in_map.write('        fontWeight: "bold",\n')                
+                    all_in_map.write('        fontFamily: "Courier New, monospace",\n')
+                    all_in_map.write('        labelAlign: "cm",\n')
+                    all_in_map.write('        labelXOffset: 30,\n')
+                    all_in_map.write('        labelYOffset: 5\n')
                 all_in_map.write('    };\n\n')
                 try:
                     cursor.execute("SELECT ID_FIRCOASTLINE FROM fir_data_list WHERE ICAO = ?;", (str(players[callsign][2][:-4]),))
@@ -1883,10 +1890,20 @@ class Settings(QMainWindow):
         pswd = config.get('Settings', 'pass')
         self.ui.lineEdit_pass.setText(pswd)
         map_refresh = config.getint('Map', 'auto_refresh')
+        label_pilot = config.getint('Map', 'label_Pilots')
+        label_atcs = config.getint('Map', 'label_ATCs')
         if map_refresh == 2:
             self.ui.AutoRefreshMap.setChecked(True)
         else:
             self.ui.AutoRefreshMap.setChecked(False)
+        if label_pilot == 2:
+            self.ui.ShowLabelPilots.setChecked(True)
+        else:
+            self.ui.ShowLabelPilots.setChecked(False)
+        if label_atcs == 2:
+            self.ui.ShowLabelControllers.setChecked(True)
+        else:
+            self.ui.ShowLabelControllers.setChecked(False)
 
     def options(self):
         minutes = self.ui.spinBox.value()
@@ -1911,6 +1928,14 @@ class Settings(QMainWindow):
             config.set('Map', 'auto_refresh', '2')
         else:
             config.set('Map', 'auto_refresh', '0')
+        if self.ui.ShowLabelPilots.checkState() == 2:
+            config.set('Map', 'label_Pilots', '2')
+        else:
+            config.set('Map', 'label_Pilots', '0')
+        if self.ui.ShowLabelControllers.checkState() == 2:
+            config.set('Map', 'label_ATCs', '2')
+        else:
+            config.set('Map', 'label_ATCs', '0')
         with open ('Config.cfg', 'wb') as configfile:
             config.write(configfile)
 
