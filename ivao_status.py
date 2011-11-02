@@ -512,16 +512,16 @@ class Main(QMainWindow):
                             groundspeed = 'On Final'
                         return groundspeed
                     else:
-                        if (groundspeed > 0) and (groundspeed <= 80) and (percent < 2):
+                        if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 2):
                             groundspeed = 'Taxing to Runaway'
                         if (percent >= 2) and (percent <= 5):
                             groundspeed = 'Taking Off'
-                        if (percent >= 97) and (percent <= 99):
+                        if ((percent >= 98) and ((get_status[6] <= 200) and (get_status[6] >= 30))):
                             groundspeed = 'Landed'
-                        if (get_status[6] == 0) and (percent >= 99 and (percent < 105)):
-                            groundspeed = 'On Blocks'
-                        if (get_status[6] <= 25) and (percent >= 99 and (percent < 105)):
+                        if (get_status[6] < 30) and (percent > 99):
                             groundspeed = 'Taxing to Gate'
+                        if (get_status[6] == 0) and (percent > 99):
+                            groundspeed = 'On Blocks'
                         if (get_status[6] == 0) and (percent <= 1):
                             groundspeed = 'Boarding'
                         if (get_status[6] == 0) and (percent >= 10 and percent <= 90):
@@ -1947,6 +1947,8 @@ class Settings(QMainWindow):
 
 def main():
     import sys, time
+    QApplication.setStyle(QStyleFactory.create("Cleanlooks"))
+    QApplication.setPalette(QApplication.style().standardPalette())
     app = QApplication(sys.argv)
     splash_pix = QPixmap('./images/ivao_status_splash.png')
     splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
