@@ -133,8 +133,10 @@ class Main(QMainWindow):
         self.ui.PILOT_FullList.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.ATCtableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.ui.PilottableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.ui.FriendstableWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
         self.showInfo_Action = QAction("Show Info", self)
         self.showMap_Action = QAction("Show at Map", self)
+        self.showDelete_Action = QAction("Delete Friend", self)
         self.ui.SearchtableWidget.addAction(self.showInfo_Action)
         self.ui.SearchtableWidget.addAction(self.showMap_Action)
         self.ui.ATC_FullList.addAction(self.showInfo_Action)
@@ -145,8 +147,12 @@ class Main(QMainWindow):
         self.ui.ATCtableWidget.addAction(self.showMap_Action)
         self.ui.PilottableWidget.addAction(self.showInfo_Action)
         self.ui.PilottableWidget.addAction(self.showMap_Action)
+        self.ui.FriendstableWidget.addAction(self.showInfo_Action)
+        self.ui.FriendstableWidget.addAction(self.showMap_Action)
+        self.ui.FriendstableWidget.addAction(self.showDelete_Action)
         self.showInfo_Action.triggered.connect(self.action_click)
         self.showMap_Action.triggered.connect(self.action_click)
+        self.showDelete_Action.triggered.connect(self.action_click)
         Pixmap = QPixmap('./images/departures.png')
         self.ui.departures_icon.setPixmap(Pixmap)
         self.ui.departures_icon.show()
@@ -1078,7 +1084,7 @@ class Main(QMainWindow):
                 current_row = self.ui.SearchtableWidget.currentRow()
                 current_callsign = self.ui.SearchtableWidget.item(current_row, 1)
                 self.ui.SearchtableWidget.setCurrentCell(-1, -1)
-                cursor.execute('SELECT clienttype FROM status_ivao where callsign=?;', ((str(current_callsign.text())),))
+                cursor.execute('SELECT clienttype FROM status_ivao WHERE callsign=?;', ((str(current_callsign.text())),))
                 clienttype = cursor.fetchone()
                 if sender == self.showInfo_Action:
                     if str(clienttype[0]) == 'PILOT':
@@ -1145,6 +1151,35 @@ class Main(QMainWindow):
                 if sender == self.showMap_Action:
                     self.view_map(current_callsign.text(), icao_orig.text(), icao_dest.text())
                 self.ui.PilottableWidget.setCurrentCell(-1, -1)
+        if self.ui.FriendstableWidget.currentRow() >= 0:
+            current_row = self.ui.FriendstableWidget.currentIndex().row()
+            current_vid = self.ui.FriendstableWidget.item(current_row, 0)
+            cursor.execute('SELECT clienttype, callsign FROM status_ivao WHERE vid=?;', ((int(current_vid.text())),))
+            friend_data = cursor.fetchall()
+            if current_row == -1:
+                pass
+            else:
+                try:
+                    if sender == self.showInfo_Action:
+                            if str(friend_data[0][0]) == 'PILOT':
+                                self.show_pilot_info(str(friend_data[0][1]))
+                            else:
+                                self.show_controller_info(str(friend_data[0][1]))
+                    if sender == self.showMap_Action:
+                        cursor.execute('SELECT planned_depairport, planned_destairport FROM status_ivao WHERE callsign=?;' \
+                                       , ((str(friend_data[0][1])),))
+                        icao_depdest = cursor.fetchall()
+                        self.view_map(str(friend_data[0][1]), icao_depdest[0][0], icao_depdest[0][1])
+                    if sender == self.showDelete_Action:
+                        cursor.execute('DELETE FROM friends_ivao WHERE vid=?;', (int(current_vid.text()),))
+                        self.statusBar().showMessage('Friend Deleted', 2000)
+                        connection.commit()
+                        connection.close()
+                        self.ivao_friend()
+                except:
+                    if friend_data == []:
+                        msg = "The user %d is off-line, can't see any info" % (int(current_vid.text()))
+                        QMessageBox.information(None, 'Friends List', msg)
 
     def ivao_friend(self):
         self.ui.PILOT_FullList.setCurrentCell(-1, -1)
