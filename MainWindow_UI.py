@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Thu Nov  3 21:14:25 2011
+# Created: Fri Nov  4 10:19:44 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -181,7 +181,7 @@ class Ui_MainWindow(object):
         self.SearchtableWidget.verticalHeader().setDefaultSectionSize(20)
         self.SearchtableWidget.verticalHeader().setMinimumSectionSize(20)
         self.SearchForLabel = QtGui.QLabel(self.main)
-        self.SearchForLabel.setGeometry(QtCore.QRect(10, 257, 61, 16))
+        self.SearchForLabel.setGeometry(QtCore.QRect(10, 257, 81, 16))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
@@ -231,7 +231,7 @@ class Ui_MainWindow(object):
         self.MetarLabel.setText(QtGui.QApplication.translate("MainWindow", "METAR", None, QtGui.QApplication.UnicodeUTF8))
         self.MetarLabel.setObjectName(_fromUtf8("MetarLabel"))
         self.SearchcomboBox = QtGui.QComboBox(self.main)
-        self.SearchcomboBox.setGeometry(QtCore.QRect(70, 253, 80, 24))
+        self.SearchcomboBox.setGeometry(QtCore.QRect(84, 253, 80, 24))
         self.SearchcomboBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.SearchcomboBox.setObjectName(_fromUtf8("SearchcomboBox"))
         self.SearchcomboBox.addItem(_fromUtf8(""))
@@ -241,25 +241,25 @@ class Ui_MainWindow(object):
         self.SearchcomboBox.addItem(_fromUtf8(""))
         self.SearchcomboBox.setItemText(2, QtGui.QApplication.translate("MainWindow", "Name", None, QtGui.QApplication.UnicodeUTF8))
         self.SearchEdit = QtGui.QLineEdit(self.main)
-        self.SearchEdit.setGeometry(QtCore.QRect(152, 253, 113, 23))
+        self.SearchEdit.setGeometry(QtCore.QRect(166, 253, 113, 23))
         self.SearchEdit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.SearchEdit.setObjectName(_fromUtf8("SearchEdit"))
         self.METAREdit = QtGui.QLineEdit(self.main)
-        self.METAREdit.setGeometry(QtCore.QRect(507, 253, 61, 24))
+        self.METAREdit.setGeometry(QtCore.QRect(509, 253, 61, 24))
         self.METAREdit.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.METAREdit.setObjectName(_fromUtf8("METAREdit"))
         self.searchpushButton = QtGui.QPushButton(self.main)
-        self.searchpushButton.setGeometry(QtCore.QRect(267, 253, 91, 24))
+        self.searchpushButton.setGeometry(QtCore.QRect(281, 253, 91, 24))
         self.searchpushButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.searchpushButton.setText(QtGui.QApplication.translate("MainWindow", "Find", None, QtGui.QApplication.UnicodeUTF8))
         self.searchpushButton.setObjectName(_fromUtf8("searchpushButton"))
         self.METARFindButton = QtGui.QPushButton(self.main)
-        self.METARFindButton.setGeometry(QtCore.QRect(570, 253, 91, 24))
+        self.METARFindButton.setGeometry(QtCore.QRect(572, 253, 91, 24))
         self.METARFindButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.METARFindButton.setText(QtGui.QApplication.translate("MainWindow", "Find", None, QtGui.QApplication.UnicodeUTF8))
         self.METARFindButton.setObjectName(_fromUtf8("METARFindButton"))
         self.METARHelpButton = QtGui.QPushButton(self.main)
-        self.METARHelpButton.setGeometry(QtCore.QRect(664, 253, 20, 24))
+        self.METARHelpButton.setGeometry(QtCore.QRect(665, 253, 20, 24))
         self.METARHelpButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.METARHelpButton.setAutoFillBackground(True)
         self.METARHelpButton.setText(QtGui.QApplication.translate("MainWindow", "?", None, QtGui.QApplication.UnicodeUTF8))
