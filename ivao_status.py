@@ -503,7 +503,7 @@ class Main(QMainWindow):
                 else:
                     if int(str(get_status[4])) == 0:
                         if (percent >= 0) and (percent <= 5):
-                            groundspeed = 'Taking Off'
+                            groundspeed = 'Takeoff'
                         if (percent >= 5) and (percent <= 10):
                             groundspeed = 'Initial Climbing'
                         if (percent >= 10) and (percent <= 20):
@@ -515,11 +515,11 @@ class Main(QMainWindow):
                         if (percent >= 80) and (percent <= 90):
                             groundspeed = 'Initial Approach'
                         if (percent >= 90) and (percent <= 95):
-                            groundspeed = 'On Final'
+                            groundspeed = 'Final Approach'
                         return groundspeed
                     else:
                         if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 2):
-                            groundspeed = 'Taxing to Runaway'
+                            groundspeed = 'Departing'
                         if (percent >= 2) and (percent <= 5):
                             groundspeed = 'Taking Off'
                         if ((percent >= 98) and ((get_status[6] <= 200) and (get_status[6] >= 30))):
@@ -707,6 +707,7 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 7, col_destination)
             status_plane = self.status_plane(row_pilot[0])
             col_status = QTableWidgetItem(str(status_plane), 0)
+            col_status.setForeground(QBrush(QColor(self.get_color(status_plane))))
             self.ui.PILOT_FullList.setItem(startrow, 8, col_status)
             start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
                                 , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
@@ -882,6 +883,7 @@ class Main(QMainWindow):
                 status_plane = self.status_plane(row_pilot[0])
                 col_status = QTableWidgetItem(str(status_plane), 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 8, col_status)
+                col_status.setForeground(QBrush(QColor(self.get_color(status_plane))))
                 start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]) \
                                                     , int(str(row_pilot[6])[6:8]), int(str(row_pilot[6])[8:10]) \
                                                     , int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
@@ -1014,6 +1016,38 @@ class Main(QMainWindow):
         connection.close()
         self.ui.PilottableWidget.setCurrentCell(-1, -1)
         self.ui.ATCtableWidget.setCurrentCell(-1, -1)
+
+    def get_color(self, status_plane):
+	color = 'black'
+	if status_plane == 'Boarding':
+	    color = 'green'
+	if status_plane == 'Departing':
+	    color = 'green'
+	if status_plane == 'Takeoff':
+	    color = 'dark cyan'
+	if status_plane == 'Initial Climbing':
+	    color = 'dark cyan'
+	if status_plane == 'Climbing':
+	    color = 'blue'
+	if status_plane == 'On Route':
+	    color = 'dark blue'
+	if status_plane == 'Descending':
+	    color = 'blue'
+	if status_plane == 'Initial Approach':
+	    color = 'orange'
+	if status_plane == 'Final Approach':
+	    color = 'orange'
+	if status_plane == 'Landed':
+	    color = 'red'
+	if status_plane == 'Taxing to Gate':
+	    color = 'dark magenta'
+	if status_plane == 'On Blocks':
+	    color = 'dark red'
+	if status_plane == 'Fill Flight Plan':
+	    color = 'black'
+	if status_plane == 'Diverted':
+	    color = 'dark gray'
+	return color
 
     def search_button(self):
         config = ConfigParser.RawConfigParser()
@@ -1325,17 +1359,17 @@ class Main(QMainWindow):
         if player[0][4] == 'ATC':
             if str(player[0][2][-4:]) == '_OBS' or str(player[0][4][-4:]) == '_DEP' \
                or str(player[0][2][-4:]) == '_GND':
-                player_location.write('         fillColor: "#FFFF99",\n')
-                player_location.write('         strokeColor: "#FFFF99",\n')
+                player_location.write('         fillColor: "white",\n')
+                player_location.write('         strokeColor: "white",\n')
             elif str(player[0][2][-4:]) == '_TWR':
-                player_location.write('         fillColor: "#99FF99",\n')
-                player_location.write('         strokeColor: "#99FF99",\n')
+                player_location.write('         fillColor: "white",\n')
+                player_location.write('         strokeColor: "white",\n')
             elif str(player[0][2][-4:]) == '_APP':
-                player_location.write('         fillColor: "#0099CC",\n')
-                player_location.write('         strokeColor: "#0099CC",\n')
+                player_location.write('         fillColor: "white",\n')
+                player_location.write('         strokeColor: "white",\n')
             elif str(player[0][2][-4:]) == '_CTR':
-                player_location.write('         fillColor: "orange",\n')
-                player_location.write('         strokeColor: "orange",\n')
+                player_location.write('         fillColor: "white",\n')
+                player_location.write('         strokeColor: "white",\n')
             player_location.write('         fillOpacity: "0.05",\n')
         else:
             player_location.write('         fillOpacity: "${opacity}",\n')
@@ -1484,7 +1518,6 @@ class Main(QMainWindow):
         all_in_map.write('                 maxResolution:156543.0339,\n')
         all_in_map.write('                 maxExtent:new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34)\n')
         all_in_map.write('             });\n')
-        all_in_map.write('\n')
         all_in_map.write('    ghyb = new OpenLayers.Layer.Google(\n')
         all_in_map.write('         "Google Satellite",\n')
         all_in_map.write('         {type: G_SATELLITE_MAP, sphericalMercator:true, numZoomLevels: 22}\n')
@@ -1518,7 +1551,7 @@ class Main(QMainWindow):
                     all_in_map.write('          fillOpacity: 100,\n')
                     if label_Pilots == 2:
                         all_in_map.write('          label: "%s",\n' % str(players[callsign][2]))
-                        all_in_map.write('          fontColor: "white",\n')
+                        all_in_map.write('          fontColor: "yellow",\n')
                         all_in_map.write('          fontSize: "10px",\n')
                         all_in_map.write('          fontFamily: "Courier New, monospace",\n')
                         all_in_map.write('          labelAlign: "cm",\n')
@@ -1558,15 +1591,15 @@ class Main(QMainWindow):
                 all_in_map.write('         graphicYOffset: 0,\n')
                 if str(players[callsign][2][-4:]) == '_OBS' or str(players[callsign][4][-4:]) == '_DEP' \
                    or str(players[callsign][2][-4:]) == '_GND':
-                    all_in_map.write('         fillColor: "#FFFF99",\n')
-                    all_in_map.write('         strokeColor: "#FFFF99",\n')
+                    all_in_map.write('         fillColor: "white",\n')
+                    all_in_map.write('         strokeColor: "white",\n')
                 elif str(players[callsign][2][-4:]) == '_TWR':
-                    all_in_map.write('         fillColor: "#99FF99",\n')
-                    all_in_map.write('         strokeColor: "#99FF99",\n')
+                    all_in_map.write('         fillColor: "white",\n')
+                    all_in_map.write('         strokeColor: "white",\n')
                 elif str(players[callsign][2][-4:]) == '_APP':
-                    all_in_map.write('         fillColor: "#0099CC",\n')
-                    all_in_map.write('         strokeColor: "#0099CC",\n')
-                all_in_map.write('         fillOpacity: "0.05",\n')
+                    all_in_map.write('         fillColor: "white",\n')
+                    all_in_map.write('         strokeColor: "white",\n')
+                all_in_map.write('         fillOpacity: "0.2",\n')
                 if label_ATCs == 2:
                     all_in_map.write('         label: "%s",\n' % str(players[callsign][2]))
                     all_in_map.write('         fontColor: "white",\n')
@@ -1617,8 +1650,8 @@ class Main(QMainWindow):
                 all_in_map.write('\n')
                 all_in_map.write('    var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer");\n')
                 all_in_map.write('    var style_controller = {\n')
-                all_in_map.write('        strokeColor: "#00FFFF",\n')
-                all_in_map.write('        strokeOpacity: 0.7,\n')
+                all_in_map.write('        strokeColor: "white",\n')
+                all_in_map.write('        strokeOpacity: 1.0,\n')
                 all_in_map.write('        strokeWidth: 2,\n')
                 if label_ATCs == 2:
                     all_in_map.write('        label: "%s",\n' % str(players[callsign][2]))
