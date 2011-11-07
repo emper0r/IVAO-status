@@ -1018,36 +1018,36 @@ class Main(QMainWindow):
         self.ui.ATCtableWidget.setCurrentCell(-1, -1)
 
     def get_color(self, status_plane):
-	color = 'black'
-	if status_plane == 'Boarding':
-	    color = 'green'
-	if status_plane == 'Departing':
-	    color = 'green'
-	if status_plane == 'Takeoff':
-	    color = 'dark cyan'
-	if status_plane == 'Initial Climbing':
-	    color = 'dark cyan'
-	if status_plane == 'Climbing':
-	    color = 'blue'
-	if status_plane == 'On Route':
-	    color = 'dark blue'
-	if status_plane == 'Descending':
-	    color = 'blue'
-	if status_plane == 'Initial Approach':
-	    color = 'orange'
-	if status_plane == 'Final Approach':
-	    color = 'orange'
-	if status_plane == 'Landed':
-	    color = 'red'
-	if status_plane == 'Taxing to Gate':
-	    color = 'dark magenta'
-	if status_plane == 'On Blocks':
-	    color = 'dark red'
-	if status_plane == 'Fill Flight Plan':
-	    color = 'black'
-	if status_plane == 'Diverted':
-	    color = 'dark gray'
-	return color
+        color = 'black'
+        if status_plane == 'Boarding':
+            color = 'green'
+        if status_plane == 'Departing':
+            color = 'green'
+        if status_plane == 'Takeoff':
+            color = 'dark cyan'
+        if status_plane == 'Initial Climbing':
+            color = 'dark cyan'
+        if status_plane == 'Climbing':
+            color = 'blue'
+        if status_plane == 'On Route':
+            color = 'dark blue'
+        if status_plane == 'Descending':
+            color = 'blue'
+        if status_plane == 'Initial Approach':
+            color = 'orange'
+        if status_plane == 'Final Approach':
+            color = 'orange'
+        if status_plane == 'Landed':
+            color = 'red'
+        if status_plane == 'Taxing to Gate':
+            color = 'dark magenta'
+        if status_plane == 'On Blocks':
+            color = 'dark red'
+        if status_plane == 'Fill Flight Plan':
+            color = 'black'
+        if status_plane == 'Diverted':
+            color = 'dark gray'
+        return color
 
     def search_button(self):
         config = ConfigParser.RawConfigParser()
