@@ -37,6 +37,11 @@
     <height>686</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <family>Sans Serif</family>
+   </font>
+  </property>
   <property name="cursor">
    <cursorShape>PointingHandCursor</cursorShape>
   </property>
@@ -55,6 +60,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -85,6 +91,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <pointsize>8</pointsize>
        </font>
       </property>
@@ -192,6 +199,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -214,6 +222,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <pointsize>8</pointsize>
        </font>
       </property>
@@ -303,6 +312,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -325,6 +335,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <pointsize>8</pointsize>
        </font>
       </property>
@@ -414,6 +425,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -436,6 +448,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <pointsize>8</pointsize>
        </font>
       </property>
@@ -515,12 +528,13 @@
        <rect>
         <x>465</x>
         <y>257</y>
-        <width>41</width>
+        <width>51</width>
         <height>16</height>
        </rect>
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -540,6 +554,11 @@
         <width>80</width>
         <height>24</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
       </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
@@ -569,6 +588,11 @@
         <height>23</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
+      </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
@@ -582,6 +606,11 @@
         <height>24</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
+      </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
@@ -594,6 +623,11 @@
         <width>91</width>
         <height>24</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
       </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
@@ -611,6 +645,11 @@
         <height>24</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
+      </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
@@ -626,6 +665,11 @@
         <width>20</width>
         <height>24</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
       </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
@@ -651,6 +695,11 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
+      </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
@@ -663,12 +712,13 @@
        <rect>
         <x>398</x>
         <y>13</y>
-        <width>151</width>
+        <width>181</width>
         <height>20</height>
        </rect>
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -685,12 +735,13 @@
        <rect>
         <x>417</x>
         <y>190</y>
-        <width>121</width>
+        <width>141</width>
         <height>20</height>
        </rect>
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -711,6 +762,11 @@
         <height>21</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
+      </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
@@ -729,6 +785,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <pointsize>8</pointsize>
        </font>
       </property>
@@ -836,6 +893,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <pointsize>8</pointsize>
        </font>
       </property>
@@ -961,6 +1019,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -980,6 +1039,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -999,6 +1059,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <pointsize>8</pointsize>
        </font>
       </property>
@@ -1104,6 +1165,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <pointsize>8</pointsize>
        </font>
       </property>
@@ -1207,6 +1269,11 @@
         <height>21</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
+      </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
@@ -1222,6 +1289,11 @@
         <width>31</width>
         <height>21</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
       </property>
       <property name="cursor">
        <cursorShape>PointingHandCursor</cursorShape>
@@ -1246,6 +1318,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <pointsize>8</pointsize>
        </font>
       </property>
@@ -1359,6 +1432,7 @@
       </property>
       <property name="font">
        <font>
+        <family>Sans Serif</family>
         <pointsize>8</pointsize>
        </font>
       </property>
@@ -1478,6 +1552,11 @@
         <height>591</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
+      </property>
       <property name="cursor" stdset="0">
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
@@ -1548,6 +1627,11 @@
         <width>661</width>
         <height>591</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Sans Serif</family>
+       </font>
       </property>
       <property name="cursor" stdset="0">
        <cursorShape>PointingHandCursor</cursorShape>
@@ -1661,6 +1745,11 @@
   <action name="actionSetting">
    <property name="text">
     <string>Settings</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Sans Serif</family>
+    </font>
    </property>
   </action>
   <action name="actionUpdate">

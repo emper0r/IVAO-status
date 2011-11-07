@@ -49,6 +49,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -70,6 +71,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -88,6 +90,11 @@
       <width>56</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Sans Serif</family>
+     </font>
     </property>
     <property name="cursor">
      <cursorShape>PointingHandCursor</cursorShape>
@@ -116,6 +123,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -146,6 +154,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -170,6 +179,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -194,6 +204,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -218,6 +229,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -242,6 +254,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -272,6 +285,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -290,6 +304,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -317,6 +332,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -335,6 +351,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -353,6 +370,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -380,6 +398,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -407,6 +426,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>

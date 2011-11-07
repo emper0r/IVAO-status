@@ -27,7 +27,9 @@ try:
     from PyQt4.Qt import *
 except:
     print ('\nNot Have Qt Module for Python, please run command as root: "aptitude install python-qt4"')
-    print ('with all dependencies.\n')
+    print ('with all dependencies.\n\n')
+    print  ('If you has installed before, it\'s pretty sure your system made an update for python package so,\n')
+    print  ('You have to reinstall again GeoPy.\n')
     sys.exit(2)
 try:
     from geopy import distance
@@ -1446,7 +1448,8 @@ class Main(QMainWindow):
             player_location.write('\n')
         player_location.write('   var feature=new OpenLayers.Feature.Vector(\n')
         if str(player[0][4]) == 'PILOT':
-            player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat), {"angle": %d, opacity: 100});\n' % (heading))
+            player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat), {"angle": %d, opacity: 100});\n' 
+                                  % (heading))
         else:
             player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat), {"angle": 0, opacity: 100});\n')
         player_location.write('   player.addFeatures([feature]);\n')

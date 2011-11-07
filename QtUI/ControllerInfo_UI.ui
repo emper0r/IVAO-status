@@ -45,13 +45,14 @@
     <property name="geometry">
      <rect>
       <x>15</x>
-      <y>22</y>
-      <width>211</width>
+      <y>23</y>
+      <width>371</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>50</weight>
       <bold>false</bold>
@@ -75,6 +76,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -98,6 +100,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>50</weight>
       <bold>false</bold>
@@ -121,6 +124,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -144,6 +148,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>50</weight>
       <bold>false</bold>
@@ -167,6 +172,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>50</weight>
       <bold>false</bold>
@@ -183,13 +189,14 @@
     <property name="geometry">
      <rect>
       <x>13</x>
-      <y>124</y>
+      <y>125</y>
       <width>231</width>
       <height>20</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -208,6 +215,11 @@
       <width>380</width>
       <height>145</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Sans Serif</family>
+     </font>
     </property>
     <property name="cursor" stdset="0">
      <cursorShape>PointingHandCursor</cursorShape>
@@ -236,6 +248,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>50</weight>
       <bold>false</bold>
@@ -259,6 +272,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>50</weight>
       <bold>false</bold>
@@ -274,7 +288,7 @@
    <widget class="QLabel" name="ConnectedText">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>338</x>
       <y>351</y>
       <width>31</width>
       <height>20</height>
@@ -282,6 +296,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>50</weight>
       <bold>false</bold>
@@ -305,6 +320,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -326,6 +342,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -347,6 +364,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -370,6 +388,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -393,6 +412,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -414,6 +434,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -437,6 +458,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -460,6 +482,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>

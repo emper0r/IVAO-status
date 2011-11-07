@@ -58,6 +58,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -81,6 +82,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -102,6 +104,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -123,6 +126,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -146,6 +150,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -170,6 +175,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -191,6 +197,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -212,6 +219,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -235,6 +243,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -258,6 +267,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -279,6 +289,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -297,6 +308,11 @@
       <width>476</width>
       <height>111</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Sans Serif</family>
+     </font>
     </property>
     <property name="cursor" stdset="0">
      <cursorShape>PointingHandCursor</cursorShape>
@@ -322,6 +338,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -345,6 +362,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -366,6 +384,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -387,6 +406,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -402,7 +422,7 @@
    <widget class="QLabel" name="GroundSpeedNumber">
     <property name="geometry">
      <rect>
-      <x>290</x>
+      <x>299</x>
       <y>225</y>
       <width>41</width>
       <height>20</height>
@@ -410,6 +430,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -431,6 +452,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -444,7 +466,7 @@
    <widget class="QLabel" name="Altitude_label">
     <property name="geometry">
      <rect>
-      <x>387</x>
+      <x>375</x>
       <y>227</y>
       <width>61</width>
       <height>16</height>
@@ -452,6 +474,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -475,6 +498,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -496,6 +520,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -519,6 +544,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -540,6 +566,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -563,6 +590,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -584,6 +612,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -597,7 +626,7 @@
    <widget class="QLabel" name="PobText">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>157</x>
       <y>461</y>
       <width>51</width>
       <height>20</height>
@@ -605,6 +634,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -618,7 +648,7 @@
    <widget class="QLabel" name="TransponderText">
     <property name="geometry">
      <rect>
-      <x>342</x>
+      <x>357</x>
       <y>460</y>
       <width>41</width>
       <height>20</height>
@@ -626,6 +656,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -647,6 +678,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -664,12 +696,13 @@
      <rect>
       <x>16</x>
       <y>463</y>
-      <width>121</width>
+      <width>141</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -693,6 +726,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -716,6 +750,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -737,6 +772,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -760,6 +796,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -781,6 +818,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -805,6 +843,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -826,6 +865,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -849,6 +889,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -870,6 +911,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -887,12 +929,13 @@
      <rect>
       <x>16</x>
       <y>247</y>
-      <width>121</width>
+      <width>141</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -916,6 +959,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -927,7 +971,6 @@
     <property name="title">
      <string>Flight Details</string>
     </property>
-    <zorder>RouteText</zorder>
    </widget>
    <widget class="QGroupBox" name="PilotDetails">
     <property name="geometry">
@@ -940,6 +983,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -963,6 +1007,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -986,6 +1031,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -1003,12 +1049,13 @@
      <rect>
       <x>205</x>
       <y>248</y>
-      <width>51</width>
+      <width>71</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
@@ -1024,7 +1071,7 @@
    <widget class="QLabel" name="GSFiledText">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>271</x>
       <y>246</y>
       <width>41</width>
       <height>20</height>
@@ -1032,6 +1079,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -1053,6 +1101,7 @@
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
      </font>
     </property>
@@ -1066,14 +1115,15 @@
    <widget class="QLabel" name="FLFiled">
     <property name="geometry">
      <rect>
-      <x>387</x>
+      <x>375</x>
       <y>248</y>
-      <width>51</width>
+      <width>61</width>
       <height>16</height>
      </rect>
     </property>
     <property name="font">
      <font>
+      <family>Sans Serif</family>
       <pointsize>8</pointsize>
       <weight>75</weight>
       <bold>true</bold>
