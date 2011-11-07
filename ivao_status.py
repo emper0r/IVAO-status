@@ -1357,19 +1357,8 @@ class Main(QMainWindow):
         player_location.write('         graphicYOffset: 0,\n')
         player_location.write('         rotation: "${angle}",\n')
         if player[0][4] == 'ATC':
-            if str(player[0][2][-4:]) == '_OBS' or str(player[0][4][-4:]) == '_DEP' \
-               or str(player[0][2][-4:]) == '_GND':
-                player_location.write('         fillColor: "white",\n')
-                player_location.write('         strokeColor: "white",\n')
-            elif str(player[0][2][-4:]) == '_TWR':
-                player_location.write('         fillColor: "white",\n')
-                player_location.write('         strokeColor: "white",\n')
-            elif str(player[0][2][-4:]) == '_APP':
-                player_location.write('         fillColor: "white",\n')
-                player_location.write('         strokeColor: "white",\n')
-            elif str(player[0][2][-4:]) == '_CTR':
-                player_location.write('         fillColor: "white",\n')
-                player_location.write('         strokeColor: "white",\n')
+            player_location.write('         fillColor: "white",\n')
+            player_location.write('         strokeColor: "white",\n')
             player_location.write('         fillOpacity: "0.05",\n')
         else:
             player_location.write('         fillOpacity: "${opacity}",\n')
@@ -1398,6 +1387,8 @@ class Main(QMainWindow):
                 player_location.write('       60000,\n')
             elif str(player[0][2][-4:]) == '_CTR':
                 pass
+            else:
+                player_location.write('       60000,\n')
             player_location.write('        360\n')
             player_location.write('     );\n')
             player_location.write('   var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')
@@ -1751,8 +1742,8 @@ class PilotInfo(QMainWindow):
         cursor = connection.cursor()
         cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
         planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, \
-        onground, latitude, longitude, planned_altairport, planned_altairport2 \
-	FROM status_ivao WHERE callsign = ? AND clienttype='PILOT' ;", (str(callsign),))
+        onground, latitude, longitude, planned_altairport, planned_altairport2, planned_tascruise \
+        FROM status_ivao WHERE callsign = ? AND clienttype='PILOT' ;", (str(callsign),))
         info = cursor.fetchall()
         try:
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][5]),))
@@ -1805,6 +1796,8 @@ class PilotInfo(QMainWindow):
         self.ui.AltitudeNumber.setText(str(info[0][2]))
         self.ui.PobText.setText(str(info[0][8]))
         self.ui.TransponderText.setText(str(info[0][11]))
+        self.ui.GSFiledText.setText(str(info[0][17]))
+        self.ui.FLText.setText(str(info[0][7]))
         altern_airport_1 = cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][15]),))
         altern_city_1 = cursor.fetchone()
         altern_airport_2 = cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][16]),))

@@ -41,34 +41,11 @@
    <string>Controller Info</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="ControllerLabel">
-    <property name="geometry">
-     <rect>
-      <x>9</x>
-      <y>10</y>
-      <width>71</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="text">
-     <string>Controller</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="ControllerText">
     <property name="geometry">
      <rect>
-      <x>78</x>
-      <y>10</y>
+      <x>15</x>
+      <y>22</y>
       <width>211</width>
       <height>16</height>
      </rect>
@@ -90,8 +67,8 @@
    <widget class="QLabel" name="VidLabel">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>45</y>
+      <x>13</x>
+      <y>55</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -113,8 +90,8 @@
    <widget class="QLabel" name="VidText">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>45</y>
+      <x>43</x>
+      <y>55</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -137,7 +114,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>45</y>
+      <y>55</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -160,7 +137,7 @@
     <property name="geometry">
      <rect>
       <x>140</x>
-      <y>60</y>
+      <y>70</y>
       <width>241</width>
       <height>20</height>
      </rect>
@@ -183,7 +160,7 @@
     <property name="geometry">
      <rect>
       <x>234</x>
-      <y>40</y>
+      <y>50</y>
       <width>41</width>
       <height>21</height>
      </rect>
@@ -202,34 +179,11 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="FacilityLabel">
-    <property name="geometry">
-     <rect>
-      <x>11</x>
-      <y>110</y>
-      <width>101</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="text">
-     <string>Facility Details</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="facility_freq_Text">
     <property name="geometry">
      <rect>
-      <x>115</x>
-      <y>108</y>
+      <x>13</x>
+      <y>124</y>
       <width>231</width>
       <height>20</height>
      </rect>
@@ -249,10 +203,10 @@
    <widget class="QTextEdit" name="ATISInfo">
     <property name="geometry">
      <rect>
-      <x>8</x>
-      <y>130</y>
-      <width>381</width>
-      <height>141</height>
+      <x>9</x>
+      <y>149</y>
+      <width>380</width>
+      <height>145</height>
      </rect>
     </property>
     <property name="cursor" stdset="0">
@@ -269,61 +223,6 @@
     </property>
     <property name="textInteractionFlags">
      <set>Qt::NoTextInteraction</set>
-    </property>
-   </widget>
-   <widget class="Line" name="separator">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>381</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="ConnectionLabel">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>300</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="text">
-     <string>Connection</string>
-    </property>
-   </widget>
-   <widget class="Line" name="separator_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>280</y>
-      <width>381</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
    <widget class="QLabel" name="TimeOnLineText">
@@ -353,7 +252,7 @@
     <property name="geometry">
      <rect>
       <x>74</x>
-      <y>350</y>
+      <y>351</y>
       <width>131</width>
       <height>21</height>
      </rect>
@@ -375,7 +274,7 @@
    <widget class="QLabel" name="ConnectedText">
     <property name="geometry">
      <rect>
-      <x>341</x>
+      <x>330</x>
       <y>351</y>
       <width>31</width>
       <height>20</height>
@@ -437,22 +336,6 @@
      <string>Add Friend</string>
     </property>
    </widget>
-   <widget class="Line" name="separator_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>370</y>
-      <width>381</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
    <widget class="QLabel" name="SoftwareLabel">
     <property name="geometry">
      <rect>
@@ -502,8 +385,8 @@
    <widget class="QLabel" name="rating_img">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>8</y>
+      <x>278</x>
+      <y>19</y>
       <width>105</width>
       <height>27</height>
      </rect>
@@ -520,6 +403,94 @@
      <string/>
     </property>
    </widget>
+   <widget class="QGroupBox" name="Controller">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>6</y>
+      <width>391</width>
+      <height>95</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="title">
+     <string>Controller</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="FacilityDetails">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>110</y>
+      <width>391</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="title">
+     <string>Facility Details</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="Conection">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>303</y>
+      <width>391</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="title">
+     <string>Conection</string>
+    </property>
+   </widget>
+   <zorder>Conection</zorder>
+   <zorder>FacilityDetails</zorder>
+   <zorder>Controller</zorder>
+   <zorder>ControllerText</zorder>
+   <zorder>VidLabel</zorder>
+   <zorder>VidText</zorder>
+   <zorder>ControllingLabel</zorder>
+   <zorder>ControllingText</zorder>
+   <zorder>Flag</zorder>
+   <zorder>facility_freq_Text</zorder>
+   <zorder>ATISInfo</zorder>
+   <zorder>TimeOnLineText</zorder>
+   <zorder>SoftwareText</zorder>
+   <zorder>ConnectedText</zorder>
+   <zorder>Close</zorder>
+   <zorder>AddFriend</zorder>
+   <zorder>SoftwareLabel</zorder>
+   <zorder>ConnectedLabel</zorder>
+   <zorder>rating_img</zorder>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
