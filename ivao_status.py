@@ -29,7 +29,7 @@ except:
     print ('\nNot Have Qt Module for Python, please run command as root: "aptitude install python-qt4"')
     print ('with all dependencies.\n\n')
     print  ('If you has installed before, it\'s pretty sure your system made an update for python package so,\n')
-    print  ('You have to reinstall again GeoPy.\n')
+    print  ('You have to reinstall GeoPy tool again.\n')
     sys.exit(2)
 try:
     from geopy import distance

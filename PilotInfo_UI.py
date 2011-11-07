@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Mon Nov  7 08:22:48 2011
+# Created: Mon Nov  7 13:09:19 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -45,7 +45,7 @@ class Ui_QPilotInfo(object):
         self.callsign_label.setText(QtGui.QApplication.translate("QPilotInfo", "Callsign", None, QtGui.QApplication.UnicodeUTF8))
         self.callsign_label.setObjectName(_fromUtf8("callsign_label"))
         self.callsign_text = QtGui.QLabel(self.centralwidget)
-        self.callsign_text.setGeometry(QtCore.QRect(61, 53, 51, 20))
+        self.callsign_text.setGeometry(QtCore.QRect(70, 53, 51, 20))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)
@@ -339,7 +339,7 @@ class Ui_QPilotInfo(object):
         self.AirplaneText.setText(_fromUtf8(""))
         self.AirplaneText.setObjectName(_fromUtf8("AirplaneText"))
         self.vid_label = QtGui.QLabel(self.centralwidget)
-        self.vid_label.setGeometry(QtCore.QRect(193, 25, 21, 16))
+        self.vid_label.setGeometry(QtCore.QRect(210, 25, 21, 16))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)
@@ -350,7 +350,7 @@ class Ui_QPilotInfo(object):
         self.vid_label.setText(QtGui.QApplication.translate("QPilotInfo", "VID", None, QtGui.QApplication.UnicodeUTF8))
         self.vid_label.setObjectName(_fromUtf8("vid_label"))
         self.vidText = QtGui.QLabel(self.centralwidget)
-        self.vidText.setGeometry(QtCore.QRect(220, 25, 61, 16))
+        self.vidText.setGeometry(QtCore.QRect(237, 25, 61, 16))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)

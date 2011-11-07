@@ -74,7 +74,7 @@
    <widget class="QLabel" name="callsign_text">
     <property name="geometry">
      <rect>
-      <x>61</x>
+      <x>70</x>
       <y>53</y>
       <width>51</width>
       <height>20</height>
@@ -764,7 +764,7 @@
    <widget class="QLabel" name="vid_label">
     <property name="geometry">
      <rect>
-      <x>193</x>
+      <x>210</x>
       <y>25</y>
       <width>21</width>
       <height>16</height>
@@ -788,7 +788,7 @@
    <widget class="QLabel" name="vidText">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>237</x>
       <y>25</y>
       <width>61</width>
       <height>16</height>
