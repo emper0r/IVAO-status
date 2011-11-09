@@ -557,7 +557,7 @@ class Main(QMainWindow):
 
         for row_atc in rows_atcs:
             self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
-
+            col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
             if str(row_atc[0][:4]) == 'IVAO':
                 self.ui.ATC_FullList.setColumnWidth(2, 60)
                 col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
@@ -587,23 +587,34 @@ class Main(QMainWindow):
                     self.ui.ATC_FullList.setItem(startrow, 3, col_country)
             else:
                 code_icao = str(row_atc[0][:4])
-                cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE ICAO=?", (str(code_icao),))
-                flagCode = cursor.fetchone()
-                connection.commit()
-                col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
-                flagCodePath = ('./flags/%s.png') % flagCode
-                if os.path.exists(flagCodePath) is True:
-                    Pixmap = QPixmap(flagCodePath)
-                    flag_country = QLabel()
-                    flag_country.setPixmap(Pixmap)
-                    self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
-                    col_country = QTableWidgetItem(str(flagCode[0]), 0)
-                    self.ui.ATC_FullList.setItem(startrow, 3, col_country)
-                    self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
-                else:
+                try:
+                    cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE ICAO=?", (str(code_icao),))
+                    flagCode = cursor.fetchone()
+                    connection.commit()
+                    if flagCode is None:
+                        cursor.execute('SELECT Country FROM fir_data_list WHERE ICAO=?;', (str(code_icao),))
+                        division = cursor.fetchone()
+                        connection.commit()
+                        cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(division[0]),))
+                        flagCode = cursor.fetchone()
+                        connection.commit()
+                    flagCodePath = ('./flags/%s.png') % flagCode
+                    if os.path.exists(flagCodePath) is True:
+                        Pixmap = QPixmap(flagCodePath)
+                        flag_country = QLabel()
+                        flag_country.setPixmap(Pixmap)
+                        self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
+                        col_country = QTableWidgetItem(str(flagCode[0]), 0)
+                        self.ui.ATC_FullList.setItem(startrow, 3, col_country)
+                        self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
+                except:
                     col_country = QTableWidgetItem(str(flagCode).encode('latin-1'), 0)
-                    self.ui.ATC_FullList.setItem(startrow, 2, col_country)
                     self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
+                    error_flag = QTableWidgetItem(str('None'), 0)
+                    self.ui.ATC_FullList.setItem(startrow, 2, error_flag)
+                    error_country = QTableWidgetItem(str('Error Callsign for IVAO'), 0)
+                    error_country.setForeground(QBrush(QColor('red')))
+                    self.ui.ATC_FullList.setItem(startrow, 3, error_country)
             col_frequency = QTableWidgetItem(str(row_atc[1]), 0)
             self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
             if row_atc[5] == '1.1.14':
@@ -741,7 +752,7 @@ class Main(QMainWindow):
         flagCodePath = ('./flags/%s.png') % country_selected
         Pixmap = QPixmap(flagCodePath)
         self.ui.flagIcon.setPixmap(Pixmap)
-        cursor.execute("SELECT icao FROM icao_codes where country=?;", (str(country_selected),))
+        cursor.execute("SELECT icao FROM icao_codes WHERE country=?;", (str(country_selected),))
         icao_country = cursor.fetchall()
         connection.commit()
         self.ui.Inbound_traffic.setText('Inbound Traffic in %s Airports' % (country_selected))
