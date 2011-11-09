@@ -1728,7 +1728,7 @@ class AddFriend():
                     cursor.execute("SELECT vid, realname, rating, clienttype from status_ivao WHERE vid=?;", ((int(vid2add),)))
                     data = cursor.fetchall()
                     cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) VALUES (?, ?, ?, ?);' \
-                                   , (int(str(data[0][0])), str(data[0][1][:-4].encode('latin-1')), int(data[0][2]), str(data[0][3])))
+                                   , (int(str(data[0][0])), str(data[0][1].encode('latin-1')), int(data[0][2]), str(data[0][3])))
                     connection.commit()
             except:
                 pass
@@ -1824,11 +1824,13 @@ class PilotInfo(QMainWindow):
             self.ui.Altern_Airport_Text_2.setText(str('-'))
         else:
             self.ui.Altern_Airport_Text_2.setText(str(altern_city_2[0]))
-        if str(info[0][4]) != '':
-            cursor.execute("SELECT Model, Fabricant, Description FROM icao_aircraft WHERE Model=?;", ((info[0][4].split('/')[1]),))
-            data = cursor.fetchall()
-            self.ui.AirplaneText.setText('Model: %s Fabricant: %s Description: %s' % (str(data[0][0]), str(data[0][1]), str(data[0][2])))
-        else:
+        try:
+            if str(info[0][4]) != '':
+                cursor.execute("SELECT Model, Fabricant, Description FROM icao_aircraft WHERE Model=?;", ((info[0][4].split('/')[1]),))
+                data = cursor.fetchall()
+                self.ui.AirplaneText.setText('Model: %s Fabricant: %s Description: %s' \
+                                             % (str(data[0][0]), str(data[0][1]), str(data[0][2])))
+        except:
             self.ui.AirplaneText.setText('Pending...')
         cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][1][-4:]),))
         flagCodeHome = cursor.fetchone()
@@ -1905,6 +1907,12 @@ class ControllerInfo(QMainWindow):
             self.ui.Flag.setPixmap(Pixmap)
             cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
             city_orig = cursor.fetchone()
+            if str(callsign[-4:]) == '_CTR':
+                cursor.execute("SELECT FIR FROM fir_data_list WHERE icao=?", (str(callsign[:4]),))
+                city_orig = cursor.fetchone()
+            if str(callsign[2:3]) == '_' or str(callsign[2:3]) == '-':
+                cursor.execute("SELECT Country FROM division_ivao WHERE Division=?", (str(callsign[:2]),))
+                city_orig = cursor.fetchone()
             self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
         except:
             self.ui.ControllingText.setText('Pending...')
