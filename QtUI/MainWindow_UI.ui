@@ -123,7 +123,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -257,7 +257,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -373,7 +373,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -483,7 +483,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -820,7 +820,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -931,7 +931,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -1097,7 +1097,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -1112,7 +1112,7 @@
        <number>81</number>
       </attribute>
       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-       <bool>true</bool>
+       <bool>false</bool>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
@@ -1203,7 +1203,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -1218,7 +1218,7 @@
        <number>82</number>
       </attribute>
       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-       <bool>true</bool>
+       <bool>false</bool>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
@@ -1350,7 +1350,7 @@
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -1461,13 +1461,13 @@
        <enum>QAbstractItemView::SelectRows</enum>
       </property>
       <property name="textElideMode">
-       <enum>Qt::ElideRight</enum>
+       <enum>Qt::ElideMiddle</enum>
       </property>
       <property name="gridStyle">
        <enum>Qt::DotLine</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -1585,7 +1585,7 @@
        <enum>Qt::ElideMiddle</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
@@ -1597,7 +1597,7 @@
        <number>50</number>
       </attribute>
       <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
-       <bool>true</bool>
+       <bool>false</bool>
       </attribute>
       <attribute name="horizontalHeaderStretchLastSection">
        <bool>true</bool>
@@ -1661,7 +1661,7 @@
        <enum>Qt::ElideMiddle</enum>
       </property>
       <property name="sortingEnabled">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>false</bool>
