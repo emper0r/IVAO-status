@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Thu Nov 10 11:59:31 2011
+# Created: Fri Nov 11 13:17:28 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -139,8 +139,8 @@ class Ui_MainWindow(object):
         self.FriendstableWidget.horizontalHeader().setHighlightSections(True)
         self.FriendstableWidget.horizontalHeader().setMinimumSectionSize(70)
         self.FriendstableWidget.horizontalHeader().setStretchLastSection(True)
-        self.FriendstableWidget.verticalHeader().setDefaultSectionSize(20)
-        self.FriendstableWidget.verticalHeader().setMinimumSectionSize(20)
+        self.FriendstableWidget.verticalHeader().setDefaultSectionSize(27)
+        self.FriendstableWidget.verticalHeader().setMinimumSectionSize(27)
         self.FriendsLabel = QtGui.QLabel(self.main)
         self.FriendsLabel.setGeometry(QtCore.QRect(466, 6, 61, 16))
         font = QtGui.QFont()
@@ -187,8 +187,8 @@ class Ui_MainWindow(object):
         self.SearchtableWidget.horizontalHeader().setDefaultSectionSize(65)
         self.SearchtableWidget.horizontalHeader().setMinimumSectionSize(65)
         self.SearchtableWidget.horizontalHeader().setStretchLastSection(True)
-        self.SearchtableWidget.verticalHeader().setDefaultSectionSize(20)
-        self.SearchtableWidget.verticalHeader().setMinimumSectionSize(20)
+        self.SearchtableWidget.verticalHeader().setDefaultSectionSize(27)
+        self.SearchtableWidget.verticalHeader().setMinimumSectionSize(27)
         self.SearchForLabel = QtGui.QLabel(self.main)
         self.SearchForLabel.setGeometry(QtCore.QRect(10, 257, 81, 16))
         font = QtGui.QFont()
@@ -670,8 +670,8 @@ class Ui_MainWindow(object):
         self.PILOT_FullList.horizontalHeader().setDefaultSectionSize(85)
         self.PILOT_FullList.horizontalHeader().setMinimumSectionSize(85)
         self.PILOT_FullList.horizontalHeader().setStretchLastSection(True)
-        self.PILOT_FullList.verticalHeader().setDefaultSectionSize(25)
-        self.PILOT_FullList.verticalHeader().setMinimumSectionSize(25)
+        self.PILOT_FullList.verticalHeader().setDefaultSectionSize(27)
+        self.PILOT_FullList.verticalHeader().setMinimumSectionSize(27)
         self.tabWidget.addTab(self.pilots, _fromUtf8(""))
         self.database = QtGui.QWidget()
         self.database.setObjectName(_fromUtf8("database"))

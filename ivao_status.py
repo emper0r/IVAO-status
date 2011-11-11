@@ -67,7 +67,8 @@ class Main(QMainWindow):
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QIcon('./images/ivao_status_splash.png'))
+        image_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')
+        self.setWindowIcon(QIcon(image_icon))
         self.ui.PILOT_FullList.setColumnWidth(0, 90)
         self.ui.PILOT_FullList.setColumnWidth(1, 65)
         self.ui.PILOT_FullList.setColumnWidth(2, 60)
@@ -155,10 +156,12 @@ class Main(QMainWindow):
         self.showInfo_Action.triggered.connect(self.action_click)
         self.showMap_Action.triggered.connect(self.action_click)
         self.showDelete_Action.triggered.connect(self.action_click)
-        Pixmap = QPixmap('./images/departures.png')
+        image_departure = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'departures.png')
+        Pixmap = QPixmap(image_departure)
         self.ui.departures_icon.setPixmap(Pixmap)
         self.ui.departures_icon.show()
-        Pixmap = QPixmap('./images/arrivals.png')
+        image_arrivals = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'arrivals.png')
+        Pixmap = QPixmap(image_arrivals)
         self.ui.arrivals_icon.setPixmap(Pixmap)
         self.ui.arrivals_icon.show()
         QTimer.singleShot(1000, self.initial_load)
@@ -182,8 +185,9 @@ class Main(QMainWindow):
                         , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
 
         config = ConfigParser.RawConfigParser()
-        if os.path.exists('Config.cfg'):
-            config.read('Config.cfg')
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        if os.path.exists(config_file):
+            config.read(config_file)
             self.timer = QTimer(self)
             self.timer.setInterval(config.getint('Time_Update', 'time'))
             self.timer.timeout.connect(self.connect)
@@ -207,7 +211,7 @@ class Main(QMainWindow):
             config.set('Map', 'auto_refresh', '0')
             config.set('Map', 'label_Pilots', '0')
             config.set('Map', 'label_ATCs', '0')
-            with open('Config.cfg', 'wb') as configfile:
+            with open(config_file, 'wb') as configfile:
                 config.write(configfile)
         self.pilot_list = []
         self.atc_list = []
@@ -226,8 +230,10 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Populating Database', 2000)
         qApp.processEvents()
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         db_t1 = cursor.execute("SELECT DISTINCT(Country) FROM icao_codes ORDER BY Country ASC;")
         db_t1 = cursor.fetchall()
@@ -246,7 +252,8 @@ class Main(QMainWindow):
             country = "%s" % line[0]
             self.ui.country_list.addItem(country)
             self.ui.dbTableWidget_1.insertRow(self.ui.dbTableWidget_1.rowCount())
-            flagCodePath = ('./flags/%s.png') % line
+            image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+            flagCodePath = (image_flag + '/%s.png') % line
             if os.path.exists(flagCodePath) is True:
                 Pixmap = QPixmap(flagCodePath)
                 flag_country = QLabel()
@@ -290,7 +297,8 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Trying connecting to IVAO', 3000)
         qApp.processEvents()
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')        
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)       
         try:
             use_proxy = config.getint('Settings', 'use_proxy')
             auth = config.getint('Settings', 'auth')
@@ -336,8 +344,10 @@ class Main(QMainWindow):
 
     def update_db(self):
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         cursor.execute("BEGIN TRANSACTION;")
         cursor.execute("DELETE FROM status_ivao;")
@@ -478,8 +488,10 @@ class Main(QMainWindow):
 
     def status_plane(self, callsign):
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, planned_depairport \
                       , planned_destairport, onground, time_connected, groundspeed, planned_altitude, Latitude, Longitude \
@@ -543,8 +555,10 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Populating Controllers and Pilots', 10000)
         self.progress.show()
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
                         WHERE clienttype='ATC' ORDER BY vid DESC;")
@@ -562,7 +576,8 @@ class Main(QMainWindow):
                 self.ui.ATC_FullList.setColumnWidth(2, 60)
                 col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
                 self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
-                flagCodePath = ('./images/ivao_member.png')
+                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                flagCodePath = (image_flag + '/ivao_member.png')
                 Pixmap = QPixmap(flagCodePath)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
@@ -576,7 +591,8 @@ class Main(QMainWindow):
                 if row_atc is None or div_ivao is None:
                     pass
                 else:
-                    flagCodePath = ('./flags/%s.png') % str(div_ivao[0])
+                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                    flagCodePath = (image_flag + '/%s.png') % str(div_ivao[0])
                     col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
                     self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
                     Pixmap = QPixmap(flagCodePath)
@@ -598,7 +614,8 @@ class Main(QMainWindow):
                         cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(division[0]),))
                         flagCode = cursor.fetchone()
                         connection.commit()
-                    flagCodePath = ('./flags/%s.png') % flagCode
+                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                    flagCodePath = (image_flag + '/%s.png') % flagCode
                     if os.path.exists(flagCodePath) is True:
                         Pixmap = QPixmap(flagCodePath)
                         flag_country = QLabel()
@@ -627,7 +644,8 @@ class Main(QMainWindow):
             col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
             self.ui.ATC_FullList.setItem(startrow, 5, col_realname)
             code_atc_rating = row_atc[3]
-            ratingImagePath = './ratings/atc_level%d.gif' % int(code_atc_rating)
+            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
+            ratingImagePath = ImagePath + '/atc_level%d.gif' % int(code_atc_rating)
             try:
                 if os.path.exists(ratingImagePath) is True:
                     Pixmap = QPixmap(ratingImagePath)
@@ -668,7 +686,8 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setCurrentCell(0, 0)
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
             code_airline = row_pilot[0][:3]
-            airlineCodePath = './airlines/%s.gif' % code_airline
+            image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+            airlineCodePath = (image_airlines + '/%s.gif') % code_airline
             try:
                 if os.path.exists(airlineCodePath) is True:
                     Pixmap = QPixmap(airlineCodePath)
@@ -700,9 +719,9 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 3, col_realname)
             col_rating = QTableWidgetItem(str(self.rating_pilot[row_pilot[2]]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)
-
             code_pilot_rating = row_pilot[2]
-            ratingImagePath = './ratings/pilot_level%d.gif' % int(code_pilot_rating)
+            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
+            ratingImagePath = ImagePath + '/pilot_level%d.gif' % int(code_pilot_rating)
             try:
                 if os.path.exists(ratingImagePath) is True:
                     Pixmap = QPixmap(ratingImagePath)
@@ -743,13 +762,17 @@ class Main(QMainWindow):
     def country_view(self):
         country_selected = self.ui.country_list.currentText()
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE Country=?", (str(country_selected),))
         flagCode = cursor.fetchone()
         connection.commit()
-        flagCodePath = ('./flags/%s.png') % country_selected
+        
+        image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+        flagCodePath = (image_flag + '/%s.png') % country_selected
         Pixmap = QPixmap(flagCodePath)
         self.ui.flagIcon.setPixmap(Pixmap)
         cursor.execute("SELECT icao FROM icao_codes WHERE country=?;", (str(country_selected),))
@@ -810,7 +833,8 @@ class Main(QMainWindow):
                 col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
                 self.ui.ATCtableWidget.setItem(startrow_atc, 3, col_realname)
                 code_atc_rating = row_atc[3]
-                ratingImagePath = './ratings/atc_level%d.gif' % int(code_atc_rating)
+                ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
+                ratingImagePath = ImagePath + '/atc_level%d.gif' % int(code_atc_rating)
                 try:
                     if os.path.exists(ratingImagePath) is True:
                         Pixmap = QPixmap(ratingImagePath)
@@ -841,7 +865,8 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
 
                 code_airline = row_pilot[0][:3]
-                airlineCodePath = './airlines/%s.gif' % code_airline
+                image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+                airlineCodePath = (image_airlines + '/%s.gif') % code_airline
                 try:
                     if os.path.exists(airlineCodePath) is True:
                         Pixmap = QPixmap(airlineCodePath)
@@ -877,7 +902,8 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_pilot, 4, col_rating)
 
                 code_pilot_rating = row_pilot[2]
-                ratingImagePath = './ratings/pilot_level%d.gif' % int(code_pilot_rating)
+                ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
+                ratingImagePath = ImagePath + '/pilot_level%d.gif' % int(code_pilot_rating)
                 try:
                     if os.path.exists(ratingImagePath) is True:
                         Pixmap = QPixmap(ratingImagePath)
@@ -911,7 +937,8 @@ class Main(QMainWindow):
                 col_callsign = QTableWidgetItem(str(inbound[0]), 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 0, col_callsign)
                 code_airline = inbound[0][:3]
-                airlineCodePath = './airlines/%s.gif' % code_airline
+                image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+                airlineCodePath = (image_flag + '/%s.gif') % code_airline
                 try:
                     if os.path.exists(airlineCodePath) is True:
                         Pixmap = QPixmap(airlineCodePath)
@@ -927,7 +954,8 @@ class Main(QMainWindow):
                 cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(inbound[1]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
-                flagCodePath_orig = ('./flags/%s.png') % flagCode
+                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                flagCodePath_orig = (image_flag + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_orig)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
@@ -944,7 +972,8 @@ class Main(QMainWindow):
                 cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(inbound[2]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
-                flagCodePath_dest = ('./flags/%s.png') % flagCode
+                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                flagCodePath_dest = (image_flag + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_dest)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
@@ -971,7 +1000,8 @@ class Main(QMainWindow):
                 col_callsign = QTableWidgetItem(str(outbound[0]), 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 0, col_callsign)
                 code_airline = outbound[0][:3]
-                airlineCodePath = './airlines/%s.gif' % code_airline
+                image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+                airlineCodePath = (image_flag + '/%s.gif') % code_airline
                 try:
                     if os.path.exists(airlineCodePath) is True:
                         Pixmap = QPixmap(airlineCodePath)
@@ -987,7 +1017,8 @@ class Main(QMainWindow):
                 cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(outbound[1]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
-                flagCodePath_orig = ('./flags/%s.png') % flagCode
+                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                flagCodePath_orig = (image_flag + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_orig)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
@@ -1004,7 +1035,8 @@ class Main(QMainWindow):
                 cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(outbound[2]),))
                 flagCode = cursor.fetchone()
                 connection.commit()
-                flagCodePath_dest = ('./flags/%s.png') % flagCode
+                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                flagCodePath_dest = (image_flag + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_dest)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
@@ -1064,8 +1096,10 @@ class Main(QMainWindow):
 
     def search_button(self):
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         arg = self.ui.SearchEdit.text()
         item = self.ui.SearchcomboBox.currentIndex()
@@ -1101,7 +1135,8 @@ class Main(QMainWindow):
                 col_realname = QTableWidgetItem(str(row[2].encode('latin-1')), 0)
                 self.ui.SearchtableWidget.setItem(startrow, 2, col_realname)
                 player = 'atc_level'
-            ratingImagePath = './ratings/%s%d.gif' % (player, int(row[3]))
+            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
+            ratingImagePath = ImagePath + '/%s%d.gif' % (player, int(row[3]))
             try:
                 if os.path.exists(ratingImagePath) is True:
                     Pixmap = QPixmap(ratingImagePath)
@@ -1119,8 +1154,10 @@ class Main(QMainWindow):
 
     def action_click(self, event=None):
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         sender = self.sender()
         if self.ui.SearchtableWidget.currentRow() >= 0:
@@ -1236,8 +1273,10 @@ class Main(QMainWindow):
         self.ui.SearchtableWidget.setCurrentCell(-1, -1)
         self.ui.FriendstableWidget.setCurrentCell(-1, -1)
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         cursor.execute('SELECT vid, realname, rating, clienttype FROM friends_ivao;')
         roster = cursor.fetchall()
@@ -1255,24 +1294,27 @@ class Main(QMainWindow):
             check = cursor.fetchone()
             try:
                 if check[0] == row[0]:
-                    Pixmap = QPixmap('./images/airplane_online.png')
+                    ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'airplane_online.png')
+                    Pixmap = QPixmap(ImagePath)
                     online = QLabel(self)
                     online.setPixmap(Pixmap)
                     self.ui.FriendstableWidget.setCellWidget(startrow, 3, online)
                     roster_row += 1
             except:
-                Pixmap = QPixmap('./images/airplane_offline.png')
+                ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'airplane_offline.png')
+                Pixmap = QPixmap(ImagePath)
                 offline = QLabel(self)
                 offline.setPixmap(Pixmap)
                 self.ui.FriendstableWidget.setCellWidget(startrow, 3, offline)
                 roster_row += 1
             col_realname = QTableWidgetItem(str(row[1].encode('latin-1')), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
+            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
             if str(row[2]) != '-':
                 if str(row[3]) == 'ATC':
-                    ratingImagePath = './ratings/atc_level%d.gif' % int(row[2])
+                    ratingImagePath = ImagePath + '/atc_level%d.gif' % int(row[2])
                 else:
-                    ratingImagePath = './ratings/pilot_level%d.gif' % int(row[2])
+                    ratingImagePath = ImagePath + '/pilot_level%d.gif' % int(row[2])
                 Pixmap = QPixmap(ratingImagePath)
                 ratingImage = QLabel(self)
                 ratingImage.setPixmap(Pixmap)
@@ -1312,8 +1354,10 @@ class Main(QMainWindow):
 
     def view_map(self, vid, icao_orig=None, icao_dest=None):
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         cursor.execute("SELECT longitude, latitude FROM icao_codes WHERE ICAO=?;", (str(icao_orig),))
         icao_orig = cursor.fetchone()
@@ -1323,11 +1367,13 @@ class Main(QMainWindow):
                        ,  (str(vid),))
         player = cursor.fetchall()
         latitude, longitude, heading = player[0][0], player[0][1], player[0][3]
-        player_location = open('./player_location.html', 'w')
+        mapfileplayer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+        images = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
+        player_location = open(mapfileplayer_path +'/player_location.html', 'w')
         player_location.write('<html><body>\n')
         player_location.write('  <div id="mapdiv"></div>\n')
         player_location.write('  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjpkAC9ePGem0lIq5XcMiuhR_wWLPFku8Ix9i2SXYRVK3e45q1BQUd_beF8dtzKET_EteAjPdGDwqpQ"></script>\n')
-        player_location.write('  <script src="./OpenLayers/OpenLayers.js"></script>\n')
+        player_location.write('  <script src="%s/OpenLayers/OpenLayers.js"></script>\n' % (mapfileplayer_path))
         player_location.write('  <script>\n')
         player_location.write('\n')
         player_location.write('    map = new OpenLayers.Map("mapdiv",\n')
@@ -1470,7 +1516,8 @@ class Main(QMainWindow):
         player_location.write('  </script>\n')
         player_location.write('</body></html>\n')
         player_location.close()
-        self.maptab.load(QUrl('./player_location.html'))
+        mapfileplayer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+        self.maptab.load(QUrl(mapfileplayer_path + '/player_location.html'))
 
     def metarHelp(self):
         msg = 'Must be entered 4-character alphanumeric code designated for each airport around the world'
@@ -1502,20 +1549,24 @@ class Main(QMainWindow):
 
     def all2map(self):
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         label_Pilots = config.getint('Map', 'label_Pilots')
         label_ATCs = config.getint('Map', 'label_ATCs')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
         cursor = connection.cursor()
         cursor.execute("SELECT longitude, latitude, callsign, true_heading, clienttype FROM status_ivao;")
         players = cursor.fetchall()
         self.statusBar().showMessage('Populating all players in the Map', 10000)
         qApp.processEvents()
-        all_in_map = open('./all_in_map.html', 'w')
+        mapfileall_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+        images = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
+        all_in_map = open(mapfileall_path + '/all_in_map.html', 'w')
         all_in_map.write('<html><body>\n')
         all_in_map.write('  <div id="mapdiv"></div>\n')
         all_in_map.write('  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjpkAC9ePGem0lIq5XcMiuhR_wWLPFku8Ix9i2SXYRVK3e45q1BQUd_beF8dtzKET_EteAjPdGDwqpQ"></script>\n')
-        all_in_map.write('  <script src="./OpenLayers/OpenLayers.js"></script>\n')
+        all_in_map.write('  <script src="%s/OpenLayers/OpenLayers.js"></script>\n' % (mapfileall_path))
         all_in_map.write('  <script>\n')
         all_in_map.write('\n')
         all_in_map.write('    map = new OpenLayers.Map("mapdiv",\n')
@@ -1548,7 +1599,7 @@ class Main(QMainWindow):
                     all_in_map.write('    {\n')
                     all_in_map.write('      styleMap: new OpenLayers.StyleMap({\n')
                     all_in_map.write('         "default": {\n')
-                    all_in_map.write('          externalGraphic: "./images/airplane.gif",\n')
+                    all_in_map.write('          externalGraphic: "' + images + '/airplane.gif",\n')
                     all_in_map.write('          graphicWidth: 15,\n')
                     all_in_map.write('          graphicHeight: 15,\n')
                     all_in_map.write('          graphicYOffset: 0,\n')
@@ -1589,7 +1640,7 @@ class Main(QMainWindow):
                 all_in_map.write('    {\n')
                 all_in_map.write('    styleMap: new OpenLayers.StyleMap({\n')
                 all_in_map.write('         "default": {\n')
-                all_in_map.write('         externalGraphic: "./images/tower.png",\n')
+                all_in_map.write('         externalGraphic: "' + images + '/tower.png",\n')
                 all_in_map.write('         rotation: "${angle}",\n')
                 all_in_map.write('         graphicWidth: 15,\n')
                 all_in_map.write('         graphicHeight: 15,\n')
@@ -1646,7 +1697,7 @@ class Main(QMainWindow):
                 all_in_map.write('    {\n')
                 all_in_map.write('    styleMap: new OpenLayers.StyleMap({\n')
                 all_in_map.write('         "default": {\n')
-                all_in_map.write('         externalGraphic: "./images/tower.png",\n')
+                all_in_map.write('         externalGraphic: "' + images + '/images/tower.png",\n')
                 all_in_map.write('         rotation: "${angle}",\n')
                 all_in_map.write('         fillOpacity: "1.00",\n')
                 all_in_map.write('         }\n')
@@ -1704,13 +1755,16 @@ class Main(QMainWindow):
         all_in_map.write('  </script>\n')
         all_in_map.write('</body></html>\n')
         all_in_map.close()
-        self.maptab.load(QUrl('./all_in_map.html'))
+        mapfileall_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+        self.maptab.load(QUrl(mapfileall_path + '/all_in_map.html'))
 
 class AddFriend():
     def add_friend(self, vid2add):
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         cursor.execute("SELECT vid FROM friends_ivao;")
         vid = cursor.fetchall()
@@ -1744,15 +1798,18 @@ class PilotInfo(QMainWindow):
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QIcon('./images/ivao_status_splash.png'))
+        image_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')
+        self.setWindowIcon(QIcon(image_icon))
         self.callsign = ''
         QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
 
     def status(self, callsign):
         self.callsign = callsign
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
         planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, \
@@ -1763,7 +1820,8 @@ class PilotInfo(QMainWindow):
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][5]),))
             flagCodeOrig = cursor.fetchone()
             connection.commit()
-            flagCodePath_orig = ('./flags/%s.png') % flagCodeOrig
+            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+            flagCodePath_orig = (ImagePath + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
             self.ui.DepartureImage.setPixmap(Pixmap)
             cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(info[0][5]),))
@@ -1778,7 +1836,8 @@ class PilotInfo(QMainWindow):
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][6]),))
             flagCodeDest = cursor.fetchone()
             connection.commit()
-            flagCodePath_dest = ('./flags/%s.png') % flagCodeDest
+            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+            flagCodePath_dest = (ImagePath + '/%s.png') % flagCodeDest
             Pixmap = QPixmap(flagCodePath_dest)
             self.ui.DestinationImage.setPixmap(Pixmap)
             cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(info[0][6]),))
@@ -1792,7 +1851,8 @@ class PilotInfo(QMainWindow):
         self.ui.vidText.setText(str(info[0][0]))
         try:
             code_airline = callsign[:3]
-            airlineCodePath = './airlines/%s.gif' % code_airline
+            image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+            airlineCodePath = (image_airlines + '/%s.gif') % code_airline
             if os.path.exists(airlineCodePath) is True:
                 Pixmap = QPixmap(airlineCodePath)
                 airline = QLabel(self)
@@ -1835,11 +1895,13 @@ class PilotInfo(QMainWindow):
         cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][1][-4:]),))
         flagCodeHome = cursor.fetchone()
         connection.commit()
-        flagCodePath_orig = ('./flags/%s.png') % flagCodeHome
-        Pixmap = QPixmap(flagCodePath_orig)
+        ImageFlag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+        flagCodePath = (ImageFlag + '/%s.png') % flagCodeHome
+        Pixmap = QPixmap(flagCodePath)
         self.ui.HomeFlag.setPixmap(Pixmap)
-        ratingPath = ('./ratings/pilot_level%d.gif') % int(info[0][10])
-        Pixmap = QPixmap(ratingPath)
+        ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
+        ratingImagePath = ImagePath + '/pilot_level%d.gif' % int(info[0][10])
+        Pixmap = QPixmap(ratingImagePath)
         self.ui.rating_img.setPixmap(Pixmap)
         player_point = info[0][13], info[0][14]
         if city_orig_point is None or city_dest_point is None:
@@ -1877,7 +1939,8 @@ class ControllerInfo(QMainWindow):
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QIcon('./images/ivao_status_splash.png'))
+        image_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')
+        self.setWindowIcon(QIcon(image_icon))
         QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
 
     def status(self, callsign):
@@ -1885,8 +1948,10 @@ class ControllerInfo(QMainWindow):
         self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
                              , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
-        connection = sqlite3.connect('./database/' + config.get('Database', 'db'))
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
         cursor = connection.cursor()
         cursor.execute("SELECT vid, realname, server, clienttype, frequency \
             , rating, facilitytype, atis_message, time_connected, \
@@ -1902,7 +1967,8 @@ class ControllerInfo(QMainWindow):
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
             flagCodeOrig = cursor.fetchone()
             connection.commit()
-            flagCodePath_orig = ('./flags/%s.png') % flagCodeOrig
+            image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+            flagCodePath_orig = (image_flag + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
             self.ui.Flag.setPixmap(Pixmap)
             cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
@@ -1916,8 +1982,9 @@ class ControllerInfo(QMainWindow):
             self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
         except:
             self.ui.ControllingText.setText('Pending...')
-        ratingPath = ('./ratings/atc_level%d.gif') % int(info[0][5])
-        Pixmap = QPixmap(ratingPath)
+        ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
+        ratingImagePath = ImagePath + '/atc_level%d.gif' % int(info[0][5])
+        Pixmap = QPixmap(ratingImagePath)
         self.ui.rating_img.setPixmap(Pixmap)
         self.ui.facility_freq_Text.setText(str(self.position_atc[str(info[0][6])]) + ' ' + str(info[0][4]) + ' MHz')
         try:
@@ -1949,10 +2016,12 @@ class Settings(QMainWindow):
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        self.setWindowIcon(QIcon('./images/ivao_status_splash.png'))
+        image_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')
+        self.setWindowIcon(QIcon(image_icon))
         self.connect(self.ui.SettingAccepButton, SIGNAL('clicked()'), self.options)
         config = ConfigParser.RawConfigParser()
-        config.read('Config.cfg')
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
         self.ui.spinBox.setValue(config.getint('Time_Update', 'time') / 60000)
         use_proxy = config.getint('Settings', 'use_proxy')
         if use_proxy == 2:
@@ -1992,6 +2061,7 @@ class Settings(QMainWindow):
         minutes = self.ui.spinBox.value()
         time_update = minutes * 60000
         config = ConfigParser.RawConfigParser()
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.add_section('Settings')
         config.set('Settings', 'use_proxy', self.ui.Setting_checkBox.checkState())
         config.set('Settings', 'host', self.ui.lineEdit_host.text())
@@ -2019,7 +2089,7 @@ class Settings(QMainWindow):
             config.set('Map', 'label_ATCs', '2')
         else:
             config.set('Map', 'label_ATCs', '0')
-        with open ('Config.cfg', 'wb') as configfile:
+        with open (config_file, 'wb') as configfile:
             config.write(configfile)
 
         self.close()
@@ -2029,11 +2099,12 @@ class Settings(QMainWindow):
         event.accept()
 
 def main():
-    import sys, time
+    import sys, time, os
     QApplication.setStyle(QStyleFactory.create("Cleanlooks"))
     QApplication.setPalette(QApplication.style().standardPalette())
     app = QApplication(sys.argv)
-    splash_pix = QPixmap('./images/ivao_status_splash.png')
+    image_splash = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')
+    splash_pix = QPixmap(image_splash)
     splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
     splash.setMask(splash_pix.mask())
     splash.show()
