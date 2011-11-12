@@ -576,7 +576,7 @@ class Main(QMainWindow):
                 self.ui.ATC_FullList.setColumnWidth(2, 60)
                 col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
                 self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
-                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
                 flagCodePath = (image_flag + '/ivao_member.png')
                 Pixmap = QPixmap(flagCodePath)
                 flag_country = QLabel()
@@ -663,11 +663,11 @@ class Main(QMainWindow):
                 start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]) \
                                                     , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10]) \
                                                     , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
+                diff = abs(datetime.datetime.now() - start_connected)
+                col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
+                self.ui.ATC_FullList.setItem(startrow, 8, col_time)
             except:
                 pass
-            diff = abs(datetime.datetime.now() - start_connected)
-            col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
-            self.ui.ATC_FullList.setItem(startrow, 8, col_time)
             self.progress.setValue(int(float(startrow) / float(len(rows_atcs)) * 100.0))
             startrow += 1
             qApp.processEvents()
