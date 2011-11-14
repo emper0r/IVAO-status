@@ -516,35 +516,35 @@ class Main(QMainWindow):
                     return groundspeed
                 else:
                     if int(str(get_status[4])) == 0:
-                        if (percent >= 0) and (percent <= 5):
+                        if (percent >= 0) and (percent <= 5.0):
                             groundspeed = 'Takeoff'
-                        if (percent >= 5) and (percent <= 10):
+                        if (percent >= 5.0) and (percent <= 7.0):
                             groundspeed = 'Initial Climbing'
-                        if (percent >= 10) and (percent <= 20):
+                        if (percent >= 7.0) and (percent <= 10.0):
                             groundspeed = 'Climbing'
-                        if (percent >= 20) and (percent <= 70):
+                        if (percent >= 10.0) and (percent <= 80.0):
                             groundspeed = 'On Route'
-                        if (percent >= 70) and (percent <= 80):
+                        if (percent >= 80.0) and (percent <= 90.0):
                             groundspeed = 'Descending'
-                        if (percent >= 80) and (percent <= 90):
+                        if (percent >= 90.0) and (percent <= 97.0):
                             groundspeed = 'Initial Approach'
-                        if (percent >= 90) and (percent <= 95):
+                        if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 200) and (get_status[6] >= 30))):
                             groundspeed = 'Final Approach'
                         return groundspeed
                     else:
-                        if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 2):
+                        if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 2.0):
                             groundspeed = 'Departing'
-                        if (percent >= 2) and (percent <= 5):
-                            groundspeed = 'Taking Off'
-                        if ((percent >= 98) and ((get_status[6] <= 200) and (get_status[6] >= 30))):
+                        if (percent >= 2.0) and (percent <= 5.0):
+                            groundspeed = 'Takeoff'
+                        if (((percent >= 97.0) and (percent <=100.0)) and ((get_status[6] <= 220) and (get_status[6] >= 30))):
                             groundspeed = 'Landed'
-                        if (get_status[6] < 30) and (percent > 99):
+                        if (get_status[6] < 30) and (percent > 99.0):
                             groundspeed = 'Taxing to Gate'
-                        if (get_status[6] == 0) and (percent > 99):
+                        if (get_status[6] == 0) and (percent > 99.0):
                             groundspeed = 'On Blocks'
-                        if (get_status[6] == 0) and (percent <= 1):
+                        if (get_status[6] == 0) and (percent <= 1.0):
                             groundspeed = 'Boarding'
-                        if (get_status[6] == 0) and (percent >= 10 and percent <= 90):
+                        if (get_status[6] == 0) and (percent >= 10.0 and percent <= 90.0):
                             groundspeed = 'Altern Airport'
                         return groundspeed
             except:
