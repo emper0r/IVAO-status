@@ -1770,29 +1770,69 @@ class Main(QMainWindow):
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
         item = self.ui.comboBoxStatistics.currentIndex()
+        
+        if item == 4:
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            startrow = 0
+            cursor.execute('select substr(callsign,1,3) as prefix, count(callsign) as airlines from status_ivao group by prefix order by airlines desc;')
+            items = cursor.fetchall()
+            
+            for i in range(0, len(items)):
+                self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                code_airline = items[i][0]
+                image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+                airlineCodePath = (image_airlines + '/%s.gif') % code_airline
+                try:
+                    if os.path.exists(airlineCodePath) is True:
+                        Pixmap = QPixmap(airlineCodePath)
+                        airline = QLabel(self)
+                        airline.setPixmap(Pixmap)
+                        self.ui.Statistics.setCellWidget(startrow, 1, airline)
+                    else:
+                        cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?', (str(items[i][0]),))
+                        airline_code = cursor.fetchone()
+                        if airline_code is None:
+                            continue
+                        else:
+                            col_airline = QTableWidgetItem(str(airline_code[0]), 0)
+                        self.ui.Statistics.setItem(startrow, 1, col_airline)
+                except:
+                    col_item = QTableWidgetItem(str(items[i][0]), 0)
+                    self.ui.Statistics.setItem(startrow, 1, col_item)
+                col_total = QTableWidgetItem(str(int(items[i][1])), 0)
+                self.ui.Statistics.setItem(startrow, 2, col_total)
+                percent = float(items[i][1]) / float(len(items)) * 100.0
+                col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
+                self.ui.Statistics.setItem(startrow, 3, col_percent)
+                startrow += 1
+                qApp.processEvents()
 
         if item == 7:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
+            
             for min_pob, max_pob in [(1, 4), (5, 20), (21, 75), (76, 150), (151, 250), (250, 500)]:
                 cursor.execute("SELECT count(callsign) from status_ivao where clienttype='PILOT';" )
-                total_pilots = cursor.fetchone()
-                if total_pilots[0] == 0:
+                total_items = cursor.fetchone()
+                if total_items[0] == 0:
                     continue
                 else:
                     cursor.execute("SELECT count(callsign) from status_ivao where clienttype='PILOT' and planned_pob >= ? and planned_pob <= ?;", (min_pob, max_pob))
                     pob = cursor.fetchone()
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-                    col_number = QTableWidgetItem(str('Flight with Passengers on Boards: %d - %d' % (min_pob, max_pob)), 0)
-                    self.ui.Statistics.setItem(startrow, 1, col_number)
+                    col_item = QTableWidgetItem(str('Flight with Passengers on Boards: %d - %d' % (min_pob, max_pob)), 0)
+                    self.ui.Statistics.setItem(startrow, 1, col_item)
                     col_total = QTableWidgetItem(str(int(pob[0])), 0)
                     self.ui.Statistics.setItem(startrow, 2, col_total)
-                    percent = float(pob[0]) / float(total_pilots[0]) * 100.0
+                    percent = float(pob[0]) / float(total_items[0]) * 100.0
                     col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
                     self.ui.Statistics.setItem(startrow, 3, col_percent)
                     startrow += 1
+                qApp.processEvents()
 
 class AddFriend():
     def add_friend(self, vid2add):
