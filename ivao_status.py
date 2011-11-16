@@ -120,6 +120,10 @@ class Main(QMainWindow):
         self.ui.OutboundTableWidget.setColumnWidth(2, 120)
         self.ui.OutboundTableWidget.setColumnWidth(3, 30)
         self.ui.OutboundTableWidget.setColumnWidth(4, 120)
+        self.ui.Statistics.setColumnWidth(0, 34)
+        self.ui.Statistics.setColumnWidth(1, 300)
+        self.ui.Statistics.setColumnWidth(2, 300)
+        self.ui.Statistics.setColumnWidth(3, 100)
         self.ui.PILOT_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.ATC_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.FriendstableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -219,11 +223,11 @@ class Main(QMainWindow):
 
     @property
     def maptab(self):
-        if self._maptab is None and self.ui.tabWidget.currentIndex() != 5:
+        if self._maptab is None and self.ui.tabWidget.currentIndex() != 6:
             self._maptab = QWebView()
-            self.ui.tabWidget.insertTab(5, self.maptab, 'Map')
+            self.ui.tabWidget.insertTab(6, self.maptab, 'Map')
         else:
-            self.ui.tabWidget.setCurrentIndex(5)
+            self.ui.tabWidget.setCurrentIndex(6)
         return self._maptab
 
     def initial_load(self):
@@ -516,35 +520,35 @@ class Main(QMainWindow):
                     return groundspeed
                 else:
                     if int(str(get_status[4])) == 0:
-                        if (percent >= 0) and (percent <= 5):
+                        if (percent >= 0) and (percent <= 5.0):
                             groundspeed = 'Takeoff'
-                        if (percent >= 5) and (percent <= 10):
+                        if (percent >= 5.0) and (percent <= 7.0):
                             groundspeed = 'Initial Climbing'
-                        if (percent >= 10) and (percent <= 20):
+                        if (percent >= 7.0) and (percent <= 10.0):
                             groundspeed = 'Climbing'
-                        if (percent >= 20) and (percent <= 70):
+                        if (percent >= 10.0) and (percent <= 80.0):
                             groundspeed = 'On Route'
-                        if (percent >= 70) and (percent <= 80):
+                        if (percent >= 80.0) and (percent <= 90.0):
                             groundspeed = 'Descending'
-                        if (percent >= 80) and (percent <= 90):
+                        if (percent >= 90.0) and (percent <= 97.0):
                             groundspeed = 'Initial Approach'
-                        if (percent >= 90) and (percent <= 95):
+                        if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 200) and (get_status[6] >= 30))):
                             groundspeed = 'Final Approach'
                         return groundspeed
                     else:
-                        if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 2):
+                        if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 2.0):
                             groundspeed = 'Departing'
-                        if (percent >= 2) and (percent <= 5):
-                            groundspeed = 'Taking Off'
-                        if ((percent >= 98) and ((get_status[6] <= 200) and (get_status[6] >= 30))):
+                        if (percent >= 2.0) and (percent <= 5.0):
+                            groundspeed = 'Takeoff'
+                        if (((percent >= 97.0) and (percent <=100.0)) and ((get_status[6] <= 220) and (get_status[6] >= 30))):
                             groundspeed = 'Landed'
-                        if (get_status[6] < 30) and (percent > 99):
+                        if (get_status[6] < 30) and (percent > 99.0):
                             groundspeed = 'Taxing to Gate'
-                        if (get_status[6] == 0) and (percent > 99):
+                        if (get_status[6] == 0) and (percent > 99.0):
                             groundspeed = 'On Blocks'
-                        if (get_status[6] == 0) and (percent <= 1):
+                        if (get_status[6] == 0) and (percent <= 1.0):
                             groundspeed = 'Boarding'
-                        if (get_status[6] == 0) and (percent >= 10 and percent <= 90):
+                        if (get_status[6] == 0) and (percent >= 10.0 and percent <= 90.0):
                             groundspeed = 'Altern Airport'
                         return groundspeed
             except:
@@ -1757,6 +1761,38 @@ class Main(QMainWindow):
         all_in_map.close()
         mapfileall_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
         self.maptab.load(QUrl(mapfileall_path + '/all_in_map.html'))
+        
+    def statistics(self):
+        config = ConfigParser.RawConfigParser()
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
+        cursor = connection.cursor()
+        item = self.ui.comboBoxStatistics.currentIndex()
+
+        if item == 7:
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            startrow = 0
+            for min_pob, max_pob in [(1, 4), (5, 20), (21, 75), (76, 150), (151, 250), (250, 500)]:
+                cursor.execute("SELECT count(callsign) from status_ivao where clienttype='PILOT';" )
+                total_pilots = cursor.fetchone()
+                if total_pilots[0] == 0:
+                    continue
+                else:
+                    cursor.execute("SELECT count(callsign) from status_ivao where clienttype='PILOT' and planned_pob >= ? and planned_pob <= ?;", (min_pob, max_pob))
+                    pob = cursor.fetchone()
+                    self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                    col_number = QTableWidgetItem(str('Flight with Passengers on Boards: %d - %d' % (min_pob, max_pob)), 0)
+                    self.ui.Statistics.setItem(startrow, 1, col_number)
+                    col_total = QTableWidgetItem(str(int(pob[0])), 0)
+                    self.ui.Statistics.setItem(startrow, 2, col_total)
+                    percent = float(pob[0]) / float(total_pilots[0]) * 100.0
+                    col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
+                    self.ui.Statistics.setItem(startrow, 3, col_percent)
+                    startrow += 1
 
 class AddFriend():
     def add_friend(self, vid2add):

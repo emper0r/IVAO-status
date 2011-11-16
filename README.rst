@@ -98,12 +98,12 @@ SPECIAL THANKS
 ==============
 - rowinggolfer at #pyqt in irc.freenode.net 
   (for show me how Qt works with VERY cool examples :-) ),
+  and other friends at #pyqt in irc.freenode.net to help me sometimes too.
 
-- htoothrot at #pyqt in irc.freenode.net to help me sometimes too, and
+- All friends of #pyar in irc.freenode.net as facundobatista and many others :)
 
 - Arnd Wippermann to help me at OpenLayers-list 
   for show me how javascript works and Google Layer with OpenStreetMap
 
 - And all my friends for testing my hobbie and push me to become this for
   a better app.
-
