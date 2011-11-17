@@ -1692,6 +1692,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Facility Type</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Pilots homes countries</string>
        </property>
       </item>

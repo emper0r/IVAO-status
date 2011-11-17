@@ -1776,7 +1776,7 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            cursor.execute('select substr(callsign,1,3) as prefix, count(callsign) as airlines from status_ivao group by prefix order by airlines desc;')
+            cursor.execute("select substr(callsign,1,3) as prefix, count(distinct callsign) as airlines from status_ivao where clienttype='PILOT' group by prefix order by airlines desc;")
             items = cursor.fetchall()
             
             for i in range(0, len(items)):
@@ -1794,7 +1794,7 @@ class Main(QMainWindow):
                         cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?', (str(items[i][0]),))
                         airline_code = cursor.fetchone()
                         if airline_code is None:
-                            continue
+                            col_airline = QTableWidgetItem(str(items[i][0]), 0)
                         else:
                             col_airline = QTableWidgetItem(str(airline_code[0]), 0)
                         self.ui.Statistics.setItem(startrow, 1, col_airline)
@@ -1829,6 +1829,31 @@ class Main(QMainWindow):
                     col_total = QTableWidgetItem(str(int(pob[0])), 0)
                     self.ui.Statistics.setItem(startrow, 2, col_total)
                     percent = float(pob[0]) / float(total_items[0]) * 100.0
+                    col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
+                    self.ui.Statistics.setItem(startrow, 3, col_percent)
+                    startrow += 1
+                qApp.processEvents()
+        
+        if item == 9:
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            startrow = 0
+            
+            for facility in ('DEP', 'GND', 'TWR', 'APP', 'CTR', 'OBS'):
+                cursor.execute("SELECT count(callsign) from status_ivao where clienttype='ATC';" )
+                total_items = cursor.fetchone()
+                if total_items[0] == 0:
+                    continue
+                else:
+                    cursor.execute("SELECT count(callsign) from status_ivao where clienttype='ATC' and callsign like ?;", ('%'+str(facility)+'%',))
+                    position = cursor.fetchone()
+                    self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                    col_item = QTableWidgetItem(str('Controller in: %s' % (facility)), 0)
+                    self.ui.Statistics.setItem(startrow, 1, col_item)
+                    col_total = QTableWidgetItem(str(int(position[0])), 0)
+                    self.ui.Statistics.setItem(startrow, 2, col_total)
+                    percent = float(position[0]) / float(total_items[0]) * 100.0
                     col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
                     self.ui.Statistics.setItem(startrow, 3, col_percent)
                     startrow += 1

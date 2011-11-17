@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Wed Nov 16 08:15:29 2011
+# Created: Wed Nov 16 19:26:23 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -735,7 +735,9 @@ class Ui_MainWindow(object):
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(8, QtGui.QApplication.translate("MainWindow", "Type of Flights", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
-        self.comboBoxStatistics.setItemText(9, QtGui.QApplication.translate("MainWindow", "Pilots homes countries", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBoxStatistics.setItemText(9, QtGui.QApplication.translate("MainWindow", "Facility Type", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBoxStatistics.addItem(_fromUtf8(""))
+        self.comboBoxStatistics.setItemText(10, QtGui.QApplication.translate("MainWindow", "Pilots homes countries", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.addTab(self.statistics, _fromUtf8(""))
         self.database = QtGui.QWidget()
         self.database.setObjectName(_fromUtf8("database"))
