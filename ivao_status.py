@@ -120,7 +120,7 @@ class Main(QMainWindow):
         self.ui.OutboundTableWidget.setColumnWidth(2, 120)
         self.ui.OutboundTableWidget.setColumnWidth(3, 30)
         self.ui.OutboundTableWidget.setColumnWidth(4, 120)
-        self.ui.Statistics.setColumnWidth(0, 34)
+        self.ui.Statistics.setColumnWidth(0, 30)
         self.ui.Statistics.setColumnWidth(1, 300)
         self.ui.Statistics.setColumnWidth(2, 300)
         self.ui.Statistics.setColumnWidth(3, 100)
@@ -479,11 +479,15 @@ class Main(QMainWindow):
         else:
             pob_ivao = QTableWidgetItem(str(int(pob[0])))
 
+        time_received = datetime.datetime.now()
+        time_board = QTableWidgetItem(str(time_received).split('.')[0])
+        
         self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
         self.ui.IVAOStatustableWidget.setItem(1, 0, atcs_ivao)
         self.ui.IVAOStatustableWidget.setItem(2, 0, obs_ivao)
         self.ui.IVAOStatustableWidget.setItem(3, 0, total_ivao)
         self.ui.IVAOStatustableWidget.setItem(5, 0, pob_ivao)
+        self.ui.IVAOStatustableWidget.setItem(6, 0, time_board)
         connection.close()
         self.statusBar().showMessage('Done', 2000)
         qApp.processEvents()
@@ -1771,6 +1775,103 @@ class Main(QMainWindow):
         cursor = connection.cursor()
         item = self.ui.comboBoxStatistics.currentIndex()
         
+        if item == 1:
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            startrow = 0
+            
+            cursor.execute("SELECT callsign FROM status_ivao WHERE clienttype='ATC';" )
+            controller_list = cursor.fetchall()
+            
+            list_icao = []
+            for callsign in range(0, len(controller_list)):
+                if controller_list[callsign][0][2:3] == '-' or controller_list[callsign][0][2:3] == '_':
+                    cursor.execute("SELECT Country FROM division_ivao WHERE division = ?;", (str(controller_list[callsign][0])[:2],))
+                else:
+                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", (str(controller_list[callsign][0])[:4],))
+                country_icao = cursor.fetchone()
+                if country_icao is None:
+                    continue
+                else:
+                    list_icao.append(str(country_icao[0]))
+
+            countries = {}
+            for item_list in set(list_icao):
+                countries[item_list] = list_icao.count(item_list)
+
+            for country in sorted(countries, key=countries.__getitem__, reverse=True):
+                if country[0] == 0:
+                    continue
+                else:
+                    self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                    flagCodePath = (image_flag + '/%s.png') % country
+                    if os.path.exists(flagCodePath) is True:
+                        Pixmap = QPixmap(flagCodePath)
+                        flag_country = QLabel()
+                        flag_country.setPixmap(Pixmap)
+                        self.ui.Statistics.setCellWidget(startrow, 0, flag_country)
+                    else:
+                        pass
+                    col_item = QTableWidgetItem(str('%s' % (country)), 0)
+                    self.ui.Statistics.setItem(startrow, 1, col_item)
+                    col_total = QTableWidgetItem(str(int(countries[country])), 0)
+                    self.ui.Statistics.setItem(startrow, 2, col_total)
+                    percent = float(countries[country]) / float(len(controller_list)) * 100.0
+                    col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
+                    self.ui.Statistics.setItem(startrow, 3, col_percent)
+                    startrow += 1
+                qApp.processEvents()
+        
+        if item == 2:
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            startrow = 0
+            
+            cursor.execute("SELECT realname FROM status_ivao WHERE clienttype='PILOT';" )
+            pilot_list = cursor.fetchall()
+            
+            list_icao = []
+            for callsign in range(0, len(pilot_list)):
+                if pilot_list[callsign][0][-4:]:
+                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", 
+                                   (str(pilot_list[callsign][0].encode('latin-1'))[-4:],))
+                country_icao = cursor.fetchone()
+                if country_icao is None:
+                    continue
+                else:
+                    list_icao.append(str(country_icao[0]))
+
+            countries = {}
+            for item_list in set(list_icao):
+                countries[item_list] = list_icao.count(item_list)
+
+            for country in sorted(countries, key=countries.__getitem__, reverse=True):
+                if country[0] == 0:
+                    continue
+                else:
+                    self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                    flagCodePath = (image_flag + '/%s.png') % country
+                    if os.path.exists(flagCodePath) is True:
+                        Pixmap = QPixmap(flagCodePath)
+                        flag_country = QLabel()
+                        flag_country.setPixmap(Pixmap)
+                        self.ui.Statistics.setCellWidget(startrow, 0, flag_country)
+                    else:
+                        pass
+                    col_item = QTableWidgetItem(str('%s' % (country)), 0)
+                    self.ui.Statistics.setItem(startrow, 1, col_item)
+                    col_total = QTableWidgetItem(str(int(countries[country])), 0)
+                    self.ui.Statistics.setItem(startrow, 2, col_total)
+                    percent = float(countries[country]) / float(len(pilot_list)) * 100.0
+                    col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
+                    self.ui.Statistics.setItem(startrow, 3, col_percent)
+                    startrow += 1
+                qApp.processEvents()
+
         if item == 4:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:

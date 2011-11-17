@@ -182,6 +182,11 @@
         <string>Total POB</string>
        </property>
       </row>
+      <row>
+       <property name="text">
+        <string>Last data received</string>
+       </property>
+      </row>
       <column>
        <property name="text">
         <string>Information Board</string>
@@ -1647,7 +1652,7 @@
       </property>
       <item>
        <property name="text">
-        <string>Counts by Countries</string>
+        <string notr="true">Counts by Countries</string>
        </property>
       </item>
       <item>
@@ -1657,7 +1662,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Pilots by Country</string>
+        <string>Pilots by Home Country</string>
        </property>
       </item>
       <item>
@@ -1693,11 +1698,6 @@
       <item>
        <property name="text">
         <string>Facility Type</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Pilots homes countries</string>
        </property>
       </item>
      </widget>
@@ -1882,7 +1882,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">

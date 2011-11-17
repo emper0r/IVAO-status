@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Wed Nov 16 19:26:23 2011
+# Created: Thu Nov 17 11:34:31 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -64,7 +64,7 @@ class Ui_MainWindow(object):
         self.IVAOStatustableWidget.setWordWrap(False)
         self.IVAOStatustableWidget.setObjectName(_fromUtf8("IVAOStatustableWidget"))
         self.IVAOStatustableWidget.setColumnCount(1)
-        self.IVAOStatustableWidget.setRowCount(6)
+        self.IVAOStatustableWidget.setRowCount(7)
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("MainWindow", "Pilots", None, QtGui.QApplication.UnicodeUTF8))
         self.IVAOStatustableWidget.setVerticalHeaderItem(0, item)
@@ -82,6 +82,9 @@ class Ui_MainWindow(object):
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("MainWindow", "Total POB", None, QtGui.QApplication.UnicodeUTF8))
         self.IVAOStatustableWidget.setVerticalHeaderItem(5, item)
+        item = QtGui.QTableWidgetItem()
+        item.setText(QtGui.QApplication.translate("MainWindow", "Last data received", None, QtGui.QApplication.UnicodeUTF8))
+        self.IVAOStatustableWidget.setVerticalHeaderItem(6, item)
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("MainWindow", "Information Board", None, QtGui.QApplication.UnicodeUTF8))
         self.IVAOStatustableWidget.setHorizontalHeaderItem(0, item)
@@ -717,11 +720,11 @@ class Ui_MainWindow(object):
         self.comboBoxStatistics.setGeometry(QtCore.QRect(5, 6, 181, 24))
         self.comboBoxStatistics.setObjectName(_fromUtf8("comboBoxStatistics"))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
-        self.comboBoxStatistics.setItemText(0, QtGui.QApplication.translate("MainWindow", "Counts by Countries", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBoxStatistics.setItemText(0, _fromUtf8("Counts by Countries"))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(1, QtGui.QApplication.translate("MainWindow", "Controlers by Country", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
-        self.comboBoxStatistics.setItemText(2, QtGui.QApplication.translate("MainWindow", "Pilots by Country", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBoxStatistics.setItemText(2, QtGui.QApplication.translate("MainWindow", "Pilots by Home Country", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(3, QtGui.QApplication.translate("MainWindow", "Airports traffics (all)", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
@@ -736,8 +739,6 @@ class Ui_MainWindow(object):
         self.comboBoxStatistics.setItemText(8, QtGui.QApplication.translate("MainWindow", "Type of Flights", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(9, QtGui.QApplication.translate("MainWindow", "Facility Type", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBoxStatistics.addItem(_fromUtf8(""))
-        self.comboBoxStatistics.setItemText(10, QtGui.QApplication.translate("MainWindow", "Pilots homes countries", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.addTab(self.statistics, _fromUtf8(""))
         self.database = QtGui.QWidget()
         self.database.setObjectName(_fromUtf8("database"))
@@ -813,7 +814,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.database, _fromUtf8(""))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 21))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 26))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuMenu = QtGui.QMenu(self.menuBar)
         self.menuMenu.setTitle(QtGui.QApplication.translate("MainWindow", "Menu", None, QtGui.QApplication.UnicodeUTF8))
@@ -874,6 +875,7 @@ class Ui_MainWindow(object):
         item = self.IVAOStatustableWidget.verticalHeaderItem(2)
         item = self.IVAOStatustableWidget.verticalHeaderItem(3)
         item = self.IVAOStatustableWidget.verticalHeaderItem(5)
+        item = self.IVAOStatustableWidget.verticalHeaderItem(6)
         item = self.IVAOStatustableWidget.horizontalHeaderItem(0)
         self.FriendstableWidget.setSortingEnabled(False)
         item = self.FriendstableWidget.horizontalHeaderItem(0)
