@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Thu Nov 17 11:34:31 2011
+# Created: Fri Nov 18 09:39:06 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -722,7 +722,7 @@ class Ui_MainWindow(object):
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(0, _fromUtf8("Counts by Countries"))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
-        self.comboBoxStatistics.setItemText(1, QtGui.QApplication.translate("MainWindow", "Controlers by Country", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBoxStatistics.setItemText(1, QtGui.QApplication.translate("MainWindow", "Controllers by Country", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(2, QtGui.QApplication.translate("MainWindow", "Pilots by Home Country", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))

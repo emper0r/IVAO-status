@@ -1877,7 +1877,7 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            cursor.execute("select substr(callsign,1,3) as prefix, count(distinct callsign) as airlines from status_ivao where clienttype='PILOT' group by prefix order by airlines desc;")
+            cursor.execute("SELECT SUBSTR(callsign,1,3) AS prefix, COUNT(DISTINCT callsign) AS airlines FROM status_ivao WHERE clienttype='PILOT' GROUP BY prefix ORDER BY airlines DESC;")
             items = cursor.fetchall()
             
             for i in range(0, len(items)):
@@ -1917,15 +1917,15 @@ class Main(QMainWindow):
             startrow = 0
             
             for min_pob, max_pob in [(1, 4), (5, 20), (21, 75), (76, 150), (151, 250), (250, 500)]:
-                cursor.execute("SELECT count(callsign) from status_ivao where clienttype='PILOT';" )
+                cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='PILOT';" )
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
                     continue
                 else:
-                    cursor.execute("SELECT count(callsign) from status_ivao where clienttype='PILOT' and planned_pob >= ? and planned_pob <= ?;", (min_pob, max_pob))
+                    cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='PILOT' AND planned_pob >= ? AND planned_pob <= ?;", (min_pob, max_pob))
                     pob = cursor.fetchone()
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-                    col_item = QTableWidgetItem(str('Flight with Passengers on Boards: %d - %d' % (min_pob, max_pob)), 0)
+                    col_item = QTableWidgetItem(str('Flights with Passengers on Boards: %d - %d' % (min_pob, max_pob)), 0)
                     self.ui.Statistics.setItem(startrow, 1, col_item)
                     col_total = QTableWidgetItem(str(int(pob[0])), 0)
                     self.ui.Statistics.setItem(startrow, 2, col_total)
@@ -1934,7 +1934,43 @@ class Main(QMainWindow):
                     self.ui.Statistics.setItem(startrow, 3, col_percent)
                     startrow += 1
                 qApp.processEvents()
-        
+
+        if item == 8:
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            startrow = 0
+            
+            for type_flight in ('S', 'G', 'M', 'N', 'X'):
+                cursor.execute("SELECT COUNT(planned_typeofflight) FROM status_ivao WHERE clienttype='PILOT';" )
+                total_items = cursor.fetchone()
+                if total_items[0] == 0:
+                    continue
+                else:
+                    cursor.execute("SELECT COUNT(planned_typeofflight) FROM status_ivao WHERE clienttype='PILOT' and planned_typeofflight = ?;", (type_flight,))
+                    item_typeofflight = cursor.fetchone()
+                    self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                    if type_flight == 'S':
+                        col_item = QTableWidgetItem(str('Flights: Scheduled Services'))
+                    if type_flight == 'N':
+                        col_item = QTableWidgetItem(str('Flights: Non-Scheduled Services'))
+                    if type_flight == 'G':
+                        col_item = QTableWidgetItem(str('Flights: General Aviation'))
+                    if type_flight == 'M':
+                        col_item = QTableWidgetItem(str('Flights: Military'))
+                    if type_flight == 'X':
+                        col_item = QTableWidgetItem(str('Flights: Others'))
+                    col_1 = QTableWidgetItem(str(type_flight), 0)
+                    self.ui.Statistics.setItem(startrow, 0, col_1)
+                    self.ui.Statistics.setItem(startrow, 1, col_item)
+                    col_total = QTableWidgetItem(str(item_typeofflight[0]), 0)
+                    self.ui.Statistics.setItem(startrow, 2, col_total)
+                    percent = float(item_typeofflight[0]) / float(total_items[0]) * 100.0
+                    col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
+                    self.ui.Statistics.setItem(startrow, 3, col_percent)
+                    startrow += 1
+                qApp.processEvents()
+
         if item == 9:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:
@@ -1942,15 +1978,15 @@ class Main(QMainWindow):
             startrow = 0
             
             for facility in ('DEP', 'GND', 'TWR', 'APP', 'CTR', 'OBS'):
-                cursor.execute("SELECT count(callsign) from status_ivao where clienttype='ATC';" )
+                cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC';" )
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
                     continue
                 else:
-                    cursor.execute("SELECT count(callsign) from status_ivao where clienttype='ATC' and callsign like ?;", ('%'+str(facility)+'%',))
+                    cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC' AND callsign LIKE ?;", ('%'+str(facility)+'%',))
                     position = cursor.fetchone()
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-                    col_item = QTableWidgetItem(str('Controller in: %s' % (facility)), 0)
+                    col_item = QTableWidgetItem(str('Controllers in: %s' % (facility)), 0)
                     self.ui.Statistics.setItem(startrow, 1, col_item)
                     col_total = QTableWidgetItem(str(int(position[0])), 0)
                     self.ui.Statistics.setItem(startrow, 2, col_total)
