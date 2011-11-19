@@ -2017,10 +2017,8 @@ class AddFriend():
                     insert = False
             try:
                 if insert is True:
-                    cursor.execute("SELECT vid, realname, rating, clienttype from status_ivao WHERE vid=?;", ((int(vid2add),)))
-                    data = cursor.fetchall()
-                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) VALUES (?, ?, ?, ?);' \
-                                   , (int(str(data[0][0])), str(data[0][1].encode('latin-1')), int(data[0][2]), str(data[0][3])))
+                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) \
+                    SELECT vid, realname, rating, clienttype from status_ivao where vid=?;', (vid2add,))
                     connection.commit()
             except:
                 pass
