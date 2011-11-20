@@ -25,34 +25,13 @@ First you must have the following dependencies installed to run the application.
 * python-qt4 (version >= 4.8.3)
 * sqlite3 (version >= 3.7.4)
 * libsqlite3-0 (version >= 3.7.4)
-* python-setuptools (stable version with the system is require for install any python package like geopy)
-* geopy (works with version >= 0.94.1)
 
 INSTALL
 =======
 
 Installing main dependencies in Debian/Ubuntu/Kubuntu
 
-    aptitude install python-qt4 sqlite3 libsqlite3-0 python-setuptools
-
-Second important dependency is GeoPy found in this link
-
-http://code.google.com/p/geopy/
-
-Download the last tarball and install with simple steps
-or can get it into tools path included
-
-untar tarball
-
-    tar zvfx geopy-0.94.1.tar.gz
-
-    cd geopy-0.94.1
-
-    python setup.py build
-
-and as root:
-
-    sudo python setup.py install
+    aptitude install python-qt4 sqlite3 libsqlite3-0
 
 SOURCE
 ======

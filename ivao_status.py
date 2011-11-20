@@ -31,13 +31,8 @@ except:
     print  ('If you has installed before, it\'s pretty sure your system made an update for python package so,\n')
     print  ('You have to reinstall GeoPy tool again.\n')
     sys.exit(2)
-try:
-    from geopy import distance
-except:
-    print ('\nNot Have GeoPy installed, please download from "http://code.google.com/p/geopy/" or can hit it')
-    print ('into tools path, read README.rst for more info to install it.\n')
-    sys.exit(2)
 
+import distance
 import MainWindow_UI
 import PilotInfo_UI
 import ControllerInfo_UI
@@ -2143,16 +2138,15 @@ class PilotInfo(QMainWindow):
         if city_orig_point is None or city_dest_point is None:
             self.ui.nauticalmiles.setText('Pending...')
             self.ui.progressBarTrack.setValue(0)
+        if str(info[0][5]) == str(info[0][6]):
+                self.ui.progressBarTrack.setValue(0)
+                self.ui.nauticalmiles.setText('Local Flight')
         else:
             total_miles = distance.distance(city_orig_point, city_dest_point).miles
             dist_traveled = distance.distance(city_orig_point, player_point).miles
             percent = float((dist_traveled / total_miles) * 100.0)
             self.ui.nauticalmiles.setText('%.1f / %.1f miles - %.1f%%' % (float(dist_traveled), float(total_miles), float(percent)))
-            if str(info[0][5]) == str(info[0][6]):
-                self.ui.progressBarTrack.setValue(0)
-                self.ui.nauticalmiles.setText('Local Flight')
-            else:
-                self.ui.progressBarTrack.setValue(int(percent))
+            self.ui.progressBarTrack.setValue(int(percent))
         status_plane = Main().status_plane(callsign)
         self.ui.FlightStatusDetail.setText(str(status_plane))
 
