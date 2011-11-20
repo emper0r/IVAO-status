@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Fri Nov 18 09:39:06 2011
+# Created: Sun Nov 20 11:05:20 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -714,8 +714,8 @@ class Ui_MainWindow(object):
         self.Statistics.horizontalHeader().setMinimumSectionSize(120)
         self.Statistics.horizontalHeader().setSortIndicatorShown(False)
         self.Statistics.horizontalHeader().setStretchLastSection(True)
-        self.Statistics.verticalHeader().setDefaultSectionSize(27)
-        self.Statistics.verticalHeader().setMinimumSectionSize(27)
+        self.Statistics.verticalHeader().setDefaultSectionSize(20)
+        self.Statistics.verticalHeader().setMinimumSectionSize(20)
         self.comboBoxStatistics = QtGui.QComboBox(self.statistics)
         self.comboBoxStatistics.setGeometry(QtCore.QRect(5, 6, 181, 24))
         self.comboBoxStatistics.setObjectName(_fromUtf8("comboBoxStatistics"))
@@ -814,7 +814,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.database, _fromUtf8(""))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 26))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 21))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuMenu = QtGui.QMenu(self.menuBar)
         self.menuMenu.setTitle(QtGui.QApplication.translate("MainWindow", "Menu", None, QtGui.QApplication.UnicodeUTF8))

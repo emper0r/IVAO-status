@@ -1814,8 +1814,11 @@ class Main(QMainWindow):
                     col_total = QTableWidgetItem(str(int(countries[country])), 0)
                     self.ui.Statistics.setItem(startrow, 2, col_total)
                     percent = float(countries[country]) / float(len(controller_list)) * 100.0
-                    col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
-                    self.ui.Statistics.setItem(startrow, 3, col_percent)
+                    self.progressbar = QProgressBar()
+                    self.progressbar.setMinimum(1)
+                    self.progressbar.setMaximum(100)
+                    self.progressbar.setValue(float(percent))
+                    self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
         
@@ -1862,8 +1865,11 @@ class Main(QMainWindow):
                     col_total = QTableWidgetItem(str(int(countries[country])), 0)
                     self.ui.Statistics.setItem(startrow, 2, col_total)
                     percent = float(countries[country]) / float(len(pilot_list)) * 100.0
-                    col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
-                    self.ui.Statistics.setItem(startrow, 3, col_percent)
+                    self.progressbar = QProgressBar()
+                    self.progressbar.setMinimum(1)
+                    self.progressbar.setMaximum(100)
+                    self.progressbar.setValue(float(percent))
+                    self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
 
@@ -1900,8 +1906,11 @@ class Main(QMainWindow):
                 col_total = QTableWidgetItem(str(int(items[i][1])), 0)
                 self.ui.Statistics.setItem(startrow, 2, col_total)
                 percent = float(items[i][1]) / float(len(items)) * 100.0
-                col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
-                self.ui.Statistics.setItem(startrow, 3, col_percent)
+                self.progressbar = QProgressBar()
+                self.progressbar.setMinimum(1)
+                self.progressbar.setMaximum(100)
+                self.progressbar.setValue(float(percent))
+                self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                 startrow += 1
                 qApp.processEvents()
 
@@ -1925,8 +1934,11 @@ class Main(QMainWindow):
                     col_total = QTableWidgetItem(str(int(pob[0])), 0)
                     self.ui.Statistics.setItem(startrow, 2, col_total)
                     percent = float(pob[0]) / float(total_items[0]) * 100.0
-                    col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
-                    self.ui.Statistics.setItem(startrow, 3, col_percent)
+                    self.progressbar = QProgressBar()
+                    self.progressbar.setMinimum(1)
+                    self.progressbar.setMaximum(100)
+                    self.progressbar.setValue(float(percent))
+                    self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
 
@@ -1961,8 +1973,11 @@ class Main(QMainWindow):
                     col_total = QTableWidgetItem(str(item_typeofflight[0]), 0)
                     self.ui.Statistics.setItem(startrow, 2, col_total)
                     percent = float(item_typeofflight[0]) / float(total_items[0]) * 100.0
-                    col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
-                    self.ui.Statistics.setItem(startrow, 3, col_percent)
+                    self.progressbar = QProgressBar()
+                    self.progressbar.setMinimum(1)
+                    self.progressbar.setMaximum(100)
+                    self.progressbar.setValue(float(percent))
+                    self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
 
@@ -1987,7 +2002,11 @@ class Main(QMainWindow):
                     self.ui.Statistics.setItem(startrow, 2, col_total)
                     percent = float(position[0]) / float(total_items[0]) * 100.0
                     col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
-                    self.ui.Statistics.setItem(startrow, 3, col_percent)
+                    self.progressbar = QProgressBar()
+                    self.progressbar.setMinimum(1)
+                    self.progressbar.setMaximum(100)
+                    self.progressbar.setValue(float(percent))
+                    self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
 
