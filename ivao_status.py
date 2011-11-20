@@ -116,8 +116,8 @@ class Main(QMainWindow):
         self.ui.OutboundTableWidget.setColumnWidth(3, 30)
         self.ui.OutboundTableWidget.setColumnWidth(4, 120)
         self.ui.Statistics.setColumnWidth(0, 30)
-        self.ui.Statistics.setColumnWidth(1, 300)
-        self.ui.Statistics.setColumnWidth(2, 300)
+        self.ui.Statistics.setColumnWidth(1, 500)
+        self.ui.Statistics.setColumnWidth(2, 100)
         self.ui.Statistics.setColumnWidth(3, 100)
         self.ui.PILOT_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.ATC_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -1898,7 +1898,7 @@ class Main(QMainWindow):
                         if airline_code is None:
                             col_airline = QTableWidgetItem(str(items[i][0]), 0)
                         else:
-                            col_airline = QTableWidgetItem(str(airline_code[0]), 0)
+                            col_airline = QTableWidgetItem(str(airline_code[0] + ''), 0)
                         self.ui.Statistics.setItem(startrow, 1, col_airline)
                 except:
                     col_item = QTableWidgetItem(str(items[i][0]), 0)
@@ -1914,6 +1914,88 @@ class Main(QMainWindow):
                 startrow += 1
                 qApp.processEvents()
 
+        if item == 5:
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            startrow = 0
+            cursor.execute("SELECT planned_aircraft FROM status_ivao WHERE clienttype='PILOT';" )
+            airplane_type = cursor.fetchall()
+            list_aircraft = []
+            for item_list in range(0, len(airplane_type)):
+                if str(airplane_type[item_list][0]) == '' or str(airplane_type[item_list][0]) == 'None':
+                    continue
+                else:
+                    cursor.execute("SELECT Fabricant FROM icao_aircraft WHERE Model = ?;", (str(airplane_type[item_list][0]).split('/')[1],))
+                    fabricant = cursor.fetchall()
+                    if fabricant == []:
+                        continue
+                    else:
+                        list_aircraft.append(str(fabricant[0][0]))
+
+            fabricant_type = {}
+            for item_list in set(list_aircraft):
+                fabricant_type[item_list] = list_aircraft.count(item_list)
+            
+            for item in sorted(fabricant_type, key=fabricant_type.__getitem__, reverse=True):
+                if fabricant_type == 0:
+                    continue
+                else:
+                    self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                    col_item = QTableWidgetItem(str('%s' % (str(item))), 0)
+                    self.ui.Statistics.setItem(startrow, 1, col_item)
+                    col_total = QTableWidgetItem(str(int(fabricant_type[item])), 0)
+                    self.ui.Statistics.setItem(startrow, 2, col_total)
+                    percent = float(fabricant_type[item]) / float(len(list_aircraft)) * 100.0
+                    self.progressbar = QProgressBar()
+                    self.progressbar.setMinimum(1)
+                    self.progressbar.setMaximum(100)
+                    self.progressbar.setValue(float(percent))
+                    self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
+                    startrow += 1
+                qApp.processEvents()
+            
+        if item == 6:
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            startrow = 0
+            cursor.execute("SELECT planned_aircraft FROM status_ivao WHERE clienttype='PILOT';" )
+            airplane_type = cursor.fetchall()
+            list_aircraft = []
+            for item_list in range(0, len(airplane_type)):
+                if str(airplane_type[item_list][0]) == '' or str(airplane_type[item_list][0]) == 'None':
+                    continue
+                else:
+                    list_aircraft.append(str(airplane_type[item_list]).split('/')[1])
+
+            list_type = {}
+            for item_list in set(list_aircraft):
+                list_type[item_list] = list_aircraft.count(item_list)
+            
+            for item in sorted(list_type, key=list_type.__getitem__, reverse=True):
+                if list_type == 0:
+                    continue
+                else:
+                    self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                    cursor.execute("SELECT Description FROM icao_aircraft WHERE Model = ?;", (item,))
+                    aircraft_description = cursor.fetchone()
+                    if aircraft_description is None:
+                        continue
+                    else:
+                        col_item = QTableWidgetItem(str('%s - %s' % (str(item), str(aircraft_description[0]))), 0)
+                        self.ui.Statistics.setItem(startrow, 1, col_item)
+                        col_total = QTableWidgetItem(str(int(list_type[item])), 0)
+                        self.ui.Statistics.setItem(startrow, 2, col_total)
+                        percent = float(list_type[item]) / float(len(list_aircraft)) * 100.0
+                        self.progressbar = QProgressBar()
+                        self.progressbar.setMinimum(1)
+                        self.progressbar.setMaximum(100)
+                        self.progressbar.setValue(float(percent))
+                        self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
+                        startrow += 1
+                qApp.processEvents()
+        
         if item == 7:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:
