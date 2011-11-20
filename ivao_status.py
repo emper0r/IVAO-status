@@ -1898,7 +1898,7 @@ class Main(QMainWindow):
                         if airline_code is None:
                             col_airline = QTableWidgetItem(str(items[i][0]), 0)
                         else:
-                            col_airline = QTableWidgetItem(str(airline_code[0] + ''), 0)
+                            col_airline = QTableWidgetItem(str(airline_code[0]), 0)
                         self.ui.Statistics.setItem(startrow, 1, col_airline)
                 except:
                     col_item = QTableWidgetItem(str(items[i][0]), 0)
