@@ -33,8 +33,15 @@ Installing main dependencies in Debian/Ubuntu/Kubuntu
 
     aptitude install python-qt4 sqlite3 libsqlite3-0
 
-SOURCE
-======
+INSTALLER BINARY
+================
+
+You can download the installer from:
+
+    https://github.com/downloads/emper0r/IVAO-status/IVAO-Status-1.0-Linux-x86-Install.bin
+
+OR TRY TO GET THE SOURCE
+========================
 
 After install all dependencies download source code:
 
