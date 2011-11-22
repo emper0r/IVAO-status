@@ -1769,6 +1769,7 @@ class Main(QMainWindow):
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
         item = self.ui.comboBoxStatistics.currentIndex()
+        qApp.processEvents()
         
         if item == 1:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
@@ -1821,8 +1822,11 @@ class Main(QMainWindow):
                     self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
+            self.statusBar().showMessage('Done!', 2000)
         
         if item == 2:
+            self.statusBar().showMessage('Counting...', 2000)
+            qApp.processEvents()
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
@@ -1872,8 +1876,72 @@ class Main(QMainWindow):
                     self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
+            self.statusBar().showMessage('Done!', 2000)
+                
+        if item == 3:
+            self.statusBar().showMessage('Counting...', 2000)
+            qApp.processEvents()
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            
+            cursor.execute("SELECT planned_depairport FROM status_ivao")
+            allairports_dep = cursor.fetchall()
+            cursor.execute("SELECT planned_destairport FROM status_ivao")
+            allairports_dest = cursor.fetchall()
+            
+            list_traffic_airport = []
+            for airport in range(0, len(allairports_dep)):
+                cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", (str(allairports_dep[airport][0]),))
+                country = cursor.fetchone()
+                if country is None:
+                    continue
+                else:
+                    list_traffic_airport.append(str(country[0]))
+
+            for airport in range(0, len(allairports_dest)):
+                cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", (str(allairports_dest[airport][0]),))
+                country = cursor.fetchone()
+                if country is None:
+                    continue
+                else:
+                    list_traffic_airport.append(str(country[0]))
+            
+            country_dict = {}
+            for item_list in set(list_traffic_airport):
+                country_dict[item_list] = list_traffic_airport.count(item_list)
+            
+            startrow = 0
+            for country in sorted(country_dict, key=country_dict.__getitem__, reverse=True):
+                if country[0] == 0:
+                    continue
+                else:
+                    self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                    flagCodePath = (image_flag + '/%s.png') % country
+                    if os.path.exists(flagCodePath) is True:
+                        Pixmap = QPixmap(flagCodePath)
+                        flag_country = QLabel()
+                        flag_country.setPixmap(Pixmap)
+                        self.ui.Statistics.setCellWidget(startrow, 0, flag_country)
+                    else:
+                        pass
+                    col_item = QTableWidgetItem(str('%s' % (country)), 0)
+                    self.ui.Statistics.setItem(startrow, 1, col_item)
+                    col_total = QTableWidgetItem(str(int(country_dict[country])), 0)
+                    self.ui.Statistics.setItem(startrow, 2, col_total)
+                    percent = float(country_dict[country]) / float(len(list_traffic_airport)) * 100.0
+                    self.progressbar = QProgressBar()
+                    self.progressbar.setMinimum(1)
+                    self.progressbar.setMaximum(100)
+                    self.progressbar.setValue(float(percent))
+                    self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
+                    startrow += 1
+            self.statusBar().showMessage('Done!', 2000)
 
         if item == 4:
+            self.statusBar().showMessage('Counting...', 2000)
+            qApp.processEvents()
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
@@ -1912,7 +1980,7 @@ class Main(QMainWindow):
                 self.progressbar.setValue(float(percent))
                 self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                 startrow += 1
-                qApp.processEvents()
+            self.statusBar().showMessage('Done!', 2000)
 
         if item == 5:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
@@ -1954,6 +2022,7 @@ class Main(QMainWindow):
                     self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
+            self.statusBar().showMessage('Done!', 2000)
             
         if item == 6:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
@@ -1994,7 +2063,8 @@ class Main(QMainWindow):
                         self.progressbar.setValue(float(percent))
                         self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                         startrow += 1
-                qApp.processEvents()
+                    qApp.processEvents()
+            self.statusBar().showMessage('Done!', 2000)
         
         if item == 7:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
@@ -2023,6 +2093,7 @@ class Main(QMainWindow):
                     self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
+            self.statusBar().showMessage('Done!', 2000)
 
         if item == 8:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
@@ -2062,6 +2133,7 @@ class Main(QMainWindow):
                     self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
+            self.statusBar().showMessage('Done!', 2000)
 
         if item == 9:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
@@ -2091,6 +2163,7 @@ class Main(QMainWindow):
                     self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
+                self.statusBar().showMessage('Done!', 2000)
 
 class AddFriend():
     def add_friend(self, vid2add):
