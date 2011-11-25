@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Sun Nov 20 11:05:20 2011
+# Created: Fri Nov 25 10:14:08 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -717,7 +717,7 @@ class Ui_MainWindow(object):
         self.Statistics.verticalHeader().setDefaultSectionSize(20)
         self.Statistics.verticalHeader().setMinimumSectionSize(20)
         self.comboBoxStatistics = QtGui.QComboBox(self.statistics)
-        self.comboBoxStatistics.setGeometry(QtCore.QRect(5, 6, 181, 24))
+        self.comboBoxStatistics.setGeometry(QtCore.QRect(5, 6, 231, 24))
         self.comboBoxStatistics.setObjectName(_fromUtf8("comboBoxStatistics"))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(0, _fromUtf8("Counts by Countries"))
@@ -726,7 +726,7 @@ class Ui_MainWindow(object):
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(2, QtGui.QApplication.translate("MainWindow", "Pilots by Home Country", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
-        self.comboBoxStatistics.setItemText(3, QtGui.QApplication.translate("MainWindow", "Airports traffics (all)", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBoxStatistics.setItemText(3, QtGui.QApplication.translate("MainWindow", "Airports traffics (inbound/outbound)", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(4, QtGui.QApplication.translate("MainWindow", "Airlines", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
@@ -814,7 +814,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.database, _fromUtf8(""))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 21))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 24))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuMenu = QtGui.QMenu(self.menuBar)
         self.menuMenu.setTitle(QtGui.QApplication.translate("MainWindow", "Menu", None, QtGui.QApplication.UnicodeUTF8))
@@ -833,7 +833,7 @@ class Ui_MainWindow(object):
         self.actionSetting.setFont(font)
         self.actionSetting.setObjectName(_fromUtf8("actionSetting"))
         self.actionUpdate = QtGui.QAction(MainWindow)
-        self.actionUpdate.setText(QtGui.QApplication.translate("MainWindow", "Update", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionUpdate.setText(QtGui.QApplication.translate("MainWindow", "Update / Refresh Data", None, QtGui.QApplication.UnicodeUTF8))
         self.actionUpdate.setObjectName(_fromUtf8("actionUpdate"))
         self.actionAbout = QtGui.QAction(MainWindow)
         self.actionAbout.setText(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
@@ -842,7 +842,7 @@ class Ui_MainWindow(object):
         self.actionExit.setText(QtGui.QApplication.translate("MainWindow", "Exit", None, QtGui.QApplication.UnicodeUTF8))
         self.actionExit.setObjectName(_fromUtf8("actionExit"))
         self.actionUpdate_Map = QtGui.QAction(MainWindow)
-        self.actionUpdate_Map.setText(QtGui.QApplication.translate("MainWindow", "Update Map", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionUpdate_Map.setText(QtGui.QApplication.translate("MainWindow", "Show whole Map", None, QtGui.QApplication.UnicodeUTF8))
         self.actionUpdate_Map.setObjectName(_fromUtf8("actionUpdate_Map"))
         self.menuMenu.addAction(self.actionSetting)
         self.menuMenu.addAction(self.actionUpdate)

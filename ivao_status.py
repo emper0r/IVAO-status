@@ -1528,9 +1528,10 @@ class Main(QMainWindow):
 
     def about(self):
         QMessageBox.about(self, "About IVAO :: Status",
-                          """<b>IVAO::Status</b>  version %s<p>License: GPL3+<p>
+                          """<b>IVAO::Status</b>  version %s<p>License: GPL version 3+<p>
                           This Aplication can be used to see IVAO operational network.<p>
-                          July 2011 Tony (emper0r) P. Diaz  --  emperor.cu@gmail.com <p>"""
+                          July 2011 Tony (emper0r) P. Diaz  --  emperor.cu@gmail.com<p>
+                          IVAO User: 304605"""
                           % (__version__))
 
     def show_pilot_info(self, callsign):
@@ -2133,6 +2134,37 @@ class Main(QMainWindow):
                     self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
+
+            for type_flight in ('I', 'V', 'Y', 'Z'):
+                cursor.execute("SELECT COUNT(planned_flighttype) FROM status_ivao WHERE clienttype='PILOT';" )
+                total_items = cursor.fetchone()
+                if total_items[0] == 0:
+                    continue
+                else:
+                    cursor.execute("SELECT COUNT(planned_flighttype) FROM status_ivao WHERE clienttype='PILOT' and planned_flighttype = ?;", (type_flight,))
+                    item_typeofflight = cursor.fetchone()
+                    self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                    if type_flight == 'I':
+                        col_item = QTableWidgetItem(str('Flights: Instrumental'))
+                    if type_flight == 'V':
+                        col_item = QTableWidgetItem(str('Flights: Visual'))
+                    if type_flight == 'Y':
+                        col_item = QTableWidgetItem(str('Flights: Instrumental changing to Visual'))
+                    if type_flight == 'Z':
+                        col_item = QTableWidgetItem(str('Flights: Visual changing to Instrumental'))
+                    col_1 = QTableWidgetItem(str(type_flight), 0)
+                    self.ui.Statistics.setItem(startrow, 0, col_1)
+                    self.ui.Statistics.setItem(startrow, 1, col_item)
+                    col_total = QTableWidgetItem(str(item_typeofflight[0]), 0)
+                    self.ui.Statistics.setItem(startrow, 2, col_total)
+                    percent = float(item_typeofflight[0]) / float(total_items[0]) * 100.0
+                    self.progressbar = QProgressBar()
+                    self.progressbar.setMinimum(1)
+                    self.progressbar.setMaximum(100)
+                    self.progressbar.setValue(float(percent))
+                    self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
+                    startrow += 1
+                qApp.processEvents()
             self.statusBar().showMessage('Done!', 2000)
 
         if item == 9:
@@ -2141,16 +2173,18 @@ class Main(QMainWindow):
                 self.ui.Statistics.removeRow(0)
             startrow = 0
             
-            for facility in ('DEP', 'GND', 'TWR', 'APP', 'CTR', 'OBS'):
+            for facility, description in (('DEP','Departure'), ('GND','Ground'), ('TWR', 'Tower'), 
+                                          ('APP','Approach'), ('CTR','Center'), ('OBS','Observer')):
                 cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC';" )
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
                     continue
                 else:
-                    cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC' AND callsign LIKE ?;", ('%'+str(facility)+'%',))
+                    cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC' AND callsign LIKE ?;", 
+                                   ('%'+str(facility)+'%',))
                     position = cursor.fetchone()
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-                    col_item = QTableWidgetItem(str('Controllers in: %s' % (facility)), 0)
+                    col_item = QTableWidgetItem(str('Controllers in: %s - (%s)' % (facility, description)), 0)
                     self.ui.Statistics.setItem(startrow, 1, col_item)
                     col_total = QTableWidgetItem(str(int(position[0])), 0)
                     self.ui.Statistics.setItem(startrow, 2, col_total)
