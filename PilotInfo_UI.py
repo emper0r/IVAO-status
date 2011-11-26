@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Mon Nov  7 13:09:19 2011
+# Created: Sat Nov 26 10:52:26 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -288,7 +288,7 @@ class Ui_QPilotInfo(object):
         self.PobText.setText(_fromUtf8(""))
         self.PobText.setObjectName(_fromUtf8("PobText"))
         self.TransponderText = QtGui.QLabel(self.centralwidget)
-        self.TransponderText.setGeometry(QtCore.QRect(357, 460, 41, 20))
+        self.TransponderText.setGeometry(QtCore.QRect(311, 460, 41, 20))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)
@@ -297,7 +297,7 @@ class Ui_QPilotInfo(object):
         self.TransponderText.setText(_fromUtf8(""))
         self.TransponderText.setObjectName(_fromUtf8("TransponderText"))
         self.TransponderLabel = QtGui.QLabel(self.centralwidget)
-        self.TransponderLabel.setGeometry(QtCore.QRect(270, 462, 91, 16))
+        self.TransponderLabel.setGeometry(QtCore.QRect(224, 462, 91, 16))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)
@@ -503,6 +503,26 @@ class Ui_QPilotInfo(object):
         self.FLFiled.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.FLFiled.setText(QtGui.QApplication.translate("QPilotInfo", "FL (Filed)", None, QtGui.QApplication.UnicodeUTF8))
         self.FLFiled.setObjectName(_fromUtf8("FLFiled"))
+        self.time_online = QtGui.QLabel(self.centralwidget)
+        self.time_online.setGeometry(QtCore.QRect(363, 462, 91, 16))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Sans Serif"))
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.time_online.setFont(font)
+        self.time_online.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.time_online.setText(QtGui.QApplication.translate("QPilotInfo", "Time Online:", None, QtGui.QApplication.UnicodeUTF8))
+        self.time_online.setObjectName(_fromUtf8("time_online"))
+        self.time_online_text = QtGui.QLabel(self.centralwidget)
+        self.time_online_text.setGeometry(QtCore.QRect(450, 460, 41, 20))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Sans Serif"))
+        font.setPointSize(8)
+        self.time_online_text.setFont(font)
+        self.time_online_text.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.time_online_text.setText(_fromUtf8(""))
+        self.time_online_text.setObjectName(_fromUtf8("time_online_text"))
         QPilotInfo.setCentralWidget(self.centralwidget)
         self.statusBar = QtGui.QStatusBar(QPilotInfo)
         self.statusBar.setObjectName(_fromUtf8("statusBar"))

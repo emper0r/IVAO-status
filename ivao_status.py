@@ -474,7 +474,7 @@ class Main(QMainWindow):
         else:
             pob_ivao = QTableWidgetItem(str(int(pob[0])))
 
-        time_received = datetime.datetime.now()
+        time_received = datetime.datetime.utcnow()
         time_board = QTableWidgetItem(str(time_received).split('.')[0])
         
         self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
@@ -519,9 +519,9 @@ class Main(QMainWindow):
                     return groundspeed
                 else:
                     if int(str(get_status[4])) == 0:
-                        if (percent >= 0) and (percent <= 5.0):
+                        if (percent >= 0.0) and (percent <= 2.0):
                             groundspeed = 'Takeoff'
-                        if (percent >= 5.0) and (percent <= 7.0):
+                        if (percent >= 2.0) and (percent <= 7.0):
                             groundspeed = 'Initial Climbing'
                         if (percent >= 7.0) and (percent <= 10.0):
                             groundspeed = 'Climbing'
@@ -535,11 +535,11 @@ class Main(QMainWindow):
                             groundspeed = 'Final Approach'
                         return groundspeed
                     else:
-                        if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 2.0):
+                        if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 1.0):
                             groundspeed = 'Departing'
-                        if (percent >= 2.0) and (percent <= 5.0):
+                        if (get_status[6] > 30) and (get_status[6] < 150) and (percent < 1.0):
                             groundspeed = 'Takeoff'
-                        if (((percent >= 97.0) and (percent <=100.0)) and ((get_status[6] <= 220) and (get_status[6] >= 30))):
+                        if (((percent >= 97.0) and (percent <=105.0)) and ((get_status[6] <= 220) and (get_status[6] >= 30))):
                             groundspeed = 'Landed'
                         if (get_status[6] < 30) and (percent > 99.0):
                             groundspeed = 'Taxing to Gate'
@@ -666,7 +666,7 @@ class Main(QMainWindow):
                 start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]) \
                                                     , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10]) \
                                                     , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
-                diff = abs(datetime.datetime.now() - start_connected)
+                diff = datetime.datetime.utcnow() - start_connected
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.ATC_FullList.setItem(startrow, 8, col_time)
             except:
@@ -746,7 +746,7 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 8, col_status)
             start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
                                 , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
-            diff = abs(datetime.datetime.now() - start_connected)
+            diff = datetime.datetime.utcnow() - start_connected
             col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             self.progress.setValue(int(float(startrow) / float(len(rows_pilots)) * 100.0))
@@ -857,7 +857,7 @@ class Main(QMainWindow):
                                                         , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
                 except:
                     pass
-                diff = abs(datetime.datetime.now() - start_connected)
+                diff = datetime.datetime.utcnow() - start_connected
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.ATCtableWidget.setItem(startrow_atc, 6, col_time)
                 qApp.processEvents()
@@ -929,7 +929,7 @@ class Main(QMainWindow):
                 start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]) \
                                                     , int(str(row_pilot[6])[6:8]), int(str(row_pilot[6])[8:10]) \
                                                     , int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
-                diff = abs(datetime.datetime.now() - start_connected)
+                diff = datetime.datetime.utcnow() - start_connected
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 9, col_time)
                 startrow_pilot += 1
@@ -1356,6 +1356,8 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Error! during try get Metar info, check your internet connection...', 4000)
 
     def view_map(self, vid, icao_orig=None, icao_dest=None):
+        self.statusBar().showMessage('Showing player in Map', 4000)
+        qApp.processEvents()
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -1408,6 +1410,8 @@ class Main(QMainWindow):
         if str(player[0][2][-4:]) == '_OBS':
             player_location.write('    var zoom = 12;\n')
         if str(player[0][2][-4:]) == '_CTR':
+            player_location.write('    var zoom = 5;\n')
+        if player[0][4] == 'PILOT':
             player_location.write('    var zoom = 5;\n')
         player_location.write('    var player=new OpenLayers.Layer.Vector("Player",\n')
         player_location.write('    {\n')
@@ -2362,7 +2366,7 @@ class PilotInfo(QMainWindow):
         cursor = connection.cursor()
         cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
         planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, \
-        onground, latitude, longitude, planned_altairport, planned_altairport2, planned_tascruise \
+        onground, latitude, longitude, planned_altairport, planned_altairport2, planned_tascruise, time_connected \
         FROM status_ivao WHERE callsign = ? AND clienttype='PILOT' ;", (str(callsign),))
         info = cursor.fetchall()
         try:
@@ -2467,6 +2471,15 @@ class PilotInfo(QMainWindow):
             self.ui.progressBarTrack.setValue(int(percent))
         status_plane = Main().status_plane(callsign)
         self.ui.FlightStatusDetail.setText(str(status_plane))
+        try:
+            start_connected = datetime.datetime(int(str(info[0][18])[:4]), int(str(info[0][18])[4:6]) \
+                                                , int(str(info[0][18])[6:8]), int(str(info[0][18])[8:10]) \
+                                                , int(str(info[0][18])[10:12]), int(str(info[0][18])[12:14]))
+            diff = datetime.datetime.utcnow() - start_connected
+            self.ui.time_online_text.setText(str(diff)[:-7])
+        except:
+            self.ui.time_online_text.setText('Pending...')
+        
 
     def add_button(self):
         add2friend = AddFriend()
@@ -2539,7 +2552,7 @@ class ControllerInfo(QMainWindow):
             start_connected = datetime.datetime(int(str(info[0][8])[:4]), int(str(info[0][8])[4:6]) \
                                                 , int(str(info[0][8])[6:8]), int(str(info[0][8])[8:10]) \
                                                 , int(str(info[0][8])[10:12]), int(str(info[0][8])[12:14]))
-            diff = abs(datetime.datetime.now() - start_connected)
+            diff = datetime.datetime.utcnow() - start_connected
             self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])
         except:
             self.ui.TimeOnLineText.setText('Pending...')
