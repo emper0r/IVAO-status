@@ -1397,14 +1397,17 @@ class Main(QMainWindow):
         player_location.write('            new OpenLayers.Projection("EPSG:4326"),\n')
         player_location.write('            map.getProjectionObject()\n')
         player_location.write('            );\n')
-        if player[0][2][-4:] == '_OBS' or player[0][2][-4:] == '_DEP' or player[0][2][-4:] == '_GND' \
-           or icao_orig is None or icao_dest is None:
+        if str(player[0][2][-4:]) == "_GND":
             player_location.write('    var zoom = 15;\n')
-        elif player[0][2][-4:] == '_TWR' or player[0][2][-4:] == '_APP':
+        if str(player[0][2][-4:]) == "_DEP":
+            player_location.write('    var zoom = 15;\n')
+        if str(player[0][2][-4:]) == "_TWR":
             player_location.write('    var zoom = 14;\n')
-        elif player[0][2][-4:] == '_CTR':
+        if str(player[0][2][-4:]) == "_APP":
+            player_location.write('    var zoom = 13;\n')
+        if str(player[0][2][-4:]) == '_OBS':
             player_location.write('    var zoom = 12;\n')
-        else:
+        if str(player[0][2][-4:]) == '_CTR':
             player_location.write('    var zoom = 5;\n')
         player_location.write('    var player=new OpenLayers.Layer.Vector("Player",\n')
         player_location.write('    {\n')
@@ -1424,97 +1427,136 @@ class Main(QMainWindow):
             player_location.write('         fillOpacity: "0.05",\n')
         else:
             player_location.write('         fillOpacity: "${opacity}",\n')
-        player_location.write('             label: "%s",\n' % str(player[0][2]))
-        player_location.write('             fontColor: "white",\n')
+        player_location.write('         label: "%s",\n' % str(player[0][2]))
+        player_location.write('         fontColor: "white",\n')
+        player_location.write('         fontSize: "10px",\n')
+        player_location.write('         fontFamily: "Courier New, monospace",\n')
+        player_location.write('         labelAlign: "cm",\n')
+        player_location.write('         labelXOffset: 30,\n')
+        player_location.write('         labelYOffset: 5\n')
         if str(player[0][2][-4:]) == '_CTR':
-            player_location.write('             fontSize: "12px",\n')
-            player_location.write('             fontWeight: "bold",\n')
-        else:
-            player_location.write('             fontSize: "10px",\n')
-        player_location.write('             fontFamily: "Courier New, monospace",\n')
-        player_location.write('             labelAlign: "cm",\n')
-        player_location.write('             labelXOffset: 30,\n')
-        player_location.write('             labelYOffset: 5\n')
-        player_location.write('         }\n')
-        player_location.write('      })\n')
-        player_location.write('   });\n')
-        if str(player[0][4]) == 'ATC':
-            player_location.write('     var ratio = OpenLayers.Geometry.Polygon.createRegularPolygon(\n')
-            player_location.write('        new OpenLayers.Geometry.Point(position.lon, position.lat),\n')
-            if str(player[0][2][-4:]) == '_OBS' or str(player[0][2][-4:]) == '_DEP' or str(player[0][2][-4:]) == '_GND':
-                player_location.write('       20000,\n')
-            elif str(player[0][2][-4:]) == '_TWR':
-                player_location.write('       40000,\n')
-            elif str(player[0][2][-4:]) == '_APP':
-                player_location.write('       60000,\n')
-            elif str(player[0][2][-4:]) == '_CTR':
+            player_location.write('         }\n')
+            player_location.write('      })\n')
+            player_location.write('   });\n\n')
+            player_location.write('   var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer");\n')
+            player_location.write('   var style_controller = {\n')
+            player_location.write('       strokeColor: "white",\n')
+            player_location.write('       strokeOpacity: 1.0,\n')
+            player_location.write('       strokeWidth: 2,\n')
+            player_location.write('       label: "%s",\n' % str(player[0][2]))
+            player_location.write('       fontWeight: "bold",\n')
+            player_location.write('       fontColor: "white",\n')
+            player_location.write('       fontSize: "12px",\n')
+            player_location.write('       fontFamily: "Courier New, monospace",\n')
+            player_location.write('       labelAlign: "cm",\n')
+            player_location.write('       labelXOffset: 30,\n')
+            player_location.write('       labelYOffset: 5\n')
+            player_location.write('   };\n\n')
+            try:
+                cursor.execute("SELECT ID_FIRCOASTLINE FROM fir_data_list WHERE ICAO = ?;", (str(player[0][2][:-4]),))
+                id_ctr = cursor.fetchone()
+                if id_ctr is None:
+                    cursor.execute("SELECT ID_FIRCOASTLINE FROM fir_data_list WHERE ICAO = ?;", (str(player[0][2][:4]),))
+                    id_ctr = cursor.fetchone()
+            except:
                 pass
-            else:
-                player_location.write('       60000,\n')
-            player_location.write('        360\n')
-            player_location.write('     );\n')
-            player_location.write('   var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')
-            player_location.write('   player.addFeatures([controller_ratio]);\n')
-        player_location.write('\n')
-        if str(player[0][4]) == 'PILOT':
-            player_location.write('    var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer");\n')
-            player_location.write('    var style_green = {\n')
-            player_location.write('     strokeColor: "#00FF00",\n')
-            player_location.write('     strokeOpacity: 0.7,\n')
-            player_location.write('     strokeWidth: 2\n')
-            player_location.write('    };\n')
-            player_location.write('    var style_red = {\n')
-            player_location.write('     strokeColor: "#FF0000",\n')
-            player_location.write('     strokeOpacity: 0.7,\n')
-            player_location.write('     strokeWidth: 2\n')
-            player_location.write('    };\n')
-            if icao_orig is None or icao_dest is None:
-                player_location.write('    var points = [];\n')
-                player_location.write('    var point_plane = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
-                player_location.write('    points.push(point_plane);\n')
-            else:
-                player_location.write('    var points_green = [];\n')
-                player_location.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n' % (icao_orig[0], icao_orig[1]))
-                player_location.write('    var point_orig_f = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
-                player_location.write('\n')
-                player_location.write('    var points_red = [];\n')
-                player_location.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
-                player_location.write('    var point_dest_f = new OpenLayers.Geometry.Point(%f, %f);\n' % (icao_dest[0], icao_dest[1]))
-                player_location.write('\n')
-                player_location.write('    points_green.push(point_orig);\n')
-                player_location.write('    points_green.push(point_orig_f);\n')
-                player_location.write('\n')
-                player_location.write('    points_red.push(point_dest);\n')
-                player_location.write('    points_red.push(point_dest_f);\n')
+            cursor.execute("SELECT Longitude, Latitude FROM fir_coastlines_list where ID_FIRCOASTLINE = ?;", (int(id_ctr[0]),))
+            points_ctr = cursor.fetchall()
+            player_location.write('    var points = [];\n')
+            for position in range(0, len(points_ctr)):
+                player_location.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n' 
+                                     % (points_ctr[position][0], points_ctr[position][1]))
+                if position == len(points_ctr) - 1:
+                    continue
+                else:
+                    player_location.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n' 
+                                         % (points_ctr[position+1][0], points_ctr[position+1][1]))
+                    player_location.write('    points.push(point_orig);\n')
+                    player_location.write('    points.push(point_dest);\n')
             player_location.write('\n')
-            if icao_orig is None or icao_dest is None:
-                player_location.write('    var lineString = new OpenLayers.Geometry.LineString(points);\n')
-                player_location.write('    lineString.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()); \n')
-            else:
-                player_location.write('    var lineString_green = new OpenLayers.Geometry.LineString(points_green);\n')
-                player_location.write('    lineString_green.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()); \n')
-                player_location.write('    var lineString_red = new OpenLayers.Geometry.LineString(points_red);\n')
-                player_location.write('    lineString_red.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()); \n')
-            player_location.write('\n')
-            if icao_orig is None or icao_dest is None:
-                player_location.write('    var lineFeature = new OpenLayers.Feature.Vector(lineString, null, null);\n')
-                player_location.write('    vectorLayer.addFeatures([lineFeature]);\n')
-            else:
-                player_location.write('    var lineFeature_green = new OpenLayers.Feature.Vector(lineString_green, null, style_green);\n')
-                player_location.write('    var lineFeature_red = new OpenLayers.Feature.Vector(lineString_red, null, style_red);\n')
-                player_location.write('    vectorLayer.addFeatures([lineFeature_green, lineFeature_red]);\n')
-            player_location.write('\n')
-            player_location.write('   map.addLayer(vectorLayer);\n')
-            player_location.write('\n')
-        player_location.write('   var feature=new OpenLayers.Feature.Vector(\n')
-        if str(player[0][4]) == 'PILOT':
-            player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat), {"angle": %d, opacity: 100});\n' 
-                                  % (heading))
+            player_location.write('    var player_String = new OpenLayers.Geometry.LineString(points);\n')
+            player_location.write('    player_String.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());\n')
+            player_location.write('    var DrawFeature = new OpenLayers.Feature.Vector(player_String, null, style_controller);\n')
+            player_location.write('    vectorLayer.addFeatures([DrawFeature]);\n')
+            player_location.write('    map.addLayer(vectorLayer);\n')
+            player_location.write('    map.addLayer(player);\n')
         else:
-            player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat), {"angle": 0, opacity: 100});\n')
-        player_location.write('   player.addFeatures([feature]);\n')
-        player_location.write('   map.addLayer(player);\n')
-        player_location.write('\n')
+            player_location.write('         }\n')
+            player_location.write('      })\n')
+            player_location.write('   });\n')
+            if str(player[0][4]) == 'ATC':
+                player_location.write('   var ratio = OpenLayers.Geometry.Polygon.createRegularPolygon(\n')
+                player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat),\n')
+                if str(player[0][2][-4:]) == '_OBS' or str(player[0][2][-4:]) == '_DEP' or str(player[0][2][-4:]) == '_GND':
+                    player_location.write('        20000,\n')
+                elif str(player[0][2][-4:]) == '_TWR':
+                    player_location.write('        40000,\n')
+                elif str(player[0][2][-4:]) == '_APP':
+                    player_location.write('        60000,\n')
+                player_location.write('        360\n')
+                player_location.write('     );\n')
+                player_location.write('   var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')
+                player_location.write('   player.addFeatures([controller_ratio]);\n')
+            player_location.write('\n')
+            if str(player[0][4]) == 'PILOT':
+                player_location.write('    var vectorLayer = new OpenLayers.Layer.Vector("Vector Layer");\n')
+                player_location.write('    var style_green = {\n')
+                player_location.write('     strokeColor: "#00FF00",\n')
+                player_location.write('     strokeOpacity: 0.7,\n')
+                player_location.write('     strokeWidth: 2\n')
+                player_location.write('    };\n')
+                player_location.write('    var style_red = {\n')
+                player_location.write('     strokeColor: "#FF0000",\n')
+                player_location.write('     strokeOpacity: 0.7,\n')
+                player_location.write('     strokeWidth: 2\n')
+                player_location.write('    };\n')
+                if icao_orig is None or icao_dest is None:
+                    player_location.write('    var points = [];\n')
+                    player_location.write('    var point_plane = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
+                    player_location.write('    points.push(point_plane);\n')
+                else:
+                    player_location.write('    var points_green = [];\n')
+                    player_location.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n' % (icao_orig[0], icao_orig[1]))
+                    player_location.write('    var point_orig_f = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
+                    player_location.write('\n')
+                    player_location.write('    var points_red = [];\n')
+                    player_location.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n' % (longitude, latitude))
+                    player_location.write('    var point_dest_f = new OpenLayers.Geometry.Point(%f, %f);\n' % (icao_dest[0], icao_dest[1]))
+                    player_location.write('\n')
+                    player_location.write('    points_green.push(point_orig);\n')
+                    player_location.write('    points_green.push(point_orig_f);\n')
+                    player_location.write('\n')
+                    player_location.write('    points_red.push(point_dest);\n')
+                    player_location.write('    points_red.push(point_dest_f);\n')
+                player_location.write('\n')
+                if icao_orig is None or icao_dest is None:
+                    player_location.write('    var lineString = new OpenLayers.Geometry.LineString(points);\n')
+                    player_location.write('    lineString.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()); \n')
+                else:
+                    player_location.write('    var lineString_green = new OpenLayers.Geometry.LineString(points_green);\n')
+                    player_location.write('    lineString_green.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()); \n')
+                    player_location.write('    var lineString_red = new OpenLayers.Geometry.LineString(points_red);\n')
+                    player_location.write('    lineString_red.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()); \n')
+                player_location.write('\n')
+                if icao_orig is None or icao_dest is None:
+                    player_location.write('    var lineFeature = new OpenLayers.Feature.Vector(lineString, null, null);\n')
+                    player_location.write('    vectorLayer.addFeatures([lineFeature]);\n')
+                else:
+                    player_location.write('    var lineFeature_green = new OpenLayers.Feature.Vector(lineString_green, null, style_green);\n')
+                    player_location.write('    var lineFeature_red = new OpenLayers.Feature.Vector(lineString_red, null, style_red);\n')
+                    player_location.write('    vectorLayer.addFeatures([lineFeature_green, lineFeature_red]);\n')
+                player_location.write('\n')
+                player_location.write('   map.addLayer(vectorLayer);\n')
+                player_location.write('\n')
+            player_location.write('   var feature=new OpenLayers.Feature.Vector(\n')
+            if str(player[0][4]) == 'PILOT':
+                player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat), {"angle": %d, opacity: 100});\n' 
+                                      % (heading))
+            else:
+                player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat), {"angle": 0, opacity: 100});\n')
+            player_location.write('   player.addFeatures([feature]);\n')
+            player_location.write('   map.addLayer(player);\n')
+            player_location.write('\n')
         player_location.write('   map.setCenter (position, zoom);\n')
         player_location.write('  </script>\n')
         player_location.write('</body></html>\n')
@@ -1772,6 +1814,74 @@ class Main(QMainWindow):
         item = self.ui.comboBoxStatistics.currentIndex()
         qApp.processEvents()
         
+        if item == 0:
+            self.statusBar().showMessage('Counting...', 2000)
+            qApp.processEvents()
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            startrow = 0
+            
+            cursor.execute("SELECT callsign FROM status_ivao WHERE clienttype='ATC';" )
+            controller_list = cursor.fetchall()
+            
+            list_all = []
+            for callsign in range(0, len(controller_list)):
+                if controller_list[callsign][0][2:3] == '-' or controller_list[callsign][0][2:3] == '_':
+                    cursor.execute("SELECT Country FROM division_ivao WHERE division = ?;", (str(controller_list[callsign][0])[:2],))
+                else:
+                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", (str(controller_list[callsign][0])[:4],))
+                country_icao = cursor.fetchone()
+                if country_icao is None:
+                    continue
+                else:
+                    list_all.append(str(country_icao[0]))
+
+            cursor.execute("SELECT realname FROM status_ivao WHERE clienttype='PILOT';" )
+            pilot_list = cursor.fetchall()
+            
+            for callsign in range(0, len(pilot_list)):
+                if pilot_list[callsign][0][-4:]:
+                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", 
+                                   (str(pilot_list[callsign][0].encode('latin-1'))[-4:],))
+                country_icao = cursor.fetchone()
+                if country_icao is None:
+                    continue
+                else:
+                    list_all.append(str(country_icao[0]))
+
+            all_countries = {}
+            for item_list in set(list_all):
+                all_countries[item_list] = list_all.count(item_list)
+
+            for country in sorted(all_countries, key=all_countries.__getitem__, reverse=True):
+                if country[0] == 0:
+                    continue
+                else:
+                    self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                    flagCodePath = (image_flag + '/%s.png') % country
+                    if os.path.exists(flagCodePath) is True:
+                        Pixmap = QPixmap(flagCodePath)
+                        flag_country = QLabel()
+                        flag_country.setPixmap(Pixmap)
+                        self.ui.Statistics.setCellWidget(startrow, 0, flag_country)
+                    else:
+                        pass
+                    col_item = QTableWidgetItem(str('%s' % (country)), 0)
+                    self.ui.Statistics.setItem(startrow, 1, col_item)
+                    col_total = QTableWidgetItem(str(int(all_countries[country])), 0)
+                    self.ui.Statistics.setItem(startrow, 2, col_total)
+                    percent = float(all_countries[country]) / float(len(list_all)) * 100.0
+                    self.progressbar = QProgressBar()
+                    self.progressbar.setMinimum(1)
+                    self.progressbar.setMaximum(100)
+                    self.progressbar.setValue(float(percent))
+                    self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
+                    startrow += 1
+                qApp.processEvents()
+            self.statusBar().showMessage('Done!', 2000)
+
         if item == 1:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:

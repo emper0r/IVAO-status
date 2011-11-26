@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Fri Nov 25 10:14:08 2011
+# Created: Fri Nov 25 21:15:19 2011
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -720,7 +720,7 @@ class Ui_MainWindow(object):
         self.comboBoxStatistics.setGeometry(QtCore.QRect(5, 6, 231, 24))
         self.comboBoxStatistics.setObjectName(_fromUtf8("comboBoxStatistics"))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
-        self.comboBoxStatistics.setItemText(0, _fromUtf8("Counts by Countries"))
+        self.comboBoxStatistics.setItemText(0, _fromUtf8("Countries with more players"))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(1, QtGui.QApplication.translate("MainWindow", "Controllers by Country", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
@@ -814,7 +814,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.database, _fromUtf8(""))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 24))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 23))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuMenu = QtGui.QMenu(self.menuBar)
         self.menuMenu.setTitle(QtGui.QApplication.translate("MainWindow", "Menu", None, QtGui.QApplication.UnicodeUTF8))
