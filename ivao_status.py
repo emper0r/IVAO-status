@@ -3,7 +3,7 @@
 # Copyright (c) 2011 by Antonio (emper0r) Peña Diaz <emperor.cu@gmail.com>
 #
 # GNU General Public Licence (GPL)
-# 
+#
 # This program is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
@@ -26,10 +26,9 @@ try:
     from PyQt4.QtWebKit import *
     from PyQt4.Qt import *
 except:
-    print ('\nNot Have Qt Module for Python, please run command as root: "aptitude install python-qt4"')
+    print ('\nYou have not installed the packages Qt Modules for Python,\n')
+    print ('please run command as root:  aptitude install python-qt4\n')
     print ('with all dependencies.\n\n')
-    print  ('If you has installed before, it\'s pretty sure your system made an update for python package so,\n')
-    print  ('You have to reinstall GeoPy tool again.\n')
     sys.exit(2)
 
 import distance
@@ -42,8 +41,15 @@ import urllib2
 try:
     import sqlite3
 except:
-    print ('\nNot have installed sqlite3 module for Python, please runn command')
-    print ('as root: "aptitude install sqlite3 libsqlite3-0"\n')
+    print ('\nYou have not installed SQLite3 module for Python,\n')
+    print ('please run command as root: aptitude install sqlite3 libsqlite3-0\n')
+    sys.exit(2)
+
+try:
+    from BeautifulSoup import BeautifulSoup
+except:
+    print ('\nYou have not have installed BeautifulSoup module for Python,\n')
+    print ('please run command as root: aptitude install python-beautifulsoup\n')
     sys.exit(2)
 
 import os
@@ -51,11 +57,13 @@ import datetime
 import ConfigParser
 import time
 
-__version__ = '1.0'
+__version__ = '1.0.2'
 url = 'http://de1.www.ivao.aero/'
+scheduling_atc = 'http://www.ivao.aero/atcss/list.asp'
+scheduling_flights = 'http://www.ivao.aero/flightss/list.asp'
 
 class Main(QMainWindow):
-    def __init__(self,):
+    def __init__(self):
         QMainWindow.__init__(self)
         self.ui = MainWindow_UI.Ui_MainWindow()
         self.ui.setupUi(self)
@@ -119,6 +127,32 @@ class Main(QMainWindow):
         self.ui.Statistics.setColumnWidth(1, 500)
         self.ui.Statistics.setColumnWidth(2, 100)
         self.ui.Statistics.setColumnWidth(3, 100)
+        self.ui.SchedulingATC.setColumnWidth(0, 30)
+        self.ui.SchedulingATC.setColumnWidth(1, 90)
+        self.ui.SchedulingATC.setColumnWidth(2, 175)
+        self.ui.SchedulingATC.setColumnWidth(3, 60)
+        self.ui.SchedulingATC.setColumnWidth(4, 160)
+        self.ui.SchedulingATC.setColumnWidth(5, 160)
+        self.ui.SchedulingATC.setColumnWidth(6, 60)
+        self.ui.SchedulingATC.setColumnWidth(7, 60)
+        self.ui.SchedulingATC.setColumnWidth(8, 50)
+        self.ui.SchedulingATC.setColumnWidth(9, 150)
+        self.ui.SchedulingFlights.setColumnWidth(0, 90)
+        self.ui.SchedulingFlights.setColumnWidth(1, 60)
+        self.ui.SchedulingFlights.setColumnWidth(2, 175)
+        self.ui.SchedulingFlights.setColumnWidth(3, 60)
+        self.ui.SchedulingFlights.setColumnWidth(4, 30)
+        self.ui.SchedulingFlights.setColumnWidth(5, 60)
+        self.ui.SchedulingFlights.setColumnWidth(6, 160)
+        self.ui.SchedulingFlights.setColumnWidth(7, 30)
+        self.ui.SchedulingFlights.setColumnWidth(8, 60)
+        self.ui.SchedulingFlights.setColumnWidth(9, 160)
+        self.ui.SchedulingFlights.setColumnWidth(10, 50)
+        self.ui.SchedulingFlights.setColumnWidth(11, 75)
+        self.ui.SchedulingFlights.setColumnWidth(12, 150)
+        self.ui.SchedulingFlights.setColumnWidth(13, 40)
+        self.ui.SchedulingFlights.setColumnWidth(14, 40)
+        self.ui.SchedulingFlights.setColumnWidth(15, 150)
         self.ui.PILOT_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.ATC_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.FriendstableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -202,6 +236,8 @@ class Main(QMainWindow):
             config.add_section('Info')
             config.set('Info', 'data_access', 'whazzup.txt')
             config.set('Info', 'url', url)
+            config.set('Info', 'scheduling_atc', scheduling_atc)
+            config.set('Info', 'scheduling_flights', scheduling_flights)
             config.add_section('Database')
             config.set('Database', 'db', 'ivao.db')
             config.add_section('Time_Update')
@@ -214,15 +250,17 @@ class Main(QMainWindow):
                 config.write(configfile)
         self.pilot_list = []
         self.atc_list = []
+        self.SchedATC_URL = None
+        self.SchedFlights_URL = None
         self.ui.tabWidget.currentChanged.connect(self.ivao_friend)
 
     @property
     def maptab(self):
-        if self._maptab is None and self.ui.tabWidget.currentIndex() != 6:
+        if self._maptab is None and self.ui.tabWidget.currentIndex() != 7:
             self._maptab = QWebView()
-            self.ui.tabWidget.insertTab(6, self.maptab, 'Map')
+            self.ui.tabWidget.insertTab(7, self.maptab, 'Map')
         else:
-            self.ui.tabWidget.setCurrentIndex(6)
+            self.ui.tabWidget.setCurrentIndex(7)
         return self._maptab
 
     def initial_load(self):
@@ -297,7 +335,7 @@ class Main(QMainWindow):
         qApp.processEvents()
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
-        config.read(config_file)       
+        config.read(config_file)
         try:
             use_proxy = config.getint('Settings', 'use_proxy')
             auth = config.getint('Settings', 'auth')
@@ -313,6 +351,8 @@ class Main(QMainWindow):
                 opener = urllib2.build_opener(proxy_support, authinfo)
                 urllib2.install_opener(opener)
                 StatusURL = urllib2.urlopen(config.get('Info', 'url') + config.get('Info', 'data_access'))
+                self.SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc'))
+                self.SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_fligths'))
                 QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port), str(user), str(pswd)))
                 qApp.processEvents()
             if use_proxy == 2 and auth == 0:
@@ -320,16 +360,21 @@ class Main(QMainWindow):
                 opener = urllib2.build_opener(proxy_support)
                 urllib2.install_opener(opener)
                 StatusURL = urllib2.urlopen(config.get('Info', 'url') + config.get('Info', 'data_access'))
+                self.SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc'))
+                self.SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_fligths'))
                 QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port)))
                 qApp.processEvents()
             if use_proxy == 0 and auth == 0:
                 StatusURL = urllib2.urlopen(config.get('Info', 'url') + config.get('Info', 'data_access'))
+                self.SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc'))
+                self.SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_flights'))
                 qApp.processEvents()
 
             self.statusBar().showMessage('Downloading info from IVAO', 2000)
             qApp.processEvents()
             self.pilot_list = []
             self.atc_list = []
+
             for logged_users in StatusURL.readlines():
                 if "PILOT" in logged_users:
                     self.pilot_list.append(logged_users)
@@ -464,6 +509,12 @@ class Main(QMainWindow):
         cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
         connection.commit()
         pob = cursor.fetchone()
+        self.statusBar().showMessage('Events schedule for Controllers ...', 2000)
+        qApp.processEvents()
+        self.soup_atc = BeautifulSoup(self.SchedATC_URL)
+        self.statusBar().showMessage('Events schedule for Flights ...', 2000)
+        qApp.processEvents()
+        self.soup_flights = BeautifulSoup(self.SchedFlights_URL)
         self.ui.IVAOStatustableWidget.setCurrentCell(-1, -1)
         pilots_ivao = QTableWidgetItem(str(pilots[0]))
         atcs_ivao = QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
@@ -475,19 +526,153 @@ class Main(QMainWindow):
             pob_ivao = QTableWidgetItem(str(int(pob[0])))
 
         time_received = datetime.datetime.utcnow()
-        time_board = QTableWidgetItem(str(time_received).split('.')[0])
-        
+        time_board = QTableWidgetItem(str(time_received).split('.')[0] + ' - Zulu Time (UTC)')
+
         self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
         self.ui.IVAOStatustableWidget.setItem(1, 0, atcs_ivao)
         self.ui.IVAOStatustableWidget.setItem(2, 0, obs_ivao)
         self.ui.IVAOStatustableWidget.setItem(3, 0, total_ivao)
         self.ui.IVAOStatustableWidget.setItem(5, 0, pob_ivao)
         self.ui.IVAOStatustableWidget.setItem(6, 0, time_board)
-        connection.close()
-        self.statusBar().showMessage('Done', 2000)
         qApp.processEvents()
+        connection.close()
         self.show_tables()
         self.ivao_friend()
+        self.Scheduling()
+
+    def Scheduling(self):
+
+        if self.SchedATC_URL is None and self.SchedFlights_URL is None:
+            self.statusBar().showMessage('You have to download data from IVAO, Select "Menu" and "Get data from IVAO"', 7000)
+            qApp.processEvents()
+            return
+
+        config = ConfigParser.RawConfigParser()
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
+        cursor = connection.cursor()
+
+        table_atc = self.soup_atc.find("table")
+        table_rows = table_atc.findAll('tr')
+        while self.ui.SchedulingATC.rowCount () > 0:
+            self.ui.SchedulingATC.removeRow(0)
+        startrow = 0
+        for line_atc_table in table_rows[1:]:
+            columns = [col.find(text=True) for col in line_atc_table.findAll('td')]
+            self.ui.SchedulingATC.insertRow(self.ui.SchedulingATC.rowCount())
+            col_Name = QTableWidgetItem(str(columns[1]).decode('latin-1'), 0)
+            self.ui.SchedulingATC.setItem(startrow, 2, col_Name)
+            col_Position = QTableWidgetItem(str(columns[3]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 3, col_Position)
+            col_StartTime = QTableWidgetItem(str(columns[4]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 4, col_StartTime)
+            col_EndTime = QTableWidgetItem(str(columns[5]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 5, col_EndTime)
+            col_Voice = QTableWidgetItem(str(columns[6]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 6, col_Voice)
+            col_Training = QTableWidgetItem(str(columns[7]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 7, col_Training)
+            col_Event = QTableWidgetItem(str(columns[8]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 8, col_Event)
+            cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?', (str(columns[3][:4]),))
+            country = cursor.fetchone()
+            if country is None:
+                cursor.execute('SELECT Country FROM fir_data_list WHERE icao = ?', (str(columns[3][:4]),))
+                country = cursor.fetchone()
+            col_Country = QTableWidgetItem(str(country[0]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 1, col_Country)
+            image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+            flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
+            Pixmap = QPixmap(flagCodePath)
+            flag_country = QLabel()
+            flag_country.setPixmap(Pixmap)
+            self.ui.SchedulingATC.setCellWidget(startrow, 0, flag_country)
+            startrow += 1
+            qApp.processEvents()
+
+        table_flights = self.soup_flights.find("table")
+        table_rows = table_flights.findAll('tr')
+        while self.ui.SchedulingFlights.rowCount () > 0:
+            self.ui.SchedulingFlights.removeRow(0)
+        startrow = 0
+        for line_flights_table in table_rows[2:]:
+            columns = [col.find(text=True) for col in line_flights_table.findAll('td')]
+            self.ui.SchedulingFlights.insertRow(self.ui.SchedulingFlights.rowCount())
+            code_airline = columns[4][:3]
+            image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+            airlineCodePath = (image_airlines + '/%s.gif') % code_airline
+            try:
+                if os.path.exists(airlineCodePath) is True:
+                    Pixmap = QPixmap(airlineCodePath)
+                    airline = QLabel(self)
+                    airline.setPixmap(Pixmap)
+                    self.ui.SchedulingFlights.setCellWidget(startrow, 0, airline)
+                else:
+                    code_airline = str(inbound[0])
+                    col_airline = QTableWidgetItem(code_airline, 0)
+                    self.ui.SchedulingFlights.setItem(startrow, 0, col_airline)
+            except:
+                pass
+            col_Callsign = QTableWidgetItem(str(columns[4]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 1, col_Callsign)
+            col_Name = QTableWidgetItem(str(columns[1]).decode('latin-1'), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 2, col_Name)
+            col_StartTime = QTableWidgetItem(str(columns[5]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 3, col_StartTime)
+            col_Departure = QTableWidgetItem(str(columns[6]), 0)
+            try:
+
+                cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?', (str(columns[6]),))
+                country = cursor.fetchone()
+                if country is None:
+                    cursor.execute('SELECT Country FROM fir_data_list WHERE icao = ?', (str(columns[6]),))
+                    country = cursor.fetchone()
+                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
+                Pixmap = QPixmap(flagCodePath)
+                flag_country = QLabel()
+                flag_country.setPixmap(Pixmap)
+                self.ui.SchedulingFlights.setCellWidget(startrow, 4, flag_country)
+            except:
+                pass
+            self.ui.SchedulingFlights.setItem(startrow, 5, col_Departure)
+            col_StartTime = QTableWidgetItem(str(columns[7]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 6, col_StartTime)
+            col_Destination = QTableWidgetItem(str(columns[8]), 0)
+            try:
+                cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?', (str(columns[8]),))
+                country = cursor.fetchone()
+                if country is None:
+                    cursor.execute('SELECT Country FROM fir_data_list WHERE icao = ?', (str(columns[8]),))
+                    country = cursor.fetchone()
+                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
+            except:
+                pass
+            Pixmap = QPixmap(flagCodePath)
+            flag_country = QLabel()
+            flag_country.setPixmap(Pixmap)
+            self.ui.SchedulingFlights.setCellWidget(startrow, 7, flag_country)
+            self.ui.SchedulingFlights.setItem(startrow, 8, col_Destination)
+            col_EndTime = QTableWidgetItem(str(columns[9]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 9, col_EndTime)
+            col_Altitude = QTableWidgetItem(str(columns[10]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 10, col_Altitude)
+            col_CruisingSpeed = QTableWidgetItem(str(columns[11]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 11, col_CruisingSpeed)
+            col_Route = QTableWidgetItem(str(columns[12]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 12, col_Route)
+            col_Voice = QTableWidgetItem(str(columns[13]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 13, col_Voice)
+            col_Training = QTableWidgetItem(str(columns[14]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 14, col_Training)
+            col_Event = QTableWidgetItem(str(columns[15]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 15, col_Event)
+            startrow += 1
+            qApp.processEvents()
+        self.statusBar().showMessage('Done!', 2000)
 
     def status_plane(self, callsign):
         config = ConfigParser.RawConfigParser()
@@ -567,7 +752,6 @@ class Main(QMainWindow):
                         WHERE clienttype='ATC' ORDER BY vid DESC;")
         rows_atcs = cursor.fetchall()
         startrow = 0
-        self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
 
         while self.ui.ATC_FullList.rowCount () > 0:
             self.ui.ATC_FullList.removeRow(0)
@@ -773,7 +957,7 @@ class Main(QMainWindow):
         cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE Country=?", (str(country_selected),))
         flagCode = cursor.fetchone()
         connection.commit()
-        
+
         image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
         flagCodePath = (image_flag + '/%s.png') % country_selected
         Pixmap = QPixmap(flagCodePath)
@@ -941,7 +1125,7 @@ class Main(QMainWindow):
                 self.ui.InboundTableWidget.setItem(startrow_in, 0, col_callsign)
                 code_airline = inbound[0][:3]
                 image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
-                airlineCodePath = (image_flag + '/%s.gif') % code_airline
+                airlineCodePath = (image_airlines + '/%s.gif') % code_airline
                 try:
                     if os.path.exists(airlineCodePath) is True:
                         Pixmap = QPixmap(airlineCodePath)
@@ -1004,7 +1188,7 @@ class Main(QMainWindow):
                 self.ui.OutboundTableWidget.setItem(startrow_out, 0, col_callsign)
                 code_airline = outbound[0][:3]
                 image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
-                airlineCodePath = (image_flag + '/%s.gif') % code_airline
+                airlineCodePath = (image_airlines + '/%s.gif') % code_airline
                 try:
                     if os.path.exists(airlineCodePath) is True:
                         Pixmap = QPixmap(airlineCodePath)
@@ -1327,7 +1511,7 @@ class Main(QMainWindow):
                 self.ui.FriendstableWidget.setItem(startrow, 2, col_rating)
             startrow += 1
         qApp.processEvents()
-        connection.close()                
+        connection.close()
 
     def metar(self):
         self.statusBar().showMessage('Downloading METAR', 2000)
@@ -1468,12 +1652,12 @@ class Main(QMainWindow):
             points_ctr = cursor.fetchall()
             player_location.write('    var points = [];\n')
             for position in range(0, len(points_ctr)):
-                player_location.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n' 
+                player_location.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n'
                                      % (points_ctr[position][0], points_ctr[position][1]))
                 if position == len(points_ctr) - 1:
                     continue
                 else:
-                    player_location.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n' 
+                    player_location.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n'
                                          % (points_ctr[position+1][0], points_ctr[position+1][1]))
                     player_location.write('    points.push(point_orig);\n')
                     player_location.write('    points.push(point_dest);\n')
@@ -1554,7 +1738,7 @@ class Main(QMainWindow):
                 player_location.write('\n')
             player_location.write('   var feature=new OpenLayers.Feature.Vector(\n')
             if str(player[0][4]) == 'PILOT':
-                player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat), {"angle": %d, opacity: 100});\n' 
+                player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat), {"angle": %d, opacity: 100});\n'
                                       % (heading))
             else:
                 player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat), {"angle": 0, opacity: 100});\n')
@@ -1668,7 +1852,7 @@ class Main(QMainWindow):
                     all_in_map.write('   });\n')
                     all_in_map.write('\n')
                     all_in_map.write('    var feature = new OpenLayers.Feature.Vector(\n')
-                    all_in_map.write('      new OpenLayers.Geometry.Point( position.lon, position.lat), {"angle": %d});\n' 
+                    all_in_map.write('      new OpenLayers.Geometry.Point( position.lon, position.lat), {"angle": %d});\n'
                                      % int(players[callsign][3]))
                     all_in_map.write('    player_%s.addFeatures([feature]);\n' % str(players[callsign][2]).replace('-',''))
                     all_in_map.write('    map.addLayer(player_%s);\n' % str(players[callsign][2]).replace('-',''))
@@ -1741,7 +1925,7 @@ class Main(QMainWindow):
             if str(players[callsign][2][-4:]) == '_CTR':
                 cursor.execute("SELECT Latitude, Longitude FROM fir_data_list WHERE ICAO = ?;", (str(players[callsign][2][:4]),))
                 position = cursor.fetchall()
-                all_in_map.write('    var position = new OpenLayers.LonLat( %f, %f )\n' 
+                all_in_map.write('    var position = new OpenLayers.LonLat( %f, %f )\n'
                                  % (float(position[0][0]), float(position[0][1])))
                 all_in_map.write('    var player_%s = new OpenLayers.Layer.Vector("Player",\n' % str(players[callsign][2]).replace('-',''))
                 all_in_map.write('    {\n')
@@ -1763,7 +1947,7 @@ class Main(QMainWindow):
                     all_in_map.write('        label: "%s",\n' % str(players[callsign][2]))
                     all_in_map.write('        fontColor: "white",\n')
                     all_in_map.write('        fontSize: "12px",\n')
-                    all_in_map.write('        fontWeight: "bold",\n')                
+                    all_in_map.write('        fontWeight: "bold",\n')
                     all_in_map.write('        fontFamily: "Courier New, monospace",\n')
                     all_in_map.write('        labelAlign: "cm",\n')
                     all_in_map.write('        labelXOffset: 30,\n')
@@ -1781,22 +1965,22 @@ class Main(QMainWindow):
                 points_ctr = cursor.fetchall()
                 all_in_map.write('    var points = [];\n')
                 for position in range(0, len(points_ctr)):
-                    all_in_map.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n' 
+                    all_in_map.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n'
                                      % (points_ctr[position][0], points_ctr[position][1]))
                     if position == len(points_ctr) - 1:
                         continue
                     else:
-                        all_in_map.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n' 
+                        all_in_map.write('    var point_dest = new OpenLayers.Geometry.Point(%f, %f);\n'
                                          % (points_ctr[position+1][0], points_ctr[position+1][1]))
                     all_in_map.write('    points.push(point_orig);\n')
                     all_in_map.write('    points.push(point_dest);\n')
                 all_in_map.write('\n')
-                all_in_map.write('    var %s_String = new OpenLayers.Geometry.LineString(points);\n' 
+                all_in_map.write('    var %s_String = new OpenLayers.Geometry.LineString(points);\n'
                                  % str(players[callsign][2][:-4]))
-                all_in_map.write('    %s_String.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());\n' 
+                all_in_map.write('    %s_String.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());\n'
                                  % str(players[callsign][2][:-4]))
                 all_in_map.write('\n')
-                all_in_map.write('    var DrawFeature = new OpenLayers.Feature.Vector(%s_String, null, style_controller);\n' 
+                all_in_map.write('    var DrawFeature = new OpenLayers.Feature.Vector(%s_String, null, style_controller);\n'
                                  % str(players[callsign][2][:-4]))
                 all_in_map.write('    vectorLayer.addFeatures([DrawFeature]);\n')
                 all_in_map.write('    map.addLayer(vectorLayer);\n')
@@ -1807,7 +1991,7 @@ class Main(QMainWindow):
         all_in_map.close()
         mapfileall_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
         self.maptab.load(QUrl(mapfileall_path + '/all_in_map.html'))
-        
+
     def statistics(self):
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
@@ -1817,7 +2001,7 @@ class Main(QMainWindow):
         cursor = connection.cursor()
         item = self.ui.comboBoxStatistics.currentIndex()
         qApp.processEvents()
-        
+
         if item == 0:
             self.statusBar().showMessage('Counting...', 2000)
             qApp.processEvents()
@@ -1825,10 +2009,10 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            
+
             cursor.execute("SELECT callsign FROM status_ivao WHERE clienttype='ATC';" )
             controller_list = cursor.fetchall()
-            
+
             list_all = []
             for callsign in range(0, len(controller_list)):
                 if controller_list[callsign][0][2:3] == '-' or controller_list[callsign][0][2:3] == '_':
@@ -1843,10 +2027,10 @@ class Main(QMainWindow):
 
             cursor.execute("SELECT realname FROM status_ivao WHERE clienttype='PILOT';" )
             pilot_list = cursor.fetchall()
-            
+
             for callsign in range(0, len(pilot_list)):
                 if pilot_list[callsign][0][-4:]:
-                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", 
+                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;",
                                    (str(pilot_list[callsign][0].encode('latin-1'))[-4:],))
                 country_icao = cursor.fetchone()
                 if country_icao is None:
@@ -1891,10 +2075,10 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            
+
             cursor.execute("SELECT callsign FROM status_ivao WHERE clienttype='ATC';" )
             controller_list = cursor.fetchall()
-            
+
             list_icao = []
             for callsign in range(0, len(controller_list)):
                 if controller_list[callsign][0][2:3] == '-' or controller_list[callsign][0][2:3] == '_':
@@ -1938,7 +2122,7 @@ class Main(QMainWindow):
                     startrow += 1
                 qApp.processEvents()
             self.statusBar().showMessage('Done!', 2000)
-        
+
         if item == 2:
             self.statusBar().showMessage('Counting...', 2000)
             qApp.processEvents()
@@ -1946,14 +2130,14 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            
+
             cursor.execute("SELECT realname FROM status_ivao WHERE clienttype='PILOT';" )
             pilot_list = cursor.fetchall()
-            
+
             list_icao = []
             for callsign in range(0, len(pilot_list)):
                 if pilot_list[callsign][0][-4:]:
-                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", 
+                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;",
                                    (str(pilot_list[callsign][0].encode('latin-1'))[-4:],))
                 country_icao = cursor.fetchone()
                 if country_icao is None:
@@ -1992,19 +2176,19 @@ class Main(QMainWindow):
                     startrow += 1
                 qApp.processEvents()
             self.statusBar().showMessage('Done!', 2000)
-                
+
         if item == 3:
             self.statusBar().showMessage('Counting...', 2000)
             qApp.processEvents()
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
-            
+
             cursor.execute("SELECT planned_depairport FROM status_ivao")
             allairports_dep = cursor.fetchall()
             cursor.execute("SELECT planned_destairport FROM status_ivao")
             allairports_dest = cursor.fetchall()
-            
+
             list_traffic_airport = []
             for airport in range(0, len(allairports_dep)):
                 cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", (str(allairports_dep[airport][0]),))
@@ -2021,11 +2205,11 @@ class Main(QMainWindow):
                     continue
                 else:
                     list_traffic_airport.append(str(country[0]))
-            
+
             country_dict = {}
             for item_list in set(list_traffic_airport):
                 country_dict[item_list] = list_traffic_airport.count(item_list)
-            
+
             startrow = 0
             for country in sorted(country_dict, key=country_dict.__getitem__, reverse=True):
                 if country[0] == 0:
@@ -2063,7 +2247,7 @@ class Main(QMainWindow):
             startrow = 0
             cursor.execute("SELECT SUBSTR(callsign,1,3) AS prefix, COUNT(DISTINCT callsign) AS airlines FROM status_ivao WHERE clienttype='PILOT' GROUP BY prefix ORDER BY airlines DESC;")
             items = cursor.fetchall()
-            
+
             for i in range(0, len(items)):
                 self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
                 code_airline = items[i][0]
@@ -2119,7 +2303,7 @@ class Main(QMainWindow):
             fabricant_type = {}
             for item_list in set(list_aircraft):
                 fabricant_type[item_list] = list_aircraft.count(item_list)
-            
+
             for item in sorted(fabricant_type, key=fabricant_type.__getitem__, reverse=True):
                 if fabricant_type == 0:
                     continue
@@ -2138,7 +2322,7 @@ class Main(QMainWindow):
                     startrow += 1
                 qApp.processEvents()
             self.statusBar().showMessage('Done!', 2000)
-            
+
         if item == 6:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:
@@ -2156,7 +2340,7 @@ class Main(QMainWindow):
             list_type = {}
             for item_list in set(list_aircraft):
                 list_type[item_list] = list_aircraft.count(item_list)
-            
+
             for item in sorted(list_type, key=list_type.__getitem__, reverse=True):
                 if list_type == 0:
                     continue
@@ -2180,13 +2364,13 @@ class Main(QMainWindow):
                         startrow += 1
                     qApp.processEvents()
             self.statusBar().showMessage('Done!', 2000)
-        
+
         if item == 7:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            
+
             for min_pob, max_pob in [(1, 4), (5, 20), (21, 75), (76, 150), (151, 250), (250, 500)]:
                 cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='PILOT';" )
                 total_items = cursor.fetchone()
@@ -2215,7 +2399,7 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            
+
             for type_flight in ('S', 'G', 'M', 'N', 'X'):
                 cursor.execute("SELECT COUNT(planned_typeofflight) FROM status_ivao WHERE clienttype='PILOT';" )
                 total_items = cursor.fetchone()
@@ -2286,15 +2470,15 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            
-            for facility, description in (('DEP','Departure'), ('GND','Ground'), ('TWR', 'Tower'), 
+
+            for facility, description in (('DEP','Departure'), ('GND','Ground'), ('TWR', 'Tower'),
                                           ('APP','Approach'), ('CTR','Center'), ('OBS','Observer')):
                 cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC';" )
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
                     continue
                 else:
-                    cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC' AND callsign LIKE ?;", 
+                    cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC' AND callsign LIKE ?;",
                                    ('%'+str(facility)+'%',))
                     position = cursor.fetchone()
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
@@ -2311,7 +2495,7 @@ class Main(QMainWindow):
                     self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
                     startrow += 1
                 qApp.processEvents()
-                self.statusBar().showMessage('Done!', 2000)
+            self.statusBar().showMessage('Done!', 2000)
 
 class AddFriend():
     def add_friend(self, vid2add):
@@ -2339,6 +2523,7 @@ class AddFriend():
                     connection.commit()
             except:
                 pass
+        self.statusBar().showMessage('Done!', 2000)
         connection.close()
 
 class PilotInfo(QMainWindow):
@@ -2479,7 +2664,7 @@ class PilotInfo(QMainWindow):
             self.ui.time_online_text.setText(str(diff)[:-7])
         except:
             self.ui.time_online_text.setText('Pending...')
-        
+
 
     def add_button(self):
         add2friend = AddFriend()
@@ -2633,6 +2818,8 @@ class Settings(QMainWindow):
         config.add_section('Info')
         config.set('Info', 'data_access', 'whazzup.txt')
         config.set('Info', 'url', url)
+        config.set('Info', 'scheduling_atc', scheduling_atc)
+        config.set('Info', 'scheduling_flights', scheduling_flights)
         config.add_section('Database')
         config.set('Database', 'db', 'ivao.db')
         config.add_section('Time_Update')
