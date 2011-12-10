@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Fri Dec  9 01:13:33 2011
-#      by: PyQt4 UI code generator 4.8.6
+# Created: Sat Dec 10 10:39:33 2011
+#      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -177,15 +177,31 @@ class Ui_MainWindow(object):
         self.SearchtableWidget.setRowCount(0)
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("MainWindow", "VID", None, QtGui.QApplication.UnicodeUTF8))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
         self.SearchtableWidget.setHorizontalHeaderItem(0, item)
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("MainWindow", "Callsign", None, QtGui.QApplication.UnicodeUTF8))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
         self.SearchtableWidget.setHorizontalHeaderItem(1, item)
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("MainWindow", "Realname", None, QtGui.QApplication.UnicodeUTF8))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
         self.SearchtableWidget.setHorizontalHeaderItem(2, item)
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("MainWindow", "Rating", None, QtGui.QApplication.UnicodeUTF8))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        item.setFont(font)
         self.SearchtableWidget.setHorizontalHeaderItem(3, item)
         self.SearchtableWidget.horizontalHeader().setDefaultSectionSize(65)
         self.SearchtableWidget.horizontalHeader().setMinimumSectionSize(65)
@@ -739,6 +755,8 @@ class Ui_MainWindow(object):
         self.comboBoxStatistics.setItemText(8, QtGui.QApplication.translate("MainWindow", "Type of Flights", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxStatistics.addItem(_fromUtf8(""))
         self.comboBoxStatistics.setItemText(9, QtGui.QApplication.translate("MainWindow", "Facility Type", None, QtGui.QApplication.UnicodeUTF8))
+        self.comboBoxStatistics.addItem(_fromUtf8(""))
+        self.comboBoxStatistics.setItemText(10, QtGui.QApplication.translate("MainWindow", "Servers", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.addTab(self.statistics, _fromUtf8(""))
         self.tab = QtGui.QWidget()
         self.tab.setObjectName(_fromUtf8("tab"))
@@ -993,9 +1011,13 @@ class Ui_MainWindow(object):
         self.actionUpdate_Scheduling = QtGui.QAction(MainWindow)
         self.actionUpdate_Scheduling.setText(QtGui.QApplication.translate("MainWindow", "Show Scheduling", None, QtGui.QApplication.UnicodeUTF8))
         self.actionUpdate_Scheduling.setObjectName(_fromUtf8("actionUpdate_Scheduling"))
+        self.actionShow_last_data = QtGui.QAction(MainWindow)
+        self.actionShow_last_data.setText(QtGui.QApplication.translate("MainWindow", "Show last data received", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionShow_last_data.setObjectName(_fromUtf8("actionShow_last_data"))
         self.menuMenu.addAction(self.actionSetting)
         self.menuMenu.addAction(self.actionUpdate)
         self.menuMenu.addAction(self.actionUpdate_Map)
+        self.menuMenu.addAction(self.actionShow_last_data)
         self.menuMenu.addSeparator()
         self.menuMenu.addAction(self.actionExit)
         self.menuAbout.addAction(self.actionAbout)
@@ -1007,6 +1029,7 @@ class Ui_MainWindow(object):
         self.country_list.setCurrentIndex(-1)
         QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
         QtCore.QObject.connect(self.actionUpdate, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.connect)
+        QtCore.QObject.connect(self.actionShow_last_data, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.show_tables)
         QtCore.QObject.connect(self.actionAbout, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.about)
         QtCore.QObject.connect(self.actionSetting, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.show_settings)
         QtCore.QObject.connect(self.searchpushButton, QtCore.SIGNAL('clicked()'), MainWindow.search_button)

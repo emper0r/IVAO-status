@@ -91,7 +91,7 @@ class Main(QMainWindow):
         self.ui.PilottableWidget.setColumnWidth(7, 80)
         self.ui.PilottableWidget.setColumnWidth(8, 65)
         self.ui.ATC_FullList.setColumnWidth(1, 70)
-        self.ui.ATC_FullList.setColumnWidth(2, 40)
+        self.ui.ATC_FullList.setColumnWidth(2, 35)
         self.ui.ATC_FullList.setColumnWidth(3, 180)
         self.ui.ATC_FullList.setColumnWidth(4, 70)
         self.ui.ATC_FullList.setColumnWidth(5, 128)
@@ -129,29 +129,29 @@ class Main(QMainWindow):
         self.ui.Statistics.setColumnWidth(3, 100)
         self.ui.SchedulingATC.setColumnWidth(0, 30)
         self.ui.SchedulingATC.setColumnWidth(1, 90)
-        self.ui.SchedulingATC.setColumnWidth(2, 175)
-        self.ui.SchedulingATC.setColumnWidth(3, 60)
-        self.ui.SchedulingATC.setColumnWidth(4, 160)
-        self.ui.SchedulingATC.setColumnWidth(5, 160)
+        self.ui.SchedulingATC.setColumnWidth(2, 150)
+        self.ui.SchedulingATC.setColumnWidth(3, 70)
+        self.ui.SchedulingATC.setColumnWidth(4, 180)
+        self.ui.SchedulingATC.setColumnWidth(5, 180)
         self.ui.SchedulingATC.setColumnWidth(6, 60)
         self.ui.SchedulingATC.setColumnWidth(7, 60)
         self.ui.SchedulingATC.setColumnWidth(8, 50)
-        self.ui.SchedulingATC.setColumnWidth(9, 150)
+        self.ui.SchedulingATC.setColumnWidth(9, 115)
         self.ui.SchedulingFlights.setColumnWidth(0, 90)
         self.ui.SchedulingFlights.setColumnWidth(1, 60)
         self.ui.SchedulingFlights.setColumnWidth(2, 175)
         self.ui.SchedulingFlights.setColumnWidth(3, 60)
         self.ui.SchedulingFlights.setColumnWidth(4, 30)
-        self.ui.SchedulingFlights.setColumnWidth(5, 60)
-        self.ui.SchedulingFlights.setColumnWidth(6, 160)
+        self.ui.SchedulingFlights.setColumnWidth(5, 65)
+        self.ui.SchedulingFlights.setColumnWidth(6, 180)
         self.ui.SchedulingFlights.setColumnWidth(7, 30)
-        self.ui.SchedulingFlights.setColumnWidth(8, 60)
-        self.ui.SchedulingFlights.setColumnWidth(9, 160)
-        self.ui.SchedulingFlights.setColumnWidth(10, 50)
-        self.ui.SchedulingFlights.setColumnWidth(11, 75)
+        self.ui.SchedulingFlights.setColumnWidth(8, 70)
+        self.ui.SchedulingFlights.setColumnWidth(9, 180)
+        self.ui.SchedulingFlights.setColumnWidth(10, 55)
+        self.ui.SchedulingFlights.setColumnWidth(11, 95)
         self.ui.SchedulingFlights.setColumnWidth(12, 150)
         self.ui.SchedulingFlights.setColumnWidth(13, 40)
-        self.ui.SchedulingFlights.setColumnWidth(14, 40)
+        self.ui.SchedulingFlights.setColumnWidth(14, 50)
         self.ui.SchedulingFlights.setColumnWidth(15, 150)
         self.ui.PILOT_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.ATC_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -496,46 +496,12 @@ class Main(QMainWindow):
              , protrevision, rating, facilitytype, visualrange, time_last_atis_received, time_connected \
              , client_software_name, client_software_version, adminrating, atc_or_pilotrating, atis_message))
         connection.commit()
-        pilots_ivao = atcs_ivao = obs_ivao = 0
-        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='PILOT';")
-        connection.commit()
-        pilots = cursor.fetchone()
-        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC';")
-        connection.commit()
-        atc = cursor.fetchone()
-        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND callsign like '%OBS%';")
-        connection.commit()
-        obs = cursor.fetchone()
-        cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
-        connection.commit()
-        pob = cursor.fetchone()
         self.statusBar().showMessage('Events schedule for Controllers ...', 2000)
         qApp.processEvents()
         self.soup_atc = BeautifulSoup(self.SchedATC_URL)
         self.statusBar().showMessage('Events schedule for Flights ...', 2000)
         qApp.processEvents()
         self.soup_flights = BeautifulSoup(self.SchedFlights_URL)
-        self.ui.IVAOStatustableWidget.setCurrentCell(-1, -1)
-        pilots_ivao = QTableWidgetItem(str(pilots[0]))
-        atcs_ivao = QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
-        obs_ivao = QTableWidgetItem(str(int(obs[0])))
-        total_ivao = QTableWidgetItem(str(atc[0] + pilots[0]))
-        if pob[0] is None:
-            pob_ivao = QTableWidgetItem(str(0))
-        else:
-            pob_ivao = QTableWidgetItem(str(int(pob[0])))
-
-        time_received = datetime.datetime.utcnow()
-        time_board = QTableWidgetItem(str(time_received).split('.')[0] + ' - Zulu Time (UTC)')
-
-        self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
-        self.ui.IVAOStatustableWidget.setItem(1, 0, atcs_ivao)
-        self.ui.IVAOStatustableWidget.setItem(2, 0, obs_ivao)
-        self.ui.IVAOStatustableWidget.setItem(3, 0, total_ivao)
-        self.ui.IVAOStatustableWidget.setItem(5, 0, pob_ivao)
-        self.ui.IVAOStatustableWidget.setItem(6, 0, time_board)
-        qApp.processEvents()
-        connection.close()
         self.show_tables()
         self.ivao_friend()
         self.Scheduling()
@@ -623,7 +589,6 @@ class Main(QMainWindow):
             self.ui.SchedulingFlights.setItem(startrow, 3, col_StartTime)
             col_Departure = QTableWidgetItem(str(columns[6]), 0)
             try:
-
                 cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?', (str(columns[6]),))
                 country = cursor.fetchone()
                 if country is None:
@@ -748,6 +713,39 @@ class Main(QMainWindow):
         database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
+        pilots_ivao = atcs_ivao = obs_ivao = 0
+        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='PILOT';")
+        connection.commit()
+        pilots = cursor.fetchone()
+        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC';")
+        connection.commit()
+        atc = cursor.fetchone()
+        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND callsign like '%OBS%';")
+        connection.commit()
+        obs = cursor.fetchone()
+        cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
+        connection.commit()
+        pob = cursor.fetchone()
+        self.ui.IVAOStatustableWidget.setCurrentCell(-1, -1)
+        pilots_ivao = QTableWidgetItem(str(pilots[0]))
+        atcs_ivao = QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
+        obs_ivao = QTableWidgetItem(str(int(obs[0])))
+        total_ivao = QTableWidgetItem(str(atc[0] + pilots[0]))
+        if pob[0] is None:
+            pob_ivao = QTableWidgetItem(str(0))
+        else:
+            pob_ivao = QTableWidgetItem(str(int(pob[0])))
+
+        time_received = datetime.datetime.utcnow()
+        time_board = QTableWidgetItem(str(time_received).split('.')[0] + ' - Zulu Time (UTC)')
+
+        self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
+        self.ui.IVAOStatustableWidget.setItem(1, 0, atcs_ivao)
+        self.ui.IVAOStatustableWidget.setItem(2, 0, obs_ivao)
+        self.ui.IVAOStatustableWidget.setItem(3, 0, total_ivao)
+        self.ui.IVAOStatustableWidget.setItem(5, 0, pob_ivao)
+        self.ui.IVAOStatustableWidget.setItem(6, 0, time_board)
+        qApp.processEvents()
         cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
                         WHERE clienttype='ATC' ORDER BY vid DESC;")
         rows_atcs = cursor.fetchall()
@@ -2496,6 +2494,39 @@ class Main(QMainWindow):
                     startrow += 1
                 qApp.processEvents()
             self.statusBar().showMessage('Done!', 2000)
+    
+        if item == 10:
+            self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+            while self.ui.Statistics.rowCount () > 0:
+                self.ui.Statistics.removeRow(0)
+            startrow = 0
+            list_server = {}
+            cursor.execute("SELECT COUNT(server) FROM status_ivao")
+            total_server_used = cursor.fetchone()
+            for server in ('AM1', 'AM2', 'AS1', 'EU1', 'EU2', 'EU3', 'EU4', 'EU5', 'EU6',
+                           'EU7', 'EU8', 'EU9', 'EU11', 'EU12', 'EU13', 'EU14'):
+                cursor.execute("SELECT COUNT(server) FROM status_ivao WHERE server=?;", (str(server),))
+                total_items = cursor.fetchone()
+                if total_items[0] == 0:
+                    continue
+                else:
+                    list_server[server] = total_items[0]
+
+            for item in list_server.keys():
+                self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
+                col_item = QTableWidgetItem(str('%s' % (str(item),)), 0)
+                self.ui.Statistics.setItem(startrow, 1, col_item)
+                col_total = QTableWidgetItem(str(list_server[item]), 0)
+                self.ui.Statistics.setItem(startrow, 2, col_total)
+                percent = float(list_server[item]) / float(total_server_used[0]) * 100.0
+                self.progressbar = QProgressBar()
+                self.progressbar.setMinimum(1)
+                self.progressbar.setMaximum(100)
+                self.progressbar.setValue(float(percent))
+                self.ui.Statistics.setCellWidget(startrow, 3, self.progressbar)
+                startrow += 1
+                qApp.processEvents()
+        self.statusBar().showMessage('Done!', 2000)
 
 class AddFriend():
     def add_friend(self, vid2add):

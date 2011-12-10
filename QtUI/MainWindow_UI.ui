@@ -402,20 +402,44 @@
        <property name="text">
         <string>VID</string>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
       </column>
       <column>
        <property name="text">
         <string>Callsign</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
       </column>
       <column>
        <property name="text">
         <string>Realname</string>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
       </column>
       <column>
        <property name="text">
         <string>Rating</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
       </column>
      </widget>
@@ -1700,6 +1724,11 @@
         <string>Facility Type</string>
        </property>
       </item>
+      <item>
+       <property name="text">
+        <string>Servers</string>
+       </property>
+      </item>
      </widget>
     </widget>
     <widget class="QWidget" name="tab">
@@ -2196,6 +2225,7 @@
     <addaction name="actionSetting"/>
     <addaction name="actionUpdate"/>
     <addaction name="actionUpdate_Map"/>
+    <addaction name="actionShow_last_data"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -2242,6 +2272,11 @@
   <action name="actionUpdate_Scheduling">
    <property name="text">
     <string>Show Scheduling</string>
+   </property>
+  </action>
+  <action name="actionShow_last_data">
+   <property name="text">
+    <string>Show last data received</string>
    </property>
   </action>
  </widget>
