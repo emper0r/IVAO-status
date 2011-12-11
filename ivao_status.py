@@ -153,6 +153,14 @@ class Main(QMainWindow):
         self.ui.SchedulingFlights.setColumnWidth(13, 40)
         self.ui.SchedulingFlights.setColumnWidth(14, 50)
         self.ui.SchedulingFlights.setColumnWidth(15, 150)
+        self.ui.network_table.setColumnWidth(0, 60)
+        self.ui.network_table.setColumnWidth(1, 120)
+        self.ui.network_table.setColumnWidth(2, 250)
+        self.ui.network_table.setColumnWidth(3, 250)
+        self.ui.network_table.setColumnWidth(4, 60)
+        self.ui.network_table.setColumnWidth(5, 60)
+        self.ui.network_table.setColumnWidth(6, 60)
+        self.ui.network_table.setColumnWidth(7, 60)
         self.ui.PILOT_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.ATC_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.FriendstableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -256,11 +264,11 @@ class Main(QMainWindow):
 
     @property
     def maptab(self):
-        if self._maptab is None and self.ui.tabWidget.currentIndex() != 7:
+        if self._maptab is None and self.ui.tabWidget.currentIndex() != 8:
             self._maptab = QWebView()
-            self.ui.tabWidget.insertTab(7, self.maptab, 'Map')
+            self.ui.tabWidget.insertTab(8, self.maptab, 'Map')
         else:
-            self.ui.tabWidget.setCurrentIndex(7)
+            self.ui.tabWidget.setCurrentIndex(8)
         return self._maptab
 
     def initial_load(self):
@@ -542,19 +550,22 @@ class Main(QMainWindow):
             self.ui.SchedulingATC.setItem(startrow, 7, col_Training)
             col_Event = QTableWidgetItem(str(columns[8]), 0)
             self.ui.SchedulingATC.setItem(startrow, 8, col_Event)
-            cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?', (str(columns[3][:4]),))
-            country = cursor.fetchone()
-            if country is None:
-                cursor.execute('SELECT Country FROM fir_data_list WHERE icao = ?', (str(columns[3][:4]),))
+            try:
+                cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?', (str(columns[3][:4]),))
                 country = cursor.fetchone()
-            col_Country = QTableWidgetItem(str(country[0]), 0)
-            self.ui.SchedulingATC.setItem(startrow, 1, col_Country)
-            image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-            flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
-            Pixmap = QPixmap(flagCodePath)
-            flag_country = QLabel()
-            flag_country.setPixmap(Pixmap)
-            self.ui.SchedulingATC.setCellWidget(startrow, 0, flag_country)
+                if country is None:
+                    cursor.execute('SELECT Country FROM fir_data_list WHERE icao = ?', (str(columns[3][:4]),))
+                    country = cursor.fetchone()
+                col_Country = QTableWidgetItem(str(country[0]), 0)
+                self.ui.SchedulingATC.setItem(startrow, 1, col_Country)
+                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
+                Pixmap = QPixmap(flagCodePath)
+                flag_country = QLabel()
+                flag_country.setPixmap(Pixmap)
+                self.ui.SchedulingATC.setCellWidget(startrow, 0, flag_country)
+            except:
+                pass
             startrow += 1
             qApp.processEvents()
 
@@ -943,6 +954,7 @@ class Main(QMainWindow):
         else:
             pass
         self.country_view()
+        self.network()
 
     def country_view(self):
         country_selected = self.ui.country_list.currentText()
@@ -2527,6 +2539,35 @@ class Main(QMainWindow):
                 startrow += 1
                 qApp.processEvents()
         self.statusBar().showMessage('Done!', 2000)
+        
+    def network(self):
+        config = ConfigParser.RawConfigParser()
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
+        cursor = connection.cursor()
+
+        startrow = 0
+        for item in ('AM1', 'AM2', 'AS1', 'EU1', 'EU2', 'EU3', 'EU4', 'EU5', 'EU6', 'EU7', 'EU8', 'EU9', 'EU11', 'EU12', 'EU13', 'EU14'):
+            cursor.execute("select count(clienttype) from status_ivao where clienttype='PILOT' and server=?;", (str(item),))
+            server_pilot = cursor.fetchone()
+            cursor.execute("select count(clienttype) from status_ivao where clienttype='ATC' and not callsign like '%OBS%' and server=?;", (str(item),))
+            server_controller = cursor.fetchone()
+            cursor.execute("select count(clienttype) from status_ivao where clienttype='ATC' and callsign like '%OBS%' and server=?;", (str(item),))
+            server_observer = cursor.fetchone()
+            cursor.execute("select count(clienttype) from status_ivao where server=?;", (str(item),))
+            server_total = cursor.fetchone()
+            col_pilot = QTableWidgetItem(str(server_pilot[0]), 0)
+            self.ui.network_table.setItem(startrow, 4, col_pilot)
+            col_controllers = QTableWidgetItem(str(server_controller[0]), 0)
+            self.ui.network_table.setItem(startrow, 5, col_controllers)
+            col_observers = QTableWidgetItem(str(server_observer[0]), 0)
+            self.ui.network_table.setItem(startrow, 6, col_observers)
+            col_total = QTableWidgetItem(str(server_total[0]), 0)
+            self.ui.network_table.setItem(startrow, 7, col_total)
+            startrow += 1
+            qApp.processEvents()
 
 class AddFriend():
     def add_friend(self, vid2add):
