@@ -164,6 +164,11 @@
       </row>
       <row>
        <property name="text">
+        <string>Vehicles</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
         <string>Observers</string>
        </property>
       </row>
@@ -2356,6 +2361,11 @@
         <string>16</string>
        </property>
       </row>
+      <row>
+       <property name="text">
+        <string>17</string>
+       </property>
+      </row>
       <column>
        <property name="text">
         <string>Server</string>
@@ -2925,6 +2935,53 @@
        <property name="text">
         <string>Europe</string>
        </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </item>
+      <item row="16" column="0">
+       <property name="text">
+        <string>EU15</string>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </item>
+      <item row="16" column="1">
+       <property name="text">
+        <string>84.243.201.205</string>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </item>
+      <item row="16" column="2">
+       <property name="text">
+        <string>IVAO - Europa 15</string>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </item>
+      <item row="16" column="3">
+       <property name="text">
+        <string>Europe</string>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </item>
+      <item row="16" column="4">
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </item>
+      <item row="16" column="5">
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+      </item>
+      <item row="16" column="6">
        <property name="textAlignment">
         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
        </property>

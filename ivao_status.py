@@ -36,6 +36,7 @@ import MainWindow_UI
 import PilotInfo_UI
 import ControllerInfo_UI
 import SettingWindow_UI
+import FollowMeCarService_UI
 import urllib2
 
 try:
@@ -57,7 +58,7 @@ import datetime
 import ConfigParser
 import time
 
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 url = 'http://de1.www.ivao.aero/'
 scheduling_atc = 'http://www.ivao.aero/atcss/list.asp'
 scheduling_flights = 'http://www.ivao.aero/flightss/list.asp'
@@ -91,7 +92,7 @@ class Main(QMainWindow):
         self.ui.PilottableWidget.setColumnWidth(7, 80)
         self.ui.PilottableWidget.setColumnWidth(8, 65)
         self.ui.ATC_FullList.setColumnWidth(1, 70)
-        self.ui.ATC_FullList.setColumnWidth(2, 35)
+        self.ui.ATC_FullList.setColumnWidth(2, 37)
         self.ui.ATC_FullList.setColumnWidth(3, 180)
         self.ui.ATC_FullList.setColumnWidth(4, 70)
         self.ui.ATC_FullList.setColumnWidth(5, 128)
@@ -156,10 +157,10 @@ class Main(QMainWindow):
         self.ui.network_table.setColumnWidth(0, 60)
         self.ui.network_table.setColumnWidth(1, 120)
         self.ui.network_table.setColumnWidth(2, 250)
-        self.ui.network_table.setColumnWidth(3, 250)
-        self.ui.network_table.setColumnWidth(4, 60)
-        self.ui.network_table.setColumnWidth(5, 60)
-        self.ui.network_table.setColumnWidth(6, 60)
+        self.ui.network_table.setColumnWidth(3, 210)
+        self.ui.network_table.setColumnWidth(4, 65)
+        self.ui.network_table.setColumnWidth(5, 70)
+        self.ui.network_table.setColumnWidth(6, 70)
         self.ui.network_table.setColumnWidth(7, 60)
         self.ui.PILOT_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.ui.ATC_FullList.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -258,6 +259,7 @@ class Main(QMainWindow):
                 config.write(configfile)
         self.pilot_list = []
         self.atc_list = []
+        self.vehicles = []
         self.SchedATC_URL = None
         self.SchedFlights_URL = None
         self.ui.tabWidget.currentChanged.connect(self.ivao_friend)
@@ -388,7 +390,8 @@ class Main(QMainWindow):
                     self.pilot_list.append(logged_users)
                 if "ATC" in logged_users:
                     self.atc_list.append(logged_users)
-
+                if "FOLME" in logged_users:
+                    self.pilot_list.append(logged_users)
             self.update_db()
 
         except IOError:
@@ -451,7 +454,7 @@ class Main(QMainWindow):
             planned_pob = fields[44]
             true_heading = fields[45]
             onground = fields[46]
-            cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, server, clienttype \
+            cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, clienttype \
             , latitude, longitude, altitude, groundspeed, planned_aircraft, planned_tascruise \
             , planned_depairport, planned_altitude, planned_destairport, server, protrevision \
             , rating, transponder, visualrange, planned_revision, planned_flighttype \
@@ -461,8 +464,8 @@ class Main(QMainWindow):
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
             , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
             , onground) \
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-            (callsign, vid, realname, server, clienttype, latitude, longitude, altitude, groundspeed, planned_aircraft \
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+            (callsign, vid, realname, clienttype, latitude, longitude, altitude, groundspeed, planned_aircraft \
              , planned_tascruise, planned_depairport, planned_altitude, planned_destairport, server, protrevision \
              , rating, transponder, visualrange, planned_revision, planned_flighttype \
              , planned_deptime, planned_actdeptime, planned_hrsenroute, planned_minenroute, planned_hrsfuel \
@@ -496,14 +499,28 @@ class Main(QMainWindow):
             adminrating = fields[40]
             atc_or_atcrating = fields[41]
 
-            cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, server, clienttype, frequency \
+            cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, clienttype, frequency \
             , latitude, longitude, altitude, server, protrevision, rating, facilitytype, visualrange \
             , time_last_atis_received, time_connected, client_software_name, client_software_version \
-            , adminrating, atc_or_pilotrating, atis_message) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
-            (callsign, vid, realname, server, clienttype, frequency, latitude, longitude, altitude, server \
+            , adminrating, atc_or_pilotrating, atis_message) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", \
+            (callsign, vid, realname, clienttype, frequency, latitude, longitude, altitude, server \
              , protrevision, rating, facilitytype, visualrange, time_last_atis_received, time_connected \
              , client_software_name, client_software_version, adminrating, atc_or_pilotrating, atis_message))
         connection.commit()
+
+        for row in self.vehicles:
+            fields = rows.split(":")
+            callsign = fields[0]
+            vid = fields[1]
+            realname = rows.rsplit(":")[2].decode('latin-1')
+            clienttype = fields[3]
+            server = fields[14]
+            time_connected = fields[37]
+
+        cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, clienttype, server, time_connected) \
+        VALUES (?,?,?,?,?,?)", (callsign, vid, realname, clienttype, server, time_connected))
+        connection.commit()
+
         self.statusBar().showMessage('Events schedule for Controllers ...', 2000)
         qApp.processEvents()
         self.soup_atc = BeautifulSoup(self.SchedATC_URL)
@@ -515,7 +532,6 @@ class Main(QMainWindow):
         self.Scheduling()
 
     def Scheduling(self):
-
         if self.SchedATC_URL is None and self.SchedFlights_URL is None:
             self.statusBar().showMessage('You have to download data from IVAO, Select "Menu" and "Get data from IVAO"', 7000)
             qApp.processEvents()
@@ -659,7 +675,7 @@ class Main(QMainWindow):
         cursor = connection.cursor()
         cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, planned_depairport \
                       , planned_destairport, onground, time_connected, groundspeed, planned_altitude, Latitude, Longitude \
-                      FROM status_ivao WHERE clienttype='PILOT' AND callsign = ?;", (str(callsign),))
+                      FROM status_ivao WHERE callsign=?;", (str(callsign),))
         get_status = cursor.fetchone()
         groundspeed = '-'
         for row_pilot in get_status:
@@ -731,6 +747,9 @@ class Main(QMainWindow):
         cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC';")
         connection.commit()
         atc = cursor.fetchone()
+        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='FOLME';")
+        connection.commit()
+        followme = cursor.fetchone()
         cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND callsign like '%OBS%';")
         connection.commit()
         obs = cursor.fetchone()
@@ -740,8 +759,9 @@ class Main(QMainWindow):
         self.ui.IVAOStatustableWidget.setCurrentCell(-1, -1)
         pilots_ivao = QTableWidgetItem(str(pilots[0]))
         atcs_ivao = QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
+        vehicles = QTableWidgetItem(str(int(followme[0])))
         obs_ivao = QTableWidgetItem(str(int(obs[0])))
-        total_ivao = QTableWidgetItem(str(atc[0] + pilots[0]))
+        total_ivao = QTableWidgetItem(str(atc[0] + pilots[0] + followme[0]))
         if pob[0] is None:
             pob_ivao = QTableWidgetItem(str(0))
         else:
@@ -752,10 +772,11 @@ class Main(QMainWindow):
 
         self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
         self.ui.IVAOStatustableWidget.setItem(1, 0, atcs_ivao)
-        self.ui.IVAOStatustableWidget.setItem(2, 0, obs_ivao)
-        self.ui.IVAOStatustableWidget.setItem(3, 0, total_ivao)
-        self.ui.IVAOStatustableWidget.setItem(5, 0, pob_ivao)
-        self.ui.IVAOStatustableWidget.setItem(6, 0, time_board)
+        self.ui.IVAOStatustableWidget.setItem(2, 0, vehicles)
+        self.ui.IVAOStatustableWidget.setItem(3, 0, obs_ivao)
+        self.ui.IVAOStatustableWidget.setItem(4, 0, total_ivao)
+        self.ui.IVAOStatustableWidget.setItem(6, 0, pob_ivao)
+        self.ui.IVAOStatustableWidget.setItem(7, 0, time_board)
         qApp.processEvents()
         cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
                         WHERE clienttype='ATC' ORDER BY vid DESC;")
@@ -766,6 +787,8 @@ class Main(QMainWindow):
             self.ui.ATC_FullList.removeRow(0)
 
         for row_atc in rows_atcs:
+            if row_atc[3] is None:
+                continue
             self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
             col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
             if str(row_atc[0][:4]) == 'IVAO':
@@ -868,18 +891,66 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
 
-        cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport \
-                      , planned_destairport, time_connected FROM status_ivao \
-                      WHERE clienttype='PILOT' ORDER BY vid desc;")
-        rows_pilots = cursor.fetchall()
-        startrow = 0
-        self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
+        cursor.execute("SELECT DISTINCT(callsign), rating, realname, time_connected, \
+        clienttype FROM status_ivao WHERE clienttype='FOLME';")
+        vehicles = cursor.fetchall()
+        connection.commit()
 
+        startrow = 0
         while self.ui.PILOT_FullList.rowCount () > 0:
             self.ui.PILOT_FullList.removeRow(0)
 
-        for row_pilot in rows_pilots:
+        for followservice in vehicles:
             self.ui.PILOT_FullList.setCurrentCell(0, 0)
+            self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
+            image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
+            followmeCodePath = (image_airlines + '/ZZZZ.png')
+            Pixmap = QPixmap(followmeCodePath)
+            FMC_img = QLabel(self)
+            FMC_img.setPixmap(Pixmap)
+            self.ui.PILOT_FullList.setCellWidget(startrow, 0, FMC_img)
+            col_callsign = QTableWidgetItem(str(followservice[0]), 0)
+            self.ui.PILOT_FullList.setItem(startrow, 1, col_callsign)
+            col_aircraft = QTableWidgetItem(str('FOLME'), 0)
+            self.ui.PILOT_FullList.setItem(startrow, 2, col_aircraft)
+            col_realname = QTableWidgetItem(str(followservice[2][:-5].encode('latin-1')), 0)
+            self.ui.PILOT_FullList.setItem(startrow, 3, col_realname)
+            col_rating = QTableWidgetItem(str(self.rating_pilot[followservice[1]]), 0)
+            self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)
+            code_pilot_rating = followservice[1]
+            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
+            ratingImagePath = ImagePath + '/pilot_level%d.gif' % int(code_pilot_rating)
+            try:
+                if os.path.exists(ratingImagePath) is True:
+                    Pixmap = QPixmap(ratingImagePath)
+                    ratingImage = QLabel(self)
+                    ratingImage.setPixmap(Pixmap)
+                    self.ui.PILOT_FullList.setCellWidget(startrow, 5, ratingImage)
+                else:
+                    pass
+            except:
+                pass
+            col_departure = QTableWidgetItem(str('-'), 0)
+            self.ui.PILOT_FullList.setItem(startrow, 6, col_departure)
+            col_destination = QTableWidgetItem(str('-'), 0)
+            self.ui.PILOT_FullList.setItem(startrow, 7, col_destination)
+            col_status = QTableWidgetItem(str("Follow Car Service"), 0)
+            self.ui.PILOT_FullList.setItem(startrow, 8, col_status)
+            start_connected = datetime.datetime(int(str(followservice[3])[:4]), int(str(followservice[3])[4:6]), int(str(followservice[3])[6:8]) \
+                                , int(str(followservice[3])[8:10]), int(str(followservice[3])[10:12]), int(str(followservice[3])[12:14]))
+            diff = datetime.datetime.utcnow() - start_connected
+            col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
+            self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
+            self.progress.setValue(int(float(startrow) / float(len(vehicles)) * 100.0))
+            startrow += 1
+            qApp.processEvents()
+
+        cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport \
+                      , planned_destairport, time_connected, clienttype FROM status_ivao \
+                      WHERE clienttype='PILOT' ORDER BY vid ASC;")
+        rows_pilots = cursor.fetchall()
+
+        for row_pilot in rows_pilots:
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
             code_airline = row_pilot[0][:3]
             image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
@@ -897,12 +968,11 @@ class Main(QMainWindow):
                         col_airline = QTableWidgetItem(str(row_pilot[0]))
                     else:
                         col_airline = QTableWidgetItem(str(airline_code[0]), 0)
-                    self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
+                        self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
             except:
                 pass
             col_callsign = QTableWidgetItem(str(row_pilot[0]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 1, col_callsign)
-
             try:
                 aircraft = row_pilot[1].split('/')[1]
                 if aircraft != '-':
@@ -945,6 +1015,7 @@ class Main(QMainWindow):
             self.progress.setValue(int(float(startrow) / float(len(rows_pilots)) * 100.0))
             startrow += 1
             qApp.processEvents()
+
         connection.close()
         self.progress.hide()
         self.statusBar().showMessage('Done', 2000)
@@ -1370,7 +1441,9 @@ class Main(QMainWindow):
                 if sender == self.showInfo_Action:
                     if str(clienttype[0]) == 'PILOT':
                         self.show_pilot_info(current_callsign.text())
-                    else:
+                    if str(clienttype[0]) == 'FOLME':
+                        self.show_followme_info(current_callsign.text())
+                    if str(clienttype[0]) == 'ATC':
                         self.show_controller_info(current_callsign.text())
                 if sender == self.showMap_Action:
                     cursor.execute('SELECT planned_depairport, planned_destairport FROM status_ivao WHERE callsign=?;' \
@@ -1411,12 +1484,22 @@ class Main(QMainWindow):
             else:
                 current_row = self.ui.PILOT_FullList.currentRow()
                 current_callsign = self.ui.PILOT_FullList.item(current_row, 1)
-                icao_orig = self.ui.PILOT_FullList.item(current_row, 6)
-                icao_dest = self.ui.PILOT_FullList.item(current_row, 7)
+                cursor.execute('SELECT clienttype FROM status_ivao WHERE callsign=?;', ((str(current_callsign.text())),))
+                clienttype = cursor.fetchone()
+                current_row = self.ui.PILOT_FullList.currentRow()
+                current_callsign = self.ui.PILOT_FullList.item(current_row, 1)
                 if sender == self.showInfo_Action:
-                    self.show_pilot_info(current_callsign.text())
+                    if str(clienttype[0]) == 'FOLME':
+                        self.show_followme_info(current_callsign.text())
+                    if str(clienttype[0]) == 'PILOT':
+                        self.show_pilot_info(current_callsign.text())
                 if sender == self.showMap_Action:
-                    self.view_map(current_callsign.text(), icao_orig.text(), icao_dest.text())
+                    if str(clienttype[0]) == 'PILOT':
+                        icao_orig = self.ui.PILOT_FullList.item(current_row, 6)
+                        icao_dest = self.ui.PILOT_FullList.item(current_row, 7)
+                        self.view_map(current_callsign.text(), icao_orig.text(), icao_dest.text())
+                    if str(clienttype[0]) == 'FOLME':
+                        pass
                 self.ui.PILOT_FullList.setCurrentCell(-1, -1)
         if self.ui.PilottableWidget.currentRow() >= 0:
             row = self.ui.PilottableWidget.currentIndex().row()
@@ -1442,10 +1525,12 @@ class Main(QMainWindow):
             else:
                 try:
                     if sender == self.showInfo_Action:
-                            if str(friend_data[0][0]) == 'PILOT':
-                                self.show_pilot_info(str(friend_data[0][1]))
-                            else:
-                                self.show_controller_info(str(friend_data[0][1]))
+                        if str(friend_data[0][0]) == 'PILOT':
+                            self.show_pilot_info(str(friend_data[0][1]))
+                        if str(friend_data[0][0]) == 'FOLME':
+                            self.show_followme_info(str(friend_data[0][1]))
+                        if str(friend_data[0][0]) == 'ATC':
+                            self.show_controller_info(str(friend_data[0][1]))
                     if sender == self.showMap_Action:
                         cursor.execute('SELECT planned_depairport, planned_destairport FROM status_ivao WHERE callsign=?;' \
                                        , ((str(friend_data[0][1])),))
@@ -1786,6 +1871,12 @@ class Main(QMainWindow):
         self.controller_window.closed.connect(self.show)
         self.controller_window.show()
 
+    def show_followme_info(self, callsign):
+        self.followme_window = FollowMeService()
+        self.followme_window.status(callsign)
+        self.followme_window.closed.connect(self.show)
+        self.followme_window.show()
+
     def show_settings(self):
         self.setting_window = Settings(self)
         self.setting_window.closed.connect(self.show)
@@ -1873,6 +1964,8 @@ class Main(QMainWindow):
             if str(players[callsign][2][-4:]) == '_OBS' \
                or str(players[callsign][4][-4:]) == '_DEP' or str(players[callsign][2][-4:]) == '_GND' \
                or str(players[callsign][2][-4:]) == '_TWR' or str(players[callsign][2][-4:]) == '_APP':
+                if players[callsign][0] is None:
+                    continue
                 all_in_map.write('    var position = new OpenLayers.LonLat( %f, %f )\n' % \
                                  (float(players[callsign][0]), float(players[callsign][1])))
                 all_in_map.write('         .transform(\n')
@@ -2506,7 +2599,7 @@ class Main(QMainWindow):
                     startrow += 1
                 qApp.processEvents()
             self.statusBar().showMessage('Done!', 2000)
-    
+
         if item == 10:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
             while self.ui.Statistics.rowCount () > 0:
@@ -2516,7 +2609,7 @@ class Main(QMainWindow):
             cursor.execute("SELECT COUNT(server) FROM status_ivao")
             total_server_used = cursor.fetchone()
             for server in ('AM1', 'AM2', 'AS1', 'EU1', 'EU2', 'EU3', 'EU4', 'EU5', 'EU6',
-                           'EU7', 'EU8', 'EU9', 'EU11', 'EU12', 'EU13', 'EU14'):
+                           'EU7', 'EU8', 'EU9', 'EU11', 'EU12', 'EU13', 'EU14', 'EU15'):
                 cursor.execute("SELECT COUNT(server) FROM status_ivao WHERE server=?;", (str(server),))
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
@@ -2539,7 +2632,7 @@ class Main(QMainWindow):
                 startrow += 1
                 qApp.processEvents()
         self.statusBar().showMessage('Done!', 2000)
-        
+
     def network(self):
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
@@ -2549,14 +2642,14 @@ class Main(QMainWindow):
         cursor = connection.cursor()
 
         startrow = 0
-        for item in ('AM1', 'AM2', 'AS1', 'EU1', 'EU2', 'EU3', 'EU4', 'EU5', 'EU6', 'EU7', 'EU8', 'EU9', 'EU11', 'EU12', 'EU13', 'EU14'):
-            cursor.execute("select count(clienttype) from status_ivao where clienttype='PILOT' and server=?;", (str(item),))
+        for item in ('AM1', 'AM2', 'AS1', 'EU1', 'EU2', 'EU3', 'EU4', 'EU5', 'EU6', 'EU7', 'EU8', 'EU9', 'EU11', 'EU12', 'EU13', 'EU14', 'EU15'):
+            cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='PILOT' AND server=?;", (str(item),))
             server_pilot = cursor.fetchone()
-            cursor.execute("select count(clienttype) from status_ivao where clienttype='ATC' and not callsign like '%OBS%' and server=?;", (str(item),))
+            cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND NOT callsign LIKE '%OBS%' AND server=?;", (str(item),))
             server_controller = cursor.fetchone()
-            cursor.execute("select count(clienttype) from status_ivao where clienttype='ATC' and callsign like '%OBS%' and server=?;", (str(item),))
+            cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND callsign LIKE '%OBS%' AND server=?;", (str(item),))
             server_observer = cursor.fetchone()
-            cursor.execute("select count(clienttype) from status_ivao where server=?;", (str(item),))
+            cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE server=?;", (str(item),))
             server_total = cursor.fetchone()
             col_pilot = QTableWidgetItem(str(server_pilot[0]), 0)
             self.ui.network_table.setItem(startrow, 4, col_pilot)
@@ -2591,7 +2684,7 @@ class AddFriend():
             try:
                 if insert is True:
                     cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) \
-                    SELECT vid, realname, rating, clienttype from status_ivao where vid=?;', (vid2add,))
+                    SELECT vid, realname, rating, clienttype FROM status_ivao WHERE vid=?;', (vid2add,))
                     connection.commit()
             except:
                 pass
@@ -2622,25 +2715,28 @@ class PilotInfo(QMainWindow):
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
         cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
-        planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, \
-        onground, latitude, longitude, planned_altairport, planned_altairport2, planned_tascruise, time_connected \
-        FROM status_ivao WHERE callsign = ? AND clienttype='PILOT' ;", (str(callsign),))
+        planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, onground,\
+        latitude, longitude, planned_altairport, planned_altairport2, planned_tascruise, time_connected, clienttype \
+        FROM status_ivao WHERE callsign=?;", (str(callsign),))
         info = cursor.fetchall()
-        try:
-            cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][5]),))
-            flagCodeOrig = cursor.fetchone()
-            connection.commit()
-            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-            flagCodePath_orig = (ImagePath + '/%s.png') % flagCodeOrig
-            Pixmap = QPixmap(flagCodePath_orig)
-            self.ui.DepartureImage.setPixmap(Pixmap)
-            cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(info[0][5]),))
-            city_orig = cursor.fetchone()
-            self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
-            city_orig_point = city_orig[1], city_orig[2]
-        except:
-            self.ui.DepartureText.setText('Pending...')
-            city_orig_point = None
+        if info[0][19] == 'FOLME':
+            pass
+        else:
+            try:
+                cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][5]),))
+                flagCodeOrig = cursor.fetchone()
+                connection.commit()
+                ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                flagCodePath_orig = (ImagePath + '/%s.png') % flagCodeOrig
+                Pixmap = QPixmap(flagCodePath_orig)
+                self.ui.DepartureImage.setPixmap(Pixmap)
+                cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(info[0][5]),))
+                city_orig = cursor.fetchone()
+                self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
+                city_orig_point = city_orig[1], city_orig[2]
+            except:
+                self.ui.DepartureText.setText('Pending...')
+                city_orig_point = None
 
         try:
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][6]),))
@@ -2771,10 +2867,8 @@ class ControllerInfo(QMainWindow):
         database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
-        cursor.execute("SELECT vid, realname, server, clienttype, frequency \
-            , rating, facilitytype, atis_message, time_connected, \
-            client_software_name, client_software_version FROM status_ivao \
-            WHERE callsign = ? AND clienttype='ATC';", (str(callsign),))
+        cursor.execute("SELECT vid, realname, server, clienttype, frequency, rating, facilitytype, atis_message, \
+        time_connected, client_software_name, client_software_version FROM status_ivao WHERE callsign=?;", (str(callsign),))
         info = cursor.fetchall()
         self.ui.VidText.setText(str(info[0][0]))
         self.ui.ControllerText.setText(str(info[0][1].encode('latin-1')))
@@ -2785,6 +2879,10 @@ class ControllerInfo(QMainWindow):
             cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
             flagCodeOrig = cursor.fetchone()
             connection.commit()
+            if flagCodeOrig is None:
+                cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(callsign[:2]),))
+                flagCodeOrig = cursor.fetchone()
+                connection.commit()
             image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
             flagCodePath_orig = (image_flag + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
@@ -2809,6 +2907,69 @@ class ControllerInfo(QMainWindow):
             start_connected = datetime.datetime(int(str(info[0][8])[:4]), int(str(info[0][8])[4:6]) \
                                                 , int(str(info[0][8])[6:8]), int(str(info[0][8])[8:10]) \
                                                 , int(str(info[0][8])[10:12]), int(str(info[0][8])[12:14]))
+            diff = datetime.datetime.utcnow() - start_connected
+            self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])
+        except:
+            self.ui.TimeOnLineText.setText('Pending...')
+
+    def add_button(self):
+        add2friend = AddFriend()
+        add2friend.add_friend(str(self.ui.VidText.text()).encode('latin-1'))
+        self.statusBar().showMessage('Friend Added', 3000)
+
+    def closeEvent(self, event):
+        self.closed.emit()
+        event.accept()
+
+class FollowMeService(QMainWindow):
+    closed = pyqtSignal()
+
+    def __init__(self):
+        QMainWindow.__init__(self)
+        self.ui = FollowMeCarService_UI.Ui_QFMC()
+        self.ui.setupUi(self)
+        screen = QDesktopWidget().screenGeometry()
+        size =  self.geometry()
+        self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+        image_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')
+        self.setWindowIcon(QIcon(image_icon))
+        QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
+
+    def status(self, callsign):
+        self.callsign = callsign
+        config = ConfigParser.RawConfigParser()
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
+        connection = sqlite3.connect(database)
+        cursor = connection.cursor()
+        cursor.execute("SELECT vid, realname, server, clienttype, rating, time_connected, client_software_name, \
+        client_software_version FROM status_ivao WHERE callsign=?;", (str(callsign),))
+        info = cursor.fetchall()
+        self.ui.VidText.setText(str(info[0][0]))
+        self.ui.FMCRealname.setText(str(info[0][1].encode('latin-1'))[:-4])
+        self.ui.SoftwareText.setText('%s %s' % (str(info[0][6]), str(info[0][7])))
+        self.ui.ConnectedText.setText(str(info[0][2]))
+        try:
+            cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][1][-4:]),))
+            flagCodeOrig = cursor.fetchone()
+            connection.commit()
+            image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+            flagCodePath_orig = (image_flag + '/%s.png') % flagCodeOrig
+            Pixmap = QPixmap(flagCodePath_orig)
+            self.ui.Flag.setPixmap(Pixmap)
+            cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
+            city_orig = cursor.fetchone()
+        except:
+            self.ui.ControllingText.setText('Pending...')
+        ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
+        ratingImagePath = (ImagePath + '/ZZZZ.png')
+        Pixmap = QPixmap(ratingImagePath)
+        self.ui.rating_img.setPixmap(Pixmap)
+        try:
+            start_connected = datetime.datetime(int(str(info[0][5])[:4]), int(str(info[0][5])[4:6]) \
+                                                , int(str(info[0][5])[6:8]), int(str(info[0][5])[8:10]) \
+                                                , int(str(info[0][5])[10:12]), int(str(info[0][5])[12:14]))
             diff = datetime.datetime.utcnow() - start_connected
             self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])
         except:
