@@ -46,13 +46,7 @@ except:
     print ('please run command as root: aptitude install sqlite3 libsqlite3-0\n')
     sys.exit(2)
 
-try:
-    from BeautifulSoup import BeautifulSoup
-except:
-    print ('\nYou have not have installed BeautifulSoup module for Python,\n')
-    print ('please run command as root: aptitude install python-beautifulsoup\n')
-    sys.exit(2)
-
+from BeautifulSoup import BeautifulSoup
 import os
 import datetime
 import ConfigParser
@@ -272,24 +266,77 @@ class Main(QMainWindow):
         else:
             self.ui.tabWidget.setCurrentIndex(8)
         return self._maptab
-
-    def initial_load(self):
-        self.statusBar().showMessage('Populating Database', 2000)
-        qApp.processEvents()
+    
+    def sql_querys(self, args=None, var=None):
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
         database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
-        db_t1 = cursor.execute("SELECT DISTINCT(Country) FROM icao_codes ORDER BY Country ASC;")
-        db_t1 = cursor.fetchall()
-        connection.commit()
-        startrow_dbt1 = 0
-        db_t2 = cursor.execute("SELECT icao, Latitude, Longitude, City_Airport, Country FROM icao_codes DESC;")
-        db_t2 = cursor.fetchall()
-        connection.commit()
-        startrow_dbt2 = 0
+        if args == 'Get_All_Flags':
+            Q_db = cursor.execute("SELECT DISTINCT(Country) FROM icao_codes ORDER BY Country ASC;")
+        if args == 'Get_All_data_icao_codes':
+            Q_db = cursor.execute("SELECT icao, Latitude, Longitude, City_Airport, Country FROM icao_codes DESC;")
+        if args == 'Get_Country_from_ICAO':
+            Q_db = cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?;', (str(var[0]),))
+        if args == 'Get_Country_from_FIR':
+            Q_db = cursor.execute('SELECT Country FROM fir_data_list WHERE icao = ?;', (str(var[0]),))
+        if args == 'Get_Country_from_Division':
+            Q_db = cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(var[0]),))
+        if args == 'Get_Status':
+            Q_db = cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, planned_depairport, \
+                                   planned_destairport, onground, time_connected, groundspeed, planned_altitude, \
+                                   Latitude, Longitude FROM status_ivao WHERE callsign=?;", (str(var[0]),))
+        if args == 'Get_City':
+            Q_db = cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?;", (str(var[0]),))
+        if args == 'Get_Pilots':
+            Q_db = cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='PILOT';")
+        if args == 'Get_Pilot':
+            Q_db = cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport, planned_destairport, \
+                                   time_connected FROM status_ivao WHERE clienttype='PILOT' \
+                                   AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(var[0])),))
+        if args == 'Get_Controllers':
+            Q_db = cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC';")
+        if args == 'Get_FollowMeCarService':
+            Q_db = cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='FOLME';")
+        if args == 'Get_Observers':
+            Q_db = cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND callsign like '%OBS%';")
+        if args == 'Get_POB':
+            Q_db = cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
+        if args == 'Get_Controller_List':
+            Q_db = cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
+                                   WHERE clienttype='ATC' ORDER BY vid DESC;")
+        if args == 'Get_Controller':
+            Q_db = cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
+                                   WHERE clienttype='ATC' AND callsign LIKE ? ORDER BY vid DESC;", (('%'+var[0]+'%'),))
+        if args == 'Get_Pilot_Lists':
+            Q_db = cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport, \
+                                   planned_destairport, time_connected, clienttype FROM status_ivao \
+                                   WHERE clienttype='PILOT' ORDER BY vid ASC;")
+        if args == 'Get_FMC_List':
+            Q_db = cursor.execute("SELECT DISTINCT(callsign), rating, realname, time_connected, clienttype \
+                                   FROM status_ivao WHERE clienttype='FOLME';")
+        if args == 'Get_Airline':
+            Q_db = cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?;', (str(var[0]),))
+        if args == 'Get_ICAO_from_Country':
+            Q_db = cursor.execute("SELECT icao FROM icao_codes WHERE country=?;", (str(var[0]),))
+        if args == 'Get_Outbound_Traffic':
+            Q_db= cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM status_ivao WHERE planned_depairport LIKE ?", \
+                           (str(var[0]),))
+        if args == 'Get_Inbound_Traffic':
+            Q_db = cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM status_ivao WHERE planned_destairport LIKE ?", \
+                           (str(var[0]),))
+        return Q_db
+
+    def initial_load(self):
+        self.statusBar().showMessage('Populating Database', 2000)
+        qApp.processEvents()
+        Q_db = self.sql_querys('Get_All_Flags')
+        db_t1 = Q_db.fetchall()
+        Q_db = self.sql_querys('Get_All_data_icao_codes')
+        db_t2 = Q_db.fetchall()
+        startrow_dbt1 = startrow_dbt2 = 0
 
         for line in db_t1:
             if line[0] == None:
@@ -333,7 +380,6 @@ class Main(QMainWindow):
                 pass
             startrow_dbt2 += 1
 
-        connection.close()
         qApp.processEvents()
         self.statusBar().showMessage('Showing friends list', 2000)
         self.ivao_friend()
@@ -537,13 +583,6 @@ class Main(QMainWindow):
             qApp.processEvents()
             return
 
-        config = ConfigParser.RawConfigParser()
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
-        config.read(config_file)
-        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
-        connection = sqlite3.connect(database)
-        cursor = connection.cursor()
-
         table_atc = self.soup_atc.find("table")
         table_rows = table_atc.findAll('tr')
         while self.ui.SchedulingATC.rowCount () > 0:
@@ -567,11 +606,11 @@ class Main(QMainWindow):
             col_Event = QTableWidgetItem(str(columns[8]), 0)
             self.ui.SchedulingATC.setItem(startrow, 8, col_Event)
             try:
-                cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?', (str(columns[3][:4]),))
-                country = cursor.fetchone()
+                Q_db = self.sql_querys('Get_Country_from_ICAO', (str(columns[3][:4]),))
+                country = Q_db.fetchone()
                 if country is None:
-                    cursor.execute('SELECT Country FROM fir_data_list WHERE icao = ?', (str(columns[3][:4]),))
-                    country = cursor.fetchone()
+                    Q_db = self.sql_querys('Get_Country_from_FIR', (str(columns[3][:4]),))
+                    country = Q_db.fetchone()
                 col_Country = QTableWidgetItem(str(country[0]), 0)
                 self.ui.SchedulingATC.setItem(startrow, 1, col_Country)
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
@@ -616,11 +655,11 @@ class Main(QMainWindow):
             self.ui.SchedulingFlights.setItem(startrow, 3, col_StartTime)
             col_Departure = QTableWidgetItem(str(columns[6]), 0)
             try:
-                cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?', (str(columns[6]),))
-                country = cursor.fetchone()
+                Q_db = self.sql_querys('Get_Country_from_ICAO', (str(columns[6]),))
+                country = Q_db.fetchone()
                 if country is None:
-                    cursor.execute('SELECT Country FROM fir_data_list WHERE icao = ?', (str(columns[6]),))
-                    country = cursor.fetchone()
+                    Q_db = self.sql_querys('Get_Country_from_FIR',  (str(columns[6]),))
+                    country = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
                 Pixmap = QPixmap(flagCodePath)
@@ -634,11 +673,11 @@ class Main(QMainWindow):
             self.ui.SchedulingFlights.setItem(startrow, 6, col_StartTime)
             col_Destination = QTableWidgetItem(str(columns[8]), 0)
             try:
-                cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?', (str(columns[8]),))
-                country = cursor.fetchone()
+                Q_db = self.sql_querys('Get_Country_from_ICAO', (str(columns[8]),))
+                country = Q_db.fetchone()
                 if country is None:
-                    cursor.execute('SELECT Country FROM fir_data_list WHERE icao = ?', (str(columns[8]),))
-                    country = cursor.fetchone()
+                    Q_db = self.sql_querys('Get_Country_from_FIR', (str(columns[8]),))
+                    country = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
             except:
@@ -667,24 +706,16 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Done!', 2000)
 
     def status_plane(self, callsign):
-        config = ConfigParser.RawConfigParser()
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
-        config.read(config_file)
-        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
-        connection = sqlite3.connect(database)
-        cursor = connection.cursor()
-        cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, planned_depairport \
-                      , planned_destairport, onground, time_connected, groundspeed, planned_altitude, Latitude, Longitude \
-                      FROM status_ivao WHERE callsign=?;", (str(callsign),))
-        get_status = cursor.fetchone()
-        groundspeed = '-'
+        Q_db = self.sql_querys('Get_Status', (str(callsign),))
+        get_status = Q_db.fetchone()
+        status = '-'
         for row_pilot in get_status:
             try:
-                cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(get_status[2]),))
-                city_orig = cursor.fetchone()
+                Q_db = self.sql_querys('Get_City', (str(get_status[2]),))
+                city_orig = Q_db.fetchone()
                 city_orig_point = float(city_orig[1]), float(city_orig[2])
-                cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(get_status[3]),))
-                city_dest = cursor.fetchone()
+                Q_db = self.sql_querys('Get_City', (str(get_status[3]),))
+                city_dest = Q_db.fetchone()
                 city_dest_point = float(city_dest[1]), float(city_dest[2])
                 pilot_position = get_status[8], get_status[9]
                 total_miles = distance.distance(city_orig_point, city_dest_point).miles
@@ -692,70 +723,62 @@ class Main(QMainWindow):
                 percent = (float(dist_traveled) / float(total_miles)) * 100.0
 
                 if percent > 105 :
-                    groundspeed = 'Diverted'
-                    return groundspeed
+                    status = 'Diverted'
+                    return status
                 else:
                     if int(str(get_status[4])) == 0:
                         if (percent >= 0.0) and (percent <= 2.0):
-                            groundspeed = 'Takeoff'
+                            status = 'Takeoff'
                         if (percent >= 2.0) and (percent <= 7.0):
-                            groundspeed = 'Initial Climbing'
+                            status = 'Initial Climbing'
                         if (percent >= 7.0) and (percent <= 10.0):
-                            groundspeed = 'Climbing'
+                            status = 'Climbing'
                         if (percent >= 10.0) and (percent <= 80.0):
-                            groundspeed = 'On Route'
+                            status = 'On Route'
                         if (percent >= 80.0) and (percent <= 90.0):
-                            groundspeed = 'Descending'
+                            status = 'Descending'
                         if (percent >= 90.0) and (percent <= 97.0):
-                            groundspeed = 'Initial Approach'
+                            status = 'Initial Approach'
                         if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 200) and (get_status[6] >= 30))):
-                            groundspeed = 'Final Approach'
-                        return groundspeed
+                            status = 'Final Approach'
+                        return status
                     else:
                         if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 1.0):
-                            groundspeed = 'Departing'
+                            status = 'Departing'
                         if (get_status[6] > 30) and (get_status[6] < 150) and (percent < 1.0):
-                            groundspeed = 'Takeoff'
-                        if (((percent >= 97.0) and (percent <=105.0)) and ((get_status[6] <= 220) and (get_status[6] >= 30))):
-                            groundspeed = 'Landed'
+                            status = 'Takeoff'
+                        if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 220) and (get_status[6] >= 30))):
+                            status = 'Landed'
                         if (get_status[6] < 30) and (percent > 99.0):
-                            groundspeed = 'Taxing to Gate'
+                            status = 'Taxing to Gate'
                         if (get_status[6] == 0) and (percent > 99.0):
-                            groundspeed = 'On Blocks'
+                            status = 'On Blocks'
                         if (get_status[6] == 0) and (percent <= 1.0):
-                            groundspeed = 'Boarding'
+                            status = 'Boarding'
                         if (get_status[6] == 0) and (percent >= 10.0 and percent <= 90.0):
-                            groundspeed = 'Altern Airport'
-                        return groundspeed
+                            status = 'Altern Airport'
+                        return status
             except:
-                groundspeed = 'Fill Flight Plan'
-                return groundspeed
+                status = 'Fill Flight Plan'
+                return status
 
     def show_tables(self):
-        self.statusBar().showMessage('Populating Controllers and Pilots', 10000)
-        self.progress.show()
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
-        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
-        connection = sqlite3.connect(database)
-        cursor = connection.cursor()
+        self.statusBar().showMessage('Populating Controllers and Pilots', 10000)
+        self.progress.show()
         pilots_ivao = atcs_ivao = obs_ivao = 0
-        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='PILOT';")
-        connection.commit()
-        pilots = cursor.fetchone()
-        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC';")
-        connection.commit()
-        atc = cursor.fetchone()
-        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='FOLME';")
-        connection.commit()
-        followme = cursor.fetchone()
-        cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND callsign like '%OBS%';")
-        connection.commit()
-        obs = cursor.fetchone()
-        cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
-        connection.commit()
-        pob = cursor.fetchone()
+        Q_db = self.sql_querys('Get_Pilots')
+        pilots = Q_db.fetchone()
+        Q_db = self.sql_querys('Get_Controllers')
+        atc = Q_db.fetchone()
+        Q_db = self.sql_querys('Get_FollowMeCarService')
+        followme = Q_db.fetchone()
+        Q_db = self.sql_querys('Get_Observers')
+        obs = Q_db.fetchone()
+        Q_db = self.sql_querys('Get_POB')
+        pob = Q_db.fetchone()
         self.ui.IVAOStatustableWidget.setCurrentCell(-1, -1)
         pilots_ivao = QTableWidgetItem(str(pilots[0]))
         atcs_ivao = QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
@@ -778,9 +801,8 @@ class Main(QMainWindow):
         self.ui.IVAOStatustableWidget.setItem(6, 0, pob_ivao)
         self.ui.IVAOStatustableWidget.setItem(7, 0, time_board)
         qApp.processEvents()
-        cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
-                        WHERE clienttype='ATC' ORDER BY vid DESC;")
-        rows_atcs = cursor.fetchall()
+        Q_db = self.sql_querys('Get_Controller_List')
+        rows_atcs = Q_db.fetchall()
         startrow = 0
 
         while self.ui.ATC_FullList.rowCount () > 0:
@@ -805,8 +827,8 @@ class Main(QMainWindow):
                 self.ui.ATC_FullList.setItem(startrow, 3, col_country)
 
             elif str(row_atc[0][2:3]) == '-' or str(row_atc[0][2:3]) == '_':
-                cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(row_atc[0][:2]),))
-                div_ivao = cursor.fetchone()
+                Q_db = self.sql_querys('Get_Country_from_Division', (str(row_atc[0][:2]),))
+                div_ivao = Q_db.fetchone()
                 if row_atc is None or div_ivao is None:
                     pass
                 else:
@@ -823,16 +845,13 @@ class Main(QMainWindow):
             else:
                 code_icao = str(row_atc[0][:4])
                 try:
-                    cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE ICAO=?", (str(code_icao),))
-                    flagCode = cursor.fetchone()
-                    connection.commit()
+                    Q_db = self.sql_querys('Get_Country_from_ICAO', (str(code_icao),))
+                    flagCode = Q_db.fetchone()
                     if flagCode is None:
-                        cursor.execute('SELECT Country FROM fir_data_list WHERE ICAO=?;', (str(code_icao),))
-                        division = cursor.fetchone()
-                        connection.commit()
-                        cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(division[0]),))
-                        flagCode = cursor.fetchone()
-                        connection.commit()
+                        Q_db = self.sql_querys('Get_Country_from_FIR', (str(code_icao),))
+                        division = Q_db.fetchone()
+                        Q_db = self.sql_querys('Get_Country_from_Division', (str(division[0]),))
+                        flagCode = Q_db.fetchone()
                     image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                     flagCodePath = (image_flag + '/%s.png') % flagCode
                     if os.path.exists(flagCodePath) is True:
@@ -891,10 +910,8 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
 
-        cursor.execute("SELECT DISTINCT(callsign), rating, realname, time_connected, \
-        clienttype FROM status_ivao WHERE clienttype='FOLME';")
-        vehicles = cursor.fetchall()
-        connection.commit()
+        Q_db = self.sql_querys('Get_FMC_List')
+        vehicles = Q_db.fetchall()
 
         startrow = 0
         while self.ui.PILOT_FullList.rowCount () > 0:
@@ -945,10 +962,8 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
 
-        cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport \
-                      , planned_destairport, time_connected, clienttype FROM status_ivao \
-                      WHERE clienttype='PILOT' ORDER BY vid ASC;")
-        rows_pilots = cursor.fetchall()
+        Q_db = self.sql_querys('Get_Pilot_Lists')
+        rows_pilots = Q_db.fetchall()
 
         for row_pilot in rows_pilots:
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
@@ -962,8 +977,8 @@ class Main(QMainWindow):
                     airline.setPixmap(Pixmap)
                     self.ui.PILOT_FullList.setCellWidget(startrow, 0, airline)
                 else:
-                    cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?', (str(row_pilot[0][:3]),))
-                    airline_code = cursor.fetchone()
+                    Q_db = self.sql_querys('Get_Airline', (str(row_pilot[0][:3]),))
+                    airline_code = Q_db.fetchone()
                     if airline_code is None:
                         col_airline = QTableWidgetItem(str(row_pilot[0]))
                     else:
@@ -1016,7 +1031,6 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
 
-        connection.close()
         self.progress.hide()
         self.statusBar().showMessage('Done', 2000)
         qApp.processEvents()
@@ -1029,23 +1043,15 @@ class Main(QMainWindow):
 
     def country_view(self):
         country_selected = self.ui.country_list.currentText()
-        config = ConfigParser.RawConfigParser()
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
-        config.read(config_file)
-        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
-        connection = sqlite3.connect(database)
-        cursor = connection.cursor()
-        cursor.execute("SELECT DISTINCT(Country) FROM icao_codes WHERE Country=?", (str(country_selected),))
-        flagCode = cursor.fetchone()
-        connection.commit()
+        Q_db = self.sql_querys('Get_Country_from_ICAO', (str(country_selected),))
+        flagCode = Q_db.fetchone()
 
         image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
         flagCodePath = (image_flag + '/%s.png') % country_selected
         Pixmap = QPixmap(flagCodePath)
         self.ui.flagIcon.setPixmap(Pixmap)
-        cursor.execute("SELECT icao FROM icao_codes WHERE country=?;", (str(country_selected),))
-        icao_country = cursor.fetchall()
-        connection.commit()
+        Q_db = self.sql_querys('Get_ICAO_from_Country', (str(country_selected),))
+        icao_country = Q_db.fetchall()
         self.ui.Inbound_traffic.setText('Inbound Traffic in %s Airports' % (country_selected))
         self.ui.Outbound_traffic.setText('Outbound Traffic in %s Airports' % (country_selected))
 
@@ -1070,25 +1076,17 @@ class Main(QMainWindow):
         startrow_out = 0
 
         for codes in icao_country:
-            cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
-            WHERE clienttype='ATC' AND callsign LIKE ? ORDER BY vid DESC;", (('%'+str(codes[0])+'%'),))
-            rows_atcs = cursor.fetchall()
-            connection.commit()
+            Q_db = self.sql_querys('Get_Controller', (('%'+str(codes[0])+'%'),))
+            rows_atcs = Q_db.fetchall()
 
-            cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport \
-                          , planned_destairport, time_connected FROM status_ivao \
-                          WHERE clienttype='PILOT' AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(codes[0])),))
-            rows_pilots = cursor.fetchall()
+            Q_db = self.sql_querys('Get_Pilot', (('%'+str(codes[0])),))
+            rows_pilots = Q_db.fetchall()
 
-            cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM status_ivao WHERE planned_depairport LIKE ?", \
-                           ((str(codes[0])),))
-            OutboundTrafficAirport = cursor.fetchall()
+            Q_db = self.sql_querys('Get_Outbound_Traffic', ((str(codes[0])),))
+            OutboundTrafficAirport = Q_db.fetchall()
 
-            cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM status_ivao WHERE planned_destairport LIKE ?", \
-                           ((str(codes[0])),))
-            InboundTrafficAirport = cursor.fetchall()
-
-            connection.commit()
+            Q_db = self.sql_querys('Get_Inbound_Traffic', ((str(codes[0])),))
+            InboundTrafficAirport = Q_db.fetchall()
 
             for row_atc in rows_atcs:
                 self.ui.ATCtableWidget.insertRow(self.ui.ATCtableWidget.rowCount())
@@ -1142,8 +1140,8 @@ class Main(QMainWindow):
                         airline.setPixmap(Pixmap)
                         self.ui.PilottableWidget.setCellWidget(startrow_pilot, 0, airline)
                     else:
-                        cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?', (str(row_pilot[0][:3]),))
-                        airline_code = cursor.fetchone()
+                        Q_db = self.sql_querys('Get_Airline', (str(row_pilot[0][:3]),))
+                        airline_code = Q_db.fetchone()
                         if airline_code is None:
                             col_airline = QTableWidgetItem(str(row_pilot[0]))
                         else:
@@ -1219,17 +1217,16 @@ class Main(QMainWindow):
                         self.ui.InboundTableWidget.setItem(startrow_in, 0, col_airline)
                 except:
                     pass
-                cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(inbound[1]),))
-                flagCode = cursor.fetchone()
-                connection.commit()
+                Q_db = self.sql_querys('Get_Country_from_ICAO', (str(inbound[1]),))
+                flagCode = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath_orig = (image_flag + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_orig)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 1, flag_country)
-                cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(inbound[1]),))
-                city = cursor.fetchone()
+                Q_db = self.sql_querys('Get_City', (str(inbound[1]),))
+                city = Q_db.fetchone()
                 col_city = ''
                 if city == None:
                     col_city = 'Pending...'
@@ -1237,17 +1234,16 @@ class Main(QMainWindow):
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 2, col_country)
-                cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(inbound[2]),))
-                flagCode = cursor.fetchone()
-                connection.commit()
+                Q_db = self.sql_querys('Get_Country_from_ICAO', (str(inbound[2]),))
+                flagCode = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath_dest = (image_flag + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_dest)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 3, flag_country)
-                cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(inbound[2]),))
-                city = cursor.fetchone()
+                Q_db = self.sql_querys('Get_City', (str(inbound[2]),))
+                city = Q_db.fetchone()
                 col_city = ''
                 if city == None:
                     col_city = 'Pending...'
@@ -1282,17 +1278,16 @@ class Main(QMainWindow):
                         self.ui.OutboundTableWidget.setItem(startrow_out, 0, col_airline)
                 except:
                     pass
-                cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(outbound[1]),))
-                flagCode = cursor.fetchone()
-                connection.commit()
+                Q_db = self.sql_querys('Get_Country_from_ICAO', (str(outbound[1]),))
+                flagCode = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath_orig = (image_flag + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_orig)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 1, flag_country)
-                cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(outbound[1]),))
-                city = cursor.fetchone()
+                Q_db = self.sql_querys('Get_City', (str(outbound[1]),))
+                city = Q_db.fetchone()
                 col_city = ''
                 if city == None:
                     col_city = 'Pending...'
@@ -1300,17 +1295,16 @@ class Main(QMainWindow):
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 2, col_country)
-                cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(outbound[2]),))
-                flagCode = cursor.fetchone()
-                connection.commit()
+                Q_db = self.sql_querys('Get_Country_from_ICAO', (str(outbound[2]),))
+                flagCode = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath_dest = (image_flag + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_dest)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 3, flag_country)
-                cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(outbound[2]),))
-                city = cursor.fetchone()
+                Q_db = self.sql_querys('Get_City', (str(outbound[2]),))
+                city = Q_db.fetchone()
                 col_city = ''
                 if city == None:
                     col_city = 'Pending...'
@@ -1326,7 +1320,6 @@ class Main(QMainWindow):
                 self.ui.OutboundTableWidget.setItem(startrow_out, 5, col_flight)
                 startrow_out += 1
             qApp.processEvents()
-        connection.close()
         self.ui.PilottableWidget.setCurrentCell(-1, -1)
         self.ui.ATCtableWidget.setCurrentCell(-1, -1)
 
@@ -2662,7 +2655,7 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
 
-class AddFriend():
+class AddFriend(QMainWindow):
     def add_friend(self, vid2add):
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')

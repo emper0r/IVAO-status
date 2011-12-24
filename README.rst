@@ -23,15 +23,13 @@ REQUIREMENTS
 First you must have the following dependencies installed to run the application.
 
 * python-qt4 (version >= 4.8.3)
-* sqlite3 (version >= 3.7.4)
-* libsqlite3-0 (version >= 3.7.4)
 
 INSTALL
 =======
 
 Installing main dependencies in Debian/Ubuntu/Kubuntu
 
-    aptitude install python-qt4 sqlite3 libsqlite3-0
+    aptitude install python-qt4
 
 INSTALLER BINARY
 ================
