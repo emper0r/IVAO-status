@@ -22,6 +22,7 @@ REQUIREMENTS
 
 First you must have the following dependencies installed to run the application.
 
+* python (version >= 2.6 )
 * python-qt4 (version >= 4.8.3)
 
 INSTALL
