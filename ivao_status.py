@@ -327,6 +327,15 @@ class Main(QMainWindow):
         if args == 'Get_Inbound_Traffic':
             Q_db = cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM status_ivao WHERE planned_destairport LIKE ?", \
                            (str(var[0]),))
+        if args == 'Search_vid':
+            Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where vid like ?;", \
+                                  (str(var[0]),))
+        if args == 'Search_callsign':
+            Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where callsign like ?;", \
+                                  (str(var[0]),))
+        if args == 'Search_realname':
+            Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where realname like ?;", \
+                                  (str(var[0]),))
         return Q_db
 
     def initial_load(self):
@@ -1364,18 +1373,14 @@ class Main(QMainWindow):
         cursor = connection.cursor()
         arg = self.ui.SearchEdit.text()
         item = self.ui.SearchcomboBox.currentIndex()
-
+                           
         if item == 0:
-            cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where vid like ?;" \
-                           , ('%'+str(arg)+'%',))
+            Q_db = self.sql_querys('Search_vid', ('%'+str(arg)+'%',))
         elif item == 1:
-            cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where callsign like ?;" \
-                           , ('%'+str(arg)+'%',))
+            Q_db = self.sql_querys('Search_callsign', ('%'+str(arg)+'%',))
         elif item == 2:
-            cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where realname like ?;" \
-                           , ('%'+str(arg)+'%',))
-        connection.commit()
-        search = cursor.fetchall()
+            Q_db = self.sql_querys('Search_realname', ('%'+str(arg)+'%',))
+        search = Q_db.fetchall()
 
         self.ui.SearchtableWidget.insertRow(self.ui.SearchtableWidget.rowCount())
         while self.ui.SearchtableWidget.rowCount () > 0:
@@ -1397,8 +1402,8 @@ class Main(QMainWindow):
                 self.ui.SearchtableWidget.setItem(startrow, 2, col_realname)
                 player = 'atc_level'
             ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
-            ratingImagePath = ImagePath + '/%s%d.gif' % (player, int(row[3]))
             try:
+                ratingImagePath = ImagePath + '/%s%d.gif' % (player, int(row[3]))
                 if os.path.exists(ratingImagePath) is True:
                     Pixmap = QPixmap(ratingImagePath)
                     ratingImage = QLabel(self)
@@ -1671,17 +1676,17 @@ class Main(QMainWindow):
         player_location.write('            new OpenLayers.Projection("EPSG:4326"),\n')
         player_location.write('            map.getProjectionObject()\n')
         player_location.write('            );\n')
-        if str(player[0][2][-4:]) == "_GND":
+        if str(player[0][2][-4:]) or str(player[0][2][4:8]) == "_GND":
             player_location.write('    var zoom = 15;\n')
-        if str(player[0][2][-4:]) == "_DEP":
+        if str(player[0][2][-4:]) or str(player[0][2][4:8]) == "_DEP":
             player_location.write('    var zoom = 15;\n')
-        if str(player[0][2][-4:]) == "_TWR":
+        if str(player[0][2][-4:]) or str(player[0][2][4:8]) == "_TWR":
             player_location.write('    var zoom = 14;\n')
-        if str(player[0][2][-4:]) == "_APP":
+        if str(player[0][2][-4:]) or str(player[0][2][4:8]) == "_APP":
             player_location.write('    var zoom = 13;\n')
-        if str(player[0][2][-4:]) == '_OBS':
+        if str(player[0][2][-4:]) or str(player[0][2][4:8]) == '_OBS':
             player_location.write('    var zoom = 12;\n')
-        if str(player[0][2][-4:]) == '_CTR':
+        if str(player[0][2][-4:]) or str(player[0][2][4:8]) == '_CTR':
             player_location.write('    var zoom = 5;\n')
         if player[0][4] == 'PILOT':
             player_location.write('    var zoom = 5;\n')
@@ -1690,9 +1695,9 @@ class Main(QMainWindow):
         player_location.write('    styleMap: new OpenLayers.StyleMap({\n')
         player_location.write('         "default": {\n')
         if player[0][4] == 'PILOT':
-            player_location.write('         externalGraphic: "./images/airplane.gif",\n')
+            player_location.write('         externalGraphic: "' + images + '/airplane.gif",\n')
         else:
-            player_location.write('         externalGraphic: "./images/tower.png",\n')
+            player_location.write('         externalGraphic: "' + images + '/tower.png",\n')
         player_location.write('         graphicWidth: 20,\n')
         player_location.write('         graphicHeight: 20,\n')
         player_location.write('         graphicYOffset: 0,\n')
@@ -1764,6 +1769,8 @@ class Main(QMainWindow):
                 player_location.write('   var ratio = OpenLayers.Geometry.Polygon.createRegularPolygon(\n')
                 player_location.write('     new OpenLayers.Geometry.Point(position.lon, position.lat),\n')
                 if str(player[0][2][-4:]) == '_OBS' or str(player[0][2][-4:]) == '_DEP' or str(player[0][2][-4:]) == '_GND':
+                    player_location.write('        20000,\n')
+                elif str(player[0][2][4:8]) == '_OBS' or str(player[0][2][-4:]) == '_DEP' or str(player[0][2][-4:]) == '_GND':
                     player_location.write('        20000,\n')
                 elif str(player[0][2][-4:]) == '_TWR':
                     player_location.write('        40000,\n')
@@ -2027,7 +2034,7 @@ class Main(QMainWindow):
                 all_in_map.write('    {\n')
                 all_in_map.write('    styleMap: new OpenLayers.StyleMap({\n')
                 all_in_map.write('         "default": {\n')
-                all_in_map.write('         externalGraphic: "' + images + '/images/tower.png",\n')
+                all_in_map.write('         externalGraphic: "' + images + '/tower.png",\n')
                 all_in_map.write('         rotation: "${angle}",\n')
                 all_in_map.write('         fillOpacity: "1.00",\n')
                 all_in_map.write('         }\n')
