@@ -336,6 +336,24 @@ class Main(QMainWindow):
         if args == 'Search_realname':
             Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where realname like ?;", \
                                   (str(var[0]),))
+        if args == 'Get_Airport_from_ICAO':
+            Q_db = cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(var[0]),))
+        if args == 'Get_Controller_data':
+            Q_db = cursor.execute("SELECT vid, realname, server, clienttype, frequency, rating, facilitytype, atis_message, \
+                                   time_connected, client_software_name, client_software_version FROM status_ivao \
+                                   WHERE callsign=?;", (str(var[0]),))
+        if args == 'Get_Pilot_data':
+            Q_db = cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
+                                planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, onground,\
+                                latitude, longitude, planned_altairport, planned_altairport2, planned_tascruise, time_connected, clienttype \
+                                FROM status_ivao WHERE callsign=?;", (str(var[0]),))
+        if args == 'Get_FIR_from_ICAO':
+            Q_db = cursor.execute("SELECT FIR FROM fir_data_list WHERE icao=?", (str(var[0]),))
+        if args == 'Get_FMC_data':
+            Q_db = cursor.execute("SELECT vid, realname, server, clienttype, rating, time_connected, client_software_name, \
+                                   client_software_version FROM status_ivao WHERE callsign=?;", (str(var[0]),))
+        if args == 'Get_Airport_Location':
+            Q_db = cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(var[0]),))
         return Q_db
 
     def initial_load(self):
@@ -1136,7 +1154,6 @@ class Main(QMainWindow):
                 startrow_atc += 1
 
             for row_pilot in rows_pilots:
-                self.ui.PilottableWidget.setCurrentCell(0, 0)
                 self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
 
                 code_airline = row_pilot[0][:3]
@@ -2708,30 +2725,20 @@ class PilotInfo(QMainWindow):
 
     def status(self, callsign):
         self.callsign = callsign
-        config = ConfigParser.RawConfigParser()
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
-        config.read(config_file)
-        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
-        connection = sqlite3.connect(database)
-        cursor = connection.cursor()
-        cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
-        planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, onground,\
-        latitude, longitude, planned_altairport, planned_altairport2, planned_tascruise, time_connected, clienttype \
-        FROM status_ivao WHERE callsign=?;", (str(callsign),))
-        info = cursor.fetchall()
+        Q_db = Main().sql_querys('Get_Pilot_data', (str(callsign),))
+        info = Q_db.fetchall()
         if info[0][19] == 'FOLME':
             pass
         else:
             try:
-                cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][5]),))
-                flagCodeOrig = cursor.fetchone()
-                connection.commit()
+                Q_db = Main().sql_querys('Get_Country_from_ICAO', (str(info[0][5]),))
+                flagCodeOrig = Q_db.fetchone()
                 ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath_orig = (ImagePath + '/%s.png') % flagCodeOrig
                 Pixmap = QPixmap(flagCodePath_orig)
                 self.ui.DepartureImage.setPixmap(Pixmap)
-                cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(info[0][5]),))
-                city_orig = cursor.fetchone()
+                Q_db = Main().sql_querys('Get_Airport_Location', (str(info[0][5]),))
+                city_orig = Q_db.fetchone()
                 self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
                 city_orig_point = city_orig[1], city_orig[2]
             except:
@@ -2739,15 +2746,14 @@ class PilotInfo(QMainWindow):
                 city_orig_point = None
 
         try:
-            cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][6]),))
-            flagCodeDest = cursor.fetchone()
-            connection.commit()
+            Q_db = Main().sql_querys('Get_Country_from_ICAO', (str(info[0][6]),))
+            flagCodeDest = Q_db.fetchone()
             ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
             flagCodePath_dest = (ImagePath + '/%s.png') % flagCodeDest
             Pixmap = QPixmap(flagCodePath_dest)
             self.ui.DestinationImage.setPixmap(Pixmap)
-            cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(info[0][6]),))
-            city_dest = cursor.fetchone()
+            Q_db = Main().sql_querys('Get_Airport_Location', (str(info[0][6]),))
+            city_dest = Q_db.fetchone()
             self.ui.DestinationText.setText(str(city_dest[0].encode('latin-1')))
             city_dest_point = city_dest[1], city_dest[2]
         except:
@@ -2764,8 +2770,8 @@ class PilotInfo(QMainWindow):
                 airline = QLabel(self)
                 self.ui.airline_image.setPixmap(Pixmap)
             else:
-                cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?', str(callsign[:3]))
-                airline_code = cursor.fetchone()
+                Q_db = Main().sql_querys('Get_Airline', str(callsign[:3]))
+                airline_code = Q_db.fetchone()
                 self.ui.airline_image.setText(str(airline_code[0]))
         except:
             pass
@@ -2778,10 +2784,10 @@ class PilotInfo(QMainWindow):
         self.ui.TransponderText.setText(str(info[0][11]))
         self.ui.GSFiledText.setText(str(info[0][17]))
         self.ui.FLText.setText(str(info[0][7]))
-        altern_airport_1 = cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][15]),))
-        altern_city_1 = cursor.fetchone()
-        altern_airport_2 = cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(info[0][16]),))
-        altern_city_2 = cursor.fetchone()
+        Q_db = Main().sql_querys('Get_Airport_from_ICAO', (str(info[0][15]),))
+        altern_city_1 = Q_db.fetchone()
+        Q_db = Main().sql_querys('Get_Airport_from_ICAO', (str(info[0][16]),))
+        altern_city_2 = Q_db.fetchone()
         if altern_city_1 is None:
             self.ui.Altern_Airport_Text.setText(str('-'))
         else:
@@ -2798,9 +2804,8 @@ class PilotInfo(QMainWindow):
                                              % (str(data[0][0]), str(data[0][1]), str(data[0][2])))
         except:
             self.ui.AirplaneText.setText('Pending...')
-        cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][1][-4:]),))
-        flagCodeHome = cursor.fetchone()
-        connection.commit()
+        Q_db = Main().sql_querys('Get_Country_from_ICAO', (str(info[0][1][-4:]),))
+        flagCodeHome = Q_db.fetchone()
         ImageFlag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
         flagCodePath = (ImageFlag + '/%s.png') % flagCodeHome
         Pixmap = QPixmap(flagCodePath)
@@ -2861,40 +2866,31 @@ class ControllerInfo(QMainWindow):
         self.callsign = callsign
         self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
                              , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
-        config = ConfigParser.RawConfigParser()
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
-        config.read(config_file)
-        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
-        connection = sqlite3.connect(database)
-        cursor = connection.cursor()
-        cursor.execute("SELECT vid, realname, server, clienttype, frequency, rating, facilitytype, atis_message, \
-        time_connected, client_software_name, client_software_version FROM status_ivao WHERE callsign=?;", (str(callsign),))
-        info = cursor.fetchall()
+        Q_db = Main().sql_querys('Get_Controller_data', (str(callsign),))
+        info = Q_db.fetchall()
         self.ui.VidText.setText(str(info[0][0]))
         self.ui.ControllerText.setText(str(info[0][1].encode('latin-1')))
         self.ui.SoftwareText.setText('%s %s' % (str(info[0][9]), str(info[0][10])))
         self.ui.ConnectedText.setText(str(info[0][2]))
         self.ui.ATISInfo.setText(str(info[0][7].encode('latin-1')).replace('^\xa7', '\n'))
         try:
-            cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
-            flagCodeOrig = cursor.fetchone()
-            connection.commit()
+            Q_db = Main().sql_querys('Get_Country_from_ICAO', (str(callsign[:4]),))
+            flagCodeOrig = Q_db.fetchone()
             if flagCodeOrig is None:
-                cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(callsign[:2]),))
-                flagCodeOrig = cursor.fetchone()
-                connection.commit()
+                Q_db = Main().sql_querys('Get_Country_from_Division', (str(callsign[:2]),))
+                flagCodeOrig = Q_db.fetchone()
             image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
             flagCodePath_orig = (image_flag + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
             self.ui.Flag.setPixmap(Pixmap)
-            cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
-            city_orig = cursor.fetchone()
+            Q_db = Main().sql_querys('Get_Airport_from_ICAO', (str(callsign[:4]),))
+            city_orig = Q_db.fetchone()
             if str(callsign[-4:]) == '_CTR':
-                cursor.execute("SELECT FIR FROM fir_data_list WHERE icao=?", (str(callsign[:4]),))
-                city_orig = cursor.fetchone()
+                Q_db = Main().sql_querys('Get_FIR_from_ICAO', (str(callsign[:4]),))
+                city_orig = Q_db.fetchone()
             if str(callsign[2:3]) == '_' or str(callsign[2:3]) == '-':
-                cursor.execute("SELECT Country FROM division_ivao WHERE Division=?", (str(callsign[:2]),))
-                city_orig = cursor.fetchone()
+                Q_db = Main().sql_querys('Get_Country_from_Division', (str(callsign[:2]),))
+                city_orig = Q_db.fetchone()
             self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
         except:
             self.ui.ControllingText.setText('Pending...')
@@ -2937,29 +2933,21 @@ class FollowMeService(QMainWindow):
 
     def status(self, callsign):
         self.callsign = callsign
-        config = ConfigParser.RawConfigParser()
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
-        config.read(config_file)
-        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
-        connection = sqlite3.connect(database)
-        cursor = connection.cursor()
-        cursor.execute("SELECT vid, realname, server, clienttype, rating, time_connected, client_software_name, \
-        client_software_version FROM status_ivao WHERE callsign=?;", (str(callsign),))
-        info = cursor.fetchall()
+        Q_db = Main().sql_querys('Get_FMC_data', (str(callsign),))
+        info = Q_db.fetchall()
         self.ui.VidText.setText(str(info[0][0]))
         self.ui.FMCRealname.setText(str(info[0][1].encode('latin-1'))[:-4])
         self.ui.SoftwareText.setText('%s %s' % (str(info[0][6]), str(info[0][7])))
         self.ui.ConnectedText.setText(str(info[0][2]))
         try:
-            cursor.execute("SELECT Country FROM icao_codes WHERE icao=?", (str(info[0][1][-4:]),))
-            flagCodeOrig = cursor.fetchone()
-            connection.commit()
+            Q_db = Main.sql_querys('Get_Country_from_ICAO', (str(info[0][1][-4:]),))
+            flagCodeOrig = Q_db.fetchone()
             image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
             flagCodePath_orig = (image_flag + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
             self.ui.Flag.setPixmap(Pixmap)
-            cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(callsign[:4]),))
-            city_orig = cursor.fetchone()
+            Q_db = Main().sql_querys('Get_Airport_from_ICAO', (str(callsign[:4]),))
+            city_orig = Q_db.fetchone()
         except:
             self.ui.ControllingText.setText('Pending...')
         ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
