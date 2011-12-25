@@ -777,7 +777,7 @@ class Main(QMainWindow):
                             status = 'Descending'
                         if (percent >= 90.0) and (percent <= 97.0):
                             status = 'Initial Approach'
-                        if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 200) and (get_status[6] >= 30))):
+                        if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 360) and (get_status[6] >= 30))):
                             status = 'Final Approach'
                         return status
                     else:
@@ -785,7 +785,7 @@ class Main(QMainWindow):
                             status = 'Departing'
                         if (get_status[6] > 30) and (get_status[6] < 150) and (percent < 1.0):
                             status = 'Takeoff'
-                        if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 220) and (get_status[6] >= 30))):
+                        if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 270) and (get_status[6] >= 30))):
                             status = 'Landed'
                         if (get_status[6] < 30) and (percent > 99.0):
                             status = 'Taxing to Gate'
@@ -1697,17 +1697,17 @@ class Main(QMainWindow):
         player_location.write('            new OpenLayers.Projection("EPSG:4326"),\n')
         player_location.write('            map.getProjectionObject()\n')
         player_location.write('            );\n')
-        if str(player[0][2][-4:]) == "_GND":
+        if str(player[0][2][4:]) == "_GND":
             player_location.write('    var zoom = 15;\n')
-        if str(player[0][2][-4:]) == "_DEP":
+        if str(player[0][2][4:]) == "_DEP":
             player_location.write('    var zoom = 15;\n')
-        if str(player[0][2][-4:]) == "_TWR":
+        if str(player[0][2][4:]) == "_TWR":
             player_location.write('    var zoom = 14;\n')
-        if str(player[0][2][-4:]) == "_APP":
+        if str(player[0][2][4:]) == "_APP":
             player_location.write('    var zoom = 13;\n')
-        if str(player[0][2][-4:]) == '_OBS':
+        if str(player[0][2][4:]) == '_OBS':
             player_location.write('    var zoom = 12;\n')
-        if str(player[0][2][-4:]) == '_CTR':
+        if str(player[0][2][4:]) == '_CTR':
             player_location.write('    var zoom = 5;\n')
         if player[0][4] == 'PILOT':
             player_location.write('    var zoom = 5;\n')
