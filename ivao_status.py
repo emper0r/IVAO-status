@@ -31,12 +31,12 @@ except:
     print ('with all dependencies.\n\n')
     sys.exit(2)
 
-import distance
-import MainWindow_UI
-import PilotInfo_UI
-import ControllerInfo_UI
-import SettingWindow_UI
-import FollowMeCarService_UI
+from modules import distance
+from modules import MainWindow_UI
+from modules import PilotInfo_UI
+from modules import ControllerInfo_UI
+from modules import SettingWindow_UI
+from modules import FollowMeCarService_UI
 import urllib2
 
 try:
@@ -46,16 +46,13 @@ except:
     print ('please run command as root: aptitude install sqlite3 libsqlite3-0\n')
     sys.exit(2)
 
-from BeautifulSoup import BeautifulSoup
+from modules import BeautifulSoup
 import os
 import datetime
 import ConfigParser
 import time
 
-__version__ = '1.0.3'
-url = 'http://de1.www.ivao.aero/'
-scheduling_atc = 'http://www.ivao.aero/atcss/list.asp'
-scheduling_flights = 'http://www.ivao.aero/flightss/list.asp'
+__version__ = '1.0.4'
 
 class Main(QMainWindow):
     def __init__(self):
@@ -237,10 +234,7 @@ class Main(QMainWindow):
             config.set('Settings', 'user', '')
             config.set('Settings', 'pass', '')
             config.add_section('Info')
-            config.set('Info', 'data_access', 'whazzup.txt')
             config.set('Info', 'url', url)
-            config.set('Info', 'scheduling_atc', scheduling_atc)
-            config.set('Info', 'scheduling_flights', scheduling_flights)
             config.add_section('Database')
             config.set('Database', 'db', 'ivao.db')
             config.add_section('Time_Update')
