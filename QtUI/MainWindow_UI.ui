@@ -196,6 +196,12 @@
        <property name="text">
         <string>Information Board</string>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
       </column>
      </widget>
      <widget class="QLabel" name="IVAOStatusLabel">
@@ -294,6 +300,12 @@
        <property name="text">
         <string>VID</string>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="textAlignment">
         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
        </property>
@@ -302,10 +314,22 @@
        <property name="text">
         <string>Realname</string>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
       </column>
       <column>
        <property name="text">
         <string>Rating</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="textAlignment">
         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
@@ -314,6 +338,12 @@
       <column>
        <property name="text">
         <string>On-Line</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
        <property name="textAlignment">
         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
@@ -568,10 +598,22 @@
        <property name="text">
         <string>ICAO</string>
        </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
       </column>
       <column>
        <property name="text">
         <string>Data</string>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
        </property>
       </column>
      </widget>
@@ -3187,10 +3229,10 @@
     <property name="title">
      <string>Menu</string>
     </property>
-    <addaction name="actionSetting"/>
     <addaction name="actionUpdate"/>
-    <addaction name="actionUpdate_Map"/>
     <addaction name="actionShow_last_data"/>
+    <addaction name="actionGet_Scheduling"/>
+    <addaction name="actionUpdate_Map"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -3200,23 +3242,20 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionSettings"/>
+   </widget>
    <addaction name="menuMenu"/>
+   <addaction name="menuView"/>
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionSetting">
-   <property name="text">
-    <string>Settings</string>
-   </property>
-   <property name="font">
-    <font>
-     <family>Sans Serif</family>
-    </font>
-   </property>
-  </action>
   <action name="actionUpdate">
    <property name="text">
-    <string>Get data from IVAO</string>
+    <string>Download Current Data</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -3241,7 +3280,17 @@
   </action>
   <action name="actionShow_last_data">
    <property name="text">
-    <string>Show last data received</string>
+    <string>Load Recent Data</string>
+   </property>
+  </action>
+  <action name="actionGet_Scheduling">
+   <property name="text">
+    <string>Download Scheduling</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>

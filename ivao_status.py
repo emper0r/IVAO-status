@@ -19,6 +19,22 @@
 # IVAO-status :: License GPLv3+
 
 import sys
+import os
+import sqlite3
+import datetime
+import ConfigParser
+import urllib2
+import random
+import gzip
+import time
+import StringIO
+from modules import distance
+from modules import MainWindow_UI
+from modules import PilotInfo_UI
+from modules import ControllerInfo_UI
+from modules import SettingWindow_UI
+from modules import FollowMeCarService_UI
+from modules import BeautifulSoup
 
 try:
     from PyQt4.QtCore import *
@@ -30,27 +46,6 @@ except:
     print ('please run command as root:  aptitude install python-qt4\n')
     print ('with all dependencies.\n\n')
     sys.exit(2)
-
-from modules import distance
-from modules import MainWindow_UI
-from modules import PilotInfo_UI
-from modules import ControllerInfo_UI
-from modules import SettingWindow_UI
-from modules import FollowMeCarService_UI
-import urllib2
-
-try:
-    import sqlite3
-except:
-    print ('\nYou have not installed SQLite3 module for Python,\n')
-    print ('please run command as root: aptitude install sqlite3 libsqlite3-0\n')
-    sys.exit(2)
-
-from modules import BeautifulSoup
-import os
-import datetime
-import ConfigParser
-import time
 
 __version__ = '1.0.4'
 
@@ -234,7 +229,9 @@ class Main(QMainWindow):
             config.set('Settings', 'user', '')
             config.set('Settings', 'pass', '')
             config.add_section('Info')
-            config.set('Info', 'url', url)
+            config.set('Info', 'data_access', 'http://www.ivao.aero/whazzup/status.txt')
+            config.set('Info', 'scheduling_atc', 'http://www.ivao.aero/atcss/list.asp')
+            config.set('Info', 'scheduling_flights', 'http://www.ivao.aero/flightss/list.asp')
             config.add_section('Database')
             config.set('Database', 'db', 'ivao.db')
             config.add_section('Time_Update')
@@ -260,7 +257,7 @@ class Main(QMainWindow):
         else:
             self.ui.tabWidget.setCurrentIndex(8)
         return self._maptab
-    
+
     def sql_query(self, args=None, var=None):
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
@@ -438,38 +435,36 @@ class Main(QMainWindow):
                 proxy_support = urllib2.ProxyHandler({"http" : "http://" + host + ':' + port})
                 opener = urllib2.build_opener(proxy_support, authinfo)
                 urllib2.install_opener(opener)
-                StatusURL = urllib2.urlopen(config.get('Info', 'url') + config.get('Info', 'data_access'))
-                self.SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc'))
-                self.SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_fligths'))
                 QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port), str(user), str(pswd)))
                 qApp.processEvents()
             if use_proxy == 2 and auth == 0:
                 proxy_support = urllib2.ProxyHandler({"http" : "http://" + host + ':' + port})
                 opener = urllib2.build_opener(proxy_support)
                 urllib2.install_opener(opener)
-                StatusURL = urllib2.urlopen(config.get('Info', 'url') + config.get('Info', 'data_access'))
-                self.SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc'))
-                self.SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_fligths'))
                 QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port)))
                 qApp.processEvents()
             if use_proxy == 0 and auth == 0:
-                StatusURL = urllib2.urlopen(config.get('Info', 'url') + config.get('Info', 'data_access'))
-                self.SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc'))
-                self.SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_flights'))
-                qApp.processEvents()
+                pass
+
+            StatusURL = urllib2.urlopen(config.get('Info', 'data_access'))
+            shuffle = random.choice([link for link in StatusURL.readlines() if 'gzurl0' in link]).split('=')[1].strip('\r\n')
+            zfilename = urllib2.urlopen(shuffle)
+            content = zfilename.read()
+            logged_users = gzip.GzipFile(fileobj=StringIO.StringIO(content))
+            qApp.processEvents()
 
             self.statusBar().showMessage('Downloading info from IVAO', 2000)
             qApp.processEvents()
             self.pilot_list = []
             self.atc_list = []
 
-            for logged_users in StatusURL.readlines():
-                if "PILOT" in logged_users:
-                    self.pilot_list.append(logged_users)
-                if "ATC" in logged_users:
-                    self.atc_list.append(logged_users)
-                if "FOLME" in logged_users:
-                    self.pilot_list.append(logged_users)
+            for player in logged_users.readlines():
+                if "PILOT" in player:
+                    self.pilot_list.append(player)
+                if "ATC" in player:
+                    self.atc_list.append(player)
+                if "FOLME" in player:
+                    self.pilot_list.append(player)
             self.update_db()
 
         except IOError:
@@ -595,25 +590,24 @@ class Main(QMainWindow):
             server = fields[14]
             time_connected = fields[37]
 
-        cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, clienttype, server, time_connected) \
-        VALUES (?,?,?,?,?,?)", (callsign, vid, realname, clienttype, server, time_connected))
+        cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, clienttype, server, time_connected) VALUES (?,?,?,?,?,?)", (callsign, vid, realname, clienttype, server, time_connected))
         connection.commit()
-
-        self.statusBar().showMessage('Events schedule for Controllers ...', 2000)
         qApp.processEvents()
-        self.soup_atc = BeautifulSoup(self.SchedATC_URL)
-        self.statusBar().showMessage('Events schedule for Flights ...', 2000)
-        qApp.processEvents()
-        self.soup_flights = BeautifulSoup(self.SchedFlights_URL)
         self.show_tables()
         self.ivao_friend()
-        self.Scheduling()
 
     def Scheduling(self):
-        if self.SchedATC_URL is None and self.SchedFlights_URL is None:
-            self.statusBar().showMessage('You have to download data from IVAO, Select "Menu" and "Get data from IVAO"', 7000)
-            qApp.processEvents()
-            return
+        config = ConfigParser.RawConfigParser()
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
+        self.statusBar().showMessage('Events schedule for Controllers ...', 2000)
+        qApp.processEvents()
+        self.SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc'))
+        self.soup_atc = BeautifulSoup.BeautifulSoup(self.SchedATC_URL)
+        self.statusBar().showMessage('Events schedule for Flights ...', 2000)
+        qApp.processEvents()
+        self.SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_flights'))
+        self.soup_flights = BeautifulSoup.BeautifulSoup(self.SchedFlights_URL)
 
         table_atc = self.soup_atc.find("table")
         table_rows = table_atc.findAll('tr')
@@ -799,7 +793,7 @@ class Main(QMainWindow):
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
         self.statusBar().showMessage('Populating Controllers and Pilots', 10000)
-        self.progress.show()
+        #self.progress.show()
         pilots_ivao = atcs_ivao = obs_ivao = 0
         Q_db = self.sql_query('Get_Pilots')
         pilots = Q_db.fetchone()
@@ -834,6 +828,7 @@ class Main(QMainWindow):
         self.ui.IVAOStatustableWidget.setItem(7, 0, time_board)
         qApp.processEvents()
         Q_db = self.sql_query('Get_Controller_List')
+        qApp.processEvents()
         rows_atcs = Q_db.fetchall()
         startrow = 0
 
@@ -938,9 +933,9 @@ class Main(QMainWindow):
                 self.ui.ATC_FullList.setItem(startrow, 8, col_time)
             except:
                 pass
-            self.progress.setValue(int(float(startrow) / float(len(rows_atcs)) * 100.0))
+            #self.progress.setValue(int(float(startrow) / float(len(rows_atcs)) * 100.0))
             startrow += 1
-            qApp.processEvents()
+            #qApp.processEvents()
 
         Q_db = self.sql_query('Get_FMC_List')
         vehicles = Q_db.fetchall()
@@ -990,9 +985,9 @@ class Main(QMainWindow):
             diff = datetime.datetime.utcnow() - start_connected
             col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
-            self.progress.setValue(int(float(startrow) / float(len(vehicles)) * 100.0))
+            #self.progress.setValue(int(float(startrow) / float(len(vehicles)) * 100.0))
             startrow += 1
-            qApp.processEvents()
+            #qApp.processEvents()
 
         Q_db = self.sql_query('Get_Pilot_Lists')
         rows_pilots = Q_db.fetchall()
@@ -1059,9 +1054,9 @@ class Main(QMainWindow):
             diff = datetime.datetime.utcnow() - start_connected
             col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
-            self.progress.setValue(int(float(startrow) / float(len(rows_pilots)) * 100.0))
+            #self.progress.setValue(int(float(startrow) / float(len(rows_pilots)) * 100.0))
             startrow += 1
-            qApp.processEvents()
+            #qApp.processEvents()
 
         self.progress.hide()
         self.statusBar().showMessage('Done', 2000)
@@ -1395,7 +1390,7 @@ class Main(QMainWindow):
         cursor = connection.cursor()
         arg = self.ui.SearchEdit.text()
         item = self.ui.SearchcomboBox.currentIndex()
-                           
+
         if item == 0:
             Q_db = self.sql_query('Search_vid', ('%'+str(arg)+'%',))
         elif item == 1:
@@ -1631,9 +1626,14 @@ class Main(QMainWindow):
     def metar(self):
         self.statusBar().showMessage('Downloading METAR', 2000)
         qApp.processEvents()
+        config = ConfigParser.RawConfigParser()
+        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
+        config.read(config_file)
         icao_airport = self.ui.METAREdit.text()
         try:
-            METAR = urllib2.urlopen('http://wx.ivao.aero/metar.php?id=%s' % icao_airport)
+            StatusURL = urllib2.urlopen(config.get('Info', 'url'))
+            shuffle = random.choice([link for link in StatusURL.readlines() if 'metar0' in link]).split('=')[1].strip('\r\n')
+            METAR = urllib2.urlopen(shuffle + '?id=%s' % icao_airport)
 
             if self.ui.METARtableWidget.rowCount() == 0:
                 self.ui.METARtableWidget.insertRow(self.ui.METARtableWidget.rowCount())
@@ -3035,10 +3035,9 @@ class Settings(QMainWindow):
         config.set('Settings', 'user', self.ui.lineEdit_user.text())
         config.set('Settings', 'pass', self.ui.lineEdit_pass.text())
         config.add_section('Info')
-        config.set('Info', 'data_access', 'whazzup.txt')
-        config.set('Info', 'url', url)
-        config.set('Info', 'scheduling_atc', scheduling_atc)
-        config.set('Info', 'scheduling_flights', scheduling_flights)
+        config.set('Info', 'data_access', 'http://www.ivao.aero/whazzup/status.txt')
+        config.set('Info', 'scheduling_atc', 'http://www.ivao.aero/atcss/list.asp')
+        config.set('Info', 'scheduling_flights', 'http://www.ivao.aero/flightss/list.asp')
         config.add_section('Database')
         config.set('Database', 'db', 'ivao.db')
         config.add_section('Time_Update')
