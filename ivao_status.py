@@ -34,10 +34,10 @@ import StringIO
 from modules import distance
 from modules import MainWindow_UI
 from modules import PilotInfo_UI
-from modules import ControllerInfo_UI
 from modules import FollowMeCarService_UI
 from modules import BeautifulSoup
 from modules import SQL_queries
+from modules import Controllers
 import Settings
 
 try:
@@ -1822,7 +1822,7 @@ class Main(QMainWindow):
 
     def show_controller_info(self, callsign):
         '''Here call the Controller Class'''
-        self.controller_window = ControllerInfo()
+        self.controller_window = Controllers.ControllerInfo()
         self.controller_window.status(callsign)
         self.controller_window.closed.connect(self.show)
         self.controller_window.show()
@@ -2624,36 +2624,6 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
 
-class AddFriend(QMainWindow):
-    '''The Class AddFriend is to add/remove the friend in roster at MainTab of MainWindow'''
-    def add_friend(self, vid2add):
-        config = ConfigParser.RawConfigParser()
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
-        config.read(config_file)
-        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
-        connection = sqlite3.connect(database)
-        cursor = connection.cursor()
-        cursor.execute("SELECT vid FROM friends_ivao;")
-        vid = cursor.fetchall()
-        total_vid = len(vid)
-        insert = True
-        if total_vid >= 0:
-            for i in range(0, total_vid):
-                if int(vid2add) == vid[i][0]:
-                    msg = 'The friend is already in the list'
-                    QMessageBox.information(None, 'Friend of IVAO list', msg)
-                    i += 1
-                    insert = False
-            try:
-                if insert is True:
-                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) \
-                    SELECT vid, realname, rating, clienttype FROM status_ivao WHERE vid=?;', (vid2add,))
-                    connection.commit()
-            except:
-                pass
-        self.statusBar().showMessage('Done!', 2000)
-        connection.close()
-
 class PilotInfo(QMainWindow):
     closed = pyqtSignal()
     '''The PilotInfo Class is to show selected player from Pilots Tables to see the status of the flight, like
@@ -2785,81 +2755,9 @@ class PilotInfo(QMainWindow):
         except:
             self.ui.time_online_text.setText('Pending...')
 
-
     def add_button(self):
         add2friend = AddFriend()
         add2friend.add_friend(str(self.ui.vidText.text()).encode('latin-1'))
-        self.statusBar().showMessage('Friend Added', 3000)
-
-    def closeEvent(self, event):
-        self.closed.emit()
-        event.accept()
-
-class ControllerInfo(QMainWindow):
-    '''The ControllerInfo Class is to show selected player from Controllers Tables to see the status of player 
-       at the Airport controlled like, freq, country, and ATIS info'''
-    closed = pyqtSignal()
-
-    def __init__(self):
-        QMainWindow.__init__(self)
-        self.ui = ControllerInfo_UI.Ui_QControllerInfo()
-        self.ui.setupUi(self)
-        screen = QDesktopWidget().screenGeometry()
-        size =  self.geometry()
-        self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        image_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')
-        self.setWindowIcon(QIcon(image_icon))
-        QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
-
-    def status(self, callsign):
-        self.callsign = callsign
-        self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
-                             , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
-        Q_db = SQL_queries.sql_query('Get_Controller_data', (str(callsign),))
-        info = Q_db.fetchall()
-        self.ui.VidText.setText(str(info[0][0]))
-        self.ui.ControllerText.setText(str(info[0][1].encode('latin-1')))
-        self.ui.SoftwareText.setText('%s %s' % (str(info[0][9]), str(info[0][10])))
-        self.ui.ConnectedText.setText(str(info[0][2]))
-        self.ui.ATISInfo.setText(str(info[0][7].encode('latin-1')).replace('^\xa7', '\n'))
-        try:
-            Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(callsign[:4]),))
-            flagCodeOrig = Q_db.fetchone()
-            if flagCodeOrig is None:
-                Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(callsign[:2]),))
-                flagCodeOrig = Q_db.fetchone()
-            image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-            flagCodePath_orig = (image_flag + '/%s.png') % flagCodeOrig
-            Pixmap = QPixmap(flagCodePath_orig)
-            self.ui.Flag.setPixmap(Pixmap)
-            Q_db = SQL_queries.sql_query('Get_Airport_from_ICAO', (str(callsign[:4]),))
-            city_orig = Q_db.fetchone()
-            if str(callsign[-4:]) == '_CTR':
-                Q_db = SQL_queries.sql_query('Get_FIR_from_ICAO', (str(callsign[:4]),))
-                city_orig = Q_db.fetchone()
-            if str(callsign[2:3]) == '_' or str(callsign[2:3]) == '-':
-                Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(callsign[:2]),))
-                city_orig = Q_db.fetchone()
-            self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
-        except:
-            self.ui.ControllingText.setText('Pending...')
-        ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
-        ratingImagePath = ImagePath + '/atc_level%d.gif' % int(info[0][5])
-        Pixmap = QPixmap(ratingImagePath)
-        self.ui.rating_img.setPixmap(Pixmap)
-        self.ui.facility_freq_Text.setText(str(self.position_atc[str(info[0][6])]) + ' ' + str(info[0][4]) + ' MHz')
-        try:
-            start_connected = datetime.datetime(int(str(info[0][8])[:4]), int(str(info[0][8])[4:6]) \
-                                                , int(str(info[0][8])[6:8]), int(str(info[0][8])[8:10]) \
-                                                , int(str(info[0][8])[10:12]), int(str(info[0][8])[12:14]))
-            diff = datetime.datetime.utcnow() - start_connected
-            self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])
-        except:
-            self.ui.TimeOnLineText.setText('Pending...')
-
-    def add_button(self):
-        add2friend = AddFriend()
-        add2friend.add_friend(str(self.ui.VidText.text()).encode('latin-1'))
         self.statusBar().showMessage('Friend Added', 3000)
 
     def closeEvent(self, event):
