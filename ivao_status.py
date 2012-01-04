@@ -18,7 +18,6 @@
 #
 # IVAO-status :: License GPLv3+
 
-
 '''Importing Python's native modules'''
 import sys
 import os
@@ -31,15 +30,14 @@ import gzip
 import time
 import StringIO
 
-'''Importing the rest modules like GeoPy embedded, parser HTML and all UI_Class made at Qt-Designer'''
+'''Importing the libraries from modules directory'''
 from modules import distance
 from modules import MainWindow_UI
 from modules import PilotInfo_UI
 from modules import ControllerInfo_UI
 from modules import FollowMeCarService_UI
 from modules import BeautifulSoup
-
-'''Importing Class files'''
+from modules import SQL_queries
 import Settings
 
 try:
@@ -90,8 +88,8 @@ class Main(QMainWindow):
         self.ui.ATC_FullList.setColumnWidth(2, 37)
         self.ui.ATC_FullList.setColumnWidth(3, 150)
         self.ui.ATC_FullList.setColumnWidth(4, 70)
-        self.ui.ATC_FullList.setColumnWidth(5, 128)
-        self.ui.ATC_FullList.setColumnWidth(6, 180)
+        self.ui.ATC_FullList.setColumnWidth(5, 138)
+        self.ui.ATC_FullList.setColumnWidth(6, 170)
         self.ui.ATC_FullList.setColumnWidth(8, 40)
         self.ui.ATCtableWidget.setColumnWidth(1, 70)
         self.ui.ATCtableWidget.setColumnWidth(2, 60)
@@ -269,113 +267,12 @@ class Main(QMainWindow):
             self.ui.tabWidget.setCurrentIndex(8)
         return self._maptab
 
-    def sql_query(self, args=None, var=None):
-        '''At this function should be to set all SQL queries to database, missing some ones yet but here is the major'''
-        config = ConfigParser.RawConfigParser()
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
-        config.read(config_file)
-        database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
-        connection = sqlite3.connect(database)
-        cursor = connection.cursor()
-        if args == 'Get_All_Flags':
-            Q_db = cursor.execute("SELECT DISTINCT(Country) FROM icao_codes ORDER BY Country ASC;")
-        if args == 'Get_All_data_icao_codes':
-            Q_db = cursor.execute("SELECT icao, Latitude, Longitude, City_Airport, Country FROM icao_codes DESC;")
-        if args == 'Get_Country_from_ICAO':
-            Q_db = cursor.execute('SELECT Country FROM icao_codes WHERE icao = ?;', (str(var[0]),))
-        if args == 'Get_Country_from_FIR':
-            Q_db = cursor.execute('SELECT Country FROM fir_data_list WHERE icao = ?;', (str(var[0]),))
-        if args == 'Get_Country_from_Division':
-            Q_db = cursor.execute('SELECT Country FROM division_ivao WHERE Division=?;', (str(var[0]),))
-        if args == 'Get_Status':
-            Q_db = cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, planned_depairport, \
-                                   planned_destairport, onground, time_connected, groundspeed, planned_altitude, \
-                                   Latitude, Longitude FROM status_ivao WHERE callsign=?;", (str(var[0]),))
-        if args == 'Get_City':
-            Q_db = cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?;", (str(var[0]),))
-        if args == 'Get_Pilots':
-            Q_db = cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='PILOT';")
-        if args == 'Get_Pilot':
-            Q_db = cursor.execute("SELECT callsign, planned_aircraft, rating, realname, planned_depairport, planned_destairport, \
-                                   time_connected FROM status_ivao WHERE clienttype='PILOT' \
-                                   AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(var[0])),))
-        if args == 'Get_Controllers':
-            Q_db = cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC';")
-        if args == 'Get_FollowMeCarService':
-            Q_db = cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='FOLME';")
-        if args == 'Get_Observers':
-            Q_db = cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND callsign like '%OBS%';")
-        if args == 'Get_POB':
-            Q_db = cursor.execute("SELECT SUM(planned_pob) FROM status_ivao;")
-        if args == 'Get_Controller_List':
-            Q_db = cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
-                                   WHERE clienttype='ATC' ORDER BY vid DESC;")
-        if args == 'Get_Controller':
-            Q_db = cursor.execute("SELECT callsign, frequency, realname, rating, facilitytype, time_connected FROM status_ivao \
-                                   WHERE clienttype='ATC' AND callsign LIKE ? ORDER BY vid DESC;", (('%'+var[0]+'%'),))
-        if args == 'Get_Pilot_Lists':
-            Q_db = cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, rating, realname, planned_depairport, \
-                                   planned_destairport, time_connected, clienttype FROM status_ivao \
-                                   WHERE clienttype='PILOT' ORDER BY vid ASC;")
-        if args == 'Get_FMC_List':
-            Q_db = cursor.execute("SELECT DISTINCT(callsign), rating, realname, time_connected, clienttype \
-                                   FROM status_ivao WHERE clienttype='FOLME';")
-        if args == 'Get_Airline':
-            Q_db = cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?;', (str(var[0]),))
-        if args == 'Get_ICAO_from_Country':
-            Q_db = cursor.execute("SELECT icao FROM icao_codes WHERE country=?;", (str(var[0]),))
-        if args == 'Get_Outbound_Traffic':
-            Q_db= cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM status_ivao WHERE planned_depairport LIKE ?", \
-                           (str(var[0]),))
-        if args == 'Get_Inbound_Traffic':
-            Q_db = cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM status_ivao WHERE planned_destairport LIKE ?", \
-                           (str(var[0]),))
-        if args == 'Search_vid':
-            Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where vid like ?;", \
-                                  (str(var[0]),))
-        if args == 'Search_callsign':
-            Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where callsign like ?;", \
-                                  (str(var[0]),))
-        if args == 'Search_realname':
-            Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype from status_ivao where realname like ?;", \
-                                  (str(var[0]),))
-        if args == 'Get_Airport_from_ICAO':
-            Q_db = cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(var[0]),))
-        if args == 'Get_Controller_data':
-            Q_db = cursor.execute("SELECT vid, realname, server, clienttype, frequency, rating, facilitytype, atis_message, \
-                                   time_connected, client_software_name, client_software_version FROM status_ivao \
-                                   WHERE callsign=?;", (str(var[0]),))
-        if args == 'Get_Pilot_data':
-            Q_db = cursor.execute("SELECT vid, realname, altitude, groundspeed, planned_aircraft, planned_depairport, \
-                                planned_destairport, planned_altitude, planned_pob, planned_route, rating, transponder, onground,\
-                                latitude, longitude, planned_altairport, planned_altairport2, planned_tascruise, time_connected, clienttype \
-                                FROM status_ivao WHERE callsign=?;", (str(var[0]),))
-        if args == 'Get_FIR_from_ICAO':
-            Q_db = cursor.execute("SELECT FIR FROM fir_data_list WHERE icao=?", (str(var[0]),))
-        if args == 'Get_FMC_data':
-            Q_db = cursor.execute("SELECT vid, realname, server, clienttype, rating, time_connected, client_software_name, \
-                                   client_software_version FROM status_ivao WHERE callsign=?;", (str(var[0]),))
-        if args == 'Get_Airport_Location':
-            Q_db = cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(var[0]),))
-        if args == 'Get_Location_from_ICAO':
-            Q_db = cursor.execute("SELECT longitude, latitude FROM icao_codes WHERE ICAO=?;", (str(var[0]),))
-        if args == 'Get_Player_Location':
-            Q_db = cursor.execute("SELECT latitude, longitude, callsign, true_heading, clienttype \
-                                   FROM status_ivao WHERE callsign=?;",  (str(var[0]),))
-        if args == 'Get_Players_Locations':
-            Q_db = cursor.execute("SELECT longitude, latitude, callsign, true_heading, clienttype FROM status_ivao;")
-        if args == 'Get_IdFIR_from_ICAO':
-            Q_db = cursor.execute("SELECT ID_FIRCOASTLINE FROM fir_data_list WHERE ICAO = ?;", (str(var[0]),))
-        if args == 'Get_borders_FIR':
-            Q_db = cursor.execute("SELECT Longitude, Latitude FROM fir_coastlines_list where ID_FIRCOASTLINE = ?;", (int(id_ctr[0]),))
-        return Q_db
-
     def initial_load(self):
         self.statusBar().showMessage('Populating Database', 2000)
         qApp.processEvents()
-        Q_db = self.sql_query('Get_All_Flags')
+        Q_db = SQL_queries.sql_query('Get_All_Flags')
         db_t1 = Q_db.fetchall()
-        Q_db = self.sql_query('Get_All_data_icao_codes')
+        Q_db = SQL_queries.sql_query('Get_All_data_icao_codes')
         db_t2 = Q_db.fetchall()
         startrow_dbt1 = startrow_dbt2 = 0
 
@@ -653,10 +550,10 @@ class Main(QMainWindow):
             col_Event = QTableWidgetItem(str(columns[8]), 0)
             self.ui.SchedulingATC.setItem(startrow, 8, col_Event)
             try:
-                Q_db = self.sql_query('Get_Country_from_ICAO', (str(columns[3][:4]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(columns[3][:4]),))
                 country = Q_db.fetchone()
                 if country is None:
-                    Q_db = self.sql_query('Get_Country_from_FIR', (str(columns[3][:4]),))
+                    Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(columns[3][:4]),))
                     country = Q_db.fetchone()
                 col_Country = QTableWidgetItem(str(country[0]), 0)
                 self.ui.SchedulingATC.setItem(startrow, 1, col_Country)
@@ -702,10 +599,10 @@ class Main(QMainWindow):
             self.ui.SchedulingFlights.setItem(startrow, 3, col_StartTime)
             col_Departure = QTableWidgetItem(str(columns[6]), 0)
             try:
-                Q_db = self.sql_query('Get_Country_from_ICAO', (str(columns[6]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(columns[6]),))
                 country = Q_db.fetchone()
                 if country is None:
-                    Q_db = self.sql_query('Get_Country_from_FIR',  (str(columns[6]),))
+                    Q_db = SQL_queries.sql_query('Get_Country_from_FIR',  (str(columns[6]),))
                     country = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
@@ -720,10 +617,10 @@ class Main(QMainWindow):
             self.ui.SchedulingFlights.setItem(startrow, 6, col_StartTime)
             col_Destination = QTableWidgetItem(str(columns[8]), 0)
             try:
-                Q_db = self.sql_query('Get_Country_from_ICAO', (str(columns[8]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(columns[8]),))
                 country = Q_db.fetchone()
                 if country is None:
-                    Q_db = self.sql_query('Get_Country_from_FIR', (str(columns[8]),))
+                    Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(columns[8]),))
                     country = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
@@ -755,15 +652,15 @@ class Main(QMainWindow):
     def status_plane(self, callsign):
         '''This function is to get the action of the Pilot but for now I try to show using percent and
            some ground speeds of the track. I'm pretty sure with more check VARS can better this part'''
-        Q_db = self.sql_query('Get_Status', (str(callsign),))
+        Q_db = SQL_queries.sql_query('Get_Status', (str(callsign),))
         get_status = Q_db.fetchone()
         status = '-'
         for row_pilot in get_status:
             try:
-                Q_db = self.sql_query('Get_City', (str(get_status[2]),))
+                Q_db = SQL_queries.sql_query('Get_City', (str(get_status[2]),))
                 city_orig = Q_db.fetchone()
                 city_orig_point = float(city_orig[1]), float(city_orig[2])
-                Q_db = self.sql_query('Get_City', (str(get_status[3]),))
+                Q_db = SQL_queries.sql_query('Get_City', (str(get_status[3]),))
                 city_dest = Q_db.fetchone()
                 city_dest_point = float(city_dest[1]), float(city_dest[2])
                 pilot_position = get_status[8], get_status[9]
@@ -819,15 +716,15 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Populating Controllers and Pilots', 10000)
         #self.progress.show()
         pilots_ivao = atcs_ivao = obs_ivao = 0
-        Q_db = self.sql_query('Get_Pilots')
+        Q_db = SQL_queries.sql_query('Get_Pilots')
         pilots = Q_db.fetchone()
-        Q_db = self.sql_query('Get_Controllers')
+        Q_db = SQL_queries.sql_query('Get_Controllers')
         atc = Q_db.fetchone()
-        Q_db = self.sql_query('Get_FollowMeCarService')
+        Q_db = SQL_queries.sql_query('Get_FollowMeCarService')
         followme = Q_db.fetchone()
-        Q_db = self.sql_query('Get_Observers')
+        Q_db = SQL_queries.sql_query('Get_Observers')
         obs = Q_db.fetchone()
-        Q_db = self.sql_query('Get_POB')
+        Q_db = SQL_queries.sql_query('Get_POB')
         pob = Q_db.fetchone()
         self.ui.IVAOStatustableWidget.setCurrentCell(-1, -1)
         pilots_ivao = QTableWidgetItem(str(pilots[0]))
@@ -851,7 +748,7 @@ class Main(QMainWindow):
         self.ui.IVAOStatustableWidget.setItem(6, 0, pob_ivao)
         self.ui.IVAOStatustableWidget.setItem(7, 0, time_board)
         qApp.processEvents()
-        Q_db = self.sql_query('Get_Controller_List')
+        Q_db = SQL_queries.sql_query('Get_Controller_List')
         qApp.processEvents()
         rows_atcs = Q_db.fetchall()
         startrow = 0
@@ -860,108 +757,109 @@ class Main(QMainWindow):
             self.ui.ATC_FullList.removeRow(0)
 
         for row_atc in rows_atcs:
-            if row_atc[3] is None:
+            if row_atc[1] == None:
                 continue
-            self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
-            col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
-            if str(row_atc[0][:4]) == 'IVAO':
-                self.ui.ATC_FullList.setColumnWidth(2, 60)
+            else:
+                self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
                 col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
-                self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
-                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
-                flagCodePath = (image_flag + '/ivao_member.png')
-                Pixmap = QPixmap(flagCodePath)
-                flag_country = QLabel()
-                flag_country.setPixmap(Pixmap)
-                self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
-                col_country = QTableWidgetItem('IVAO Member', 0)
-                self.ui.ATC_FullList.setItem(startrow, 3, col_country)
-
-            elif str(row_atc[0][2:3]) == '-' or str(row_atc[0][2:3]) == '_':
-                Q_db = self.sql_query('Get_Country_from_Division', (str(row_atc[0][:2]),))
-                div_ivao = Q_db.fetchone()
-                if row_atc is None or div_ivao is None:
-                    pass
-                else:
-                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                    flagCodePath = (image_flag + '/%s.png') % str(div_ivao[0])
+                if str(row_atc[0][:4]) == 'IVAO':
+                    self.ui.ATC_FullList.setColumnWidth(2, 60)
                     col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
                     self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
+                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
+                    flagCodePath = (image_flag + '/ivao_member.png')
                     Pixmap = QPixmap(flagCodePath)
                     flag_country = QLabel()
                     flag_country.setPixmap(Pixmap)
                     self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
-                    col_country = QTableWidgetItem(str(div_ivao[0]), 0)
+                    col_country = QTableWidgetItem('IVAO Member', 0)
                     self.ui.ATC_FullList.setItem(startrow, 3, col_country)
-            else:
-                code_icao = str(row_atc[0][:4])
-                try:
-                    Q_db = self.sql_query('Get_Country_from_ICAO', (str(code_icao),))
-                    flagCode = Q_db.fetchone()
-                    if flagCode is None:
-                        Q_db = self.sql_query('Get_Country_from_FIR', (str(code_icao),))
-                        division = Q_db.fetchone()
-                        Q_db = self.sql_query('Get_Country_from_Division', (str(division[0]),))
-                        flagCode = Q_db.fetchone()
-                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                    flagCodePath = (image_flag + '/%s.png') % flagCode
-                    if os.path.exists(flagCodePath) is True:
+    
+                elif str(row_atc[0][2:3]) == '-' or str(row_atc[0][2:3]) == '_':
+                    Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(row_atc[0][:2]),))
+                    div_ivao = Q_db.fetchone()
+                    if row_atc is None or div_ivao is None:
+                        self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
+                    else:
+                        image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                        flagCodePath = (image_flag + '/%s.png') % str(div_ivao[0])
+                        col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
+                        self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
                         Pixmap = QPixmap(flagCodePath)
                         flag_country = QLabel()
                         flag_country.setPixmap(Pixmap)
                         self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
-                        col_country = QTableWidgetItem(str(flagCode[0]), 0)
+                        col_country = QTableWidgetItem(str(div_ivao[0]), 0)
                         self.ui.ATC_FullList.setItem(startrow, 3, col_country)
-                        self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
-                except:
-                    col_country = QTableWidgetItem(str(flagCode).encode('latin-1'), 0)
-                    self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
-                    error_flag = QTableWidgetItem(str('None'), 0)
-                    self.ui.ATC_FullList.setItem(startrow, 2, error_flag)
-                    error_country = QTableWidgetItem(str('Error Callsign for IVAO'), 0)
-                    error_country.setForeground(QBrush(QColor('red')))
-                    self.ui.ATC_FullList.setItem(startrow, 3, error_country)
-            col_frequency = QTableWidgetItem(str(row_atc[1]), 0)
-            self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
-            if row_atc[5] == '1.1.14':
-                pass
-            try:
-                col_facility = QTableWidgetItem(str(self.position_atc[row_atc[4]]), 0)
-                self.ui.ATC_FullList.setItem(startrow, 4, col_facility)
-            except:
-                pass
-            col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
-            self.ui.ATC_FullList.setItem(startrow, 5, col_realname)
-            code_atc_rating = row_atc[3]
-            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
-            ratingImagePath = ImagePath + '/atc_level%d.gif' % int(code_atc_rating)
-            try:
-                if os.path.exists(ratingImagePath) is True:
-                    Pixmap = QPixmap(ratingImagePath)
-                    ratingImage = QLabel(self)
-                    ratingImage.setPixmap(Pixmap)
-                    self.ui.ATC_FullList.setCellWidget(startrow, 7, ratingImage)
-                    col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
-                    self.ui.ATC_FullList.setItem(startrow, 6, col_rating)
                 else:
-                    col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
-                    self.ui.ATC_FullList.setItem(startrow, 7, col_rating)
-            except:
-                pass
-            try:
-                start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]) \
-                                                    , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10]) \
-                                                    , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
-                diff = datetime.datetime.utcnow() - start_connected
-                col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
-                self.ui.ATC_FullList.setItem(startrow, 8, col_time)
-            except:
-                pass
-            #self.progress.setValue(int(float(startrow) / float(len(rows_atcs)) * 100.0))
-            startrow += 1
-            #qApp.processEvents()
+                    code_icao = str(row_atc[0][:4])
+                    try:
+                        Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(code_icao),))
+                        flagCode = Q_db.fetchone()
+                        if flagCode is None:
+                            Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(code_icao),))
+                            division = Q_db.fetchone()
+                            Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(division[0]),))
+                            flagCode = Q_db.fetchone()
+                        image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+                        flagCodePath = (image_flag + '/%s.png') % flagCode
+                        if os.path.exists(flagCodePath) is True:
+                            Pixmap = QPixmap(flagCodePath)
+                            flag_country = QLabel()
+                            flag_country.setPixmap(Pixmap)
+                            self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
+                            col_country = QTableWidgetItem(str(flagCode[0]), 0)
+                            self.ui.ATC_FullList.setItem(startrow, 3, col_country)
+                            self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
+                    except:
+                        col_country = QTableWidgetItem(str(flagCode).encode('latin-1'), 0)
+                        self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
+                        error_flag = QTableWidgetItem(str('None'), 0)
+                        self.ui.ATC_FullList.setItem(startrow, 2, error_flag)
+                        error_country = QTableWidgetItem(str('Error Callsign for IVAO'), 0)
+                        error_country.setForeground(QBrush(QColor('red')))
+                        self.ui.ATC_FullList.setItem(startrow, 3, error_country)
+                col_frequency = QTableWidgetItem(str(row_atc[1]), 0)
+                self.ui.ATC_FullList.setItem(startrow, 1, col_frequency)
+                if row_atc[5] == '1.1.14':
+                    pass
+                try:
+                    col_facility = QTableWidgetItem(str(self.position_atc[row_atc[4]]), 0)
+                    self.ui.ATC_FullList.setItem(startrow, 4, col_facility)
+                except:
+                    pass
+                col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
+                self.ui.ATC_FullList.setItem(startrow, 5, col_realname)
+                code_atc_rating = row_atc[3]
+                ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
+                ratingImagePath = ImagePath + '/atc_level%d.gif' % int(code_atc_rating)
+                try:
+                    if os.path.exists(ratingImagePath) is True:
+                        Pixmap = QPixmap(ratingImagePath)
+                        ratingImage = QLabel(self)
+                        ratingImage.setPixmap(Pixmap)
+                        self.ui.ATC_FullList.setCellWidget(startrow, 7, ratingImage)
+                        col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
+                        self.ui.ATC_FullList.setItem(startrow, 6, col_rating)
+                    else:
+                        col_rating = QTableWidgetItem(str(self.rating_atc[row_atc[3]]), 0)
+                        self.ui.ATC_FullList.setItem(startrow, 7, col_rating)
+                except:
+                    pass
+                try:
+                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]) \
+                                                        , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10]) \
+                                                        , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
+                    diff = datetime.datetime.utcnow() - start_connected
+                    col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
+                    self.ui.ATC_FullList.setItem(startrow, 8, col_time)
+                except:
+                    pass
+                #self.progress.setValue(int(float(startrow) / float(len(rows_atcs)) * 100.0))
+                startrow += 1
+                #qApp.processEvents()
 
-        Q_db = self.sql_query('Get_FMC_List')
+        Q_db = SQL_queries.sql_query('Get_FMC_List')
         vehicles = Q_db.fetchall()
 
         startrow = 0
@@ -1013,7 +911,7 @@ class Main(QMainWindow):
             startrow += 1
             #qApp.processEvents()
 
-        Q_db = self.sql_query('Get_Pilot_Lists')
+        Q_db = SQL_queries.sql_query('Get_Pilot_Lists')
         rows_pilots = Q_db.fetchall()
 
         for row_pilot in rows_pilots:
@@ -1028,7 +926,7 @@ class Main(QMainWindow):
                     airline.setPixmap(Pixmap)
                     self.ui.PILOT_FullList.setCellWidget(startrow, 0, airline)
                 else:
-                    Q_db = self.sql_query('Get_Airline', (str(row_pilot[0][:3]),))
+                    Q_db = SQL_queries.sql_query('Get_Airline', (str(row_pilot[0][:3]),))
                     airline_code = Q_db.fetchone()
                     if airline_code is None:
                         col_airline = QTableWidgetItem(str(row_pilot[0]))
@@ -1097,14 +995,14 @@ class Main(QMainWindow):
            and all flight inbound/outbound in same country, This is my favorite part because
            is very similar like any Airport's Flights of MainBoard'''
         country_selected = self.ui.country_list.currentText()
-        Q_db = self.sql_query('Get_Country_from_ICAO', (str(country_selected),))
+        Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(country_selected),))
         flagCode = Q_db.fetchone()
 
         image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
         flagCodePath = (image_flag + '/%s.png') % country_selected
         Pixmap = QPixmap(flagCodePath)
         self.ui.flagIcon.setPixmap(Pixmap)
-        Q_db = self.sql_query('Get_ICAO_from_Country', (str(country_selected),))
+        Q_db = SQL_queries.sql_query('Get_ICAO_from_Country', (str(country_selected),))
         icao_country = Q_db.fetchall()
         self.ui.Inbound_traffic.setText('Inbound Traffic in %s Airports' % (country_selected))
         self.ui.Outbound_traffic.setText('Outbound Traffic in %s Airports' % (country_selected))
@@ -1130,16 +1028,16 @@ class Main(QMainWindow):
         startrow_out = 0
 
         for codes in icao_country:
-            Q_db = self.sql_query('Get_Controller', (('%'+str(codes[0])+'%'),))
+            Q_db = SQL_queries.sql_query('Get_Controller', (('%'+str(codes[0])+'%'),))
             rows_atcs = Q_db.fetchall()
 
-            Q_db = self.sql_query('Get_Pilot', (('%'+str(codes[0])),))
+            Q_db = SQL_queries.sql_query('Get_Pilot', (('%'+str(codes[0])),))
             rows_pilots = Q_db.fetchall()
 
-            Q_db = self.sql_query('Get_Outbound_Traffic', ((str(codes[0])),))
+            Q_db = SQL_queries.sql_query('Get_Outbound_Traffic', ((str(codes[0])),))
             OutboundTrafficAirport = Q_db.fetchall()
 
-            Q_db = self.sql_query('Get_Inbound_Traffic', ((str(codes[0])),))
+            Q_db = SQL_queries.sql_query('Get_Inbound_Traffic', ((str(codes[0])),))
             InboundTrafficAirport = Q_db.fetchall()
 
             for row_atc in rows_atcs:
@@ -1193,7 +1091,7 @@ class Main(QMainWindow):
                         airline.setPixmap(Pixmap)
                         self.ui.PilottableWidget.setCellWidget(startrow_pilot, 0, airline)
                     else:
-                        Q_db = self.sql_query('Get_Airline', (str(row_pilot[0][:3]),))
+                        Q_db = SQL_queries.sql_query('Get_Airline', (str(row_pilot[0][:3]),))
                         airline_code = Q_db.fetchone()
                         if airline_code is None:
                             col_airline = QTableWidgetItem(str(row_pilot[0]))
@@ -1270,7 +1168,7 @@ class Main(QMainWindow):
                         self.ui.InboundTableWidget.setItem(startrow_in, 0, col_airline)
                 except:
                     pass
-                Q_db = self.sql_query('Get_Country_from_ICAO', (str(inbound[1]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(inbound[1]),))
                 flagCode = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath_orig = (image_flag + '/%s.png') % flagCode
@@ -1278,7 +1176,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 1, flag_country)
-                Q_db = self.sql_query('Get_City', (str(inbound[1]),))
+                Q_db = SQL_queries.sql_query('Get_City', (str(inbound[1]),))
                 city = Q_db.fetchone()
                 col_city = ''
                 if city == None:
@@ -1287,7 +1185,7 @@ class Main(QMainWindow):
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 2, col_country)
-                Q_db = self.sql_query('Get_Country_from_ICAO', (str(inbound[2]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(inbound[2]),))
                 flagCode = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath_dest = (image_flag + '/%s.png') % flagCode
@@ -1295,7 +1193,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.InboundTableWidget.setCellWidget(startrow_in, 3, flag_country)
-                Q_db = self.sql_query('Get_City', (str(inbound[2]),))
+                Q_db = SQL_queries.sql_query('Get_City', (str(inbound[2]),))
                 city = Q_db.fetchone()
                 col_city = ''
                 if city == None:
@@ -1332,7 +1230,7 @@ class Main(QMainWindow):
                         self.ui.OutboundTableWidget.setItem(startrow_out, 0, col_airline)
                 except:
                     pass
-                Q_db = self.sql_query('Get_Country_from_ICAO', (str(outbound[1]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(outbound[1]),))
                 flagCode = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath_orig = (image_flag + '/%s.png') % flagCode
@@ -1340,7 +1238,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 1, flag_country)
-                Q_db = self.sql_query('Get_City', (str(outbound[1]),))
+                Q_db = SQL_queries.sql_query('Get_City', (str(outbound[1]),))
                 city = Q_db.fetchone()
                 col_city = ''
                 if city == None:
@@ -1349,7 +1247,7 @@ class Main(QMainWindow):
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 2, col_country)
-                Q_db = self.sql_query('Get_Country_from_ICAO', (str(outbound[2]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(outbound[2]),))
                 flagCode = Q_db.fetchone()
                 image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath_dest = (image_flag + '/%s.png') % flagCode
@@ -1357,7 +1255,7 @@ class Main(QMainWindow):
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
                 self.ui.OutboundTableWidget.setCellWidget(startrow_out, 3, flag_country)
-                Q_db = self.sql_query('Get_City', (str(outbound[2]),))
+                Q_db = SQL_queries.sql_query('Get_City', (str(outbound[2]),))
                 city = Q_db.fetchone()
                 col_city = ''
                 if city == None:
@@ -1422,11 +1320,11 @@ class Main(QMainWindow):
         item = self.ui.SearchcomboBox.currentIndex()
 
         if item == 0:
-            Q_db = self.sql_query('Search_vid', ('%'+str(arg)+'%',))
+            Q_db = SQL_queries.sql_query('Search_vid', ('%'+str(arg)+'%',))
         elif item == 1:
-            Q_db = self.sql_query('Search_callsign', ('%'+str(arg)+'%',))
+            Q_db = SQL_queries.sql_query('Search_callsign', ('%'+str(arg)+'%',))
         elif item == 2:
-            Q_db = self.sql_query('Search_realname', ('%'+str(arg)+'%',))
+            Q_db = SQL_queries.sql_query('Search_realname', ('%'+str(arg)+'%',))
         search = Q_db.fetchall()
 
         self.ui.SearchtableWidget.insertRow(self.ui.SearchtableWidget.rowCount())
@@ -1694,11 +1592,11 @@ class Main(QMainWindow):
            now with webeye, I want use it here, to make strong those 2 tools'''
         self.statusBar().showMessage('Showing player in Map', 4000)
         qApp.processEvents()
-        Q_db = self.sql_query('Get_Location_from_ICAO', (str(icao_orig),))
+        Q_db = SQL_queries.sql_query('Get_Location_from_ICAO', (str(icao_orig),))
         icao_orig = Q_db.fetchone()
-        Q_db = self.sql_query('Get_Location_from_ICAO', (str(icao_dest),))
+        Q_db = SQL_queries.sql_query('Get_Location_from_ICAO', (str(icao_dest),))
         icao_dest = Q_db.fetchone()
-        Q_db = self.sql_query('Get_Player_Location', (str(vid),))
+        Q_db = SQL_queries.sql_query('Get_Player_Location', (str(vid),))
         player = Q_db.fetchall()
         latitude, longitude, heading = player[0][0], player[0][1], player[0][3]
         mapfileplayer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
@@ -1742,6 +1640,8 @@ class Main(QMainWindow):
             player_location.write('    var zoom = 5;\n')
         if player[0][4] == 'PILOT':
             player_location.write('    var zoom = 5;\n')
+        else:
+            player_location.write('    var zoom = 12;\n')
         player_location.write('    var player=new OpenLayers.Layer.Vector("Player",\n')
         player_location.write('    {\n')
         player_location.write('    styleMap: new OpenLayers.StyleMap({\n')
@@ -1786,14 +1686,14 @@ class Main(QMainWindow):
             player_location.write('       labelYOffset: 5\n')
             player_location.write('   };\n\n')
             try:
-                Q_db = self.sql_query('Get_IdFIR_from_ICAO', (str(player[0][2][:-4]),))
+                Q_db = SQL_queries.sql_query('Get_IdFIR_from_ICAO', (str(player[0][2][:-4]),))
                 id_ctr = Q_db.fetchone()
                 if id_ctr is None:
-                    Q_db = self.sql_query('Get_IdFIR_from_ICAO', (str(player[0][2][:4]),))
+                    Q_db = SQL_queries.sql_query('Get_IdFIR_from_ICAO', (str(player[0][2][:4]),))
                     id_ctr = Q_db.fetchone()
             except:
                 pass
-            Q_db = self.sql_query('Get_borders_FIR', (int(id_ctr[0]),))
+            Q_db = SQL_queries.sql_query('Get_borders_FIR', (int(id_ctr[0]),))
             points_ctr = Q_db.fetchall()
             player_location.write('    var points = [];\n')
             for position in range(0, len(points_ctr)):
@@ -1828,6 +1728,8 @@ class Main(QMainWindow):
                     player_location.write('        40000,\n')
                 elif str(player[0][2][-4:]) == '_APP':
                     player_location.write('        60000,\n')
+                else:
+                    player_location.write('        20000,\n')
                 player_location.write('        360\n')
                 player_location.write('     );\n')
                 player_location.write('   var controller_ratio = new OpenLayers.Feature.Vector(ratio);\n')
@@ -1949,7 +1851,7 @@ class Main(QMainWindow):
         cursor = connection.cursor()
         label_Pilots = config.getint('Map', 'label_Pilots')
         label_ATCs = config.getint('Map', 'label_ATCs')
-        Q_db = self.sql_query('Get_Players_Locations')
+        Q_db = SQL_queries.sql_query('Get_Players_Locations')
         players = Q_db.fetchall()
         self.statusBar().showMessage('Populating all players in the Map', 10000)
         qApp.processEvents()
@@ -2770,13 +2672,13 @@ class PilotInfo(QMainWindow):
 
     def status(self, callsign):
         self.callsign = callsign
-        Q_db = Main().sql_query('Get_Pilot_data', (str(callsign),))
+        Q_db = SQL_queries.sql_query('Get_Pilot_data', (str(callsign),))
         info = Q_db.fetchall()
         if info[0][19] == 'FOLME':
             pass
         else:
             try:
-                Q_db = Main().sql_query('Get_Country_from_ICAO', (str(info[0][5]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(info[0][5]),))
                 flagCodeOrig = Q_db.fetchone()
                 ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
                 flagCodePath_orig = (ImagePath + '/%s.png') % flagCodeOrig
@@ -2791,13 +2693,13 @@ class PilotInfo(QMainWindow):
                 city_orig_point = None
 
         try:
-            Q_db = Main().sql_query('Get_Country_from_ICAO', (str(info[0][6]),))
+            Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(info[0][6]),))
             flagCodeDest = Q_db.fetchone()
             ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
             flagCodePath_dest = (ImagePath + '/%s.png') % flagCodeDest
             Pixmap = QPixmap(flagCodePath_dest)
             self.ui.DestinationImage.setPixmap(Pixmap)
-            Q_db = Main().sql_query('Get_Airport_Location', (str(info[0][6]),))
+            Q_db = SQL_queries.sql_query('Get_Airport_Location', (str(info[0][6]),))
             city_dest = Q_db.fetchone()
             self.ui.DestinationText.setText(str(city_dest[0].encode('latin-1')))
             city_dest_point = city_dest[1], city_dest[2]
@@ -2815,7 +2717,7 @@ class PilotInfo(QMainWindow):
                 airline = QLabel(self)
                 self.ui.airline_image.setPixmap(Pixmap)
             else:
-                Q_db = Main().sql_query('Get_Airline', str(callsign[:3]))
+                Q_db = SQL_queries.sql_query('Get_Airline', str(callsign[:3]))
                 airline_code = Q_db.fetchone()
                 self.ui.airline_image.setText(str(airline_code[0]))
         except:
@@ -2829,9 +2731,9 @@ class PilotInfo(QMainWindow):
         self.ui.TransponderText.setText(str(info[0][11]))
         self.ui.GSFiledText.setText(str(info[0][17]))
         self.ui.FLText.setText(str(info[0][7]))
-        Q_db = Main().sql_query('Get_Airport_from_ICAO', (str(info[0][15]),))
+        Q_db = SQL_queries.sql_query('Get_Airport_from_ICAO', (str(info[0][15]),))
         altern_city_1 = Q_db.fetchone()
-        Q_db = Main().sql_query('Get_Airport_from_ICAO', (str(info[0][16]),))
+        Q_db = SQL_queries.sql_query('Get_Airport_from_ICAO', (str(info[0][16]),))
         altern_city_2 = Q_db.fetchone()
         if altern_city_1 is None:
             self.ui.Altern_Airport_Text.setText(str('-'))
@@ -2849,7 +2751,7 @@ class PilotInfo(QMainWindow):
                                              % (str(data[0][0]), str(data[0][1]), str(data[0][2])))
         except:
             self.ui.AirplaneText.setText('Pending...')
-        Q_db = Main().sql_query('Get_Country_from_ICAO', (str(info[0][1][-4:]),))
+        Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(info[0][1][-4:]),))
         flagCodeHome = Q_db.fetchone()
         ImageFlag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
         flagCodePath = (ImageFlag + '/%s.png') % flagCodeHome
@@ -2913,7 +2815,7 @@ class ControllerInfo(QMainWindow):
         self.callsign = callsign
         self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
                              , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
-        Q_db = Main().sql_query('Get_Controller_data', (str(callsign),))
+        Q_db = SQL_queries.sql_query('Get_Controller_data', (str(callsign),))
         info = Q_db.fetchall()
         self.ui.VidText.setText(str(info[0][0]))
         self.ui.ControllerText.setText(str(info[0][1].encode('latin-1')))
@@ -2921,22 +2823,22 @@ class ControllerInfo(QMainWindow):
         self.ui.ConnectedText.setText(str(info[0][2]))
         self.ui.ATISInfo.setText(str(info[0][7].encode('latin-1')).replace('^\xa7', '\n'))
         try:
-            Q_db = Main().sql_query('Get_Country_from_ICAO', (str(callsign[:4]),))
+            Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(callsign[:4]),))
             flagCodeOrig = Q_db.fetchone()
             if flagCodeOrig is None:
-                Q_db = Main().sql_query('Get_Country_from_Division', (str(callsign[:2]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(callsign[:2]),))
                 flagCodeOrig = Q_db.fetchone()
             image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
             flagCodePath_orig = (image_flag + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
             self.ui.Flag.setPixmap(Pixmap)
-            Q_db = Main().sql_query('Get_Airport_from_ICAO', (str(callsign[:4]),))
+            Q_db = SQL_queries.sql_query('Get_Airport_from_ICAO', (str(callsign[:4]),))
             city_orig = Q_db.fetchone()
             if str(callsign[-4:]) == '_CTR':
-                Q_db = Main().sql_query('Get_FIR_from_ICAO', (str(callsign[:4]),))
+                Q_db = SQL_queries.sql_query('Get_FIR_from_ICAO', (str(callsign[:4]),))
                 city_orig = Q_db.fetchone()
             if str(callsign[2:3]) == '_' or str(callsign[2:3]) == '-':
-                Q_db = Main().sql_query('Get_Country_from_Division', (str(callsign[:2]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(callsign[:2]),))
                 city_orig = Q_db.fetchone()
             self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
         except:
@@ -2981,20 +2883,20 @@ class FollowMeService(QMainWindow):
 
     def status(self, callsign):
         self.callsign = callsign
-        Q_db = Main().sql_query('Get_FMC_data', (str(callsign),))
+        Q_db = SQL_queries.sql_query('Get_FMC_data', (str(callsign),))
         info = Q_db.fetchall()
         self.ui.VidText.setText(str(info[0][0]))
         self.ui.FMCRealname.setText(str(info[0][1].encode('latin-1'))[:-4])
         self.ui.SoftwareText.setText('%s %s' % (str(info[0][6]), str(info[0][7])))
         self.ui.ConnectedText.setText(str(info[0][2]))
         try:
-            Q_db = Main().sql_query('Get_Country_from_ICAO', (str(callsign[:4]),))
+            Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(callsign[:4]),))
             flagCodeOrig = Q_db.fetchone()
             image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
             flagCodePath_orig = (image_flag + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
             self.ui.Flag.setPixmap(Pixmap)
-            Q_db = Main().sql_query('Get_Airport_from_ICAO', (str(callsign[:4]),))
+            Q_db = SQL_queries.sql_query('Get_Airport_from_ICAO', (str(callsign[:4]),))
             city_orig = Q_db.fetchone()
         except:
             self.ui.ControllingText.setText('Pending...')
