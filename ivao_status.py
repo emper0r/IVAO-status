@@ -18,6 +18,8 @@
 #
 # IVAO-status :: License GPLv3+
 
+
+'''Importing Python's native modules'''
 import sys
 import os
 import sqlite3
@@ -28,6 +30,8 @@ import random
 import gzip
 import time
 import StringIO
+
+'''Importing the rest modules like GeoPy embedded, parser HTML and all UI_Class made at Qt-Designer'''
 from modules import distance
 from modules import MainWindow_UI
 from modules import PilotInfo_UI
@@ -37,6 +41,8 @@ from modules import FollowMeCarService_UI
 from modules import BeautifulSoup
 
 try:
+    '''Check if PyQT4 is installed or not, this library is a dependency of all, 
+    if not installed read the README.rst'''
     from PyQt4.QtCore import *
     from PyQt4.QtGui import *
     from PyQt4.QtWebKit import *
@@ -50,6 +56,7 @@ except:
 __version__ = '1.0.4'
 
 class Main(QMainWindow):
+    '''Preparing the MainWindow Class, to paint all design of the app'''
     def __init__(self):
         QMainWindow.__init__(self)
         self.ui = MainWindow_UI.Ui_MainWindow()
@@ -211,7 +218,8 @@ class Main(QMainWindow):
 
         self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
                         , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
-
+        
+        '''If user delete Config.ini by error, when app start write it again the file'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         if os.path.exists(config_file):
@@ -259,6 +267,7 @@ class Main(QMainWindow):
         return self._maptab
 
     def sql_query(self, args=None, var=None):
+        '''At this function should be to set all SQL queries to database, missing some ones yet but here is the major'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -416,6 +425,8 @@ class Main(QMainWindow):
         qApp.restoreOverrideCursor()
 
     def connect(self):
+        '''Conecting to IVAO with only link explain in the Logistic mail rules, 
+        this part contain some proxy settings because at least in my country is very used'''
         self.statusBar().showMessage('Trying connecting to IVAO', 3000)
         qApp.processEvents()
         config = ConfigParser.RawConfigParser()
@@ -446,6 +457,7 @@ class Main(QMainWindow):
             if use_proxy == 0 and auth == 0:
                 pass
 
+            '''Doing Load balance to IVAO as Logistics require'''
             StatusURL = urllib2.urlopen(config.get('Info', 'data_access'))
             shuffle = random.choice([link for link in StatusURL.readlines() if 'gzurl0' in link]).split('=')[1].strip('\r\n')
             zfilename = urllib2.urlopen(shuffle)
@@ -471,6 +483,8 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Error! when trying to download info from IVAO. Check your connection to Internet.')
 
     def update_db(self):
+        '''This function insert the data got it in memory downloaded from IVAO to parse the players for controllers, 
+           pilots, and FMC to insert into database, separate by field ':' as NOTAM and Logistic explain what field means'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -597,6 +611,10 @@ class Main(QMainWindow):
         self.ivao_friend()
 
     def Scheduling(self):
+        '''This part is very slowly yet, because i can't access directly to IVAO db to download schedule, 
+           so I have to parse the URLs where users can see the schedule for controllers and pilots on IVAO website,
+           now is made using BeautifulSoup, but I guess with other tool to parse like lxml, can check if 
+           is more faster or not'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -732,6 +750,8 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Done!', 2000)
 
     def status_plane(self, callsign):
+        '''This function is to get the action of the Pilot but for now I try to show using percent and
+           some ground speeds of the track. I'm pretty sure with more check VARS can better this part'''
         Q_db = self.sql_query('Get_Status', (str(callsign),))
         get_status = Q_db.fetchone()
         status = '-'
@@ -789,6 +809,7 @@ class Main(QMainWindow):
                 return status
 
     def show_tables(self):
+        '''Here show all data into PILOT and CONTROLLER full list'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -1069,6 +1090,9 @@ class Main(QMainWindow):
         self.network()
 
     def country_view(self):
+        '''This function show all users connected as PILOT and CONTOLLER of Country selected,
+           and all flight inbound/outbound in same country, This is my favorite part because
+           is very similar like any Airport's Flights of MainBoard'''
         country_selected = self.ui.country_list.currentText()
         Q_db = self.sql_query('Get_Country_from_ICAO', (str(country_selected),))
         flagCode = Q_db.fetchone()
@@ -1350,6 +1374,7 @@ class Main(QMainWindow):
         self.ui.ATCtableWidget.setCurrentCell(-1, -1)
 
     def get_color(self, status_plane):
+        '''This function is implemented with status_plane'''
         color = 'black'
         if status_plane == 'Boarding':
             color = 'green'
@@ -1382,6 +1407,7 @@ class Main(QMainWindow):
         return color
 
     def search_button(self):
+        '''Here can search by VID, Callsign or Player Name in MainTab'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -1436,6 +1462,7 @@ class Main(QMainWindow):
         connection.close()
 
     def action_click(self, event=None):
+        '''This section is for right-click mouse, and get in what table was clicked to do some action'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -1563,6 +1590,8 @@ class Main(QMainWindow):
                         QMessageBox.information(None, 'Friends List', msg)
 
     def ivao_friend(self):
+        '''Here can show the friend added to roster, this roster is reload after get consecutive data
+           to see if player's friend is online or not'''
         self.ui.PILOT_FullList.setCurrentCell(-1, -1)
         self.ui.ATC_FullList.setCurrentCell(-1, -1)
         self.ui.PilottableWidget.setCurrentCell(-1, -1)
@@ -1624,6 +1653,7 @@ class Main(QMainWindow):
         connection.close()
 
     def metar(self):
+        '''This functions is for get the METAR balance as Logistics mail require'''
         self.statusBar().showMessage('Downloading METAR', 2000)
         qApp.processEvents()
         config = ConfigParser.RawConfigParser()
@@ -1655,6 +1685,9 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Error! during try get Metar info, check your internet connection...', 4000)
 
     def view_map(self, vid, icao_orig=None, icao_dest=None):
+        '''This function is for see the single player in GoogleMaps, if  is ATC, see with more or less zoom depends 
+           from ATC level and the PILOT, I implemented this before show up webeye, so i made the middle stuff, 
+           now with webeye, I want use it here, to make strong those 2 tools'''
         self.statusBar().showMessage('Showing player in Map', 4000)
         qApp.processEvents()
         Q_db = self.sql_query('Get_Location_from_ICAO', (str(icao_orig),))
@@ -1875,29 +1908,35 @@ class Main(QMainWindow):
                           % (__version__))
 
     def show_pilot_info(self, callsign):
+        '''Here call the Pilot Class'''
         self.pilot_window = PilotInfo()
         self.pilot_window.status(callsign)
         self.pilot_window.closed.connect(self.show)
         self.pilot_window.show()
 
     def show_controller_info(self, callsign):
+        '''Here call the Controller Class'''
         self.controller_window = ControllerInfo()
         self.controller_window.status(callsign)
         self.controller_window.closed.connect(self.show)
         self.controller_window.show()
 
     def show_followme_info(self, callsign):
+        '''Here call the FOLME Class'''
         self.followme_window = FollowMeService()
         self.followme_window.status(callsign)
         self.followme_window.closed.connect(self.show)
         self.followme_window.show()
 
     def show_settings(self):
+        '''Here call the Settings Class'''
         self.setting_window = Settings(self)
         self.setting_window.closed.connect(self.show)
         self.setting_window.show()
 
     def all2map(self):
+        '''This function is for see the whole map, all player in GoogleMaps, I implemented this before show up webeye, 
+           now with webeye, I want to use it here, to make strong those 2 tools'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -2111,6 +2150,7 @@ class Main(QMainWindow):
         self.maptab.load(QUrl(mapfileall_path + '/all_in_map.html'))
 
     def statistics(self):
+        '''This function is for Statistics Tab in the MainWindow, when select option at combobox appears result'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -2649,6 +2689,7 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Done!', 2000)
 
     def network(self):
+        '''This function is to see NetworkTab statistics'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -2678,6 +2719,7 @@ class Main(QMainWindow):
             qApp.processEvents()
 
 class AddFriend(QMainWindow):
+    '''The Class AddFriend is to add/remove the friend in roster at MainTab of MainWindow'''
     def add_friend(self, vid2add):
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
@@ -2708,7 +2750,8 @@ class AddFriend(QMainWindow):
 
 class PilotInfo(QMainWindow):
     closed = pyqtSignal()
-
+    '''The PilotInfo Class is to show selected player from Pilots Tables to see the status of the flight, like
+       departure, destination, miles, route, type of aircraft and flight, etc'''
     def __init__(self):
         QMainWindow.__init__(self)
         self.ui = PilotInfo_UI.Ui_QPilotInfo()
@@ -2847,6 +2890,8 @@ class PilotInfo(QMainWindow):
         event.accept()
 
 class ControllerInfo(QMainWindow):
+    '''The ControllerInfo Class is to show selected player from Controllers Tables to see the status of player 
+       at the Airport controlled like, freq, country, and ATIS info'''
     closed = pyqtSignal()
 
     def __init__(self):
@@ -2916,6 +2961,7 @@ class ControllerInfo(QMainWindow):
         event.accept()
 
 class FollowMeService(QMainWindow):
+    '''The FOLME Class is for show selected player connected as FOLME'''
     closed = pyqtSignal()
 
     def __init__(self):
@@ -2971,6 +3017,8 @@ class FollowMeService(QMainWindow):
         event.accept()
 
 class Settings(QMainWindow):
+    '''The Settings Class is to set options like interval time to update, show labels of the players when see in the map,
+       set proxy, this will write into Config.ini, this re-build the config if user delete it by error'''
     closed = pyqtSignal()
 
     def __init__(self, parent=None):
@@ -3066,6 +3114,7 @@ class Settings(QMainWindow):
 
 def main():
     import sys, time, os
+    '''Next line is for set only exact theme with Qt libraries to the app'''
     QApplication.setStyle(QStyleFactory.create("Cleanlooks"))
     QApplication.setPalette(QApplication.style().standardPalette())
     app = QApplication(sys.argv)
