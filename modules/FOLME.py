@@ -22,7 +22,7 @@
 
 import os
 import SQL_queries
-import ControllerInfo_UI
+import FOLME_UI
 import Friends
 
 try:
@@ -38,14 +38,13 @@ except:
     print ('with all dependencies.\n\n')
     sys.exit(2)
 
-class ControllerInfo(QMainWindow):
-    '''The ControllerInfo Class is to show selected player from Controllers Tables to see the status of player 
-       at the Airport controlled like, freq, country, and ATIS info'''
+class FollowMeService(QMainWindow):
+    '''The FOLME Class is for show selected player connected as FOLME'''
     closed = pyqtSignal()
 
     def __init__(self):
         QMainWindow.__init__(self)
-        self.ui = ControllerInfo_UI.Ui_QControllerInfo()
+        self.ui = FOLME_UI.Ui_QFMC()
         self.ui.setupUi(self)
         screen = QDesktopWidget().screenGeometry()
         size =  self.geometry()
@@ -56,45 +55,31 @@ class ControllerInfo(QMainWindow):
 
     def status(self, callsign):
         self.callsign = callsign
-        self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
-                             , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
-        Q_db = SQL_queries.sql_query('Get_Controller_data', (str(callsign),))
+        Q_db = SQL_queries.sql_query('Get_FMC_data', (str(callsign),))
         info = Q_db.fetchall()
         self.ui.VidText.setText(str(info[0][0]))
-        self.ui.ControllerText.setText(str(info[0][1].encode('latin-1')))
-        self.ui.SoftwareText.setText('%s %s' % (str(info[0][9]), str(info[0][10])))
+        self.ui.FMCRealname.setText(str(info[0][1].encode('latin-1'))[:-4])
+        self.ui.SoftwareText.setText('%s %s' % (str(info[0][6]), str(info[0][7])))
         self.ui.ConnectedText.setText(str(info[0][2]))
-        self.ui.ATISInfo.setText(str(info[0][7].encode('latin-1')).replace('^\xa7', '\n'))
         try:
             Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(callsign[:4]),))
             flagCodeOrig = Q_db.fetchone()
-            if flagCodeOrig is None:
-                Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(callsign[:2]),))
-                flagCodeOrig = Q_db.fetchone()
             image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../flags')
             flagCodePath_orig = (image_flag + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
             self.ui.Flag.setPixmap(Pixmap)
             Q_db = SQL_queries.sql_query('Get_Airport_from_ICAO', (str(callsign[:4]),))
             city_orig = Q_db.fetchone()
-            if str(callsign[-4:]) == '_CTR':
-                Q_db = SQL_queries.sql_query('Get_FIR_from_ICAO', (str(callsign[:4]),))
-                city_orig = Q_db.fetchone()
-            if str(callsign[2:3]) == '_' or str(callsign[2:3]) == '-':
-                Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(callsign[:2]),))
-                city_orig = Q_db.fetchone()
-            self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
         except:
             self.ui.ControllingText.setText('Pending...')
-        ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../ratings')
-        ratingImagePath = ImagePath + '/atc_level%d.gif' % int(info[0][5])
+        ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../images')
+        ratingImagePath = (ImagePath + '/ZZZZ.png')
         Pixmap = QPixmap(ratingImagePath)
         self.ui.rating_img.setPixmap(Pixmap)
-        self.ui.facility_freq_Text.setText(str(self.position_atc[str(info[0][6])]) + ' ' + str(info[0][4]) + ' MHz')
         try:
-            start_connected = datetime.datetime(int(str(info[0][8])[:4]), int(str(info[0][8])[4:6]) \
-                                                , int(str(info[0][8])[6:8]), int(str(info[0][8])[8:10]) \
-                                                , int(str(info[0][8])[10:12]), int(str(info[0][8])[12:14]))
+            start_connected = datetime.datetime(int(str(info[0][5])[:4]), int(str(info[0][5])[4:6]) \
+                                                , int(str(info[0][5])[6:8]), int(str(info[0][5])[8:10]) \
+                                                , int(str(info[0][5])[10:12]), int(str(info[0][5])[12:14]))
             diff = datetime.datetime.utcnow() - start_connected
             self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])
         except:
