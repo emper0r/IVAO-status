@@ -88,14 +88,15 @@ class Main(QMainWindow):
         self.ui.PilottableWidget.setColumnWidth(8, 65)
         self.ui.ATC_FullList.setColumnWidth(1, 70)
         self.ui.ATC_FullList.setColumnWidth(2, 37)
-        self.ui.ATC_FullList.setColumnWidth(3, 180)
+        self.ui.ATC_FullList.setColumnWidth(3, 150)
         self.ui.ATC_FullList.setColumnWidth(4, 70)
         self.ui.ATC_FullList.setColumnWidth(5, 128)
+        self.ui.ATC_FullList.setColumnWidth(6, 180)
         self.ui.ATC_FullList.setColumnWidth(8, 40)
         self.ui.ATCtableWidget.setColumnWidth(1, 70)
         self.ui.ATCtableWidget.setColumnWidth(2, 60)
         self.ui.ATCtableWidget.setColumnWidth(3, 240)
-        self.ui.ATCtableWidget.setColumnWidth(4, 110)
+        self.ui.ATCtableWidget.setColumnWidth(4, 150)
         self.ui.ATCtableWidget.setColumnWidth(5, 108)
         self.ui.ATCtableWidget.setColumnWidth(6, 110)
         self.ui.SearchtableWidget.setColumnWidth(0, 50)
@@ -213,10 +214,10 @@ class Main(QMainWindow):
                 , "9":"CFC - Commercial Flight Captain", "10":"CSC - Commercial Senior Captain" \
                 , "11":"SUP - Supervisor", "12":"ADM - Administrator"}
 
-        self.rating_atc = {"0":"OBS - Observer", "2":"S1 - Student 1", "3":"S2 - Student 2" \
-                      , "4":"S3 - Student 3", "5":"C1 - Controller 1", "6":"C2 - Controller 2" \
-                      , "7":"C3 - Controller 3", "8":"I1 - Instructor 1", "9":"I2 - Instructor 2" \
-                      , "10":"I3 - Instructor 3", "11":"SUP - Supervisor", "12":"ADM - Administrator"}
+        self.rating_atc = {"0":"OBS - Observer", "2":"ATC Applicant", "3":"ATC Trainee" \
+                      , "4":"Advanced ATC Trainee", "5":"Aerodrome Controller", "6":"Approach Controller" \
+                      , "7":"Center Controller", "8":"Senior Controller", "9":"Senior ATC Instructor" \
+                      , "10":"Chief ATC Instructor", "11":"SUP - Supervisor", "12":"ADM - Administrator"}
 
         self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
                         , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
@@ -1176,8 +1177,8 @@ class Main(QMainWindow):
                 diff = datetime.datetime.utcnow() - start_connected
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.ATCtableWidget.setItem(startrow_atc, 6, col_time)
-                qApp.processEvents()
                 startrow_atc += 1
+            #qApp.processEvents()
 
             for row_pilot in rows_pilots:
                 self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
@@ -1248,7 +1249,7 @@ class Main(QMainWindow):
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 9, col_time)
                 startrow_pilot += 1
-                qApp.processEvents()
+            #qApp.processEvents()
 
             for inbound in InboundTrafficAirport:
                 self.ui.InboundTableWidget.insertRow(self.ui.InboundTableWidget.rowCount())
@@ -1304,12 +1305,13 @@ class Main(QMainWindow):
                 col_country = QTableWidgetItem(col_city, 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 4, col_country)
                 if  flagCodePath_orig == flagCodePath_dest:
-                    status_flight = 'National'
+                    status_flight = 'Domestic'
                 else:
                     status_flight = 'International'
                 col_flight = QTableWidgetItem(status_flight, 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 5, col_flight)
                 startrow_in += 1
+            #qApp.processEvents()
 
             for outbound in OutboundTrafficAirport:
                 self.ui.OutboundTableWidget.insertRow(self.ui.OutboundTableWidget.rowCount())
@@ -1365,13 +1367,13 @@ class Main(QMainWindow):
                 col_country = QTableWidgetItem(col_city, 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 4, col_country)
                 if  flagCodePath_orig == flagCodePath_dest:
-                    status_flight = 'National'
+                    status_flight = 'Domestic'
                 else:
                     status_flight = 'International'
                 col_flight = QTableWidgetItem(status_flight, 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 5, col_flight)
                 startrow_out += 1
-            qApp.processEvents()
+        qApp.processEvents()
         self.ui.PilottableWidget.setCurrentCell(-1, -1)
         self.ui.ATCtableWidget.setCurrentCell(-1, -1)
 
