@@ -33,11 +33,11 @@ import StringIO
 '''Importing the libraries from modules directory'''
 from modules import MainWindow_UI
 from modules import Pilots
-from modules import BeautifulSoup
 from modules import SQL_queries
 from modules import Controllers
 from modules import FOLME
 from modules import StatusFlight
+from modules import Schedule
 import Settings
 
 try:
@@ -319,9 +319,13 @@ class Main(QMainWindow):
             startrow_dbt2 += 1
 
         qApp.processEvents()
-        self.statusBar().showMessage('Showing friends list', 2000)
+        self.statusBar().showMessage('Loading friends list', 2000)
+        qApp.processEvents()
         self.ivao_friend()
         self.country_view()
+        self.statusBar().showMessage('Loading Schedule', 4000)
+        qApp.processEvents()
+        self.show_TabSched()
         qApp.restoreOverrideCursor()
 
     def connect(self):
@@ -510,150 +514,14 @@ class Main(QMainWindow):
         self.show_tables()
         self.ivao_friend()
 
-    def Scheduling(self):
-        '''This part is very slowly yet, because i can't access directly to IVAO db to download schedule, 
-           so I have to parse the URLs where users can see the schedule for controllers and pilots on IVAO website,
-           now is made using BeautifulSoup, but I guess with other tool to parse like lxml, can check if 
-           is more faster or not'''
-        config = ConfigParser.RawConfigParser()
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
-        config.read(config_file)
-        self.statusBar().showMessage('Events schedule for Controllers ...', 2000)
-        qApp.processEvents()
-        self.SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc'))
-        self.soup_atc = BeautifulSoup.BeautifulSoup(self.SchedATC_URL)
-        self.statusBar().showMessage('Events schedule for Flights ...', 2000)
-        qApp.processEvents()
-        self.SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_flights'))
-        self.soup_flights = BeautifulSoup.BeautifulSoup(self.SchedFlights_URL)
-        ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-        ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
-        ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-        
-        table_atc = self.soup_atc.find("table")
-        table_rows = table_atc.findAll('tr')
-        while self.ui.SchedulingATC.rowCount () > 0:
-            self.ui.SchedulingATC.removeRow(0)
-        startrow = 0
-        for line_atc_table in table_rows[1:]:
-            columns = [col.find(text=True) for col in line_atc_table.findAll('td')]
-            self.ui.SchedulingATC.insertRow(self.ui.SchedulingATC.rowCount())
-            col_Name = QTableWidgetItem(str(columns[1]).decode('latin-1'), 0)
-            self.ui.SchedulingATC.setItem(startrow, 2, col_Name)
-            col_Position = QTableWidgetItem(str(columns[3]), 0)
-            self.ui.SchedulingATC.setItem(startrow, 3, col_Position)
-            col_StartTime = QTableWidgetItem(str(columns[4]), 0)
-            self.ui.SchedulingATC.setItem(startrow, 4, col_StartTime)
-            col_EndTime = QTableWidgetItem(str(columns[5]), 0)
-            self.ui.SchedulingATC.setItem(startrow, 5, col_EndTime)
-            col_Voice = QTableWidgetItem(str(columns[6]), 0)
-            self.ui.SchedulingATC.setItem(startrow, 6, col_Voice)
-            col_Training = QTableWidgetItem(str(columns[7]), 0)
-            self.ui.SchedulingATC.setItem(startrow, 7, col_Training)
-            col_Event = QTableWidgetItem(str(columns[8]), 0)
-            self.ui.SchedulingATC.setItem(startrow, 8, col_Event)
-            try:
-                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(columns[3][:4]),))
-                country = Q_db.fetchone()
-                if country is None:
-                    Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(columns[3][:4]),))
-                    country = Q_db.fetchone()
-                col_Country = QTableWidgetItem(str(country[0]), 0)
-                self.ui.SchedulingATC.setItem(startrow, 1, col_Country)
-                flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
-                Pixmap = QPixmap(flagCodePath)
-                flag_country = QLabel()
-                flag_country.setPixmap(Pixmap)
-                self.ui.SchedulingATC.setCellWidget(startrow, 0, flag_country)
-            except:
-                pass
-            startrow += 1
-            qApp.processEvents()
-
-        table_flights = self.soup_flights.find("table")
-        table_rows = table_flights.findAll('tr')
-        while self.ui.SchedulingFlights.rowCount () > 0:
-            self.ui.SchedulingFlights.removeRow(0)
-        startrow = 0
-        for line_flights_table in table_rows[2:]:
-            columns = [col.find(text=True) for col in line_flights_table.findAll('td')]
-            self.ui.SchedulingFlights.insertRow(self.ui.SchedulingFlights.rowCount())
-            code_airline = columns[4][:3]
-            airlineCodePath = (ImageAirlines + '/%s.gif') % code_airline
-            try:
-                if os.path.exists(airlineCodePath) is True:
-                    Pixmap = QPixmap(airlineCodePath)
-                    airline = QLabel(self)
-                    airline.setPixmap(Pixmap)
-                    self.ui.SchedulingFlights.setCellWidget(startrow, 0, airline)
-                else:
-                    code_airline = str(inbound[0])
-                    col_airline = QTableWidgetItem(code_airline, 0)
-                    self.ui.SchedulingFlights.setItem(startrow, 0, col_airline)
-            except:
-                pass
-            col_Callsign = QTableWidgetItem(str(columns[4]), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 1, col_Callsign)
-            col_Name = QTableWidgetItem(str(columns[1]).decode('latin-1'), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 2, col_Name)
-            col_StartTime = QTableWidgetItem(str(columns[5]), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 3, col_StartTime)
-            col_Departure = QTableWidgetItem(str(columns[6]), 0)
-            try:
-                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(columns[6]),))
-                country = Q_db.fetchone()
-                if country is None:
-                    Q_db = SQL_queries.sql_query('Get_Country_from_FIR',  (str(columns[6]),))
-                    country = Q_db.fetchone()
-                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
-                Pixmap = QPixmap(flagCodePath)
-                flag_country = QLabel()
-                flag_country.setPixmap(Pixmap)
-                self.ui.SchedulingFlights.setCellWidget(startrow, 4, flag_country)
-            except:
-                pass
-            self.ui.SchedulingFlights.setItem(startrow, 5, col_Departure)
-            col_StartTime = QTableWidgetItem(str(columns[7]), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 6, col_StartTime)
-            col_Destination = QTableWidgetItem(str(columns[8]), 0)
-            try:
-                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(columns[8]),))
-                country = Q_db.fetchone()
-                if country is None:
-                    Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(columns[8]),))
-                    country = Q_db.fetchone()
-                flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
-            except:
-                pass
-            Pixmap = QPixmap(flagCodePath)
-            flag_country = QLabel()
-            flag_country.setPixmap(Pixmap)
-            self.ui.SchedulingFlights.setCellWidget(startrow, 7, flag_country)
-            self.ui.SchedulingFlights.setItem(startrow, 8, col_Destination)
-            col_EndTime = QTableWidgetItem(str(columns[9]), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 9, col_EndTime)
-            col_Altitude = QTableWidgetItem(str(columns[10]), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 10, col_Altitude)
-            col_CruisingSpeed = QTableWidgetItem(str(columns[11]), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 11, col_CruisingSpeed)
-            col_Route = QTableWidgetItem(str(columns[12]), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 12, col_Route)
-            col_Voice = QTableWidgetItem(str(columns[13]), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 13, col_Voice)
-            col_Training = QTableWidgetItem(str(columns[14]), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 14, col_Training)
-            col_Event = QTableWidgetItem(str(columns[15]), 0)
-            self.ui.SchedulingFlights.setItem(startrow, 15, col_Event)
-            startrow += 1
-            qApp.processEvents()
-        self.statusBar().showMessage('Done!', 2000)
-
     def show_tables(self):
         '''Here show all data into PILOT and CONTROLLER full list'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
+        ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+        ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+        ImageRatings = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
         self.statusBar().showMessage('Populating Controllers and Pilots', 10000)
         #self.progress.show()
         pilots_ivao = atcs_ivao = obs_ivao = 0
@@ -707,9 +575,8 @@ class Main(QMainWindow):
                     self.ui.ATC_FullList.setColumnWidth(2, 60)
                     col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
                     self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
-                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
-                    flagCodePath = (image_flag + '/ivao_member.png')
-                    Pixmap = QPixmap(flagCodePath)
+                    ImageIVAO = (os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images') + '/ivao_member.png')
+                    Pixmap = QPixmap(ImageIVAO)
                     flag_country = QLabel()
                     flag_country.setPixmap(Pixmap)
                     self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
@@ -722,8 +589,7 @@ class Main(QMainWindow):
                     if row_atc is None or div_ivao is None:
                         self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
                     else:
-                        image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                        flagCodePath = (image_flag + '/%s.png') % str(div_ivao[0])
+                        flagCodePath = (ImageFlags + '/%s.png') % str(div_ivao[0])
                         col_callsign = QTableWidgetItem(str(row_atc[0]), 0)
                         self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
                         Pixmap = QPixmap(flagCodePath)
@@ -742,8 +608,7 @@ class Main(QMainWindow):
                             division = Q_db.fetchone()
                             Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(division[0]),))
                             flagCode = Q_db.fetchone()
-                        image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                        flagCodePath = (image_flag + '/%s.png') % flagCode
+                        flagCodePath = (ImageFlags + '/%s.png') % flagCode
                         if os.path.exists(flagCodePath) is True:
                             Pixmap = QPixmap(flagCodePath)
                             flag_country = QLabel()
@@ -772,8 +637,7 @@ class Main(QMainWindow):
                 col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
                 self.ui.ATC_FullList.setItem(startrow, 5, col_realname)
                 code_atc_rating = row_atc[3]
-                ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
-                ratingImagePath = ImagePath + '/atc_level%d.gif' % int(code_atc_rating)
+                ratingImagePath = ImageRatings + '/atc_level%d.gif' % int(code_atc_rating)
                 try:
                     if os.path.exists(ratingImagePath) is True:
                         Pixmap = QPixmap(ratingImagePath)
@@ -810,8 +674,7 @@ class Main(QMainWindow):
         for followservice in vehicles:
             self.ui.PILOT_FullList.setCurrentCell(0, 0)
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
-            image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images')
-            followmeCodePath = (image_airlines + '/ZZZZ.png')
+            followmeCodePath = (ImageAirlines + '/ZZZZ.png')
             Pixmap = QPixmap(followmeCodePath)
             FMC_img = QLabel(self)
             FMC_img.setPixmap(Pixmap)
@@ -825,8 +688,7 @@ class Main(QMainWindow):
             col_rating = QTableWidgetItem(str(self.rating_pilot[followservice[1]]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)
             code_pilot_rating = followservice[1]
-            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
-            ratingImagePath = ImagePath + '/pilot_level%d.gif' % int(code_pilot_rating)
+            ratingImagePath = ImageRatings + '/pilot_level%d.gif' % int(code_pilot_rating)
             try:
                 if os.path.exists(ratingImagePath) is True:
                     Pixmap = QPixmap(ratingImagePath)
@@ -858,8 +720,7 @@ class Main(QMainWindow):
         for row_pilot in rows_pilots:
             self.ui.PILOT_FullList.insertRow(self.ui.PILOT_FullList.rowCount())
             code_airline = row_pilot[0][:3]
-            image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
-            airlineCodePath = (image_airlines + '/%s.gif') % code_airline
+            airlineCodePath = (ImageAirlines + '/%s.gif') % code_airline
             try:
                 if os.path.exists(airlineCodePath) is True:
                     Pixmap = QPixmap(airlineCodePath)
@@ -891,8 +752,7 @@ class Main(QMainWindow):
             col_rating = QTableWidgetItem(str(self.rating_pilot[row_pilot[2]]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 4, col_rating)
             code_pilot_rating = row_pilot[2]
-            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
-            ratingImagePath = ImagePath + '/pilot_level%d.gif' % int(code_pilot_rating)
+            ratingImagePath = ImageRatings + '/pilot_level%d.gif' % int(code_pilot_rating)
             try:
                 if os.path.exists(ratingImagePath) is True:
                     Pixmap = QPixmap(ratingImagePath)
@@ -938,9 +798,10 @@ class Main(QMainWindow):
         country_selected = self.ui.country_list.currentText()
         Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(country_selected),))
         flagCode = Q_db.fetchone()
-
-        image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-        flagCodePath = (image_flag + '/%s.png') % country_selected
+        ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+        ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+        ImageRatings = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
+        flagCodePath = (ImageFlags + '/%s.png') % country_selected
         Pixmap = QPixmap(flagCodePath)
         self.ui.flagIcon.setPixmap(Pixmap)
         Q_db = SQL_queries.sql_query('Get_ICAO_from_Country', (str(country_selected),))
@@ -992,8 +853,7 @@ class Main(QMainWindow):
                 col_realname = QTableWidgetItem(str(row_atc[2].encode('latin-1')), 0)
                 self.ui.ATCtableWidget.setItem(startrow_atc, 3, col_realname)
                 code_atc_rating = row_atc[3]
-                ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
-                ratingImagePath = ImagePath + '/atc_level%d.gif' % int(code_atc_rating)
+                ratingImagePath = ImageRatings + '/atc_level%d.gif' % int(code_atc_rating)
                 try:
                     if os.path.exists(ratingImagePath) is True:
                         Pixmap = QPixmap(ratingImagePath)
@@ -1023,8 +883,7 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
 
                 code_airline = row_pilot[0][:3]
-                image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
-                airlineCodePath = (image_airlines + '/%s.gif') % code_airline
+                airlineCodePath = (ImageAirlines + '/%s.gif') % code_airline
                 try:
                     if os.path.exists(airlineCodePath) is True:
                         Pixmap = QPixmap(airlineCodePath)
@@ -1060,8 +919,7 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_pilot, 4, col_rating)
 
                 code_pilot_rating = row_pilot[2]
-                ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
-                ratingImagePath = ImagePath + '/pilot_level%d.gif' % int(code_pilot_rating)
+                ratingImagePath = ImageRatings + '/pilot_level%d.gif' % int(code_pilot_rating)
                 try:
                     if os.path.exists(ratingImagePath) is True:
                         Pixmap = QPixmap(ratingImagePath)
@@ -1095,8 +953,7 @@ class Main(QMainWindow):
                 col_callsign = QTableWidgetItem(str(inbound[0]), 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 0, col_callsign)
                 code_airline = inbound[0][:3]
-                image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
-                airlineCodePath = (image_airlines + '/%s.gif') % code_airline
+                airlineCodePath = (ImageAirlines + '/%s.gif') % code_airline
                 try:
                     if os.path.exists(airlineCodePath) is True:
                         Pixmap = QPixmap(airlineCodePath)
@@ -1111,8 +968,7 @@ class Main(QMainWindow):
                     pass
                 Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(inbound[1]),))
                 flagCode = Q_db.fetchone()
-                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                flagCodePath_orig = (image_flag + '/%s.png') % flagCode
+                flagCodePath_orig = (ImageFlags + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_orig)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
@@ -1128,8 +984,7 @@ class Main(QMainWindow):
                 self.ui.InboundTableWidget.setItem(startrow_in, 2, col_country)
                 Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(inbound[2]),))
                 flagCode = Q_db.fetchone()
-                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                flagCodePath_dest = (image_flag + '/%s.png') % flagCode
+                flagCodePath_dest = (ImageFlags + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_dest)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
@@ -1157,8 +1012,7 @@ class Main(QMainWindow):
                 col_callsign = QTableWidgetItem(str(outbound[0]), 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 0, col_callsign)
                 code_airline = outbound[0][:3]
-                image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
-                airlineCodePath = (image_airlines + '/%s.gif') % code_airline
+                airlineCodePath = (ImageAirlines + '/%s.gif') % code_airline
                 try:
                     if os.path.exists(airlineCodePath) is True:
                         Pixmap = QPixmap(airlineCodePath)
@@ -1173,8 +1027,7 @@ class Main(QMainWindow):
                     pass
                 Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(outbound[1]),))
                 flagCode = Q_db.fetchone()
-                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                flagCodePath_orig = (image_flag + '/%s.png') % flagCode
+                flagCodePath_orig = (ImageFlags + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_orig)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
@@ -1190,8 +1043,7 @@ class Main(QMainWindow):
                 self.ui.OutboundTableWidget.setItem(startrow_out, 2, col_country)
                 Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(outbound[2]),))
                 flagCode = Q_db.fetchone()
-                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                flagCodePath_dest = (image_flag + '/%s.png') % flagCode
+                flagCodePath_dest = (ImageFlags + '/%s.png') % flagCode
                 Pixmap = QPixmap(flagCodePath_dest)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
@@ -1246,6 +1098,7 @@ class Main(QMainWindow):
             self.ui.SearchtableWidget.setItem(startrow, 0, col_vid)
             col_callsign = QTableWidgetItem(str(row[1]), 0)
             self.ui.SearchtableWidget.setItem(startrow, 1, col_callsign)
+            ImageRatings = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
             if row[4] == 'PILOT':
                 col_realname = QTableWidgetItem(str(row[2][:-4].encode('latin-1')), 0)
                 self.ui.SearchtableWidget.setItem(startrow, 2, col_realname)
@@ -1254,9 +1107,8 @@ class Main(QMainWindow):
                 col_realname = QTableWidgetItem(str(row[2].encode('latin-1')), 0)
                 self.ui.SearchtableWidget.setItem(startrow, 2, col_realname)
                 player = 'atc_level'
-            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
             try:
-                ratingImagePath = ImagePath + '/%s%d.gif' % (player, int(row[3]))
+                ratingImagePath = ImageRatings + '/%s%d.gif' % (player, int(row[3]))
                 if os.path.exists(ratingImagePath) is True:
                     Pixmap = QPixmap(ratingImagePath)
                     ratingImage = QLabel(self)
@@ -1416,6 +1268,7 @@ class Main(QMainWindow):
         cursor = connection.cursor()
         cursor.execute('SELECT vid, realname, rating, clienttype FROM friends_ivao;')
         roster = cursor.fetchall()
+        ImageRatings = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
         self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
         while self.ui.FriendstableWidget.rowCount () > 0:
             self.ui.FriendstableWidget.removeRow(0)
@@ -1445,12 +1298,11 @@ class Main(QMainWindow):
                 roster_row += 1
             col_realname = QTableWidgetItem(str(row[1].encode('latin-1')), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
-            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
             if str(row[2]) != '-':
                 if str(row[3]) == 'ATC':
-                    ratingImagePath = ImagePath + '/atc_level%d.gif' % int(row[2])
+                    ratingImagePath = ImageRatings + '/atc_level%d.gif' % int(row[2])
                 else:
-                    ratingImagePath = ImagePath + '/pilot_level%d.gif' % int(row[2])
+                    ratingImagePath = ImageRatings + '/pilot_level%d.gif' % int(row[2])
                 Pixmap = QPixmap(ratingImagePath)
                 ratingImage = QLabel(self)
                 ratingImage.setPixmap(Pixmap)
@@ -1971,6 +1823,8 @@ class Main(QMainWindow):
         database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
+        ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+        ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
         item = self.ui.comboBoxStatistics.currentIndex()
         qApp.processEvents()
 
@@ -2019,8 +1873,7 @@ class Main(QMainWindow):
                     continue
                 else:
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                    flagCodePath = (image_flag + '/%s.png') % country
+                    flagCodePath = (ImageFlags + '/%s.png') % country
                     if os.path.exists(flagCodePath) is True:
                         Pixmap = QPixmap(flagCodePath)
                         flag_country = QLabel()
@@ -2072,8 +1925,7 @@ class Main(QMainWindow):
                     continue
                 else:
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                    flagCodePath = (image_flag + '/%s.png') % country
+                    flagCodePath = (ImageFlags + '/%s.png') % country
                     if os.path.exists(flagCodePath) is True:
                         Pixmap = QPixmap(flagCodePath)
                         flag_country = QLabel()
@@ -2126,8 +1978,7 @@ class Main(QMainWindow):
                     continue
                 else:
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                    flagCodePath = (image_flag + '/%s.png') % country
+                    flagCodePath = (ImageFlags + '/%s.png') % country
                     if os.path.exists(flagCodePath) is True:
                         Pixmap = QPixmap(flagCodePath)
                         flag_country = QLabel()
@@ -2188,8 +2039,7 @@ class Main(QMainWindow):
                     continue
                 else:
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-                    image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                    flagCodePath = (image_flag + '/%s.png') % country
+                    flagCodePath = (ImageFlags + '/%s.png') % country
                     if os.path.exists(flagCodePath) is True:
                         Pixmap = QPixmap(flagCodePath)
                         flag_country = QLabel()
@@ -2223,8 +2073,7 @@ class Main(QMainWindow):
             for i in range(0, len(items)):
                 self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
                 code_airline = items[i][0]
-                image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
-                airlineCodePath = (image_airlines + '/%s.gif') % code_airline
+                airlineCodePath = (ImageAirlines + '/%s.gif') % code_airline
                 try:
                     if os.path.exists(airlineCodePath) is True:
                         Pixmap = QPixmap(airlineCodePath)
@@ -2532,6 +2381,143 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
 
+    def Scheduling(self):
+        QMessageBox.information(None, 'Scheduling', 'This take a little time processing only when download occurs...')
+        self.statusBar().showMessage('Downloading Events for Controllers and Pilots...', 2000)
+        qApp.processEvents()
+        Schedule.Scheduling()
+        self.ui.tabWidget.setCurrentIndex(8)
+        self.show_TabSched()
+        self.statusBar().showMessage('Done!', 2000)
+        
+    def show_TabSched(self):
+        ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+        ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+
+        Q_db = SQL_queries.sql_query('Get_Schedule_ATC', None)
+        sched_atc = Q_db.fetchall()
+        
+        if len(sched_atc) > 0:
+            qApp.processEvents()
+            while self.ui.SchedulingATC.rowCount () > 0:
+                self.ui.SchedulingATC.removeRow(0)
+
+            startrow = 0
+            for atc_table in range(0, len(sched_atc)):
+                self.ui.SchedulingATC.insertRow(self.ui.SchedulingATC.rowCount())
+                col_Name = QTableWidgetItem(str(sched_atc[atc_table][0].encode('latin-1')), 0)
+                self.ui.SchedulingATC.setItem(startrow, 2, col_Name)
+                col_Position = QTableWidgetItem(sched_atc[atc_table][1], 0)
+                self.ui.SchedulingATC.setItem(startrow, 3, col_Position)
+                col_StartTime = QTableWidgetItem(str(sched_atc[atc_table][2]), 0)
+                self.ui.SchedulingATC.setItem(startrow, 4, col_StartTime)
+                col_EndTime = QTableWidgetItem(str(sched_atc[atc_table][3]), 0)
+                self.ui.SchedulingATC.setItem(startrow, 5, col_EndTime)
+                col_Voice = QTableWidgetItem(str(sched_atc[atc_table][4]), 0)
+                self.ui.SchedulingATC.setItem(startrow, 6, col_Voice)
+                col_Training = QTableWidgetItem(str(sched_atc[atc_table][5]), 0)
+                self.ui.SchedulingATC.setItem(startrow, 7, col_Training)
+                col_Event = QTableWidgetItem(str(sched_atc[atc_table][6]), 0)
+                self.ui.SchedulingATC.setItem(startrow, 8, col_Event)
+                try:
+                    Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(sched_atc[atc_table][1][:4]),))
+                    country = Q_db.fetchone()
+                    if country is None:
+                        Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(sched_atc[atc_table][1][:4]),))
+                        country = Q_db.fetchone()
+                    col_Country = QTableWidgetItem(str(country[0]), 0)
+                    self.ui.SchedulingATC.setItem(startrow, 1, col_Country)
+                    flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
+                    Pixmap = QPixmap(flagCodePath)
+                    flag_country = QLabel()
+                    flag_country.setPixmap(Pixmap)
+                    self.ui.SchedulingATC.setCellWidget(startrow, 0, flag_country)
+                except:
+                    pass
+                startrow += 1
+        qApp.processEvents()
+
+        Q_db = SQL_queries.sql_query('Get_Schedule_Flights')
+        sched_pilots = Q_db.fetchall()
+        
+        if len(sched_pilots) > 0:
+            qApp.processEvents()
+            while self.ui.SchedulingFlights.rowCount () > 0:
+                self.ui.SchedulingFlights.removeRow(0)
+    
+            startrow = 0
+            for flights_table in range(0, len(sched_pilots)):
+                self.ui.SchedulingFlights.insertRow(self.ui.SchedulingFlights.rowCount())
+                code_Airline = sched_pilots[flights_table][0][:3]
+                airlinePath = (ImageAirlines + '/%s.gif') % code_Airline
+                try:
+                    if os.path.exists(airlinePath) is True:
+                        Pixmap = QPixmap(airlinePath)
+                        airline = QLabel(self)
+                        airline.setPixmap(Pixmap)
+                        self.ui.SchedulingFlights.setCellWidget(startrow, 0, airline)
+                    else:
+                        code_airline = str(inbound[0])
+                        col_airline = QTableWidgetItem(code_airline, 0)
+                        self.ui.SchedulingFlights.setItem(startrow, 0, col_airline)
+                except:
+                    pass
+                col_Callsign = QTableWidgetItem(str(sched_pilots[flights_table][0]), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 1, col_Callsign)
+                col_Name = QTableWidgetItem(str(sched_pilots[flights_table][1].encode('latin-1')), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 2, col_Name)
+                col_Airplane = QTableWidgetItem(str(sched_pilots[flights_table][2]), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 3, col_Airplane)
+                col_Departure = QTableWidgetItem(str(sched_pilots[flights_table][3]), 0)
+                try:
+                    Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(sched_pilots[flights_table][3]),))
+                    country = Q_db.fetchone()
+                    if country is None:
+                        Q_db = SQL_queries.sql_query('Get_Country_from_FIR',  (str(sched_pilots[flights_table][3]),))
+                        country = Q_db.fetchone()
+                    flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
+                    Pixmap = QPixmap(flagCodePath)
+                    flag_country = QLabel()
+                    flag_country.setPixmap(Pixmap)
+                    self.ui.SchedulingFlights.setCellWidget(startrow, 4, flag_country)
+                except:
+                    pass
+                self.ui.SchedulingFlights.setItem(startrow, 5, col_Departure)
+                col_StartTime = QTableWidgetItem(str(sched_pilots[flights_table][4]), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 6, col_StartTime)
+                col_Destination = QTableWidgetItem(str(sched_pilots[flights_table][5]), 0)
+                try:
+                    Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(sched_pilots[flights_table][5]),))
+                    country = Q_db.fetchone()
+                    if country is None:
+                        Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(sched_pilots[flights_table][5]),))
+                        country = Q_db.fetchone()
+                    flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
+                except:
+                    pass
+                Pixmap = QPixmap(flagCodePath)
+                flag_country = QLabel()
+                flag_country.setPixmap(Pixmap)
+                self.ui.SchedulingFlights.setCellWidget(startrow, 7, flag_country)
+                self.ui.SchedulingFlights.setItem(startrow, 8, col_Destination)
+                col_EndTime = QTableWidgetItem(str(sched_pilots[flights_table][6]), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 9, col_EndTime)
+                col_Altitude = QTableWidgetItem(str(sched_pilots[flights_table][7]), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 10, col_Altitude)
+                col_CruisingSpeed = QTableWidgetItem(str(sched_pilots[flights_table][8]), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 11, col_CruisingSpeed)
+                col_Route = QTableWidgetItem(str(sched_pilots[flights_table][9]), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 12, col_Route)
+                col_Voice = QTableWidgetItem(str(sched_pilots[flights_table][10]), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 13, col_Voice)
+                col_Training = QTableWidgetItem(str(sched_pilots[flights_table][11]), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 14, col_Training)
+                col_Event = QTableWidgetItem(str(sched_pilots[flights_table][12]), 0)
+                self.ui.SchedulingFlights.setItem(startrow, 15, col_Event)
+                startrow += 1
+        self.statusBar().showMessage('Done!', 2000)
+        qApp.processEvents()
+    
 def main():
     import sys, time, os
     '''Next line is for set only exact theme with Qt libraries to the app'''
