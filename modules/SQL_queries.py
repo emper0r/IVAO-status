@@ -146,3 +146,129 @@ def sql_query(args=None, var=None):
         connection.commit()
         return
     return Q_db
+
+def update_db(pilots, controllers, vehicles):
+    '''This function insert the data got it in memory downloaded from IVAO to parse the players for controllers, 
+       pilots, and FMC to insert into database, separate by field ':' as NOTAM and Logistic explain what field means'''
+    config = ConfigParser.RawConfigParser()
+    config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Config.cfg')
+    config.read(config_file)
+    database = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../database', config.get('Database', 'db'))
+    connection = sqlite3.connect(database)
+    cursor = connection.cursor()
+    cursor.execute("BEGIN TRANSACTION;")
+    cursor.execute("DELETE FROM status_ivao;")
+
+    for rows in pilots:
+        fields = rows.split(":")
+        callsign = fields[0]
+        vid = fields[1]
+        realname = rows.rsplit(":")[2].decode('latin-1')
+        clienttype = fields[3]
+        latitude = fields[5]
+        longitude = fields[6]
+        altitude = fields[7]
+        groundspeed = fields[8]
+        planned_aircraft = fields[9]
+        planned_tascruise = fields[10]
+        planned_depairport = fields[11]
+        planned_altitude = fields[12]
+        planned_destairport = fields[13]
+        server = fields[14]
+        protrevision = fields[15]
+        rating = fields[16]
+        transponder = fields[17]
+        visualrange = fields[19]
+        planned_revision = fields[20]
+        planned_flighttype = fields[21]
+        planned_deptime = fields[22]
+        planned_actdeptime = fields[23]
+        planned_hrsenroute = fields[24]
+        planned_minenroute = fields[25]
+        planned_hrsfuel = fields[26]
+        planned_minfuel = fields[27]
+        planned_altairport = fields[28]
+        planned_remarks = fields[29]
+        planned_route = fields[30]
+        planned_depairport_lat = fields[31]
+        planned_depairport_lon = fields[32]
+        planned_destairport_lat = fields[33]
+        planned_destairport_lon = fields[34]
+        time_last_atis_received = fields[36]
+        time_connected = fields[37]
+        client_software_name = fields[38]
+        client_software_version = fields[39]
+        adminrating = fields[40]
+        atc_or_pilotrating = fields[41]
+        planned_altairport2 = fields[42]
+        planned_typeofflight = fields[43]
+        planned_pob = fields[44]
+        true_heading = fields[45]
+        onground = fields[46]
+        cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, clienttype \
+        , latitude, longitude, altitude, groundspeed, planned_aircraft, planned_tascruise \
+        , planned_depairport, planned_altitude, planned_destairport, server, protrevision \
+        , rating, transponder, visualrange, planned_revision, planned_flighttype \
+        , planned_deptime, planned_actdeptime, planned_hrsenroute, planned_minenroute, planned_hrsfuel \
+        , planned_minfuel, planned_altairport, planned_remarks, planned_route, planned_depairport_lat \
+        , planned_depairport_lon, planned_destairport_lat, planned_destairport_lon \
+        , time_last_atis_received, time_connected, client_software_name, client_software_version \
+        , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
+        , onground) \
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", \
+        (callsign, vid, realname, clienttype, latitude, longitude, altitude, groundspeed, planned_aircraft \
+         , planned_tascruise, planned_depairport, planned_altitude, planned_destairport, server, protrevision \
+         , rating, transponder, visualrange, planned_revision, planned_flighttype \
+         , planned_deptime, planned_actdeptime, planned_hrsenroute, planned_minenroute, planned_hrsfuel \
+         , planned_minfuel, planned_altairport, planned_remarks, planned_route, planned_depairport_lat \
+         , planned_depairport_lon, planned_destairport_lat, planned_destairport_lon \
+         , time_last_atis_received, time_connected, client_software_name, client_software_version \
+         , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
+         , onground))
+    connection.commit()
+
+    for rows in controllers:
+        fields = rows.split(":")
+        callsign = fields[0]
+        vid = fields[1]
+        realname = rows.rsplit(":")[2].decode('latin-1')
+        clienttype = fields[3]
+        frequency = fields[4]
+        latitude = fields[5]
+        longitude = fields[6]
+        altitude = fields[7]
+        server = fields[14]
+        protrevision = fields[15]
+        rating = fields[16]
+        facilitytype = fields[18]
+        visualrange = fields[19]
+        atis_message = fields[35].decode('latin-1')
+        time_last_atis_received = fields[36]
+        time_connected = fields[37]
+        client_software_name = fields[38]
+        client_software_version = fields[39]
+        adminrating = fields[40]
+        atc_or_atcrating = fields[41]
+
+        cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, clienttype, frequency \
+        , latitude, longitude, altitude, server, protrevision, rating, facilitytype, visualrange \
+        , time_last_atis_received, time_connected, client_software_name, client_software_version \
+        , adminrating, atc_or_pilotrating, atis_message) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", \
+        (callsign, vid, realname, clienttype, frequency, latitude, longitude, altitude, server \
+         , protrevision, rating, facilitytype, visualrange, time_last_atis_received, time_connected \
+         , client_software_name, client_software_version, adminrating, atc_or_pilotrating, atis_message))
+    connection.commit()
+
+    for row in vehicles:
+        fields = rows.split(":")
+        callsign = fields[0]
+        vid = fields[1]
+        realname = rows.rsplit(":")[2].decode('latin-1')
+        clienttype = fields[3]
+        server = fields[14]
+        time_connected = fields[37]
+
+        cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, clienttype, server, time_connected) VALUES (?,?,?,?,?,?);", \
+                   (callsign, vid, realname, clienttype, server, time_connected))
+    connection.commit()
+    return 
