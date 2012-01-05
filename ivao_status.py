@@ -31,13 +31,13 @@ import time
 import StringIO
 
 '''Importing the libraries from modules directory'''
-from modules import distance
 from modules import MainWindow_UI
-from modules import PilotInfo_UI
+from modules import Pilots
 from modules import BeautifulSoup
 from modules import SQL_queries
 from modules import Controllers
 from modules import FOLME
+from modules import StatusFlight
 import Settings
 
 try:
@@ -526,7 +526,10 @@ class Main(QMainWindow):
         qApp.processEvents()
         self.SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_flights'))
         self.soup_flights = BeautifulSoup.BeautifulSoup(self.SchedFlights_URL)
-
+        ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+        ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
+        ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
+        
         table_atc = self.soup_atc.find("table")
         table_rows = table_atc.findAll('tr')
         while self.ui.SchedulingATC.rowCount () > 0:
@@ -557,8 +560,7 @@ class Main(QMainWindow):
                     country = Q_db.fetchone()
                 col_Country = QTableWidgetItem(str(country[0]), 0)
                 self.ui.SchedulingATC.setItem(startrow, 1, col_Country)
-                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
+                flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
                 Pixmap = QPixmap(flagCodePath)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
@@ -577,8 +579,7 @@ class Main(QMainWindow):
             columns = [col.find(text=True) for col in line_flights_table.findAll('td')]
             self.ui.SchedulingFlights.insertRow(self.ui.SchedulingFlights.rowCount())
             code_airline = columns[4][:3]
-            image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
-            airlineCodePath = (image_airlines + '/%s.gif') % code_airline
+            airlineCodePath = (ImageAirlines + '/%s.gif') % code_airline
             try:
                 if os.path.exists(airlineCodePath) is True:
                     Pixmap = QPixmap(airlineCodePath)
@@ -622,8 +623,7 @@ class Main(QMainWindow):
                 if country is None:
                     Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(columns[8]),))
                     country = Q_db.fetchone()
-                image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                flagCodePath = (image_flag + '/%s.png') % (str(country[0]))
+                flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
             except:
                 pass
             Pixmap = QPixmap(flagCodePath)
@@ -648,65 +648,6 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
         self.statusBar().showMessage('Done!', 2000)
-
-    def status_plane(self, callsign):
-        '''This function is to get the action of the Pilot but for now I try to show using percent and
-           some ground speeds of the track. I'm pretty sure with more check VARS can better this part'''
-        Q_db = SQL_queries.sql_query('Get_Status', (str(callsign),))
-        get_status = Q_db.fetchone()
-        status = '-'
-        for row_pilot in get_status:
-            try:
-                Q_db = SQL_queries.sql_query('Get_City', (str(get_status[2]),))
-                city_orig = Q_db.fetchone()
-                city_orig_point = float(city_orig[1]), float(city_orig[2])
-                Q_db = SQL_queries.sql_query('Get_City', (str(get_status[3]),))
-                city_dest = Q_db.fetchone()
-                city_dest_point = float(city_dest[1]), float(city_dest[2])
-                pilot_position = get_status[8], get_status[9]
-                total_miles = distance.distance(city_orig_point, city_dest_point).miles
-                dist_traveled = distance.distance(city_orig_point, pilot_position).miles
-                percent = (float(dist_traveled) / float(total_miles)) * 100.0
-
-                if percent > 105 :
-                    status = 'Diverted'
-                    return status
-                else:
-                    if int(str(get_status[4])) == 0:
-                        if (percent >= 0.0) and (percent <= 2.0):
-                            status = 'Takeoff'
-                        if (percent >= 2.0) and (percent <= 7.0):
-                            status = 'Initial Climbing'
-                        if (percent >= 7.0) and (percent <= 10.0):
-                            status = 'Climbing'
-                        if (percent >= 10.0) and (percent <= 80.0):
-                            status = 'On Route'
-                        if (percent >= 80.0) and (percent <= 90.0):
-                            status = 'Descending'
-                        if (percent >= 90.0) and (percent <= 97.0):
-                            status = 'Initial Approach'
-                        if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 360) and (get_status[6] >= 30))):
-                            status = 'Final Approach'
-                        return status
-                    else:
-                        if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 1.0):
-                            status = 'Departing'
-                        if (get_status[6] > 30) and (get_status[6] < 150) and (percent < 1.0):
-                            status = 'Takeoff'
-                        if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 270) and (get_status[6] >= 30))):
-                            status = 'Landed'
-                        if (get_status[6] < 30) and (percent > 99.0):
-                            status = 'Taxing to Gate'
-                        if (get_status[6] == 0) and (percent > 99.0):
-                            status = 'On Blocks'
-                        if (get_status[6] == 0) and (percent <= 1.0):
-                            status = 'Boarding'
-                        if (get_status[6] == 0) and (percent >= 10.0 and percent <= 90.0):
-                            status = 'Altern Airport'
-                        return status
-            except:
-                status = 'Fill Flight Plan'
-                return status
 
     def show_tables(self):
         '''Here show all data into PILOT and CONTROLLER full list'''
@@ -967,9 +908,9 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 6, col_departure)
             col_destination = QTableWidgetItem(str(row_pilot[5]), 0)
             self.ui.PILOT_FullList.setItem(startrow, 7, col_destination)
-            status_plane = self.status_plane(row_pilot[0])
+            status_plane = StatusFlight.status_flight(row_pilot[0])
             col_status = QTableWidgetItem(str(status_plane), 0)
-            col_status.setForeground(QBrush(QColor(self.get_color(status_plane))))
+            col_status.setForeground(QBrush(QColor(StatusFlight.get_color(status_plane))))
             self.ui.PILOT_FullList.setItem(startrow, 8, col_status)
             start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]), int(str(row_pilot[6])[6:8]) \
                                 , int(str(row_pilot[6])[8:10]), int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
@@ -1136,10 +1077,10 @@ class Main(QMainWindow):
                 self.ui.PilottableWidget.setItem(startrow_pilot, 6, col_departure)
                 col_destination = QTableWidgetItem(str(row_pilot[5]), 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 7, col_destination)
-                status_plane = self.status_plane(row_pilot[0])
+                status_plane = StatusFlight.status_flight(row_pilot[0])
                 col_status = QTableWidgetItem(str(status_plane), 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 8, col_status)
-                col_status.setForeground(QBrush(QColor(self.get_color(status_plane))))
+                col_status.setForeground(QBrush(QColor(StatusFlight.get_color(status_plane))))
                 start_connected = datetime.datetime(int(str(row_pilot[6])[:4]), int(str(row_pilot[6])[4:6]) \
                                                     , int(str(row_pilot[6])[6:8]), int(str(row_pilot[6])[8:10]) \
                                                     , int(str(row_pilot[6])[10:12]), int(str(row_pilot[6])[12:14]))
@@ -1274,39 +1215,6 @@ class Main(QMainWindow):
         qApp.processEvents()
         self.ui.PilottableWidget.setCurrentCell(-1, -1)
         self.ui.ATCtableWidget.setCurrentCell(-1, -1)
-
-    def get_color(self, status_plane):
-        '''This function is implemented with status_plane'''
-        color = 'black'
-        if status_plane == 'Boarding':
-            color = 'green'
-        if status_plane == 'Departing':
-            color = 'green'
-        if status_plane == 'Takeoff':
-            color = 'dark cyan'
-        if status_plane == 'Initial Climbing':
-            color = 'dark cyan'
-        if status_plane == 'Climbing':
-            color = 'blue'
-        if status_plane == 'On Route':
-            color = 'dark blue'
-        if status_plane == 'Descending':
-            color = 'blue'
-        if status_plane == 'Initial Approach':
-            color = 'orange'
-        if status_plane == 'Final Approach':
-            color = 'orange'
-        if status_plane == 'Landed':
-            color = 'red'
-        if status_plane == 'Taxing to Gate':
-            color = 'dark magenta'
-        if status_plane == 'On Blocks':
-            color = 'dark red'
-        if status_plane == 'Fill Flight Plan':
-            color = 'black'
-        if status_plane == 'Diverted':
-            color = 'dark gray'
-        return color
 
     def search_button(self):
         '''Here can search by VID, Callsign or Player Name in MainTab'''
@@ -1815,7 +1723,7 @@ class Main(QMainWindow):
 
     def show_pilot_info(self, callsign):
         '''Here call the Pilot Class'''
-        self.pilot_window = PilotInfo()
+        self.pilot_window = Pilots.PilotInfo()
         self.pilot_window.status(callsign)
         self.pilot_window.closed.connect(self.show)
         self.pilot_window.show()
@@ -2623,146 +2531,6 @@ class Main(QMainWindow):
             self.ui.network_table.setItem(startrow, 7, col_total)
             startrow += 1
             qApp.processEvents()
-
-class PilotInfo(QMainWindow):
-    closed = pyqtSignal()
-    '''The PilotInfo Class is to show selected player from Pilots Tables to see the status of the flight, like
-       departure, destination, miles, route, type of aircraft and flight, etc'''
-    def __init__(self):
-        QMainWindow.__init__(self)
-        self.ui = PilotInfo_UI.Ui_QPilotInfo()
-        self.ui.setupUi(self)
-        screen = QDesktopWidget().screenGeometry()
-        size =  self.geometry()
-        self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
-        image_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')
-        self.setWindowIcon(QIcon(image_icon))
-        self.callsign = ''
-        QObject.connect(self.ui.AddFriend, SIGNAL('clicked()'), self.add_button)
-
-    def status(self, callsign):
-        self.callsign = callsign
-        Q_db = SQL_queries.sql_query('Get_Pilot_data', (str(callsign),))
-        info = Q_db.fetchall()
-        if info[0][19] == 'FOLME':
-            pass
-        else:
-            try:
-                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(info[0][5]),))
-                flagCodeOrig = Q_db.fetchone()
-                ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-                flagCodePath_orig = (ImagePath + '/%s.png') % flagCodeOrig
-                Pixmap = QPixmap(flagCodePath_orig)
-                self.ui.DepartureImage.setPixmap(Pixmap)
-                Q_db = Main().sql_query('Get_Airport_Location', (str(info[0][5]),))
-                city_orig = Q_db.fetchone()
-                self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
-                city_orig_point = city_orig[1], city_orig[2]
-            except:
-                self.ui.DepartureText.setText('Pending...')
-                city_orig_point = None
-
-        try:
-            Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(info[0][6]),))
-            flagCodeDest = Q_db.fetchone()
-            ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-            flagCodePath_dest = (ImagePath + '/%s.png') % flagCodeDest
-            Pixmap = QPixmap(flagCodePath_dest)
-            self.ui.DestinationImage.setPixmap(Pixmap)
-            Q_db = SQL_queries.sql_query('Get_Airport_Location', (str(info[0][6]),))
-            city_dest = Q_db.fetchone()
-            self.ui.DestinationText.setText(str(city_dest[0].encode('latin-1')))
-            city_dest_point = city_dest[1], city_dest[2]
-        except:
-            self.ui.DestinationText.setText('Pending...')
-            city_dest_point = None
-
-        self.ui.vidText.setText(str(info[0][0]))
-        try:
-            code_airline = callsign[:3]
-            image_airlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
-            airlineCodePath = (image_airlines + '/%s.gif') % code_airline
-            if os.path.exists(airlineCodePath) is True:
-                Pixmap = QPixmap(airlineCodePath)
-                airline = QLabel(self)
-                self.ui.airline_image.setPixmap(Pixmap)
-            else:
-                Q_db = SQL_queries.sql_query('Get_Airline', str(callsign[:3]))
-                airline_code = Q_db.fetchone()
-                self.ui.airline_image.setText(str(airline_code[0]))
-        except:
-            pass
-        self.ui.callsign_text.setText(callsign)
-        self.ui.PilotNameText.setText(str(info[0][1][:-4].encode('latin-1')))
-        self.ui.RouteText.setText(str(info[0][9]))
-        self.ui.GroundSpeedNumber.setText(str(info[0][3]))
-        self.ui.AltitudeNumber.setText(str(info[0][2]))
-        self.ui.PobText.setText(str(info[0][8]))
-        self.ui.TransponderText.setText(str(info[0][11]))
-        self.ui.GSFiledText.setText(str(info[0][17]))
-        self.ui.FLText.setText(str(info[0][7]))
-        Q_db = SQL_queries.sql_query('Get_Airport_from_ICAO', (str(info[0][15]),))
-        altern_city_1 = Q_db.fetchone()
-        Q_db = SQL_queries.sql_query('Get_Airport_from_ICAO', (str(info[0][16]),))
-        altern_city_2 = Q_db.fetchone()
-        if altern_city_1 is None:
-            self.ui.Altern_Airport_Text.setText(str('-'))
-        else:
-            self.ui.Altern_Airport_Text.setText(str(altern_city_1[0]))
-        if altern_city_2 is None:
-            self.ui.Altern_Airport_Text_2.setText(str('-'))
-        else:
-            self.ui.Altern_Airport_Text_2.setText(str(altern_city_2[0]))
-        try:
-            if str(info[0][4]) != '':
-                cursor.execute("SELECT Model, Fabricant, Description FROM icao_aircraft WHERE Model=?;", ((info[0][4].split('/')[1]),))
-                data = cursor.fetchall()
-                self.ui.AirplaneText.setText('Model: %s Fabricant: %s Description: %s' \
-                                             % (str(data[0][0]), str(data[0][1]), str(data[0][2])))
-        except:
-            self.ui.AirplaneText.setText('Pending...')
-        Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(info[0][1][-4:]),))
-        flagCodeHome = Q_db.fetchone()
-        ImageFlag = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
-        flagCodePath = (ImageFlag + '/%s.png') % flagCodeHome
-        Pixmap = QPixmap(flagCodePath)
-        self.ui.HomeFlag.setPixmap(Pixmap)
-        ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
-        ratingImagePath = ImagePath + '/pilot_level%d.gif' % int(info[0][10])
-        Pixmap = QPixmap(ratingImagePath)
-        self.ui.rating_img.setPixmap(Pixmap)
-        player_point = info[0][13], info[0][14]
-        if city_orig_point is None or city_dest_point is None:
-            self.ui.nauticalmiles.setText('Pending...')
-            self.ui.progressBarTrack.setValue(0)
-        if str(info[0][5]) == str(info[0][6]):
-                self.ui.progressBarTrack.setValue(0)
-                self.ui.nauticalmiles.setText('Local Flight')
-        else:
-            total_miles = distance.distance(city_orig_point, city_dest_point).miles
-            dist_traveled = distance.distance(city_orig_point, player_point).miles
-            percent = float((dist_traveled / total_miles) * 100.0)
-            self.ui.nauticalmiles.setText('%.1f / %.1f miles - %.1f%%' % (float(dist_traveled), float(total_miles), float(percent)))
-            self.ui.progressBarTrack.setValue(int(percent))
-        status_plane = Main().status_plane(callsign)
-        self.ui.FlightStatusDetail.setText(str(status_plane))
-        try:
-            start_connected = datetime.datetime(int(str(info[0][18])[:4]), int(str(info[0][18])[4:6]) \
-                                                , int(str(info[0][18])[6:8]), int(str(info[0][18])[8:10]) \
-                                                , int(str(info[0][18])[10:12]), int(str(info[0][18])[12:14]))
-            diff = datetime.datetime.utcnow() - start_connected
-            self.ui.time_online_text.setText(str(diff)[:-7])
-        except:
-            self.ui.time_online_text.setText('Pending...')
-
-    def add_button(self):
-        add2friend = AddFriend()
-        add2friend.add_friend(str(self.ui.vidText.text()).encode('latin-1'))
-        self.statusBar().showMessage('Friend Added', 3000)
-
-    def closeEvent(self, event):
-        self.closed.emit()
-        event.accept()
 
 def main():
     import sys, time, os

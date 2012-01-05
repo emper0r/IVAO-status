@@ -65,14 +65,15 @@ class ControllerInfo(QMainWindow):
         self.ui.SoftwareText.setText('%s %s' % (str(info[0][9]), str(info[0][10])))
         self.ui.ConnectedText.setText(str(info[0][2]))
         self.ui.ATISInfo.setText(str(info[0][7].encode('latin-1')).replace('^\xa7', '\n'))
+        ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../flags')
+        ImageRatings = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../ratings')
         try:
             Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(callsign[:4]),))
             flagCodeOrig = Q_db.fetchone()
             if flagCodeOrig is None:
                 Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(callsign[:2]),))
                 flagCodeOrig = Q_db.fetchone()
-            image_flag = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../flags')
-            flagCodePath_orig = (image_flag + '/%s.png') % flagCodeOrig
+            flagCodePath_orig = (ImageFlags + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
             self.ui.Flag.setPixmap(Pixmap)
             Q_db = SQL_queries.sql_query('Get_Airport_from_ICAO', (str(callsign[:4]),))
@@ -86,8 +87,7 @@ class ControllerInfo(QMainWindow):
             self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
         except:
             self.ui.ControllingText.setText('Pending...')
-        ImagePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../ratings')
-        ratingImagePath = ImagePath + '/atc_level%d.gif' % int(info[0][5])
+        ratingImagePath = ImageRatings + '/atc_level%d.gif' % int(info[0][5])
         Pixmap = QPixmap(ratingImagePath)
         self.ui.rating_img.setPixmap(Pixmap)
         self.ui.facility_freq_Text.setText(str(self.position_atc[str(info[0][6])]) + ' ' + str(info[0][4]) + ' MHz')

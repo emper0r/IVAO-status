@@ -18,7 +18,7 @@
 #
 # IVAO-status :: License GPLv3+
 #
-# Controller Class
+# FOLME Class
 
 import os
 import SQL_queries
