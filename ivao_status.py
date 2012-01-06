@@ -123,7 +123,7 @@ class Main(QMainWindow):
         self.ui.Statistics.setColumnWidth(2, 100)
         self.ui.Statistics.setColumnWidth(3, 100)
         self.ui.SchedulingATC.setColumnWidth(0, 30)
-        self.ui.SchedulingATC.setColumnWidth(1, 90)
+        self.ui.SchedulingATC.setColumnWidth(1, 100)
         self.ui.SchedulingATC.setColumnWidth(2, 150)
         self.ui.SchedulingATC.setColumnWidth(3, 70)
         self.ui.SchedulingATC.setColumnWidth(4, 180)
@@ -2258,7 +2258,6 @@ class Main(QMainWindow):
             qApp.processEvents()
 
     def Scheduling(self):
-        QMessageBox.information(None, 'Scheduling', 'This take a little time processing only when download occurs...')
         self.statusBar().showMessage('Downloading Events for Controllers and Pilots...', 2000)
         qApp.processEvents()
         Schedule.Scheduling()
@@ -2391,8 +2390,8 @@ class Main(QMainWindow):
                 col_Event = QTableWidgetItem(str(sched_pilots[flights_table][12]), 0)
                 self.ui.SchedulingFlights.setItem(startrow, 15, col_Event)
                 startrow += 1
-        self.statusBar().showMessage('Done!', 2000)
         qApp.processEvents()
+        self.statusBar().showMessage('Done!', 2000)
     
 def main():
     import sys, time, os

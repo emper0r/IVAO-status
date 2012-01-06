@@ -24,33 +24,41 @@ import os
 import SQL_queries
 import ConfigParser
 import urllib2
-from BeautifulSoup import BeautifulSoup
+import etree
+import StringIO
+import calendar
+import datetime
 
 def Scheduling():
-    '''This part is very slowly yet, because i can't access directly to IVAO db to download schedule, 
-       so I have to parse the URLs where users can see the schedule for controllers and pilots on IVAO website,
-       now is made using BeautifulSoup, but I guess with other tool to parse like lxml, can check if 
-       is more faster or not'''
+    '''This part is a parse HTML from Schedule website from IVAO, because i can't access 
+       directly to IVAO database to download schedule, so I have to get by other way where users can 
+       see the schedule for controllers and pilots'''
     config = ConfigParser.RawConfigParser()
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Config.cfg')
     config.read(config_file)
     SQL_queries.sql_query('Clear_Scheduling_tables')
-    SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc'))
-    soup_atc = BeautifulSoup(SchedATC_URL)
-    SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_flights'))
-    soup_flights = BeautifulSoup(SchedFlights_URL)
+    parser = etree.HTMLParser()
+    try:
+        SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc')).read()
+        tree = etree.parse(StringIO.StringIO(SchedATC_URL), parser)
+        table_atc = tree.xpath("/html/body/div/center/table")[0]
     
-    table_atc = soup_atc.find("table")
-    atc_rows = table_atc.findAll('tr')
-    table_flights = soup_flights.find("table")
-    fligths_rows = table_flights.findAll('tr')
-    
-    for line_atc_table in atc_rows[1:]:
-        columns = [col.find(text=True) for col in line_atc_table.findAll('td')]
-        SQL_queries.sql_query('Add_Schedule_ATC', columns)
+        for line_atc_table in table_atc[1:]:
+            if calendar.month_name[datetime.datetime.now().month] in line_atc_table[4][0].text: 
+                columns = [td[0].text for td in line_atc_table]
+                SQL_queries.sql_query('Add_Schedule_ATC', columns)
+    except IOError:
+            print('Error! when trying to download info from IVAO. Check your connection to Internet.')
 
-    for line_flights_table in fligths_rows[2:]:
-        columns = [col.find(text=True) for col in line_flights_table.findAll('td')]
-        SQL_queries.sql_query('Add_Schedule_Flights', columns)
-    
+    try:
+        SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_flights')).read()
+        tree = etree.parse(StringIO.StringIO(SchedFlights_URL), parser)
+        table_flights = tree.xpath("/html/body/div/div/center/table")[0]
+
+        for line_flights_table in table_flights[2:]:
+            if calendar.month_name[datetime.datetime.now().month] in line_flights_table[7][0].text:
+                columns = [td[0].text for td in line_flights_table]
+                SQL_queries.sql_query('Add_Schedule_Flights', columns)
+    except IOError:
+            print('Error! when trying to download info from IVAO. Check your connection to Internet.')
     return

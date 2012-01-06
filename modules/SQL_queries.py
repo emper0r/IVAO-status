@@ -134,14 +134,14 @@ def sql_query(args=None, var=None):
         return
     if args == 'Add_Schedule_ATC':
         Q_db = cursor.execute("INSERT INTO schedule_controllers (Name, Position, StartDateUTC, EndDateUTC, Voice, Training, Event) \
-                               VALUES (?,?,?,?,?,?,?);", (str(var[1]).decode('latin-1'), str(var[3]), str(var[4]), str(var[5]), \
+                               VALUES (?,?,?,?,?,?,?);", (var[1], str(var[3]), str(var[4]), str(var[5]), \
                                 str(var[6]), str(var[7]), str(var[8]),))
         connection.commit()
         return
     if args == 'Add_Schedule_Flights':
         Q_db = cursor.execute("INSERT INTO schedule_pilots (Callsign, Name, Airplane, Departure, DepTime, Destination, DestTime, \
                                Altitude, CruisingSpeed, Route, Voice, Training, Event) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);", \
-                                (str(var[4]), str(var[1]).decode('latin-1'), str(var[5]), str(var[6]), str(var[7]), str(var[8]), \
+                                (str(var[4]), var[1], str(var[5]), str(var[6]), str(var[7]), str(var[8]), \
                                  str(var[9]), int(var[10]), int(var[11]), str(var[12]), str(var[13]), str(var[14]), str(var[15]),))
         connection.commit()
         return
