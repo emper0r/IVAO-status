@@ -28,7 +28,7 @@ import etree
 import StringIO
 import calendar
 import datetime
-from PyQt4.Qt import QNetwork
+from PyQt4.Qt import QNetworkProxy
 
 def Scheduling():
     '''This part is a parse HTML from Schedule website from IVAO, because i can't access
