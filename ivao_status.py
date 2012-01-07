@@ -351,13 +351,11 @@ class Main(QMainWindow):
                 opener = urllib2.build_opener(proxy_support, authinfo)
                 urllib2.install_opener(opener)
                 QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port), str(user), str(pswd)))
-                qApp.processEvents()
             if use_proxy == 2 and auth == 0:
                 proxy_support = urllib2.ProxyHandler({"http" : "http://" + host + ':' + port})
                 opener = urllib2.build_opener(proxy_support)
                 urllib2.install_opener(opener)
                 QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port)))
-                qApp.processEvents()
             if use_proxy == 0 and auth == 0:
                 pass
 
@@ -383,12 +381,11 @@ class Main(QMainWindow):
                 if "FOLME" in player:
                     vehicles.append(player)
             SQL_queries.update_db(pilot, atc, vehicles)
+            self.show_tables()
+            self.ivao_friend()
 
         except IOError:
             self.statusBar().showMessage('Error! when trying to download info from IVAO. Check your connection to Internet.')
-        
-        self.show_tables()
-        self.ivao_friend()
 
     def show_tables(self):
         '''Here show all data into PILOT and CONTROLLER full list'''
@@ -538,7 +535,7 @@ class Main(QMainWindow):
                     pass
                 #self.progress.setValue(int(float(startrow) / float(len(rows_atcs)) * 100.0))
                 startrow += 1
-                #qApp.processEvents()
+        qApp.processEvents()
 
         Q_db = SQL_queries.sql_query('Get_FMC_List')
         vehicles = Q_db.fetchall()
@@ -588,7 +585,7 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             #self.progress.setValue(int(float(startrow) / float(len(vehicles)) * 100.0))
             startrow += 1
-            #qApp.processEvents()
+        qApp.processEvents()
 
         Q_db = SQL_queries.sql_query('Get_Pilot_Lists')
         rows_pilots = Q_db.fetchall()
@@ -655,7 +652,7 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             #self.progress.setValue(int(float(startrow) / float(len(rows_pilots)) * 100.0))
             startrow += 1
-            #qApp.processEvents()
+        qApp.processEvents()
 
         self.progress.hide()
         self.statusBar().showMessage('Done', 2000)
@@ -2260,10 +2257,14 @@ class Main(QMainWindow):
     def Scheduling(self):
         self.statusBar().showMessage('Downloading Events for Controllers and Pilots...', 2000)
         qApp.processEvents()
-        Schedule.Scheduling()
-        self.ui.tabWidget.setCurrentIndex(8)
-        self.show_TabSched()
-        self.statusBar().showMessage('Done!', 2000)
+        check = Schedule.Scheduling()
+        if check is True:
+            self.ui.tabWidget.setCurrentIndex(8)
+            self.statusBar().showMessage('Refreshing Schedule...', 2000)
+            self.show_TabSched()
+            self.statusBar().showMessage('Done!', 2000)
+        else:
+            self.statusBar().showMessage('Error! when trying to download info from IVAO. Check your connection to Internet.')
         
     def show_TabSched(self):
         ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
@@ -2271,125 +2272,123 @@ class Main(QMainWindow):
 
         Q_db = SQL_queries.sql_query('Get_Schedule_ATC', None)
         sched_atc = Q_db.fetchall()
-        
-        if len(sched_atc) > 0:
-            qApp.processEvents()
-            while self.ui.SchedulingATC.rowCount () > 0:
-                self.ui.SchedulingATC.removeRow(0)
 
-            startrow = 0
-            for atc_table in range(0, len(sched_atc)):
-                self.ui.SchedulingATC.insertRow(self.ui.SchedulingATC.rowCount())
-                col_Name = QTableWidgetItem(str(sched_atc[atc_table][0].encode('latin-1')), 0)
-                self.ui.SchedulingATC.setItem(startrow, 2, col_Name)
-                col_Position = QTableWidgetItem(sched_atc[atc_table][1], 0)
-                self.ui.SchedulingATC.setItem(startrow, 3, col_Position)
-                col_StartTime = QTableWidgetItem(str(sched_atc[atc_table][2]), 0)
-                self.ui.SchedulingATC.setItem(startrow, 4, col_StartTime)
-                col_EndTime = QTableWidgetItem(str(sched_atc[atc_table][3]), 0)
-                self.ui.SchedulingATC.setItem(startrow, 5, col_EndTime)
-                col_Voice = QTableWidgetItem(str(sched_atc[atc_table][4]), 0)
-                self.ui.SchedulingATC.setItem(startrow, 6, col_Voice)
-                col_Training = QTableWidgetItem(str(sched_atc[atc_table][5]), 0)
-                self.ui.SchedulingATC.setItem(startrow, 7, col_Training)
-                col_Event = QTableWidgetItem(str(sched_atc[atc_table][6]), 0)
-                self.ui.SchedulingATC.setItem(startrow, 8, col_Event)
-                try:
-                    Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(sched_atc[atc_table][1][:4]),))
+        qApp.processEvents()
+        while self.ui.SchedulingATC.rowCount () > 0:
+            self.ui.SchedulingATC.removeRow(0)
+
+        startrow = 0
+        for atc_table in range(0, len(sched_atc)):
+            self.ui.SchedulingATC.insertRow(self.ui.SchedulingATC.rowCount())
+            col_Name = QTableWidgetItem(str(sched_atc[atc_table][0].encode('latin-1')), 0)
+            self.ui.SchedulingATC.setItem(startrow, 2, col_Name)
+            col_Position = QTableWidgetItem(sched_atc[atc_table][1], 0)
+            self.ui.SchedulingATC.setItem(startrow, 3, col_Position)
+            col_StartTime = QTableWidgetItem(str(sched_atc[atc_table][2]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 4, col_StartTime)
+            col_EndTime = QTableWidgetItem(str(sched_atc[atc_table][3]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 5, col_EndTime)
+            col_Voice = QTableWidgetItem(str(sched_atc[atc_table][4]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 6, col_Voice)
+            col_Training = QTableWidgetItem(str(sched_atc[atc_table][5]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 7, col_Training)
+            col_Event = QTableWidgetItem(str(sched_atc[atc_table][6]), 0)
+            self.ui.SchedulingATC.setItem(startrow, 8, col_Event)
+            try:
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(sched_atc[atc_table][1][:4]),))
+                country = Q_db.fetchone()
+                if country is None:
+                    Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(sched_atc[atc_table][1][:4]),))
                     country = Q_db.fetchone()
-                    if country is None:
-                        Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(sched_atc[atc_table][1][:4]),))
-                        country = Q_db.fetchone()
-                    col_Country = QTableWidgetItem(str(country[0]), 0)
-                    self.ui.SchedulingATC.setItem(startrow, 1, col_Country)
-                    flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
-                    Pixmap = QPixmap(flagCodePath)
-                    flag_country = QLabel()
-                    flag_country.setPixmap(Pixmap)
-                    self.ui.SchedulingATC.setCellWidget(startrow, 0, flag_country)
-                except:
-                    pass
-                startrow += 1
+                col_Country = QTableWidgetItem(str(country[0]), 0)
+                self.ui.SchedulingATC.setItem(startrow, 1, col_Country)
+                flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
+                Pixmap = QPixmap(flagCodePath)
+                flag_country = QLabel()
+                flag_country.setPixmap(Pixmap)
+                self.ui.SchedulingATC.setCellWidget(startrow, 0, flag_country)
+            except:
+                pass
+            startrow += 1
         qApp.processEvents()
 
         Q_db = SQL_queries.sql_query('Get_Schedule_Flights')
         sched_pilots = Q_db.fetchall()
         
-        if len(sched_pilots) > 0:
-            qApp.processEvents()
-            while self.ui.SchedulingFlights.rowCount () > 0:
-                self.ui.SchedulingFlights.removeRow(0)
-    
-            startrow = 0
-            for flights_table in range(0, len(sched_pilots)):
-                self.ui.SchedulingFlights.insertRow(self.ui.SchedulingFlights.rowCount())
-                code_Airline = sched_pilots[flights_table][0][:3]
-                airlinePath = (ImageAirlines + '/%s.gif') % code_Airline
-                try:
-                    if os.path.exists(airlinePath) is True:
-                        Pixmap = QPixmap(airlinePath)
-                        airline = QLabel(self)
-                        airline.setPixmap(Pixmap)
-                        self.ui.SchedulingFlights.setCellWidget(startrow, 0, airline)
-                    else:
-                        code_airline = str(inbound[0])
-                        col_airline = QTableWidgetItem(code_airline, 0)
-                        self.ui.SchedulingFlights.setItem(startrow, 0, col_airline)
-                except:
-                    pass
-                col_Callsign = QTableWidgetItem(str(sched_pilots[flights_table][0]), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 1, col_Callsign)
-                col_Name = QTableWidgetItem(str(sched_pilots[flights_table][1].encode('latin-1')), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 2, col_Name)
-                col_Airplane = QTableWidgetItem(str(sched_pilots[flights_table][2]), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 3, col_Airplane)
-                col_Departure = QTableWidgetItem(str(sched_pilots[flights_table][3]), 0)
-                try:
-                    Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(sched_pilots[flights_table][3]),))
+        qApp.processEvents()
+        while self.ui.SchedulingFlights.rowCount () > 0:
+            self.ui.SchedulingFlights.removeRow(0)
+
+        startrow = 0
+        for flights_table in range(0, len(sched_pilots)):
+            self.ui.SchedulingFlights.insertRow(self.ui.SchedulingFlights.rowCount())
+            code_Airline = sched_pilots[flights_table][0][:3]
+            airlinePath = (ImageAirlines + '/%s.gif') % code_Airline
+            try:
+                if os.path.exists(airlinePath) is True:
+                    Pixmap = QPixmap(airlinePath)
+                    airline = QLabel(self)
+                    airline.setPixmap(Pixmap)
+                    self.ui.SchedulingFlights.setCellWidget(startrow, 0, airline)
+                else:
+                    code_airline = str(inbound[0])
+                    col_airline = QTableWidgetItem(code_airline, 0)
+                    self.ui.SchedulingFlights.setItem(startrow, 0, col_airline)
+            except:
+                pass
+            col_Callsign = QTableWidgetItem(str(sched_pilots[flights_table][0]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 1, col_Callsign)
+            col_Name = QTableWidgetItem(str(sched_pilots[flights_table][1].encode('latin-1')), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 2, col_Name)
+            col_Airplane = QTableWidgetItem(str(sched_pilots[flights_table][2]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 3, col_Airplane)
+            col_Departure = QTableWidgetItem(str(sched_pilots[flights_table][3]), 0)
+            try:
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(sched_pilots[flights_table][3]),))
+                country = Q_db.fetchone()
+                if country is None:
+                    Q_db = SQL_queries.sql_query('Get_Country_from_FIR',  (str(sched_pilots[flights_table][3]),))
                     country = Q_db.fetchone()
-                    if country is None:
-                        Q_db = SQL_queries.sql_query('Get_Country_from_FIR',  (str(sched_pilots[flights_table][3]),))
-                        country = Q_db.fetchone()
-                    flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
-                    Pixmap = QPixmap(flagCodePath)
-                    flag_country = QLabel()
-                    flag_country.setPixmap(Pixmap)
-                    self.ui.SchedulingFlights.setCellWidget(startrow, 4, flag_country)
-                except:
-                    pass
-                self.ui.SchedulingFlights.setItem(startrow, 5, col_Departure)
-                col_StartTime = QTableWidgetItem(str(sched_pilots[flights_table][4]), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 6, col_StartTime)
-                col_Destination = QTableWidgetItem(str(sched_pilots[flights_table][5]), 0)
-                try:
-                    Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(sched_pilots[flights_table][5]),))
-                    country = Q_db.fetchone()
-                    if country is None:
-                        Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(sched_pilots[flights_table][5]),))
-                        country = Q_db.fetchone()
-                    flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
-                except:
-                    pass
+                flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
                 Pixmap = QPixmap(flagCodePath)
                 flag_country = QLabel()
                 flag_country.setPixmap(Pixmap)
-                self.ui.SchedulingFlights.setCellWidget(startrow, 7, flag_country)
-                self.ui.SchedulingFlights.setItem(startrow, 8, col_Destination)
-                col_EndTime = QTableWidgetItem(str(sched_pilots[flights_table][6]), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 9, col_EndTime)
-                col_Altitude = QTableWidgetItem(str(sched_pilots[flights_table][7]), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 10, col_Altitude)
-                col_CruisingSpeed = QTableWidgetItem(str(sched_pilots[flights_table][8]), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 11, col_CruisingSpeed)
-                col_Route = QTableWidgetItem(str(sched_pilots[flights_table][9]), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 12, col_Route)
-                col_Voice = QTableWidgetItem(str(sched_pilots[flights_table][10]), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 13, col_Voice)
-                col_Training = QTableWidgetItem(str(sched_pilots[flights_table][11]), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 14, col_Training)
-                col_Event = QTableWidgetItem(str(sched_pilots[flights_table][12]), 0)
-                self.ui.SchedulingFlights.setItem(startrow, 15, col_Event)
-                startrow += 1
+                self.ui.SchedulingFlights.setCellWidget(startrow, 4, flag_country)
+            except:
+                pass
+            self.ui.SchedulingFlights.setItem(startrow, 5, col_Departure)
+            col_StartTime = QTableWidgetItem(str(sched_pilots[flights_table][4]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 6, col_StartTime)
+            col_Destination = QTableWidgetItem(str(sched_pilots[flights_table][5]), 0)
+            try:
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(sched_pilots[flights_table][5]),))
+                country = Q_db.fetchone()
+                if country is None:
+                    Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(sched_pilots[flights_table][5]),))
+                    country = Q_db.fetchone()
+                flagCodePath = (ImageFlags + '/%s.png') % (str(country[0]))
+            except:
+                pass
+            Pixmap = QPixmap(flagCodePath)
+            flag_country = QLabel()
+            flag_country.setPixmap(Pixmap)
+            self.ui.SchedulingFlights.setCellWidget(startrow, 7, flag_country)
+            self.ui.SchedulingFlights.setItem(startrow, 8, col_Destination)
+            col_EndTime = QTableWidgetItem(str(sched_pilots[flights_table][6]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 9, col_EndTime)
+            col_Altitude = QTableWidgetItem(str(sched_pilots[flights_table][7]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 10, col_Altitude)
+            col_CruisingSpeed = QTableWidgetItem(str(sched_pilots[flights_table][8]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 11, col_CruisingSpeed)
+            col_Route = QTableWidgetItem(str(sched_pilots[flights_table][9]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 12, col_Route)
+            col_Voice = QTableWidgetItem(str(sched_pilots[flights_table][10]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 13, col_Voice)
+            col_Training = QTableWidgetItem(str(sched_pilots[flights_table][11]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 14, col_Training)
+            col_Event = QTableWidgetItem(str(sched_pilots[flights_table][12]), 0)
+            self.ui.SchedulingFlights.setItem(startrow, 15, col_Event)
+            startrow += 1
         qApp.processEvents()
         self.statusBar().showMessage('Done!', 2000)
     

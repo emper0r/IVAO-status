@@ -154,9 +154,13 @@ class PilotInfo(QMainWindow):
                 self.ui.progressBarTrack.setValue(0)
                 self.ui.nauticalmiles.setText('Local Flight')
         else:
-            total_miles = distance.distance(city_orig_point, city_dest_point).miles
-            dist_traveled = distance.distance(city_orig_point, player_point).miles
-            percent = float((dist_traveled / total_miles) * 100.0)
+            try:
+                total_miles = distance.distance(city_orig_point, city_dest_point).miles
+                dist_traveled = distance.distance(city_orig_point, player_point).miles
+                percent = float((dist_traveled / total_miles) * 100.0)
+            except:
+                if city_orig_point or city_orig_point is None:
+                    percent = 0.0
             self.ui.nauticalmiles.setText('%.1f / %.1f miles - %.1f%%' % (float(dist_traveled), float(total_miles), float(percent)))
             self.ui.progressBarTrack.setValue(int(percent))
         status_plane = StatusFlight.status_flight(callsign)

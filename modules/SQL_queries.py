@@ -169,7 +169,7 @@ def update_db(pilots, controllers, vehicles):
         longitude = fields[6]
         altitude = fields[7]
         groundspeed = fields[8]
-        planned_aircraft = fields[9]
+        planned_aircraft = fields[9].decode('latin-1')
         planned_tascruise = fields[10]
         planned_depairport = fields[11]
         planned_altitude = fields[12]

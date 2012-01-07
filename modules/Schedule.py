@@ -28,10 +28,11 @@ import etree
 import StringIO
 import calendar
 import datetime
+from PyQt4.Qt import QNetwork
 
 def Scheduling():
-    '''This part is a parse HTML from Schedule website from IVAO, because i can't access 
-       directly to IVAO database to download schedule, so I have to get by other way where users can 
+    '''This part is a parse HTML from Schedule website from IVAO, because i can't access
+       directly to IVAO database to download schedule, so I have to get by other way where users can
        see the schedule for controllers and pilots'''
     config = ConfigParser.RawConfigParser()
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Config.cfg')
@@ -39,18 +40,37 @@ def Scheduling():
     SQL_queries.sql_query('Clear_Scheduling_tables')
     parser = etree.HTMLParser()
     try:
+        use_proxy = config.getint('Settings', 'use_proxy')
+        auth = config.getint('Settings', 'auth')
+        host = config.get('Settings', 'host')
+        port = config.get('Settings', 'port')
+        user = config.get('Settings', 'user')
+        pswd = config.get('Settings', 'pass')
+        if use_proxy == 2 and auth == 2:
+            passmgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            passmgr.add_password(None, 'http://' + host + ':' + port, user, pswd)
+            authinfo = urllib2.ProxyBasicAuthHandler(passmgr)
+            proxy_support = urllib2.ProxyHandler({"http" : "http://" + host + ':' + port})
+            opener = urllib2.build_opener(proxy_support, authinfo)
+            urllib2.install_opener(opener)
+            QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port), str(user), str(pswd)))
+        if use_proxy == 2 and auth == 0:
+            proxy_support = urllib2.ProxyHandler({"http" : "http://" + host + ':' + port})
+            opener = urllib2.build_opener(proxy_support)
+            urllib2.install_opener(opener)
+            QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port)))
+        if use_proxy == 0 and auth == 0:
+            pass
+
         SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc')).read()
         tree = etree.parse(StringIO.StringIO(SchedATC_URL), parser)
         table_atc = tree.xpath("/html/body/div/center/table")[0]
-    
+
         for line_atc_table in table_atc[1:]:
-            if calendar.month_name[datetime.datetime.now().month] in line_atc_table[4][0].text: 
+            if calendar.month_name[datetime.datetime.now().month] in line_atc_table[4][0].text:
                 columns = [td[0].text for td in line_atc_table]
                 SQL_queries.sql_query('Add_Schedule_ATC', columns)
-    except IOError:
-            print('Error! when trying to download info from IVAO. Check your connection to Internet.')
 
-    try:
         SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_flights')).read()
         tree = etree.parse(StringIO.StringIO(SchedFlights_URL), parser)
         table_flights = tree.xpath("/html/body/div/div/center/table")[0]
@@ -59,6 +79,7 @@ def Scheduling():
             if calendar.month_name[datetime.datetime.now().month] in line_flights_table[7][0].text:
                 columns = [td[0].text for td in line_flights_table]
                 SQL_queries.sql_query('Add_Schedule_Flights', columns)
+
+        return True
     except IOError:
-            print('Error! when trying to download info from IVAO. Check your connection to Internet.')
-    return
+            return False
