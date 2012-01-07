@@ -28,6 +28,7 @@ import etree
 import StringIO
 import calendar
 import datetime
+import locale
 from PyQt4.Qt import QNetworkProxy
 
 def Scheduling():
@@ -62,6 +63,11 @@ def Scheduling():
         if use_proxy == 0 and auth == 0:
             pass
 
+        '''This lines set locales of enviroment at default language "English" 
+           to can parse with web'''
+        save_locale = locale.getlocale()
+        locale.setlocale(locale.LC_ALL, 'C')
+
         SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc')).read()
         tree = etree.parse(StringIO.StringIO(SchedATC_URL), parser)
         table_atc = tree.xpath("/html/body/div/center/table")[0]
@@ -80,6 +86,8 @@ def Scheduling():
                 columns = [td[0].text for td in line_flights_table]
                 SQL_queries.sql_query('Add_Schedule_Flights', columns)
 
+        '''Restore locales'''
+        locale.setlocale(locale.LC_ALL, save_locale)
         return True
     except IOError:
             return False

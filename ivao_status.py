@@ -2259,7 +2259,6 @@ class Main(QMainWindow):
         qApp.processEvents()
         check = Schedule.Scheduling()
         if check is True:
-            self.ui.tabWidget.setCurrentIndex(8)
             self.statusBar().showMessage('Refreshing Schedule...', 2000)
             self.show_TabSched()
             self.statusBar().showMessage('Done!', 2000)
@@ -2310,7 +2309,7 @@ class Main(QMainWindow):
             except:
                 pass
             startrow += 1
-        qApp.processEvents()
+            qApp.processEvents()
 
         Q_db = SQL_queries.sql_query('Get_Schedule_Flights')
         sched_pilots = Q_db.fetchall()
@@ -2389,7 +2388,7 @@ class Main(QMainWindow):
             col_Event = QTableWidgetItem(str(sched_pilots[flights_table][12]), 0)
             self.ui.SchedulingFlights.setItem(startrow, 15, col_Event)
             startrow += 1
-        qApp.processEvents()
+            qApp.processEvents()
         self.statusBar().showMessage('Done!', 2000)
     
 def main():
