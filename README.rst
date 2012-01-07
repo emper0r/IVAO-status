@@ -37,7 +37,7 @@ INSTALLER BINARY
 
 You can download the installer from:
 
-    https://github.com/downloads/emper0r/IVAO-status/IVAO-Status-1.0.4-Linux-x86-Install.bin
+    https://github.com/downloads/emper0r/IVAO-status/IVAO-Status-1.0.5-Linux-x86-Install.bin
 
 OR TRY TO GET THE SOURCE
 ========================
@@ -81,11 +81,11 @@ See the license file.
 
 SPECIAL THANKS
 ==============
-- rowinggolfer at #pyqt in irc.freenode.net 
-  (for show me how Qt works with VERY cool examples :-) ),
+- rowinggolfer (for show me how Qt works with VERY cool examples :-) ),
   and other friends at #pyqt in irc.freenode.net to help me sometimes too.
 
-- All friends of #pyar in irc.freenode.net as facundobatista and many others :)
+- All friends of #pyar in irc.freenode.net starting by facundobatista, StyXman, jmg,
+  dlitvakb and many others :)
 
 - Arnd Wippermann to help me at OpenLayers-list 
   for show me how javascript works and Google Layer with OpenStreetMap
