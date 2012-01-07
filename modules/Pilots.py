@@ -70,10 +70,10 @@ class PilotInfo(QMainWindow):
             try:
                 Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(info[0][5]),))
                 flagCodeOrig = Q_db.fetchone()
-                flagCodePath_orig = (ImagePath + '/%s.png') % flagCodeOrig
+                flagCodePath_orig = (ImageFlags + '/%s.png') % flagCodeOrig
                 Pixmap = QPixmap(flagCodePath_orig)
                 self.ui.DepartureImage.setPixmap(Pixmap)
-                Q_db = Main().sql_query('Get_Airport_Location', (str(info[0][5]),))
+                Q_db = SQL_queries.sql_query('Get_Airport_Location', (str(info[0][5]),))
                 city_orig = Q_db.fetchone()
                 self.ui.DepartureText.setText(str(city_orig[0].encode('latin-1')))
                 city_orig_point = city_orig[1], city_orig[2]
