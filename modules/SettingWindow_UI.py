@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'QtUI/SettingWindow_UI.ui'
 #
-# Created: Mon Nov  7 10:12:47 2011
-#      by: PyQt4 UI code generator 4.8.6
+# Created: Mon Jan  9 10:08:03 2012
+#      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,7 +26,6 @@ class Ui_SettingWindow(object):
         SettingWindow.setMinimumSize(QtCore.QSize(320, 320))
         SettingWindow.setMaximumSize(QtCore.QSize(345, 320))
         SettingWindow.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        SettingWindow.setWindowTitle(QtGui.QApplication.translate("SettingWindow", "Settings of IVAO :: Status", None, QtGui.QApplication.UnicodeUTF8))
         SettingWindow.setAnimated(False)
         self.centralwidget = QtGui.QWidget(SettingWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
@@ -37,7 +36,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.SettingAccepButton.setFont(font)
         self.SettingAccepButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.SettingAccepButton.setText(QtGui.QApplication.translate("SettingWindow", "Accept", None, QtGui.QApplication.UnicodeUTF8))
         self.SettingAccepButton.setObjectName(_fromUtf8("SettingAccepButton"))
         self.SettingTimeUpdate = QtGui.QLabel(self.centralwidget)
         self.SettingTimeUpdate.setGeometry(QtCore.QRect(14, 16, 231, 16))
@@ -46,7 +44,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.SettingTimeUpdate.setFont(font)
         self.SettingTimeUpdate.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.SettingTimeUpdate.setText(QtGui.QApplication.translate("SettingWindow", "Setting Time for Update Info in minutes", None, QtGui.QApplication.UnicodeUTF8))
         self.SettingTimeUpdate.setObjectName(_fromUtf8("SettingTimeUpdate"))
         self.spinBox = QtGui.QSpinBox(self.centralwidget)
         self.spinBox.setGeometry(QtCore.QRect(250, 13, 56, 22))
@@ -66,7 +63,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.Setting_checkBox.setFont(font)
         self.Setting_checkBox.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.Setting_checkBox.setText(QtGui.QApplication.translate("SettingWindow", "Use Proxy", None, QtGui.QApplication.UnicodeUTF8))
         self.Setting_checkBox.setChecked(False)
         self.Setting_checkBox.setTristate(False)
         self.Setting_checkBox.setObjectName(_fromUtf8("Setting_checkBox"))
@@ -78,7 +74,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.proxy_host.setFont(font)
         self.proxy_host.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.proxy_host.setText(QtGui.QApplication.translate("SettingWindow", "Host  http://", None, QtGui.QApplication.UnicodeUTF8))
         self.proxy_host.setObjectName(_fromUtf8("proxy_host"))
         self.proxy_port = QtGui.QLabel(self.centralwidget)
         self.proxy_port.setEnabled(True)
@@ -88,7 +83,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.proxy_port.setFont(font)
         self.proxy_port.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.proxy_port.setText(QtGui.QApplication.translate("SettingWindow", "Port", None, QtGui.QApplication.UnicodeUTF8))
         self.proxy_port.setObjectName(_fromUtf8("proxy_port"))
         self.proxy_user = QtGui.QLabel(self.centralwidget)
         self.proxy_user.setEnabled(True)
@@ -98,7 +92,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.proxy_user.setFont(font)
         self.proxy_user.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.proxy_user.setText(QtGui.QApplication.translate("SettingWindow", "Username", None, QtGui.QApplication.UnicodeUTF8))
         self.proxy_user.setObjectName(_fromUtf8("proxy_user"))
         self.proxy_pass = QtGui.QLabel(self.centralwidget)
         self.proxy_pass.setEnabled(True)
@@ -108,7 +101,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.proxy_pass.setFont(font)
         self.proxy_pass.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.proxy_pass.setText(QtGui.QApplication.translate("SettingWindow", "Password", None, QtGui.QApplication.UnicodeUTF8))
         self.proxy_pass.setObjectName(_fromUtf8("proxy_pass"))
         self.Setting_auth = QtGui.QCheckBox(self.centralwidget)
         self.Setting_auth.setEnabled(True)
@@ -118,7 +110,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.Setting_auth.setFont(font)
         self.Setting_auth.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.Setting_auth.setText(QtGui.QApplication.translate("SettingWindow", "Authentication", None, QtGui.QApplication.UnicodeUTF8))
         self.Setting_auth.setChecked(False)
         self.Setting_auth.setTristate(False)
         self.Setting_auth.setObjectName(_fromUtf8("Setting_auth"))
@@ -138,7 +129,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.lineEdit_port.setFont(font)
         self.lineEdit_port.setInputMethodHints(QtCore.Qt.ImhDigitsOnly|QtCore.Qt.ImhFormattedNumbersOnly|QtCore.Qt.ImhPreferNumbers)
-        self.lineEdit_port.setInputMask(QtGui.QApplication.translate("SettingWindow", "00000; ", None, QtGui.QApplication.UnicodeUTF8))
         self.lineEdit_port.setMaxLength(5)
         self.lineEdit_port.setObjectName(_fromUtf8("lineEdit_port"))
         self.lineEdit_user = QtGui.QLineEdit(self.centralwidget)
@@ -165,7 +155,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.AutoRefreshMap.setFont(font)
         self.AutoRefreshMap.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.AutoRefreshMap.setText(QtGui.QApplication.translate("SettingWindow", "Auto-Refresh the map when connecting to IVAO", None, QtGui.QApplication.UnicodeUTF8))
         self.AutoRefreshMap.setChecked(True)
         self.AutoRefreshMap.setTristate(False)
         self.AutoRefreshMap.setObjectName(_fromUtf8("AutoRefreshMap"))
@@ -176,7 +165,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.ShowLabelPilots.setFont(font)
         self.ShowLabelPilots.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.ShowLabelPilots.setText(QtGui.QApplication.translate("SettingWindow", "Show Label of Pilots", None, QtGui.QApplication.UnicodeUTF8))
         self.ShowLabelPilots.setChecked(True)
         self.ShowLabelPilots.setTristate(False)
         self.ShowLabelPilots.setObjectName(_fromUtf8("ShowLabelPilots"))
@@ -187,7 +175,6 @@ class Ui_SettingWindow(object):
         font.setPointSize(8)
         self.ShowLabelControllers.setFont(font)
         self.ShowLabelControllers.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.ShowLabelControllers.setText(QtGui.QApplication.translate("SettingWindow", "Show Label of Controllers", None, QtGui.QApplication.UnicodeUTF8))
         self.ShowLabelControllers.setChecked(True)
         self.ShowLabelControllers.setTristate(False)
         self.ShowLabelControllers.setObjectName(_fromUtf8("ShowLabelControllers"))
@@ -197,5 +184,17 @@ class Ui_SettingWindow(object):
         QtCore.QMetaObject.connectSlotsByName(SettingWindow)
 
     def retranslateUi(self, SettingWindow):
-        pass
+        SettingWindow.setWindowTitle(QtGui.QApplication.translate("SettingWindow", "Settings of IVAO :: Status", None, QtGui.QApplication.UnicodeUTF8))
+        self.SettingAccepButton.setText(QtGui.QApplication.translate("SettingWindow", "Accept", None, QtGui.QApplication.UnicodeUTF8))
+        self.SettingTimeUpdate.setText(QtGui.QApplication.translate("SettingWindow", "Setting Time for Update Info in minutes", None, QtGui.QApplication.UnicodeUTF8))
+        self.Setting_checkBox.setText(QtGui.QApplication.translate("SettingWindow", "Use Proxy", None, QtGui.QApplication.UnicodeUTF8))
+        self.proxy_host.setText(QtGui.QApplication.translate("SettingWindow", "Host  http://", None, QtGui.QApplication.UnicodeUTF8))
+        self.proxy_port.setText(QtGui.QApplication.translate("SettingWindow", "Port", None, QtGui.QApplication.UnicodeUTF8))
+        self.proxy_user.setText(QtGui.QApplication.translate("SettingWindow", "Username", None, QtGui.QApplication.UnicodeUTF8))
+        self.proxy_pass.setText(QtGui.QApplication.translate("SettingWindow", "Password", None, QtGui.QApplication.UnicodeUTF8))
+        self.Setting_auth.setText(QtGui.QApplication.translate("SettingWindow", "Authentication", None, QtGui.QApplication.UnicodeUTF8))
+        self.lineEdit_port.setInputMask(QtGui.QApplication.translate("SettingWindow", "00000; ", None, QtGui.QApplication.UnicodeUTF8))
+        self.AutoRefreshMap.setText(QtGui.QApplication.translate("SettingWindow", "Auto-Refresh the map when connecting to IVAO", None, QtGui.QApplication.UnicodeUTF8))
+        self.ShowLabelPilots.setText(QtGui.QApplication.translate("SettingWindow", "Show Label of Pilots", None, QtGui.QApplication.UnicodeUTF8))
+        self.ShowLabelControllers.setText(QtGui.QApplication.translate("SettingWindow", "Show Label of Controllers", None, QtGui.QApplication.UnicodeUTF8))
 

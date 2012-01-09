@@ -84,7 +84,8 @@ class Main(QMainWindow):
         self.ui.PilottableWidget.setColumnWidth(5, 105)
         self.ui.PilottableWidget.setColumnWidth(6, 70)
         self.ui.PilottableWidget.setColumnWidth(7, 80)
-        self.ui.PilottableWidget.setColumnWidth(8, 65)
+        self.ui.PilottableWidget.setColumnWidth(8, 85)
+        self.ui.PilottableWidget.setColumnWidth(9, 55)
         self.ui.ATC_FullList.setColumnWidth(1, 70)
         self.ui.ATC_FullList.setColumnWidth(2, 37)
         self.ui.ATC_FullList.setColumnWidth(3, 150)
@@ -123,7 +124,7 @@ class Main(QMainWindow):
         self.ui.Statistics.setColumnWidth(1, 500)
         self.ui.Statistics.setColumnWidth(2, 100)
         self.ui.Statistics.setColumnWidth(3, 100)
-        self.ui.SchedulingATC.setColumnWidth(0, 30)
+        self.ui.SchedulingATC.setColumnWidth(0, 35)
         self.ui.SchedulingATC.setColumnWidth(1, 100)
         self.ui.SchedulingATC.setColumnWidth(2, 150)
         self.ui.SchedulingATC.setColumnWidth(3, 70)
@@ -396,7 +397,7 @@ class Main(QMainWindow):
         ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
         ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
         ImageRatings = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
-        self.statusBar().showMessage('Populating Controllers and Pilots', 10000)
+        self.statusBar().showMessage('Populating Controllers and Pilots', 3000)
         #self.progress.show()
         pilots_ivao = atcs_ivao = obs_ivao = 0
         Q_db = SQL_queries.sql_query('Get_Pilots')
@@ -586,7 +587,7 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             #self.progress.setValue(int(float(startrow) / float(len(vehicles)) * 100.0))
             startrow += 1
-        qApp.processEvents()
+            qApp.processEvents()
 
         Q_db = SQL_queries.sql_query('Get_Pilot_Lists')
         rows_pilots = Q_db.fetchall()
@@ -653,7 +654,7 @@ class Main(QMainWindow):
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
             #self.progress.setValue(int(float(startrow) / float(len(rows_pilots)) * 100.0))
             startrow += 1
-        qApp.processEvents()
+            qApp.processEvents()
 
         self.progress.hide()
         self.statusBar().showMessage('Done', 2000)
@@ -751,7 +752,7 @@ class Main(QMainWindow):
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.ATCtableWidget.setItem(startrow_atc, 6, col_time)
                 startrow_atc += 1
-            #qApp.processEvents()
+            qApp.processEvents()
 
             for row_pilot in rows_pilots:
                 self.ui.PilottableWidget.insertRow(self.ui.PilottableWidget.rowCount())
@@ -820,7 +821,7 @@ class Main(QMainWindow):
                 col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                 self.ui.PilottableWidget.setItem(startrow_pilot, 9, col_time)
                 startrow_pilot += 1
-            #qApp.processEvents()
+            qApp.processEvents()
 
             for inbound in InboundTrafficAirport:
                 self.ui.InboundTableWidget.insertRow(self.ui.InboundTableWidget.rowCount())
@@ -879,7 +880,7 @@ class Main(QMainWindow):
                 col_flight = QTableWidgetItem(status_flight, 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 5, col_flight)
                 startrow_in += 1
-            #qApp.processEvents()
+            qApp.processEvents()
 
             for outbound in OutboundTrafficAirport:
                 self.ui.OutboundTableWidget.insertRow(self.ui.OutboundTableWidget.rowCount())
@@ -938,7 +939,7 @@ class Main(QMainWindow):
                 col_flight = QTableWidgetItem(status_flight, 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 5, col_flight)
                 startrow_out += 1
-        qApp.processEvents()
+            qApp.processEvents()
         self.ui.PilottableWidget.setCurrentCell(-1, -1)
         self.ui.ATCtableWidget.setCurrentCell(-1, -1)
 
@@ -1857,7 +1858,7 @@ class Main(QMainWindow):
         if check is True:
             self.statusBar().showMessage('Refreshing Schedule...', 2000)
             self.show_TabSched()
-            self.statusBar().showMessage('Done!', 2000)
+            self.statusBar().showMessage('Schedule Done!', 2000)
         else:
             self.statusBar().showMessage('Error! when trying to download info from IVAO. Check your connection to Internet.')
         

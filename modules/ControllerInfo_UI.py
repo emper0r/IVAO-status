@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'QtUI/ControllerInfo_UI.ui'
 #
-# Created: Mon Nov  7 08:22:59 2011
-#      by: PyQt4 UI code generator 4.8.6
+# Created: Mon Jan  9 10:05:38 2012
+#      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -28,7 +28,6 @@ class Ui_QControllerInfo(object):
         QControllerInfo.setMaximumSize(QtCore.QSize(400, 437))
         QControllerInfo.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         QControllerInfo.setFocusPolicy(QtCore.Qt.StrongFocus)
-        QControllerInfo.setWindowTitle(QtGui.QApplication.translate("QControllerInfo", "Controller Info", None, QtGui.QApplication.UnicodeUTF8))
         self.centralwidget = QtGui.QWidget(QControllerInfo)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.ControllerText = QtGui.QLabel(self.centralwidget)
@@ -51,7 +50,6 @@ class Ui_QControllerInfo(object):
         font.setWeight(75)
         self.VidLabel.setFont(font)
         self.VidLabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.VidLabel.setText(QtGui.QApplication.translate("QControllerInfo", "VID", None, QtGui.QApplication.UnicodeUTF8))
         self.VidLabel.setObjectName(_fromUtf8("VidLabel"))
         self.VidText = QtGui.QLabel(self.centralwidget)
         self.VidText.setGeometry(QtCore.QRect(43, 55, 71, 16))
@@ -73,7 +71,6 @@ class Ui_QControllerInfo(object):
         font.setWeight(75)
         self.ControllingLabel.setFont(font)
         self.ControllingLabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.ControllingLabel.setText(QtGui.QApplication.translate("QControllerInfo", "Controlling in ", None, QtGui.QApplication.UnicodeUTF8))
         self.ControllingLabel.setObjectName(_fromUtf8("ControllingLabel"))
         self.ControllingText = QtGui.QLabel(self.centralwidget)
         self.ControllingText.setGeometry(QtCore.QRect(140, 70, 241, 20))
@@ -157,7 +154,6 @@ class Ui_QControllerInfo(object):
         font.setPointSize(8)
         self.Close.setFont(font)
         self.Close.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.Close.setText(QtGui.QApplication.translate("QControllerInfo", "Close", None, QtGui.QApplication.UnicodeUTF8))
         self.Close.setObjectName(_fromUtf8("Close"))
         self.AddFriend = QtGui.QPushButton(self.centralwidget)
         self.AddFriend.setGeometry(QtCore.QRect(95, 390, 99, 23))
@@ -166,7 +162,6 @@ class Ui_QControllerInfo(object):
         font.setPointSize(8)
         self.AddFriend.setFont(font)
         self.AddFriend.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.AddFriend.setText(QtGui.QApplication.translate("QControllerInfo", "Add Friend", None, QtGui.QApplication.UnicodeUTF8))
         self.AddFriend.setObjectName(_fromUtf8("AddFriend"))
         self.SoftwareLabel = QtGui.QLabel(self.centralwidget)
         self.SoftwareLabel.setGeometry(QtCore.QRect(10, 353, 61, 16))
@@ -177,7 +172,6 @@ class Ui_QControllerInfo(object):
         font.setWeight(75)
         self.SoftwareLabel.setFont(font)
         self.SoftwareLabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.SoftwareLabel.setText(QtGui.QApplication.translate("QControllerInfo", "Software", None, QtGui.QApplication.UnicodeUTF8))
         self.SoftwareLabel.setObjectName(_fromUtf8("SoftwareLabel"))
         self.ConnectedLabel = QtGui.QLabel(self.centralwidget)
         self.ConnectedLabel.setGeometry(QtCore.QRect(250, 351, 91, 20))
@@ -188,7 +182,6 @@ class Ui_QControllerInfo(object):
         font.setWeight(75)
         self.ConnectedLabel.setFont(font)
         self.ConnectedLabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.ConnectedLabel.setText(QtGui.QApplication.translate("QControllerInfo", "Connected to", None, QtGui.QApplication.UnicodeUTF8))
         self.ConnectedLabel.setObjectName(_fromUtf8("ConnectedLabel"))
         self.rating_img = QtGui.QLabel(self.centralwidget)
         self.rating_img.setGeometry(QtCore.QRect(278, 19, 105, 27))
@@ -208,7 +201,6 @@ class Ui_QControllerInfo(object):
         font.setWeight(75)
         self.Controller.setFont(font)
         self.Controller.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.Controller.setTitle(QtGui.QApplication.translate("QControllerInfo", "Controller", None, QtGui.QApplication.UnicodeUTF8))
         self.Controller.setObjectName(_fromUtf8("Controller"))
         self.FacilityDetails = QtGui.QGroupBox(self.centralwidget)
         self.FacilityDetails.setGeometry(QtCore.QRect(4, 110, 391, 191))
@@ -219,7 +211,6 @@ class Ui_QControllerInfo(object):
         font.setWeight(75)
         self.FacilityDetails.setFont(font)
         self.FacilityDetails.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.FacilityDetails.setTitle(QtGui.QApplication.translate("QControllerInfo", "Facility Details", None, QtGui.QApplication.UnicodeUTF8))
         self.FacilityDetails.setObjectName(_fromUtf8("FacilityDetails"))
         self.Conection = QtGui.QGroupBox(self.centralwidget)
         self.Conection.setGeometry(QtCore.QRect(4, 303, 391, 81))
@@ -230,7 +221,6 @@ class Ui_QControllerInfo(object):
         font.setWeight(75)
         self.Conection.setFont(font)
         self.Conection.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.Conection.setTitle(QtGui.QApplication.translate("QControllerInfo", "Conection", None, QtGui.QApplication.UnicodeUTF8))
         self.Conection.setObjectName(_fromUtf8("Conection"))
         QControllerInfo.setCentralWidget(self.centralwidget)
         self.statusBar = QtGui.QStatusBar(QControllerInfo)
@@ -242,5 +232,14 @@ class Ui_QControllerInfo(object):
         QtCore.QMetaObject.connectSlotsByName(QControllerInfo)
 
     def retranslateUi(self, QControllerInfo):
-        pass
+        QControllerInfo.setWindowTitle(QtGui.QApplication.translate("QControllerInfo", "Controller Info", None, QtGui.QApplication.UnicodeUTF8))
+        self.VidLabel.setText(QtGui.QApplication.translate("QControllerInfo", "VID", None, QtGui.QApplication.UnicodeUTF8))
+        self.ControllingLabel.setText(QtGui.QApplication.translate("QControllerInfo", "Controlling in ", None, QtGui.QApplication.UnicodeUTF8))
+        self.Close.setText(QtGui.QApplication.translate("QControllerInfo", "Close", None, QtGui.QApplication.UnicodeUTF8))
+        self.AddFriend.setText(QtGui.QApplication.translate("QControllerInfo", "Add Friend", None, QtGui.QApplication.UnicodeUTF8))
+        self.SoftwareLabel.setText(QtGui.QApplication.translate("QControllerInfo", "Software", None, QtGui.QApplication.UnicodeUTF8))
+        self.ConnectedLabel.setText(QtGui.QApplication.translate("QControllerInfo", "Connected to", None, QtGui.QApplication.UnicodeUTF8))
+        self.Controller.setTitle(QtGui.QApplication.translate("QControllerInfo", "Controller", None, QtGui.QApplication.UnicodeUTF8))
+        self.FacilityDetails.setTitle(QtGui.QApplication.translate("QControllerInfo", "Facility Details", None, QtGui.QApplication.UnicodeUTF8))
+        self.Conection.setTitle(QtGui.QApplication.translate("QControllerInfo", "Conection", None, QtGui.QApplication.UnicodeUTF8))
 

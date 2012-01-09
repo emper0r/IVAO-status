@@ -1923,6 +1923,9 @@
       <property name="autoFillBackground">
        <bool>true</bool>
       </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
       <property name="tabKeyNavigation">
        <bool>false</bool>
       </property>
@@ -2049,6 +2052,9 @@
       </property>
       <property name="autoFillBackground">
        <bool>true</bool>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
       </property>
       <property name="tabKeyNavigation">
        <bool>false</bool>
@@ -2281,6 +2287,9 @@
       <property name="autoFillBackground">
        <bool>true</bool>
       </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
       <property name="tabKeyNavigation">
        <bool>false</bool>
       </property>
@@ -2475,6 +2484,9 @@
        </property>
        <property name="textAlignment">
         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsEnabled</set>
        </property>
       </item>
       <item row="0" column="1">
@@ -3014,16 +3026,25 @@
        </property>
       </item>
       <item row="16" column="4">
+       <property name="text">
+        <string/>
+       </property>
        <property name="textAlignment">
         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
        </property>
       </item>
       <item row="16" column="5">
+       <property name="text">
+        <string/>
+       </property>
        <property name="textAlignment">
         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
        </property>
       </item>
       <item row="16" column="6">
+       <property name="text">
+        <string/>
+       </property>
        <property name="textAlignment">
         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
        </property>
@@ -3222,7 +3243,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">

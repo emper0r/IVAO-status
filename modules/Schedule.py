@@ -30,6 +30,7 @@ import calendar
 import datetime
 import locale
 from PyQt4.Qt import QNetworkProxy
+from PyQt4.QtGui import qApp
 
 def Scheduling():
     '''This part is a parse HTML from Schedule website from IVAO, because i can't access
@@ -40,6 +41,7 @@ def Scheduling():
     config.read(config_file)
     SQL_queries.sql_query('Clear_Scheduling_tables')
     parser = etree.HTMLParser()
+    qApp.processEvents()
     try:
         use_proxy = config.getint('Settings', 'use_proxy')
         auth = config.getint('Settings', 'auth')
@@ -76,6 +78,7 @@ def Scheduling():
             if calendar.month_name[datetime.datetime.now().month] in line_atc_table[4][0].text:
                 columns = [td[0].text for td in line_atc_table]
                 SQL_queries.sql_query('Add_Schedule_ATC', columns)
+                qApp.processEvents()
 
         SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_flights')).read()
         tree = etree.parse(StringIO.StringIO(SchedFlights_URL), parser)
@@ -85,6 +88,7 @@ def Scheduling():
             if calendar.month_name[datetime.datetime.now().month] in line_flights_table[7][0].text:
                 columns = [td[0].text for td in line_flights_table]
                 SQL_queries.sql_query('Add_Schedule_Flights', columns)
+                qApp.processEvents()
 
         '''Restore locales'''
         locale.setlocale(locale.LC_ALL, save_locale)

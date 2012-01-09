@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'QtUI/FollowMeCarService_UI.ui'
+# Form implementation generated from reading ui file 'QtUI/FOLME_UI.ui'
 #
-# Created: Fri Dec 16 13:42:59 2011
-#      by: PyQt4 UI code generator 4.8.5
+# Created: Mon Jan  9 10:07:36 2012
+#      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -28,7 +28,6 @@ class Ui_QFMC(object):
         QFMC.setMaximumSize(QtCore.QSize(400, 280))
         QFMC.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         QFMC.setFocusPolicy(QtCore.Qt.StrongFocus)
-        QFMC.setWindowTitle(QtGui.QApplication.translate("QFMC", "Follow Me Car Service", None, QtGui.QApplication.UnicodeUTF8))
         self.centralwidget = QtGui.QWidget(QFMC)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.FMCRealname = QtGui.QLabel(self.centralwidget)
@@ -51,7 +50,6 @@ class Ui_QFMC(object):
         font.setWeight(75)
         self.VidLabel.setFont(font)
         self.VidLabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.VidLabel.setText(QtGui.QApplication.translate("QFMC", "VID", None, QtGui.QApplication.UnicodeUTF8))
         self.VidLabel.setObjectName(_fromUtf8("VidLabel"))
         self.VidText = QtGui.QLabel(self.centralwidget)
         self.VidText.setGeometry(QtCore.QRect(43, 55, 71, 16))
@@ -73,7 +71,6 @@ class Ui_QFMC(object):
         font.setWeight(75)
         self.FMCLabel.setFont(font)
         self.FMCLabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.FMCLabel.setText(QtGui.QApplication.translate("QFMC", "Follow Me Car Service at", None, QtGui.QApplication.UnicodeUTF8))
         self.FMCLabel.setObjectName(_fromUtf8("FMCLabel"))
         self.ControllingText = QtGui.QLabel(self.centralwidget)
         self.ControllingText.setGeometry(QtCore.QRect(140, 70, 241, 20))
@@ -137,7 +134,6 @@ class Ui_QFMC(object):
         font.setPointSize(8)
         self.Close.setFont(font)
         self.Close.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.Close.setText(QtGui.QApplication.translate("QFMC", "Close", None, QtGui.QApplication.UnicodeUTF8))
         self.Close.setObjectName(_fromUtf8("Close"))
         self.AddFriend = QtGui.QPushButton(self.centralwidget)
         self.AddFriend.setGeometry(QtCore.QRect(95, 201, 99, 23))
@@ -146,7 +142,6 @@ class Ui_QFMC(object):
         font.setPointSize(8)
         self.AddFriend.setFont(font)
         self.AddFriend.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.AddFriend.setText(QtGui.QApplication.translate("QFMC", "Add Friend", None, QtGui.QApplication.UnicodeUTF8))
         self.AddFriend.setObjectName(_fromUtf8("AddFriend"))
         self.SoftwareLabel = QtGui.QLabel(self.centralwidget)
         self.SoftwareLabel.setGeometry(QtCore.QRect(10, 164, 61, 16))
@@ -157,7 +152,6 @@ class Ui_QFMC(object):
         font.setWeight(75)
         self.SoftwareLabel.setFont(font)
         self.SoftwareLabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.SoftwareLabel.setText(QtGui.QApplication.translate("QFMC", "Software", None, QtGui.QApplication.UnicodeUTF8))
         self.SoftwareLabel.setObjectName(_fromUtf8("SoftwareLabel"))
         self.ConnectedLabel = QtGui.QLabel(self.centralwidget)
         self.ConnectedLabel.setGeometry(QtCore.QRect(250, 162, 91, 20))
@@ -168,7 +162,6 @@ class Ui_QFMC(object):
         font.setWeight(75)
         self.ConnectedLabel.setFont(font)
         self.ConnectedLabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.ConnectedLabel.setText(QtGui.QApplication.translate("QFMC", "Connected to", None, QtGui.QApplication.UnicodeUTF8))
         self.ConnectedLabel.setObjectName(_fromUtf8("ConnectedLabel"))
         self.rating_img = QtGui.QLabel(self.centralwidget)
         self.rating_img.setGeometry(QtCore.QRect(278, 19, 105, 27))
@@ -188,7 +181,6 @@ class Ui_QFMC(object):
         font.setWeight(75)
         self.FMC.setFont(font)
         self.FMC.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.FMC.setTitle(QtGui.QApplication.translate("QFMC", "FMC Service", None, QtGui.QApplication.UnicodeUTF8))
         self.FMC.setObjectName(_fromUtf8("FMC"))
         self.Conection = QtGui.QGroupBox(self.centralwidget)
         self.Conection.setGeometry(QtCore.QRect(4, 114, 391, 81))
@@ -199,7 +191,6 @@ class Ui_QFMC(object):
         font.setWeight(75)
         self.Conection.setFont(font)
         self.Conection.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.Conection.setTitle(QtGui.QApplication.translate("QFMC", "Conection", None, QtGui.QApplication.UnicodeUTF8))
         self.Conection.setObjectName(_fromUtf8("Conection"))
         QFMC.setCentralWidget(self.centralwidget)
         self.statusBar = QtGui.QStatusBar(QFMC)
@@ -211,5 +202,13 @@ class Ui_QFMC(object):
         QtCore.QMetaObject.connectSlotsByName(QFMC)
 
     def retranslateUi(self, QFMC):
-        pass
+        QFMC.setWindowTitle(QtGui.QApplication.translate("QFMC", "Follow Me Car Service", None, QtGui.QApplication.UnicodeUTF8))
+        self.VidLabel.setText(QtGui.QApplication.translate("QFMC", "VID", None, QtGui.QApplication.UnicodeUTF8))
+        self.FMCLabel.setText(QtGui.QApplication.translate("QFMC", "Follow Me Car Service at", None, QtGui.QApplication.UnicodeUTF8))
+        self.Close.setText(QtGui.QApplication.translate("QFMC", "Close", None, QtGui.QApplication.UnicodeUTF8))
+        self.AddFriend.setText(QtGui.QApplication.translate("QFMC", "Add Friend", None, QtGui.QApplication.UnicodeUTF8))
+        self.SoftwareLabel.setText(QtGui.QApplication.translate("QFMC", "Software", None, QtGui.QApplication.UnicodeUTF8))
+        self.ConnectedLabel.setText(QtGui.QApplication.translate("QFMC", "Connected to", None, QtGui.QApplication.UnicodeUTF8))
+        self.FMC.setTitle(QtGui.QApplication.translate("QFMC", "FMC Service", None, QtGui.QApplication.UnicodeUTF8))
+        self.Conection.setTitle(QtGui.QApplication.translate("QFMC", "Conection", None, QtGui.QApplication.UnicodeUTF8))
 
