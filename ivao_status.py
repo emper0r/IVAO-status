@@ -48,13 +48,13 @@ try:
     from PyQt4.QtGui import *
     from PyQt4.QtWebKit import *
     from PyQt4.Qt import *
-except:
+except ImportError:
     print ('\nYou have not installed the packages Qt Modules for Python,\n')
     print ('please run command as root:  aptitude install python-qt4\n')
     print ('with all dependencies.\n\n')
     sys.exit(2)
 
-__version__ = '1.0.4'
+__version__ = '1.0.6'
 
 class Main(QMainWindow):
     '''Preparing the MainWindow Class, to paint all design of the app'''
@@ -324,6 +324,7 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Loading friends list', 2000)
         qApp.processEvents()
         self.ivao_friend()
+        self.network()
         self.country_view()
         self.statusBar().showMessage('Loading Schedule', 4000)
         qApp.processEvents()
@@ -383,6 +384,7 @@ class Main(QMainWindow):
                 if "FOLME" in player:
                     vehicles.append(player)
             SQL_queries.update_db(pilot, atc, vehicles)
+            self.network()
             self.show_tables()
             self.ivao_friend()
 
@@ -1198,7 +1200,7 @@ class Main(QMainWindow):
         config.read(config_file)
         icao_airport = self.ui.METAREdit.text()
         try:
-            StatusURL = urllib2.urlopen(config.get('Info', 'url'))
+            StatusURL = urllib2.urlopen(config.get('Info', 'data_access'))
             shuffle = random.choice([link for link in StatusURL.readlines() if 'metar0' in link]).split('=')[1].strip('\r\n')
             METAR = urllib2.urlopen(shuffle + '?id=%s' % icao_airport)
 
