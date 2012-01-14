@@ -27,6 +27,7 @@ import StatusFlight
 import Friends
 import sqlite3
 import distance
+import datetime
 
 try:
     '''Check if PyQt4 is installed or not, this library is a dependency of all,
