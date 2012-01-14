@@ -148,7 +148,7 @@ def sql_query(args=None, var=None):
     return Q_db
 
 def update_db(pilots, controllers, vehicles):
-    '''This function insert the data got it in memory downloaded from IVAO to parse the players for controllers, 
+    '''This function insert the data got it in memory downloaded from IVAO to parse the players for controllers,
        pilots, and FMC to insert into database, separate by field ':' as NOTAM and Logistic explain what field means'''
     config = ConfigParser.RawConfigParser()
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Config.cfg')
@@ -271,4 +271,4 @@ def update_db(pilots, controllers, vehicles):
         cursor.execute("INSERT INTO status_ivao (callsign, vid, realname, clienttype, server, time_connected) VALUES (?,?,?,?,?,?);", \
                    (callsign, vid, realname, clienttype, server, time_connected))
     connection.commit()
-    return 
+    return

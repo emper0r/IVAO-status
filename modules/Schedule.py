@@ -65,7 +65,7 @@ def Scheduling():
         if use_proxy == 0 and auth == 0:
             pass
 
-        '''This lines set locales of enviroment at default language "English" 
+        '''This lines set locales of enviroment at default language "English"
            to can parse with web'''
         save_locale = locale.getlocale()
         locale.setlocale(locale.LC_ALL, 'C')

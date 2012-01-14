@@ -27,8 +27,8 @@ import sqlite3
 from modules import SQL_queries
 
 def GMapsLayer(vid, icao_orig, icao_dest):
-    '''This function is for see the single player in GoogleMaps, if  is ATC, see with more or less zoom depends 
-       from ATC level and the PILOT, I implemented this before show up webeye, so i made the middle stuff, 
+    '''This function is for see the single player in GoogleMaps, if  is ATC, see with more or less zoom depends
+       from ATC level and the PILOT, I implemented this before show up webeye, so i made the middle stuff,
        now with webeye, I want use it here, to make strong those 2 tools'''
     latitude, longitude, heading = vid[0][0], vid[0][1], vid[0][3]
     mapfileplayer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
@@ -233,7 +233,7 @@ def GMapsLayer(vid, icao_orig, icao_dest):
     return
 
 def all2map():
-    '''This function is for see the whole map, all player in GoogleMaps, I implemented this before show up webeye, 
+    '''This function is for see the whole map, all player in GoogleMaps, I implemented this before show up webeye,
        now with webeye, I want to use it here, to make strong those 2 tools'''
     config = ConfigParser.RawConfigParser()
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Config.cfg')
@@ -442,4 +442,4 @@ def all2map():
     all_in_map.write('  </script>\n')
     all_in_map.write('</body></html>\n')
     all_in_map.close()
-    return 
+    return

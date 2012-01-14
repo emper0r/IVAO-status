@@ -42,7 +42,7 @@ from modules import MapView
 import Settings
 
 try:
-    '''Check if PyQT4 is installed or not, this library is a dependency of all, 
+    '''Check if PyQT4 is installed or not, this library is a dependency of all,
     if not installed read the README.rst'''
     from PyQt4.QtCore import *
     from PyQt4.QtGui import *
@@ -221,7 +221,7 @@ class Main(QMainWindow):
 
         self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
                         , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
-        
+
         '''If user delete Config.ini by error, when app start write it again the file'''
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
@@ -332,7 +332,7 @@ class Main(QMainWindow):
         qApp.restoreOverrideCursor()
 
     def connect(self):
-        '''Conecting to IVAO with only link explain in the Logistic mail rules, 
+        '''Conecting to IVAO with only link explain in the Logistic mail rules,
         this part contain some proxy settings because at least in my country is very used'''
         self.statusBar().showMessage('Trying connecting to IVAO', 3000)
         qApp.processEvents()
@@ -459,7 +459,7 @@ class Main(QMainWindow):
                     self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
                     col_country = QTableWidgetItem('IVAO Member', 0)
                     self.ui.ATC_FullList.setItem(startrow, 3, col_country)
-    
+
                 elif str(row_atc[0][2:3]) == '-' or str(row_atc[0][2:3]) == '_':
                     Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(row_atc[0][:2]),))
                     div_ivao = Q_db.fetchone()
@@ -1224,8 +1224,8 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Error! during try get Metar info, check your internet connection...', 4000)
 
     def view_map(self, vid, icao_orig=None, icao_dest=None):
-        '''This function is for see the single player in GoogleMaps, if  is ATC, see with more or less zoom depends 
-           from ATC level and the PILOT, I implemented this before show up webeye, so i made the middle stuff, 
+        '''This function is for see the single player in GoogleMaps, if  is ATC, see with more or less zoom depends
+           from ATC level and the PILOT, I implemented this before show up webeye, so i made the middle stuff,
            now with webeye, I want use it here, to make strong those 2 tools'''
         self.statusBar().showMessage('Showing player in Map', 4000)
         qApp.processEvents()
@@ -1279,7 +1279,7 @@ class Main(QMainWindow):
         self.setting_window.show()
 
     def all2map(self):
-        '''This function is for see the whole map, all player in GoogleMaps, I implemented this before show up webeye, 
+        '''This function is for see the whole map, all player in GoogleMaps, I implemented this before show up webeye,
            now with webeye, I want to use it here, to make strong those 2 tools'''
         self.statusBar().showMessage('Populating all players in the Map', 10000)
         qApp.processEvents()
@@ -1863,7 +1863,7 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Schedule Done!', 2000)
         else:
             self.statusBar().showMessage('Error! when trying to download info from IVAO. Check your connection to Internet.')
-        
+
     def show_TabSched(self):
         ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
         ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
@@ -1912,7 +1912,7 @@ class Main(QMainWindow):
 
         Q_db = SQL_queries.sql_query('Get_Schedule_Flights')
         sched_pilots = Q_db.fetchall()
-        
+
         qApp.processEvents()
         while self.ui.SchedulingFlights.rowCount () > 0:
             self.ui.SchedulingFlights.removeRow(0)
@@ -1989,7 +1989,7 @@ class Main(QMainWindow):
             startrow += 1
             qApp.processEvents()
         self.statusBar().showMessage('Done!', 2000)
-    
+
 def main():
     import sys, time, os
     '''Next line is for set only exact theme with Qt libraries to the app'''

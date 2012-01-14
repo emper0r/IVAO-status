@@ -39,7 +39,7 @@ except:
     sys.exit(2)
 
 class ControllerInfo(QMainWindow):
-    '''The ControllerInfo Class is to show selected player from Controllers Tables to see the status of player 
+    '''The ControllerInfo Class is to show selected player from Controllers Tables to see the status of player
        at the Airport controlled like, freq, country, and ATIS info'''
     closed = pyqtSignal()
 

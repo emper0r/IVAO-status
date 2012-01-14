@@ -24,7 +24,7 @@ def pairwise(seq):
 
 def join_filter(sep, seq, pred=bool):
     return sep.join([unicode(i) for i in seq if pred(i)])
- 
+
 def get_encoding(page, contents=None):
     plist = page.headers.getplist()
     if plist:
@@ -62,7 +62,7 @@ def join_filter(sep, seq, pred=bool):
 def unescape(text):
     """
     Removes HTML or XML character references and entities from a text string.
-    
+
     """
     def fixup(m):
         text = m.group(0)
