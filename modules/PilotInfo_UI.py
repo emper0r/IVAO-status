@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Mon Jan  9 10:07:49 2012
+# Created: Sun Jan 15 08:02:07 2012
 #      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
@@ -137,7 +137,7 @@ class Ui_QPilotInfo(object):
         self.DestinationText.setText(_fromUtf8(""))
         self.DestinationText.setObjectName(_fromUtf8("DestinationText"))
         self.RouteText = QtGui.QTextEdit(self.centralwidget)
-        self.RouteText.setGeometry(QtCore.QRect(11, 288, 476, 111))
+        self.RouteText.setGeometry(QtCore.QRect(11, 301, 476, 111))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         self.RouteText.setFont(font)
@@ -147,7 +147,7 @@ class Ui_QPilotInfo(object):
         self.RouteText.setTextInteractionFlags(QtCore.Qt.NoTextInteraction)
         self.RouteText.setObjectName(_fromUtf8("RouteText"))
         self.Route_label = QtGui.QLabel(self.centralwidget)
-        self.Route_label.setGeometry(QtCore.QRect(13, 270, 41, 16))
+        self.Route_label.setGeometry(QtCore.QRect(16, 283, 41, 16))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)
@@ -497,6 +497,25 @@ class Ui_QPilotInfo(object):
         self.time_online_text.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.time_online_text.setText(_fromUtf8(""))
         self.time_online_text.setObjectName(_fromUtf8("time_online_text"))
+        self.ETAlabel = QtGui.QLabel(self.centralwidget)
+        self.ETAlabel.setGeometry(QtCore.QRect(16, 265, 51, 16))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Sans Serif"))
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.ETAlabel.setFont(font)
+        self.ETAlabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.ETAlabel.setObjectName(_fromUtf8("ETAlabel"))
+        self.ETA_Arrive = QtGui.QLabel(self.centralwidget)
+        self.ETA_Arrive.setGeometry(QtCore.QRect(80, 262, 91, 20))
+        font = QtGui.QFont()
+        font.setFamily(_fromUtf8("Sans Serif"))
+        font.setPointSize(8)
+        self.ETA_Arrive.setFont(font)
+        self.ETA_Arrive.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.ETA_Arrive.setText(_fromUtf8(""))
+        self.ETA_Arrive.setObjectName(_fromUtf8("ETA_Arrive"))
         QPilotInfo.setCentralWidget(self.centralwidget)
         self.statusBar = QtGui.QStatusBar(QPilotInfo)
         self.statusBar.setObjectName(_fromUtf8("statusBar"))
@@ -533,4 +552,5 @@ class Ui_QPilotInfo(object):
         self.GSFiled.setText(QtGui.QApplication.translate("QPilotInfo", "GS (Filed)", None, QtGui.QApplication.UnicodeUTF8))
         self.FLFiled.setText(QtGui.QApplication.translate("QPilotInfo", "FL (Filed)", None, QtGui.QApplication.UnicodeUTF8))
         self.time_online.setText(QtGui.QApplication.translate("QPilotInfo", "Time Online:", None, QtGui.QApplication.UnicodeUTF8))
+        self.ETAlabel.setText(QtGui.QApplication.translate("QPilotInfo", "Arrives at:", None, QtGui.QApplication.UnicodeUTF8))
 

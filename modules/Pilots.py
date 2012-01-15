@@ -159,13 +159,16 @@ class PilotInfo(QMainWindow):
                 total_miles = distance.distance(city_orig_point, city_dest_point).miles
                 dist_traveled = distance.distance(city_orig_point, player_point).miles
                 percent = float((dist_traveled / total_miles) * 100.0)
+                eta = str(datetime.timedelta(hours=((total_miles - dist_traveled) / float(info[0][3]))))
             except:
                 if city_orig_point or city_orig_point is None:
                     percent = 0.0
+                eta = '00:00:00.000000'
             self.ui.nauticalmiles.setText('%.1f / %.1f miles - %.1f%%' % (float(dist_traveled), float(total_miles), float(percent)))
             self.ui.progressBarTrack.setValue(int(percent))
         status_plane = StatusFlight.status_flight(callsign)
         self.ui.FlightStatusDetail.setText(str(status_plane))
+        self.ui.ETA_Arrive.setText(str(eta)[:-7])
         try:
             start_connected = datetime.datetime(int(str(info[0][18])[:4]), int(str(info[0][18])[4:6]) \
                                                 , int(str(info[0][18])[6:8]), int(str(info[0][18])[8:10]) \
