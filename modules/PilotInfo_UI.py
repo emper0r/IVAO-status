@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/PilotInfo_UI.ui'
 #
-# Created: Sun Jan 15 08:02:07 2012
+# Created: Mon Jan 16 07:57:38 2012
 #      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
@@ -276,7 +276,7 @@ class Ui_QPilotInfo(object):
         self.PobText.setText(_fromUtf8(""))
         self.PobText.setObjectName(_fromUtf8("PobText"))
         self.TransponderText = QtGui.QLabel(self.centralwidget)
-        self.TransponderText.setGeometry(QtCore.QRect(311, 460, 41, 20))
+        self.TransponderText.setGeometry(QtCore.QRect(298, 460, 41, 20))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)
@@ -285,7 +285,7 @@ class Ui_QPilotInfo(object):
         self.TransponderText.setText(_fromUtf8(""))
         self.TransponderText.setObjectName(_fromUtf8("TransponderText"))
         self.TransponderLabel = QtGui.QLabel(self.centralwidget)
-        self.TransponderLabel.setGeometry(QtCore.QRect(224, 462, 91, 16))
+        self.TransponderLabel.setGeometry(QtCore.QRect(211, 462, 91, 16))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)
@@ -479,7 +479,7 @@ class Ui_QPilotInfo(object):
         self.FLFiled.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.FLFiled.setObjectName(_fromUtf8("FLFiled"))
         self.time_online = QtGui.QLabel(self.centralwidget)
-        self.time_online.setGeometry(QtCore.QRect(363, 462, 91, 16))
+        self.time_online.setGeometry(QtCore.QRect(350, 462, 91, 16))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)
@@ -489,7 +489,7 @@ class Ui_QPilotInfo(object):
         self.time_online.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.time_online.setObjectName(_fromUtf8("time_online"))
         self.time_online_text = QtGui.QLabel(self.centralwidget)
-        self.time_online_text.setGeometry(QtCore.QRect(450, 460, 41, 20))
+        self.time_online_text.setGeometry(QtCore.QRect(437, 460, 51, 20))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)
@@ -498,7 +498,7 @@ class Ui_QPilotInfo(object):
         self.time_online_text.setText(_fromUtf8(""))
         self.time_online_text.setObjectName(_fromUtf8("time_online_text"))
         self.ETAlabel = QtGui.QLabel(self.centralwidget)
-        self.ETAlabel.setGeometry(QtCore.QRect(16, 265, 51, 16))
+        self.ETAlabel.setGeometry(QtCore.QRect(16, 265, 71, 16))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)
@@ -508,7 +508,7 @@ class Ui_QPilotInfo(object):
         self.ETAlabel.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.ETAlabel.setObjectName(_fromUtf8("ETAlabel"))
         self.ETA_Arrive = QtGui.QLabel(self.centralwidget)
-        self.ETA_Arrive.setGeometry(QtCore.QRect(80, 262, 91, 20))
+        self.ETA_Arrive.setGeometry(QtCore.QRect(84, 263, 91, 20))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Sans Serif"))
         font.setPointSize(8)

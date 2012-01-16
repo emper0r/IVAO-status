@@ -648,7 +648,7 @@
    <widget class="QLabel" name="TransponderText">
     <property name="geometry">
      <rect>
-      <x>311</x>
+      <x>298</x>
       <y>460</y>
       <width>41</width>
       <height>20</height>
@@ -670,7 +670,7 @@
    <widget class="QLabel" name="TransponderLabel">
     <property name="geometry">
      <rect>
-      <x>224</x>
+      <x>211</x>
       <y>462</y>
       <width>91</width>
       <height>16</height>
@@ -1139,7 +1139,7 @@
    <widget class="QLabel" name="time_online">
     <property name="geometry">
      <rect>
-      <x>363</x>
+      <x>350</x>
       <y>462</y>
       <width>91</width>
       <height>16</height>
@@ -1163,9 +1163,9 @@
    <widget class="QLabel" name="time_online_text">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>437</x>
       <y>460</y>
-      <width>41</width>
+      <width>51</width>
       <height>20</height>
      </rect>
     </property>
@@ -1187,7 +1187,7 @@
      <rect>
       <x>16</x>
       <y>265</y>
-      <width>51</width>
+      <width>71</width>
       <height>16</height>
      </rect>
     </property>
@@ -1209,8 +1209,8 @@
    <widget class="QLabel" name="ETA_Arrive">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>262</y>
+      <x>84</x>
+      <y>263</y>
       <width>91</width>
       <height>20</height>
      </rect>
