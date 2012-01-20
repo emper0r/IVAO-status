@@ -73,22 +73,25 @@ def Scheduling():
         SchedATC_URL = urllib2.urlopen(config.get('Info', 'scheduling_atc')).read()
         tree = etree.parse(StringIO.StringIO(SchedATC_URL), parser)
         table_atc = tree.xpath("/html/body/div/center/table")[0]
+        actual_today = datetime.datetime.today()
 
         for line_atc_table in table_atc[1:]:
-            if calendar.month_name[datetime.datetime.now().month] in line_atc_table[4][0].text:
-                columns = [td[0].text for td in line_atc_table]
-                SQL_queries.sql_query('Add_Schedule_ATC', columns)
-                qApp.processEvents()
+            for day in range(actual_today.day, 31):
+                if '%s %s' % (day, calendar.month_name[datetime.datetime.now().month]) in line_atc_table[4][0].text:
+                    columns = [td[0].text for td in line_atc_table]
+                    SQL_queries.sql_query('Add_Schedule_ATC', columns)
+                    qApp.processEvents()
 
         SchedFlights_URL = urllib2.urlopen(config.get('Info', 'scheduling_flights')).read()
         tree = etree.parse(StringIO.StringIO(SchedFlights_URL), parser)
         table_flights = tree.xpath("/html/body/div/div/center/table")[0]
 
         for line_flights_table in table_flights[2:]:
-            if calendar.month_name[datetime.datetime.now().month] in line_flights_table[7][0].text:
-                columns = [td[0].text for td in line_flights_table]
-                SQL_queries.sql_query('Add_Schedule_Flights', columns)
-                qApp.processEvents()
+            for day in range(actual_today.day, 31):
+                if '%s %s' % (day, calendar.month_name[datetime.datetime.now().month]) in line_flights_table[7][0].text:
+                    columns = [td[0].text for td in line_flights_table]
+                    SQL_queries.sql_query('Add_Schedule_Flights', columns)
+                    qApp.processEvents()
 
         '''Restore locales'''
         locale.setlocale(locale.LC_ALL, save_locale)

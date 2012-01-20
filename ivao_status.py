@@ -27,7 +27,6 @@ import ConfigParser
 import urllib2
 import random
 import gzip
-import time
 import StringIO
 
 '''Importing the libraries from modules directory'''
@@ -387,6 +386,8 @@ class Main(QMainWindow):
             self.network()
             self.show_tables()
             self.ivao_friend()
+            self.country_view()
+            self.network()
 
         except IOError:
             self.statusBar().showMessage('Error! when trying to download info from IVAO. Check your connection to Internet.')
@@ -665,8 +666,6 @@ class Main(QMainWindow):
             self.all2map()
         else:
             pass
-        self.country_view()
-        self.network()
 
     def country_view(self):
         '''This function show all users connected as PILOT and CONTOLLER of Country selected,
@@ -1235,7 +1234,7 @@ class Main(QMainWindow):
         icao_dest = Q_db.fetchone()
         Q_db = SQL_queries.sql_query('Get_Player_Location', (str(vid),))
         player = Q_db.fetchall()
-        PlayerMap = MapView.GMapsLayer(player, icao_orig, icao_dest)
+        MapView.GMapsLayer(player, icao_orig, icao_dest)
         mapfileplayer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules')
         self.maptab.load(QUrl(mapfileplayer_path + '/player_location.html'))
 
@@ -1780,7 +1779,7 @@ class Main(QMainWindow):
                     col_total = QTableWidgetItem(str(int(position[0])), 0)
                     self.ui.Statistics.setItem(startrow, 2, col_total)
                     percent = float(position[0]) / float(total_items[0]) * 100.0
-                    col_percent = QTableWidgetItem(str('%.1f' % (float(percent))), 0)
+                    QTableWidgetItem(str('%.1f' % (float(percent))), 0)
                     self.progressbar = QProgressBar()
                     self.progressbar.setMinimum(1)
                     self.progressbar.setMaximum(100)
