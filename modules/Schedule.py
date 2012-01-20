@@ -24,13 +24,17 @@ import os
 import SQL_queries
 import ConfigParser
 import urllib2
-import etree
 import StringIO
 import calendar
 import datetime
 import locale
 from PyQt4.Qt import QNetworkProxy
 from PyQt4.QtGui import qApp
+
+if os.uname()[-1] == 'i686':
+    from x86 import etree
+else:
+    from x64 import etree
 
 def Scheduling():
     '''This part is a parse HTML from Schedule website from IVAO, because i can't access
