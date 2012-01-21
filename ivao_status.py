@@ -384,10 +384,10 @@ class Main(QMainWindow):
                     vehicles.append(player)
             SQL_queries.update_db(pilot, atc, vehicles)
             self.network()
-            self.show_tables()
             self.ivao_friend()
-            self.country_view()
             self.network()
+            self.country_view()
+            self.show_tables()
 
         except IOError:
             self.statusBar().showMessage('Error! when trying to download info from IVAO. Check your connection to Internet.')

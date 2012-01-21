@@ -133,8 +133,8 @@ class PilotInfo(QMainWindow):
             self.ui.Altern_Airport_Text_2.setText(str(altern_city_2[0]))
         try:
             if str(info[0][4]) != '':
-                cursor.execute("SELECT Model, Fabricant, Description FROM icao_aircraft WHERE Model=?;", ((info[0][4].split('/')[1]),))
-                data = cursor.fetchall()
+                Q_db = SQL_queries.sql_query('Get_Model', ((info[0][4].split('/')[1]),))
+                data = Q_db.fetchall()
                 self.ui.AirplaneText.setText('Model: %s Fabricant: %s Description: %s' \
                                              % (str(data[0][0]), str(data[0][1]), str(data[0][2])))
         except:
@@ -154,6 +154,7 @@ class PilotInfo(QMainWindow):
         if str(info[0][5]) == str(info[0][6]):
                 self.ui.progressBarTrack.setValue(0)
                 self.ui.nauticalmiles.setText('Local Flight')
+                eta = '00:00:00.000000'
         else:
             try:
                 total_miles = distance.distance(city_orig_point, city_dest_point).miles

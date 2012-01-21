@@ -123,6 +123,8 @@ def sql_query(args=None, var=None):
         Q_db = cursor.execute("SELECT Longitude, Latitude FROM fir_coastlines_list where ID_FIRCOASTLINE = ?;", (int(var[0]),))
     if args == 'Get_Schedule_ATC':
         Q_db = cursor.execute("SELECT Name, Position, StartDateUTC, EndDateUTC, Voice, Training, Event FROM schedule_controllers;")
+    if args == 'Get_Model':
+        Q_db = cursor.execute("SELECT Model, Fabricant, Description FROM icao_aircraft WHERE Model=?;", ((var[0]),))
     if args == 'Get_Schedule_Flights':
         Q_db = cursor.execute("SELECT Callsign, Name, Airplane, Departure, DepTime, Destination, DestTime, \
                                Altitude, CruisingSpeed, Route, Voice, Training, Event FROM schedule_pilots;")
