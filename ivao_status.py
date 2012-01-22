@@ -385,7 +385,6 @@ class Main(QMainWindow):
             SQL_queries.update_db(pilot, atc, vehicles)
             self.network()
             self.ivao_friend()
-            self.network()
             self.country_view()
             self.show_tables()
 
@@ -1172,7 +1171,10 @@ class Main(QMainWindow):
                 offline.setPixmap(Pixmap)
                 self.ui.FriendstableWidget.setCellWidget(startrow, 3, offline)
                 roster_row += 1
-            col_realname = QTableWidgetItem(str(row[1].encode('latin-1')), 0)
+            if row[3] == 'ATC':
+                col_realname = QTableWidgetItem(str(row[1].encode('latin-1')), 0)
+            else:
+                col_realname = QTableWidgetItem(str(row[1].encode('latin-1')[:-4]), 0)
             self.ui.FriendstableWidget.setItem(startrow, 1, col_realname)
             if str(row[2]) != '-':
                 if str(row[3]) == 'ATC':

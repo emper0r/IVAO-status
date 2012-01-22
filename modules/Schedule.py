@@ -31,10 +31,19 @@ import locale
 from PyQt4.Qt import QNetworkProxy
 from PyQt4.QtGui import qApp
 
-if os.uname()[-1] == 'i686':
-    from x86 import etree
-else:
-    from x64 import etree
+try:
+    # This options to can load LXML module for Linux x86 or x64 arch
+    if os.uname()[-1] == 'i686':
+        from x86 import etree
+    else:
+        from x64 import etree
+except:
+    # This options to can load LXML module for Windows 32bits with
+    # Python and PyQt devel enviroment
+    if os.environ["PROCESSOR_ARCHITECTURE"] == 'x86':
+        from windows import etree
+    else:
+        print '\nThis software not run here yet.\n'
 
 def Scheduling():
     '''This part is a parse HTML from Schedule website from IVAO, because i can't access
