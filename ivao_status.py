@@ -53,7 +53,7 @@ except ImportError:
     print ('with all dependencies.\n\n')
     sys.exit(2)
 
-__version__ = '1.0.6'
+__version__ = '1.0.7'
 
 class Main(QMainWindow):
     '''Preparing the MainWindow Class, to paint all design of the app'''
@@ -207,17 +207,13 @@ class Main(QMainWindow):
         self.progress.hide()
         self.progress.setValue(0)
         self._maptab = None
-        self.rating_pilot = {"0":"OBS - Observer", "2":"SFO - Second Flight Officer", "3":"FFO - First Flight Officer" \
-                , "4":"C - Captain", "5":"FC - Flight Captain", "6":"SC - Senior Captain" \
-                , "7":"SFC - Senior Flight Captain", "8":"CC - Commercial Captain" \
-                , "9":"CFC - Commercial Flight Captain", "10":"CSC - Commercial Senior Captain" \
-                , "11":"SUP - Supervisor", "12":"ADM - Administrator"}
-
-        self.rating_atc = {"0":"OBS - Observer", "2":"ATC Applicant", "3":"ATC Trainee" \
-                      , "4":"Advanced ATC Trainee", "5":"Aerodrome Controller", "6":"Approach Controller" \
-                      , "7":"Center Controller", "8":"Senior Controller", "9":"Senior ATC Instructor" \
-                      , "10":"Chief ATC Instructor", "11":"SUP - Supervisor", "12":"ADM - Administrator"}
-
+        
+        ratings = open('database/ratings.dat','r').readlines()
+        self.rating_pilot = {}
+        self.rating_atc = {}
+        for item in range(len(ratings)):
+            self.rating_atc[ratings[item].split(':')[0]] = ratings[item].split(':')[2]
+            self.rating_pilot[ratings[item].split(':')[0]] = ratings[item].split(':')[4].strip('\r\n')
         self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
                         , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
 
