@@ -1,0 +1,508 @@
+AGGG::SB:Honiara:Control:-9.5:160.9
+ANAU::NR:Nauru:Control:-4.2:165
+AYPY::PG:Port Moresby:Control:-6.4:150.4
+BGGL::GL:Sondrestrom:Control:71.4:-42.2
+BIRD::IS:Reykjavik:Control:66.9:-15.5
+CZEG::CA:Edmonton:Centre:65:-115
+CZQM::CA:Moncton:Centre:45.1:-62.4
+CZQX:O:CA:Gander Oceanic:Radio:54.7:-47.7:CZQX Oceanic
+CZQX::CA:Gander:Centre:51.75:-55.1
+CZUL::CA:Montreal:Centre:52.9:-71.1
+CZVR::CA:Vancouver:Centre:52.6:-125.6
+CZWG::CA:Winnipeg:Centre:56:-95
+CZYZ::CA:Toronto:Centre:47.5:-81.6
+DAAA::DZ:Algiers:Control:28.1:2.8
+DGAC::GH:Accra:Control:0.7:1.6
+DIII::CI:Abidjan:Control:-2:-5
+DNKK::NG:Kano:Control:8.4:8.6
+DRRR::NE:Niamey:Control:17:2.9
+DTTC::TN:Tunis:Control:34.6:9.5
+EBBU::BE:Brussels:Control:50.4:4.2
+EBSZ::BE:Belga:Radar:50.4:4.2:EBBU
+EDGG:N:DE:Langen:Radar:51.30:7.4:EDGG NORTH
+EDGG:W:DE:Langen:Radar:49.8:7.28:EDGG WEST
+EDGG:S:DE:Langen:Radar:49:8.91:EDGG SOUTH
+EDGG:E:DE:Langen:Radar:50.35:9.44:EDGG EAST
+EDGG:NW:DE:Langen:Radar:50.7:6.76:EDGG NORTH-WEST
+EDGG:SE:DE:Langen:Radar:49.6:8.9:EDGG SOUTH-EAST
+EDGG::DE:Langen:Radar
+EDMM:N:DE:München:Radar:50.80:11.88:EDMM NORTH
+EDMM:S:DE:München:Radar:48.7:11.18:EDMM SOUTH
+EDMM::DE:München:Radar:49.5400:12.4000:EDMM
+EDWW:E:DE:Bremen:Radar:52.5:12.7:EDWW EAST
+EDWW:W:DE:Bremen:Radar:53.2:9.2:EDWW WEST
+EDWW:N:DE:Bremen:Radar:53.6:9.2:EDWW NORTH
+EDWW:S:DE:Bremen:Radar:52.6:8.98:EDWW SOUTH
+EDWW::DE:Bremen:Radar
+EDYY::EU:Maastricht:Radar:52.2:6.7
+EDYY:BR:EU:Maastricht:Radar:50.8:5.0:EDYY BRU
+EDYY:DC:EU:Maastricht:Radar:53.3:6.5:EDYY DECO
+EDYY:HN:EU:Maastricht:Radar:52.1:9.2:EDYY HNN
+EDYY:BRU:EU:Maastricht:Radar:50.8:5.0:EDYY BRU
+EDYY:DCO:EU:Maastricht:Radar:53.3:6.5:EDYY DECO
+EDYY:HNN:EU:Maastricht:Radar:52.1:9.2:EDYY HNN
+EETN::EE:Tallinn:FIR:58.7:24.4
+EETT::EE:Tallinn:Control:58.7:24.4
+EFES::FI:Tampere:Radar:63.44:26.0
+EGGX::GB:Shanwick Oceanic:Radio:53:-19
+EGPX:MO:GB:Scottish:Control:58.05:0.14:EGPX MORAY
+EGPX:WS:GB:Scottish:Control:56.48:-7.20:EGPX WEST-COAST
+EGPX:RA:GB:Scottish:Control:56.00:-7.20:EGPX RATHLIN
+EGPX:TL:GB:Scottish:Control:55.39:-4.20:EGPX TLA
+EGPX:WL:GB:Scottish:Control:53.47:-3.85:EGPX WAL
+EGPX:ET:GB:Scottish:Control:53.82:-1.40:EGPX EAST-LOW
+EGPX:ST:GB:Scottish:Control:52.96:-2.20:EGPX STAFA
+EGTT:35:GB:London:Control:51.29:-5.36:EGTT S35
+EGTT:20:GB:London:Control:50.30:-1.10:EGTT S20
+EGTT:26:GB:London:Control:51.64:-0.01:EGTT S26
+EGTT:10:GB:London:Control:53.70:-1.33:EGTT S10
+EGTT:28:GB:London:Control:52.50:-1.80:EGTT S28
+EGTL:NW:GB:London:Control:52.29:-1.50:EGTL NW
+EGTL:NE:GB:London:Control:52.23:0.20:EGTL NE
+EGTL:RE:GB:London:Control:52.02:1.50:EGTL REDFA
+EGTL:SE:GB:London:Control:51.30:0.25:EGTL SE
+EGTL:SW:GB:London:Control:51.23:-0.70:EGTL SW
+EGWD::GB:London:Military:51.40:-5.00:EGWD
+EHAA::NL:Amsterdam:Radar:52.8:4.6
+EHMC:I:NL:DutchMill:Info:52.8:4.6:EHAA
+EHMC:R:NL:DutchMill:Rapcon:52.8:4.6:EHAA
+EHMC::NL:DutchMill::52.8:4.6:EHAA
+EHML::NL:Bandbox::52.8:4.6:EHAA
+EIDW:N:IE:Dublin:Control:53.7:-6.0:EIDW N
+EIDW:S:IE:Dublin:Control:53.0:-6.0:EIDW S
+EISN:I:IE:Shannon:Control:52.2:-8.3:EISN I
+EISN:L:IE:Shannon:Control:53.0:-8.3:EISN L
+EISN::IE:Shannon:Control:53.0:-11.0
+EKDK:SE:DK:Copenhagen:Control:56.2:10:EKDK_SE
+EKDK::DK:Copenhagen:Control:56.4:10
+EKMC::DK:Skylight::56:10.5:EKMC
+ENBD::NO:Bodo:Control:68.5:19.3
+ENOB::NO:Bodo Oceanic:Control:72.5:15.2
+ENOR::NO:Norway:Control:61:9.4
+ENOS::NO:Oslo:Control:59.5:9.4
+ENSV::NO:Stavanger:Control:60:4
+ENTR::NO:Trondheim:Control:63.6:9.2
+EPWW::PL:Warsaw:Radar:52.4:20.7
+ESMM::SE:Sweden:Control:56.23:14.5
+ESOS:N:SE:Sweden:Control:65.1:16.4:ESOS North
+ESOS::SE:Sweden:Control:60.5:15.8
+EVRR::LV:Riga:Control:57:23.3
+EYVL::LT:Vilnius:Control:55.1:22.4
+FACT:E:ZA:Cape Town:Control:-33.6:25.7:FACT East
+FACT:W:ZA:Cape Town:Control:-34:17.7:FACT West
+FACT::ZA:Cape Town:Control:-32.3:23.5
+FAJO::ZA:Johannesburg Oceanic:Control:-39:32.5
+FAJS:N:ZA:Johannesburg:Control:-24.3:28.6:FAJS North
+FAJS:S:ZA:Johannesburg:Control:-27.1:27.9:FAJS South
+FAJS:W:ZA:Johannesburg:Control:-29:20:FAJS West
+FAJS:E:ZA:Johannesburg:Control:-30:29.5:FAJS East
+FAJS:C:ZA:Johannesburg:Control:-30.2:23.4:FAJS Central
+FAJS::ZA:Johannesburg:Control:-27.6:28
+FBGR::BW:Gaborone:Control:-22.2:24.6
+FCCC::CG:Brazzaville:Control:1.2:17
+FIMM::MU:Mauritius:Control:-25.5:65.2
+FLFI::ZM:Lusaka:Control:-13.1:27.8
+FMMM::MG:Antananarivo:Control:-20:48.5
+FNAN::AO:Luanda:Control:-12.1:7.1
+FQBE::MZ:Beira:Control:-20.3:36.6
+FSSS::SC:Seychelles:Control:0.1:52
+FTTT::TD:NDjamena:Control:15:18.2
+FVHA::ZW:Harare:Control:-19.1:29.1
+FWLL::MW:Lilongwe:Control:-12.8:34.2
+FYWH::NA:Windhoek:Control:-22.3:17.6
+FZZA::CD:Kinshasa:Control:-3.4:21.6
+GCCC:W:ES:Canarias:West Control:26:-21:GCCC West
+GCCC:E:ES:Canarias:East Control:26:-15:GCCC East
+GCCC::ES:Canarias:Control:25.4:-18
+GLRB::LR:Roberts:Control:6.7:-12.2
+GMMM::MA:Casablanca:Control:31.8:-8.4
+GOOO::SN:Dakar:Control:2.5:-20.3:GOOO Oceanic
+GOOT::SN:Dakar Terrestre:Control:12.7:-12:GOOO
+GVSC::CV:Sal Oceanic:Control:18.4:-28.8
+HAAA::ET:Addis Ababa:Control:9.4:40.5
+HBBA::BI:Bujumbura:Control:-3.4:29.9
+HCSM::SO:Mogadishu:Control:5:50.5
+HECC::EG:Cairo:Control:28:31
+HHAA::ER:Asmara:Control:16.1:39.8
+HKNA::KE:Nairobi:Control:-0.4:38.9
+HLLL::LY:Tripoli:Control:26.9:17.2
+HRYR::RW:Kigali:Control:-2:29.8
+HSSS::SD:Khartoum:Control:13:30.1
+HTDC::TZ:Dar es-Salaam:Control:-6.4:36.4
+HUEC::UG:Entebbe:Control:1.2:32.3
+KZAB::US:Albuquerque:Center:33.2:-107
+KZAK:N:US:San Francisco Radio:Radio:43:-150:KZAK NORTH
+KZAK:E:US:San Francisco Radio:Radio:20:-142:KZAK EAST
+KZAK:S:US:San Francisco Radio:Radio:6:-165:KZAK SOUTH
+KZAK:CW:US:San Francisco Radio:Radio:22:-176:KZAK CENTRAL WEST
+KZAK:NW:US:San Francisco Radio:Radio:41:-183:KZAK NORTH WEST
+KZAK:W:US:San Francisco Radio:Radio:12:-215:KZAK WEST
+KZAU::US:Chicago:Center:42.1:-89.2
+KZBW::US:Boston:Center:43.8:-71.9
+KZDC::US:Washington:Center:36.4:-76.8
+KZDV::US:Denver:Center:40.4:-105.4
+KZFW::US:Fort Worth:Center:33.5:-97.9
+KZHU:O:US:Houston Oceanic:Center:26:-92
+KZHU::US:Houston:Center:29:-97
+KZID::US:Indianapolis:Center:38.5:-84.4
+KZJX::US:Jacksonville:Center:31.1:-82.2
+KZKC::US:Kansas City:Center:38.1:-95.4
+KZLA::US:Los Angeles:Center:34.3:-117.4
+KZLC::US:Salt Lake City:Center:43.2:-111.4
+KZMA:O:US:Miami Oceanic:Center:22.8:-72.4:KZMA Oceanic
+KZMA::US:Miami:Center:27:-82
+KZME::US:Memphis:Center:34.6:-90.5
+KZMP::US:Minneapolis:Center:44.2:-92.7
+KZNY:O:US:New York Oceanic:Center:31.5:-58.5:KZNY Oceanic
+KZNY::US:New York:Center:41:-76.15
+KZOA::US:Oakland:Center:37.9:-122.1
+KZOB::US:Cleveland:Center:41.5:-80.9
+KZSE::US:Seattle:Center:44.6:-121.4
+KZTL::US:Atlanta:Center:34.3:-84.1
+KZWY::US:New York Oceanic:Radio:31.5:-58.5:KZNY Oceanic
+LATI::AL:Tirana:Control:41.1:20.1:LAAA
+LAAA::AL:Tirana:Control:41.1:20.1
+LBSR:W:BG:Sofia West:Control:42.5:24.4:LBSR_W
+LBSR:E:BG:Sofia East:Control:43.1:28.1:LBSR_E
+LBSR::BG:Sofia:Control:42.8:26.4
+LCCC::CY:Nicosia:Control:34:32.9
+LDZO::HR:Zagreb:Radar:43.8:16.7
+LECB:N:ES:Barcelona:North Control:40.76:0.76:LECB North
+LECB:S:ES:Barcelona:South Control:38.06:0.58:LECB South
+LECB::ES:Barcelona:Control:39.3:1.2
+LECM:NW:ES:Madrid:North West Control:42.5:-6.55:LECM North West
+LECM:NE:ES:Madrid:North East Control:42.63:-3.73:LECM North East
+LECM:S:ES:Madrid:South Control:39.56:-4.63:LECM South
+LECM::ES:Madrid:Control:42:-6.6
+LECP::ES:Palma:Control:39.4:2.5
+LECS::ES:Sevilla:Control:37.5:-4.4
+LFBB:N:FR:Bordeaux:North Control:45.9:0.55:LFBB North
+LFBB:S:FR:Bordeaux:South Control:44:1.3:LFBB South
+LFBB:U:FR:Bordeaux:Upper Control:44.7:0.6
+LFBB::FR:Bordeaux:Control:44.7:0.6
+LFEE:U:FR:Reims:Upper Control:49:6.2
+LFEE:L:FR:Reims:Lower Control:49:6.2
+LFEE::FR:Reims:Control:49:6.2
+LFFF:U:FR:Paris:Upper Control:48.4:3.2
+LFFF:L:FR:Paris:Lower Control:48.4:3.2
+LFFF::FR:Paris:Control:48.4:3.2
+LFNN::FR:Marseille:North West Control:45.25:4.8:LFMM North-West
+LFMM:NW:FR:Marseille:North West Control:45.25:4.8:LFMM North-West
+LFMM:S:FR:Marseille:South Control:42.3:6.8:LFMM South
+LFRR:N:FR:Brest:North Control:48.6:-4.2:LFRR North
+LFRR:S:FR:Brest:South Control:45.9:-4.2:LFRR South
+LFRR::FR:Brest:Control:46.7:-4.2
+LGGG:E:GR:Athinai:Control:36.09:25.9:LGGG East
+LGGG:W:GR:Athinai:Control:37.87:21.33:LGGG West
+LGGG:M:GR:Athinai:Military Radar:37.10:22.57:LGGG_MIL
+LGGG:O:GR:Athinai:Control MERGED FIR:37.54:24.42:LGGGLGMD
+LGGG:GR:Athinai:Control:36.27:23.50
+LGMD:E:GR:Makedonia:Control:40.23:24.68:LGMD East
+LGMD:W:GR:Makedonia:Control:40.08:22.85:LGMD West
+LGMD:GR:Makedonia:Control:39.6:24.4
+LHCC::HU:Budapest:Control:47.2:19.5
+LIBB:ND:IT:Brindisi:North:42.5:15:LIBB ND
+LIBB:EL:IT:Brindisi:East Lower:40.5:17.3:LIBB EL
+LIBB:EU:IT:Brindisi:East Upper:41:17.3:LIBB EU
+LIBB:SW:IT:Brindisi:South West:38:17:LIBB SW
+LIBB::IT:Brindisi:Control:40.40:16.00
+LIMM::IT:Milano:Radar:44.9:8.9
+LIPP:NL:IT:Padova:Radar:46.00:11.80:LIPP NL
+LIPP:NU:IT:Padova:Radar:46.00:11.80:LIPP NU
+LIPP:SU:IT:Padova:Radar:44.32:12.22:LIPP SU
+LIPP:SL:IT:Padova:Radar:44.32:12.22:LIPP SL
+LIPP::IT:Padova:Control:45.4:11.9
+LIRR:TS:IT:Roma:Radar:40.40:14.20:LIRR TS
+LIRR:SU:IT:Roma:Radar:38.30:13.3:LIRR SU
+LIRR:EW:IT:Roma:Radar:40:10:LIRR EW
+LIRR:NE:IT:Roma:Radar:42.6:12.6:LIRR NE
+LIRR:US:IT:Roma:Radar:41.50:14.00:LIRR US
+LIRR:NW:IT:Roma:Radar:42.4:10.2:LIRR NW
+LIRR:OV:IT:Roma:Radar:41.2:11.8:LIRR OV
+LIRR:MI:IT:Roma:Radar:44.9:8.9:LIRR MI
+LIRR::IT:Roma:Radar:40.2:12.1
+LIRR:SC:IT:Roma:Military:40.2:12.1:LIRR SCC
+LIRR:I:IT:Roma:Information:40.2:12.1:LIRR FIC
+LJLA::SI:Ljubljana:Radar:46.2:15
+LKAA::CZ:Prague:Radar:49.8:15.6
+LLLL::IL:Tel Aviv:Control:31.3:34.8
+LLPT::IL:Pluto:Center:32.5:35.2
+LLSC::IL:South Control:Center:30.8:34.9
+LMMM::MT:Malta:Control:35.4:17.5
+LOVV::AT:Wien:Radar:47.7:15
+LOVV:M:AT:Wien:MCC:47.7:15
+LPPC:P:PT:Lisbon:Control-North and South Sector:36.9:-12:LPPC North & South
+LPPC:A:PT:Lisbon:Control-Madeira Sector:34.4:-14.5:LPPC Madeira
+LPPC:N:PT:Lisbon:Control-North Sector:41:-12:LPPC North
+LPPC:S:PT:Lisbon:Control-South Sector:38.4:-12:LPPC South
+LPPC::PT:Lisbon:Control:36.9:-12:LPPC
+LPPO:OC:PT:Santa Maria Oceanic:Control:31:-26.5:LPPO Oceanic
+LPPO::PT:Santa Maria TMA:Sector:37:-26.5:LPPO TMA
+LPAM::PT:Lisbon:Control-Military Sector:36.9:-12:LPPC Military
+LQSB::BA:Sarajevo:Control:43.9:17.8
+LRBB::RO:Bucharest:Control:45.9:25.6
+LSAG::CH:Swiss:Radar:46.5:7.2
+LSAZ::CH:Swiss:Radar:47.2:9.2
+LSAS::CH:Swiss:Radar:46.9:8.4
+LTAA::TR:Ankara:Control:39.4:37.2
+LTAA:N:TR:Ankara North:Control:42.16:34.31:LTAA N
+LTAA:S:TR:Ankara South:Control:37.73:31.90:LTAA S
+LTAA:W:TR:Ankara West:Control:40.47:33.01:LTAA W
+LTAA:SE:TR:Ankara Southeast:Control:38.22:40.93:LTAA SE
+LTAA:NE:TR:Ankara Northeast:Control:40.41:41.01:LTAA NE
+LTAA:C:TR:Ankara Centre:Control:38.24:36.56:LTAA C
+LTBB::TR:Istanbul:Control:39.4:29.2
+LTBB:N:TR:Istanbul North:Control:40.75:28:LTBB N
+LTBB:S:TR:Istanbul South:Control:38.04:28.45:LTBB S
+LUKK::MD:Kishinau:Control:47:28.3
+LWSS::MK:Skopje:Radar:41.6:21.8
+LYBA::YU:Beograd:Radar:43.7:20.2
+LZBB::SK:Bratislava:Radar:48.8:19.7
+MDCS::DO:Santo Domingo:Control:18.2:-70
+MHTG::HN:Central America:Control:11:-93.3
+MKJK::JM:Kingston:Control:17.5:-77.7
+MMEX::MX:Mexico:Control:18.5:-100.5
+MMID::MX:Merida:Control:19.45:-92.2
+MMTY::MX:Monterrey:Control:27.3:-100.8
+MMZT:O:MX:Mazatlan Oceanic:Control:13.5:-116.9:MMZT Oceanic
+MMZT::MX:Mazatlan:Control:24.4:-111.9
+MPZL::PA:Panama:Control:9.7:-80.2
+MTEG::HT:Port Au Prince:Control:18.7:-73.4
+MUHA::CU:Havana:Control:21.2:-79.7
+MUFH::CU:Havana:Control:21.2:-79.7:MUHA
+MYNA::BS:Nassau:Control:24.7:-77.5
+NFFF::FJ:Nadi:Control:-13.3:175
+NTTT::PF:Tahiti:Control:-13.3:-138.5
+NTTT:C:PF:Tahiti:Control:-16.3:-151.3:NTTT_C
+NWWN::NC:Noumea:Controle:-19.5:165.2
+NZZC:A:NZ:Christchurch:Control:-35.53:174.47:NZZC_A
+NZZC:W:NZ:Christchurch:Control:-40.16:172.11:NZZC_W
+NZZC:N:NZ:Christchurch:Control:-42.73:172.42:NZZC_N
+NZZC:S:NZ:Christchurch:Control:-45.14:168.68:NZZC_S
+NZZC:O:NZ:Ohakea:Control:-40.08:176.50:NZZC_O
+NZZC::NZ:New Zealand:Control:-41:172.5:NZZC
+NZZO::NZ:Auckland Oceanic:Control:-40:-170
+NZWD::NZ:McMurdo:Control:-75:35
+OAKX::AF:Kabul:Control:33.9:67.6
+OBBB::BH:Bahrain:Control:23.8:50.5
+OEJD::SA:Jeddah:Control:23.9:43.2
+OIIX::IR:Tehran:Control:32.2:53.6
+OJAC::JO:Amman:Control:31.2:37
+OKAC::KW:Kuwait:Control:29.1:48.1
+OLBB::LB:Beirut:FIR:33.8:35.7
+OMAE::AE:UAE:Control:24.4:54.1
+OOMM::OM:Muscat:Control:21.1:58.2
+OPKR::PK:Karachi:Control:26.7:67.2
+OPLR::PK:Lahore:Control:33.4:71.6
+ORBB::IQ:Baghdad:Centre:33.2:43.7
+ORBS::IQ:Baghdad:FIR:33.2:43.7:ORBB
+OSDI::SY:Damascus:FIR:34.7:38.9:OSTT
+OSTT::SY:Damascus:Control:34.7:38.9
+OYSC::YE:Sanaa:FIR:15.7:50.8
+PAZA::US:Anchorage:Control:62.5:-156
+PHZH::US:Honolulu:Control:21.6:-157
+RCAA::TW:Taipei:Control:25:120.7
+RJCG::JP:Sapporo:Control
+RJDG::JP:Fukuoka:Control
+RJTG::JP:Tokyo:Control:35.5:145.2
+RKRR::KR:Incheon:Control:34.3:128.8
+RORG::JP:Naha:Control:25.5:129.2
+RPHI::PH:Manila:Control:12.2:123.5
+SABA::AR:Baires:Control:-34.7:-58.6:SABA
+SACF::AR:Cordoba:FIR:-27.9:-65
+SACU::AR:Cordoba:UIR:-27.9:-65:SACF
+SAEF::AR:Ezeiza:FIR:-42.3:-46.4
+SAEU::AR:Ezeiza:UIR:-42.3:-46.4:SAEF
+SAMF::AR:Mendoza:FIR:-33.5:-67.9
+SAMV::AR:Mendoza:UIR:-33.5:-67.9:SAMF
+SARR::AR:Resistencia:FIR:-26.5:-58.2
+SARU::AR:Resistencia:UIR:-26.5:-58.2:SARR
+SAVF::AR:Comodoro Rivadavia:FIR:-49.7:-41.8
+SAVU::AR:Comodoro Rivadavia:UIR:-49.7:-41.8:SAVF
+SBAO::BR:Atlantico:Center:-13.2:-30.4
+SBAZ::BR:Amazonico:Center:-5.6:-59.1
+SBBS::BR:Brasilia:Center:-14.7:-52.1
+SBCW::BR:Curitiba:Center:-25.2:-51.2
+SBRE::BR:Recife:Center:-8.8:-38.1
+SCCZ::CL:Punta Arenas:Control:-53.5:-77.9
+SCEZ::CL:Santiago:Control:-33.5:-79.9
+SCFZ::CL:Antofagasta:Control:-23:-78.6
+SCIZ::CL:Isla De Pascua:Control:-37.5:-110.5
+SCTZ::CL:Puerto Montt:Control:-42.8:-80.5
+SEGU::EC:Guayaquil:Control:-1.8:-83.6
+SGFA::PY:Asuncion:Control:-23.5:-58.5
+SKEC::CO:Barranquilla:Control:11.3:-74.3
+SKED::CO:Bogota:Control:2.2:-74.9
+SLLF::BO:La Paz:Control:-16.3:-63.6
+SLLP::BO:La Paz:Control:-16.3:-63.6:SLLF
+SMPM::SR:Paramaribo:Control:5.5:-56
+SOOO::FR:Rochambeau:Control:7.8:-44.8
+SPIM::PE:Lima:Control:-9.3:-79.4
+SUEO::UY:Montevideo:Radar:-36.0:-41.0
+SVZM::VE:Maiquetia:Control:8.2:-66.6
+SYGC::GY:Georgetown:Control:5:-59
+TJZS::PR:San Juan Oceanic:Control:19.2:-64.6
+TNCF::AN:Curacao:Control:14.2:-70.6
+TTZP::TT:Piarco:Control:15.6:-51.3
+TXKF::BM:Bermuda:Control:28:-74
+UAAA::KZ:Almaty:Control:44.5:73.4
+UACC::KZ:Astana:Control:51.7:71.4
+UAFM::KG:Bishkek:Control:41.9:75.6
+UAFO::KG:Osh:Control:41:73.6
+UAII::KZ:Shymkent:Control:45:67
+UAOO::KZ:Kyzylorda:Control:45:63
+UATT::KZ:Aktobe:Control:48:52
+UBBB::AZ:Baku:Control:40.2:48.6
+UDDD::AM:Yerevan:Control:40:45
+UEEE::RU:Yakutsk:Control:64:133
+UELL::RU:Chulman:Control:56.8:125.5
+UERP::RU:Poliarny:control:67:110
+UERR::RU:Mirnyi:Control:65:112
+UESO::RU:Chokurdakh:Control:70.6:148
+UESS::RU:Chersky:Control:69.5:160.5
+UEST::RU:Tiksi:Control:71:119.1
+UESU::RU:Zyryanka:Control:66:150.5
+UEVV::RU:Zhygansk:Control:66.9:122.5
+UGGG::GE:Tbilisi:Control:42.1:43.4
+UHBB::RU:Blagoveshensk:Control:51.2:129.4
+UHHH::RU:Khabarovsk:Control:50:134
+UHMA::RU:Anadyr:Control:64.5:173
+UHMG::RU:Chaybukha:Control
+UHMI::RU:Shmidta Mys:Control:68.5:-177
+UHMM::RU:Magadan:Control:60.8:150
+UHMP::RU:Pevek:Control:68:167
+UHPP::RU:Petropavlovsk-Kamchatsk:Control:56:155
+UHSS::RU:Yuzhno Sakhalinsk:Control:47.5:145
+UHWW::RU:Vladivostok:Control:43.6:135.2
+UIAA::RU:Chita:Control:52.1:114.3
+UIII::RU:Irkutsk:Control:52.9:104.2
+UKBV::UA:Kiev:Control:50:30.9
+UKDV::UA:Dnipropetrovs'k:Control:48.9:36.5
+UKFV::UA:Simferopol:Control:45.2:33.7
+UKLV::UA:Lvov:Control:49.8:24.9
+UKOO::UA:Odessa:Control:46.5:30.6:UKOV
+ULAA::RU:Arkhangelsk:Control:64.9:42.3
+ULAM::RU:Naryan-Mar:Control:68.83:50
+ULDD::RU:Amderma:Control:71.4:59
+ULKK::RU:Kotlas:Control:61.6:45.3
+ULLL::RU:Peterburg:Control:59.5:30.9
+ULMM::RU:Murmansk:Control:68.7:35.8
+ULOL::RU:Velikiye Luki:Control:57:30.3
+ULWW::RU:Vologda:Control:59.9:40.9
+UMKK::RU:Kaliningrad:Control:55.2:20.2
+UMMM::BY:Minsk:Control:53.7:27.9
+UMMV::BY:Minsk:Control:53.7:27.9:UMMM
+UNBB::RU:Barnaul:Control:51.7:83.5
+UNKL::RU:Krasnoyarsk:Control:55.8:93
+UNNT::RU:Novosibirsk:Control:55.4:81.2
+UNOO::RU:Omsk:Control:55.8:73.7
+UOOO::RU:Norilsk:Control:69.8:92.7
+UOTT::RU:Turukhansk:Control:65.1:89.3
+URRV::RU:Rostov:Control:45.5:43.1
+URWA::RU:Astrakhan:Control:46.1:47.2
+URWW::RU:Volgograd:Control:48.6:45.1
+USCC::RU:Chelyabinsk:Control:55:61.6
+USDD::RU:Salekhard:Control:66:67.6
+USDK::RU:Kamenny Mys:Control:70.3:73.6
+USDS::RU:Tarko-Sale:Control:65:76
+USHH::RU:Khanty:Control:62.6:65
+USKK::RU:Kirov:Control:58.2:48.6
+USPP::RU:Perm:Control:58.8:55.3
+USRR::RU:Surgut:Control:61.5:77
+USSS::RU:Yekaterinburg:Control:57.2:60.1
+USTT::RU:Tyumen:Control:57.5:67.2
+USUU::RU:Kurgan:Control:55.6:66
+UTAA::TM:Ashgabat:Control:39:59
+UTAK::TM:Turkmenbashi:Control:39.8:54.5
+UTAT::TM:Dashoguz:Control:41.4:59
+UTAV::TM:Turkmenabat:Control:38:64
+UTDD::TJ:Dushanbe:Control:39:71.3
+UTNR::UZ:Nukus:Control:43.5:59
+UTSD::UZ:Samarkand:Control:40:65
+UTTR::UZ:Tashkent:Control:40.5:69
+UUWV::RU:Moscow:Control:54:38.8
+UUYW::RU:Vorkuta:Control:67.4:63
+UUYY::RU:Syvkar:Control:64:53
+UWKD::RU:Kazan:Control:55.8:49.8
+UWOO::RU:Orenburg:Control:52.1:55
+UWPP::RU:Penza:Control:52.7:45
+UWSS::RU:Saratov:Control:51.3:46.6
+UWUU::RU:Ufa:Control:54.6:56
+UWWW::RU:Samara:Control:53.1:49.8
+VABF::IN:Mumbai:Control:16:67
+VCCC::LK:Colombo:Control:4:84.2
+VDPP::KH:Phnom Penh:Control:12.6:104.9
+VECF::IN:Calcutta:Control:21.7:89.3
+VGFR::BD:Dhaka:Control:23.8:90.3
+VHHK::HK:Hong Kong:Radar:20.1:114.5
+VHHH::HK:Hong Kong:Control:20.1:114.5:VHHK
+VIDF::IN:Delhi:Control:30.2:76.5
+VLIV::LA:Vientiane:Control:18.2:103.9
+VNSM::NP:Kathmandu:Control:28.3:84.1
+VOMF::IN:Chennai:Control:12:83.2
+VRMF::MV:Male:FIR:0.7:73
+VTBB::TH:Bangkok:Control:13:101
+VVGL::VN:Hanoi:Control:20.2:105
+VVTS::VN:Ho Chi Minh:Control:12.3:108.3
+VYYY::MM:Yangon:Control:19.2:96.5
+WAAZ:E:ID:Makassar Control:East Upper Area:-2.7:126.5:WAAZ EAST
+WAAZ:W:ID:Makassar Control:West Upper Area:-0.37:114.68:WAAZ WEST
+WAAZ:L:ID:Makassar Low:Radar:-3.43:119.57:WAAZ LOW
+WAAZ:B:ID:Makassar Control:Bali Upper Area:-10:116.83:WAAZ BALI
+WAAZ:BW:ID:Makassar Control:Bali West Upper Area:-9.13:112.22:WAAZ BW
+WAAZ:BC:ID:Makassar Control:Bali Center Upper Area:-5.77:113.72:WAAZ BC
+WAAZ:BE:ID:Makassar Control:Bali East Upper Area:-7.41:117.70:WAAZ BE
+WAAZ:C:ID:Makassar:Control:1.50:125:WAAZ C
+WBFC::MY:Kota Kinabalu:Control:4.6:114.2
+WIIZ:UT:ID:Jakarta Control:Upper TJ. Karang:-9.66:106.50:WIIZ UT
+WIIZ:UK:ID:Jakarta Control:Upper Kalimantan:-1.31:107.25:WIIZ UK
+WIIZ:UP:ID:Jakarta Control:Upper Palembang:-1.99:98.35:WIIZ UP
+WIIZ:M:ID:Medan:Control:2.87:96.99:WIIZ MEDAN
+WIIZ:LN:ID:Jakarta Radar:Lower North:-4.73:105.63:WIIZ LN
+WIIZ:LE:ID:Jakarta Radar:Lower East:-6.80:108.41:WIIZ LE
+WIIZ:L:ID:Jakarta Low:Radar:-4.98:106.90:WIIZ LOW
+WIIZ:C:ID:Jakarta:Control:-4.60:100.00:WIIZ C
+WMFC::MY:Kuala Lumpur:Control:5.6:99.5
+WSJC::SG:Singapore:Control:4.8:109.3
+YBAS::AU:Alice Springs:Control:-25.7:135.8
+YBBB:B:AU:Brisbane:Control:-22.4:146.4:YBBB_B
+YBBB:D:AU:Darwin:Control:-15.2:125.2:YBBB_D
+YBBB:N:AU:Brisbane North Oceanic:Control:-23.8:154.3:YBBB_N
+YBBB:S:AU:Brisbane South Oceanic:Control:-47.8:156.6:YBBB_S
+YBBN::AU:Brisbane:Control:-26.1:151.5
+YBBO::AU:Brisbane Oceanic:Control:-43.5:153.9
+YBCS::AU:Cairns:Control:-13.8:143
+YBRM::AU:Broome:Control:-17.8:121.3
+YBTL::AU:Townsville:Control:-21:148.1
+YCBA::AU:Cobar:Control:-32.1:145.4
+YMHB::AU:Hobart:Control:-42.5:147
+YMML::AU:Melbourne:Control:-36.9:145.6
+YMMM:M:AU:Melbourne:Control:-35.6:143.1:YMMM_M
+YMMM:P:AU:Perth:Control:-29.5:123.3:YMMM_P
+YMMM:N:AU:Melbourne North Oceanic:Control:-16:93.4:YMMM_N
+YMMM:S:AU:Melbourne South Oceanic:Control:-45:112.6:YMMM_S
+YMMO::AU:Melbourne Oceanic:Control:-38.5:113
+YNUL::AU:Nullabor:Control:-28.9:126.2
+YPAD::AU:Adelaide:Control:-34.5:138
+YPDN::AU:Darwin:Control:-12.5:132.1
+YPPD::AU:Port Hedland:Control:-22.7:116.7
+YPPH::AU:Perth:Control:-31.9:117.9
+YQLP::AU:Quilpie:Control:-26.3:144.1
+YSSY::AU:Sydney:Control:-33.2:150.7
+YSSS::AU:Sydney:Control:-33.2:150.7:YSSY
+YTNK::AU:Tennant Creek:Control:-19.6:133.2
+YWTN::AU:Winton:Control:-22.2:142.2
+ZBPE::CN:Beijing:Control:39.9:112.6
+ZGZU::CN:Guangzhou:Control:23.3:111.5
+ZHWH::CN:Wuhan:Control:32.8:112.6
+ZKKP::KP:Pyongyang:Control:40.3:129.9
+ZLHW::CN:Lanzhou:Control:37.3:99.1
+ZMBZ::MN:Ulaanbaatar:FIR:46.8:102.5
+ZMDZ::MN:Dornod:FIR
+ZMMZ::MN:Muren:FIR
+ZMSZ::MN:Sainsand:FIR
+ZMUZ::MN:Underhaan:FIR
+ZPKM::CN:Kunming:Control:28.7:95.5
+ZSHA::CN:Shanghai:Control:30.6:118.9
+ZWUQ::CN:Urumqi:Control:39.6:84.9
+ZYSH::CN:Shenyang:Control:45.7:125

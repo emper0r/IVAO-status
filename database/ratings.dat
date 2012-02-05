@@ -1,0 +1,11 @@
+2:AS1:ATC Applicant:FS1:Basic Flight Student
+3:AS2:ATC Trainee:FS2:Flight Student
+4:AS3:Advanced ATC Trainee:FS3:Advanced Flight Student
+5:ADC:Aerodrome Controller:PP:Private Pilot
+6:APC:Approach Controller:SPP:Senior Private Pilot
+7:ACC:Center Controller:CP:Commercial Pilot
+8:SEC:Senior Controller:ATP:Airline Transport Pilot
+9:SAI:Senior ATC Instructor:SFI:Senior Flight Instructor
+10:CAI:Chief ATC Instructor:CFI:Chief Flight Instructor
+11:SUP:Supervisor:SUP:Supervisor
+12:ADM:Administrator:ADM:Administrator

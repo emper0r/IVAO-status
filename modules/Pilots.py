@@ -162,7 +162,7 @@ class PilotInfo(QMainWindow):
                 percent = float((dist_traveled / total_miles) * 100.0)
                 eta = str(datetime.timedelta(hours=((total_miles - dist_traveled) / float(info[0][3]))))
             except:
-                if city_orig_point or city_orig_point is None:
+                if city_orig_point or city_dest_point is None:
                     percent = 0.0
                 eta = '00:00:00.000000'
             self.ui.nauticalmiles.setText('%.1f / %.1f miles - %.1f%%' % (float(dist_traveled), float(total_miles), float(percent)))
