@@ -86,7 +86,8 @@ class Build_datafiles(QMainWindow):
             model = fields[2].decode('latin-1')
             code = fields[3]
             category = fields[4].strip('\r\n')
-            cursor.execute("INSERT INTO aircraft (icao, fabricant, model, code, category) VALUES (?, ?, ?, ?, ?);", (icao, fabricant, model, code, category))
+            cursor.execute("INSERT INTO aircraft (icao, fabricant, model, code, category) VALUES (?, ?, ?, ?, ?);",
+                           (icao, fabricant, model, code, category))
             count += 1
             self.ui.LabelFile.setText('Aircraft.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
@@ -102,7 +103,8 @@ class Build_datafiles(QMainWindow):
             airline_name = fields[1].decode('latin-1')
             callsign = fields[2].decode('latin-1')
             reality = fields[3].strip('\r\n')
-            cursor.execute("INSERT INTO airlines (code, airline_name, callsign, reality) VALUES (?, ?, ?, ?);", (code, airline_name, callsign, reality))
+            cursor.execute("INSERT INTO airlines (code, airline_name, callsign, reality) VALUES (?, ?, ?, ?);",
+                           (code, airline_name, callsign, reality))
             count += 1
             self.ui.LabelFile.setText('Airlines.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
@@ -121,8 +123,8 @@ class Build_datafiles(QMainWindow):
             fir = fields[3]
             latitude = fields[4]
             longitude = fields[5].strip('\r\n')
-            cursor.execute("INSERT INTO airports (icao, airport, city, country, fir, latitude, longitude) \
-                            VALUES (?, ?, ?, ?, ?, ?, ?);", (icao, airport, city, country, fir, latitude, longitude))
+            cursor.execute("INSERT INTO airports (icao, airport, city, country, fir, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?);",
+                           (icao, airport, city, country, fir, latitude, longitude))
             count += 1
             self.ui.LabelFile.setText('Airports.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
@@ -136,7 +138,8 @@ class Build_datafiles(QMainWindow):
             fields = item.split(":")
             icao_initial = fields[0]
             id_country = fields[1].strip('\r\n')
-            cursor.execute("INSERT INTO cprefix (icao_initial, id_country) VALUES (?, ?);", (icao_initial, id_country))
+            cursor.execute("INSERT INTO cprefix (icao_initial, id_country) VALUES (?, ?);",
+                           (icao_initial, id_country))
             count += 1
             self.ui.LabelFile.setText('Cprefix.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
@@ -159,7 +162,7 @@ class Build_datafiles(QMainWindow):
                 name = fields[7].decode('latin-1').strip('\r\n')
             except:
                 name = '-'
-            cursor.execute("INSERT INTO firs (fir, location, id_country, city, control_type, latitude, longitude, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", 
+            cursor.execute("INSERT INTO firs (fir, location, id_country, city, control_type, latitude, longitude, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
                            (fir, location, id_country, city, control_type, latitude, longitude, name))
             count += 1
             self.ui.LabelFile.setText('Firs.dat - [ %d / %d ]' % (count, len(data)))
@@ -177,7 +180,8 @@ class Build_datafiles(QMainWindow):
             controller_rating = fields[2]
             pilot_level = fields[3]
             pilot_rating = fields[4].strip('\r\n')
-            cursor.execute("INSERT INTO ratings (id, controller_level, controller_rating, pilot_level, pilot_rating) VALUES (?, ?, ?, ?, ?);", (id, controller_level, controller_rating, pilot_level, pilot_rating))
+            cursor.execute("INSERT INTO ratings (id, controller_level, controller_rating, pilot_level, pilot_rating) VALUES (?, ?, ?, ?, ?);",
+                           (id, controller_level, controller_rating, pilot_level, pilot_rating))
             count += 1
             self.ui.LabelFile.setText('Ratings.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)

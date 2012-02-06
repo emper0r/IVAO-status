@@ -208,7 +208,7 @@ class Main(QMainWindow):
         self.progress.hide()
         self.progress.setValue(0)
         self._maptab = None
-        
+
         ratings = open('database/ratings.dat','r').readlines()
         self.rating_pilot = {}
         self.rating_atc = {}
