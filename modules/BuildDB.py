@@ -198,10 +198,59 @@ class Build_datafiles(QMainWindow):
             icao = fields[2]
             latitude = fields[3]
             longitude = fields[4].strip('\r\n')
-            cursor.execute("INSERT INTO countries (id_country, country, icao, latitude, longitude) VALUES (?, ?, ?, ?, ?);"
-                           , (id_country, country, icao, latitude, longitude))
+            cursor.execute("INSERT INTO countries (id_country, country, icao, latitude, longitude) VALUES (?, ?, ?, ?, ?);",
+                           (id_country, country, icao, latitude, longitude))
             count += 1
             self.ui.LabelFile.setText('Countries.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
             qApp.processEvents()
         connection.commit()
+        
+        '''Importing countries.dat'''
+        data = open('database/fir.dat', 'r').readlines()
+        count = 7
+        firname = ''
+        count_firname = True
+        for item in range(0, len(data)):
+            fields = data[item].split(":")
+            if len(fields) == 1 and count_firname is True:
+                if fields[0][0] == '!':
+                    firname = fields[0][1:].strip('\r\n')
+                    count += 1
+                    continue
+            if len(fields) == 1 and count_firname is False:
+                count_firname = True
+                count += 1
+                continue
+            if len(data[item].split(":")) == 2:
+                latitude = fields[0].strip('\r\n')
+                longitude = fields[1].strip('\r\n')
+                cursor.execute("INSERT INTO fir (fir, latitude, longitude) VALUES (?, ?, ?);",
+                           (firname, latitude, longitude))
+                count += 1
+                self.ui.LabelFile.setText('Fir.dat - [ %d / %d ]' % (count, len(data)))
+                self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+                count_firname = False
+            qApp.processEvents()
+        connection.commit()
+
+        '''Importing countries.dat'''
+        data = open('database/staff.dat', 'r').readlines()
+        count = 0
+        for item in data:
+            fields = item.split(":")
+            callsign = fields[0]
+            name = fields[1]
+            id1 = fields[2]
+            id2 = fields[3]
+            id3 = fields[4].strip('\r\n')
+            cursor.execute("INSERT INTO staff (callsign, name, id1, id2, id3) VALUES (?, ?, ?, ?, ?);",
+                           (callsign, name, id1, id2, id3))
+            count += 1
+            self.ui.LabelFile.setText('Staff.dat - [ %d / %d ]' % (count, len(data)))
+            self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+            qApp.processEvents()
+        connection.commit()
+        
+        self.ui.LabelFile.setText('DONE!')
+        
