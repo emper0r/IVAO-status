@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Mon Jan  9 09:57:27 2012
+# Created: Sun Feb  5 17:42:26 2012
 #      by: PyQt4 UI code generator 4.9
 #
 # WARNING! All changes made in this file will be lost!
@@ -1248,7 +1248,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.database, _fromUtf8(""))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 26))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 21))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuMenu = QtGui.QMenu(self.menuBar)
         self.menuMenu.setObjectName(_fromUtf8("menuMenu"))
@@ -1276,10 +1276,13 @@ class Ui_MainWindow(object):
         self.actionGet_Scheduling.setObjectName(_fromUtf8("actionGet_Scheduling"))
         self.actionSettings = QtGui.QAction(MainWindow)
         self.actionSettings.setObjectName(_fromUtf8("actionSettings"))
+        self.actionBuild_data = QtGui.QAction(MainWindow)
+        self.actionBuild_data.setObjectName(_fromUtf8("actionBuild_data"))
         self.menuMenu.addAction(self.actionUpdate)
         self.menuMenu.addAction(self.actionShow_last_data)
         self.menuMenu.addAction(self.actionGet_Scheduling)
         self.menuMenu.addAction(self.actionUpdate_Map)
+        self.menuMenu.addAction(self.actionBuild_data)
         self.menuMenu.addSeparator()
         self.menuMenu.addAction(self.actionExit)
         self.menuAbout.addAction(self.actionAbout)
@@ -1305,6 +1308,7 @@ class Ui_MainWindow(object):
         QtCore.QObject.connect(self.actionUpdate_Map, QtCore.SIGNAL('activated()'), MainWindow.all2map)
         QtCore.QObject.connect(self.actionGet_Scheduling, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.Scheduling)
         QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
+        QtCore.QObject.connect(self.actionBuild_data, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.build_db)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1753,4 +1757,5 @@ class Ui_MainWindow(object):
         self.actionShow_last_data.setText(QtGui.QApplication.translate("MainWindow", "Load Recent Data", None, QtGui.QApplication.UnicodeUTF8))
         self.actionGet_Scheduling.setText(QtGui.QApplication.translate("MainWindow", "Download Scheduling", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSettings.setText(QtGui.QApplication.translate("MainWindow", "Settings", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionBuild_data.setText(QtGui.QApplication.translate("MainWindow", "Build data", None, QtGui.QApplication.UnicodeUTF8))
 

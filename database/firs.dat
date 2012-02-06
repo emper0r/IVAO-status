@@ -25,7 +25,7 @@ EDGG:S:DE:Langen:Radar:49:8.91:EDGG SOUTH
 EDGG:E:DE:Langen:Radar:50.35:9.44:EDGG EAST
 EDGG:NW:DE:Langen:Radar:50.7:6.76:EDGG NORTH-WEST
 EDGG:SE:DE:Langen:Radar:49.6:8.9:EDGG SOUTH-EAST
-EDGG::DE:Langen:Radar
+EDGG::DE:Langen:Radar::
 EDMM:N:DE:München:Radar:50.80:11.88:EDMM NORTH
 EDMM:S:DE:München:Radar:48.7:11.18:EDMM SOUTH
 EDMM::DE:München:Radar:49.5400:12.4000:EDMM
@@ -33,7 +33,7 @@ EDWW:E:DE:Bremen:Radar:52.5:12.7:EDWW EAST
 EDWW:W:DE:Bremen:Radar:53.2:9.2:EDWW WEST
 EDWW:N:DE:Bremen:Radar:53.6:9.2:EDWW NORTH
 EDWW:S:DE:Bremen:Radar:52.6:8.98:EDWW SOUTH
-EDWW::DE:Bremen:Radar
+EDWW::DE:Bremen:Radar::
 EDYY::EU:Maastricht:Radar:52.2:6.7
 EDYY:BR:EU:Maastricht:Radar:50.8:5.0:EDYY BRU
 EDYY:DC:EU:Maastricht:Radar:53.3:6.5:EDYY DECO
@@ -196,10 +196,10 @@ LGGG:E:GR:Athinai:Control:36.09:25.9:LGGG East
 LGGG:W:GR:Athinai:Control:37.87:21.33:LGGG West
 LGGG:M:GR:Athinai:Military Radar:37.10:22.57:LGGG_MIL
 LGGG:O:GR:Athinai:Control MERGED FIR:37.54:24.42:LGGGLGMD
-LGGG:GR:Athinai:Control:36.27:23.50
+LGGG::GR:Athinai:Control:36.27:23.50
 LGMD:E:GR:Makedonia:Control:40.23:24.68:LGMD East
 LGMD:W:GR:Makedonia:Control:40.08:22.85:LGMD West
-LGMD:GR:Makedonia:Control:39.6:24.4
+LGMD::GR:Makedonia:Control:39.6:24.4
 LHCC::HU:Budapest:Control:47.2:19.5
 LIBB:ND:IT:Brindisi:North:42.5:15:LIBB ND
 LIBB:EL:IT:Brindisi:East Lower:40.5:17.3:LIBB EL
@@ -302,8 +302,8 @@ OYSC::YE:Sanaa:FIR:15.7:50.8
 PAZA::US:Anchorage:Control:62.5:-156
 PHZH::US:Honolulu:Control:21.6:-157
 RCAA::TW:Taipei:Control:25:120.7
-RJCG::JP:Sapporo:Control
-RJDG::JP:Fukuoka:Control
+RJCG::JP:Sapporo:Control::
+RJDG::JP:Fukuoka:Control::
 RJTG::JP:Tokyo:Control:35.5:145.2
 RKRR::KR:Incheon:Control:34.3:128.8
 RORG::JP:Naha:Control:25.5:129.2
@@ -367,7 +367,7 @@ UGGG::GE:Tbilisi:Control:42.1:43.4
 UHBB::RU:Blagoveshensk:Control:51.2:129.4
 UHHH::RU:Khabarovsk:Control:50:134
 UHMA::RU:Anadyr:Control:64.5:173
-UHMG::RU:Chaybukha:Control
+UHMG::RU:Chaybukha:Control::
 UHMI::RU:Shmidta Mys:Control:68.5:-177
 UHMM::RU:Magadan:Control:60.8:150
 UHMP::RU:Pevek:Control:68:167
@@ -498,10 +498,10 @@ ZHWH::CN:Wuhan:Control:32.8:112.6
 ZKKP::KP:Pyongyang:Control:40.3:129.9
 ZLHW::CN:Lanzhou:Control:37.3:99.1
 ZMBZ::MN:Ulaanbaatar:FIR:46.8:102.5
-ZMDZ::MN:Dornod:FIR
-ZMMZ::MN:Muren:FIR
-ZMSZ::MN:Sainsand:FIR
-ZMUZ::MN:Underhaan:FIR
+ZMDZ::MN:Dornod:FIR::
+ZMMZ::MN:Muren:FIR::
+ZMSZ::MN:Sainsand:FIR::
+ZMUZ::MN:Underhaan:FIR::
 ZPKM::CN:Kunming:Control:28.7:95.5
 ZSHA::CN:Shanghai:Control:30.6:118.9
 ZWUQ::CN:Urumqi:Control:39.6:84.9

@@ -38,6 +38,7 @@ from modules import FOLME
 from modules import StatusFlight
 from modules import Schedule
 from modules import MapView
+from modules import BuildDB
 import Settings
 
 try:
@@ -201,7 +202,7 @@ class Main(QMainWindow):
         Pixmap = QPixmap(image_arrivals)
         self.ui.arrivals_icon.setPixmap(Pixmap)
         self.ui.arrivals_icon.show()
-        QTimer.singleShot(1000, self.initial_load)
+        #QTimer.singleShot(1000, self.initial_load)
         self.progress = QProgressBar()
         self.statusBar().addPermanentWidget(self.progress)
         self.progress.hide()
@@ -253,7 +254,7 @@ class Main(QMainWindow):
         self.vehicles = []
         self.SchedATC_URL = None
         self.SchedFlights_URL = None
-        self.ui.tabWidget.currentChanged.connect(self.ivao_friend)
+        #self.ui.tabWidget.currentChanged.connect(self.ivao_friend)
 
     @property
     def maptab(self):
@@ -1274,6 +1275,12 @@ class Main(QMainWindow):
         self.setting_window = Settings.Settings(self)
         self.setting_window.closed.connect(self.show)
         self.setting_window.show()
+
+    def build_db(self):
+        '''Here call the Build database Class from files.dat'''
+        self.build_update = BuildDB.Build_datafiles()
+        self.build_update.closed.connect(self.show)
+        self.build_update.show()
 
     def all2map(self):
         '''This function is for see the whole map, all player in GoogleMaps, I implemented this before show up webeye,
