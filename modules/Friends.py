@@ -47,7 +47,7 @@ class Friends():
         database = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../database', config.get('Database', 'db'))
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
-        cursor.execute("SELECT vid FROM friends_ivao;")
+        cursor.execute("SELECT vid FROM friends;")
         vid = cursor.fetchall()
         total_vid = len(vid)
         insert = True
@@ -59,7 +59,7 @@ class Friends():
                     insert = False
             try:
                 if insert is True:
-                    cursor.execute('INSERT INTO friends_ivao (vid, realname, rating, clienttype) \
+                    cursor.execute('INSERT INTO friends (vid, realname, rating, clienttype) \
                     SELECT vid, realname, rating, clienttype FROM status_ivao WHERE vid=?;', (vid2add,))
                     connection.commit()
                     QMessageBox.information(None, 'Friend of IVAO list', 'Friend Added!')

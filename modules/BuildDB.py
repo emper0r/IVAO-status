@@ -205,8 +205,8 @@ class Build_datafiles(QMainWindow):
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
             qApp.processEvents()
         connection.commit()
-        
-        '''Importing countries.dat'''
+
+        '''Importing fir.dat'''
         data = open('database/fir.dat', 'r').readlines()
         count = 7
         firname = ''
@@ -234,7 +234,7 @@ class Build_datafiles(QMainWindow):
             qApp.processEvents()
         connection.commit()
 
-        '''Importing countries.dat'''
+        '''Importing staff.dat'''
         data = open('database/staff.dat', 'r').readlines()
         count = 0
         for item in data:
@@ -251,6 +251,5 @@ class Build_datafiles(QMainWindow):
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
             qApp.processEvents()
         connection.commit()
-        
+
         self.ui.LabelFile.setText('DONE!')
-        

@@ -202,7 +202,7 @@ class Main(QMainWindow):
         Pixmap = QPixmap(image_arrivals)
         self.ui.arrivals_icon.setPixmap(Pixmap)
         self.ui.arrivals_icon.show()
-        #QTimer.singleShot(1000, self.initial_load)
+        QTimer.singleShot(1000, self.initial_load)
         self.progress = QProgressBar()
         self.statusBar().addPermanentWidget(self.progress)
         self.progress.hide()
@@ -1012,7 +1012,7 @@ class Main(QMainWindow):
                 current_row = self.ui.SearchtableWidget.currentRow()
                 current_callsign = self.ui.SearchtableWidget.item(current_row, 1)
                 self.ui.SearchtableWidget.setCurrentCell(-1, -1)
-                cursor.execute('SELECT clienttype FROM status_ivao WHERE callsign=?;', ((str(current_callsign.text())),))
+                cursor.execute('SELECT clienttype FROM recent WHERE callsign=?;', ((str(current_callsign.text())),))
                 clienttype = cursor.fetchone()
                 if sender == self.showInfo_Action:
                     if str(clienttype[0]) == 'PILOT':
@@ -1022,7 +1022,7 @@ class Main(QMainWindow):
                     if str(clienttype[0]) == 'ATC':
                         self.show_controller_info(current_callsign.text())
                 if sender == self.showMap_Action:
-                    cursor.execute('SELECT planned_depairport, planned_destairport FROM status_ivao WHERE callsign=?;' \
+                    cursor.execute('SELECT planned_depairport, planned_destairport FROM recent WHERE callsign=?;' \
                                    , ((str(current_callsign.text())),))
                     icao_depdest = cursor.fetchall()
                     self.view_map(current_callsign.text(), icao_depdest[0][0], icao_depdest[0][1])
@@ -1060,7 +1060,7 @@ class Main(QMainWindow):
             else:
                 current_row = self.ui.PILOT_FullList.currentRow()
                 current_callsign = self.ui.PILOT_FullList.item(current_row, 1)
-                cursor.execute('SELECT clienttype FROM status_ivao WHERE callsign=?;', ((str(current_callsign.text())),))
+                cursor.execute('SELECT clienttype FROM recent WHERE callsign=?;', ((str(current_callsign.text())),))
                 clienttype = cursor.fetchone()
                 current_row = self.ui.PILOT_FullList.currentRow()
                 current_callsign = self.ui.PILOT_FullList.item(current_row, 1)
@@ -1094,7 +1094,7 @@ class Main(QMainWindow):
         if self.ui.FriendstableWidget.currentRow() >= 0:
             current_row = self.ui.FriendstableWidget.currentIndex().row()
             current_vid = self.ui.FriendstableWidget.item(current_row, 0)
-            cursor.execute('SELECT clienttype, callsign FROM status_ivao WHERE vid=?;', ((int(current_vid.text())),))
+            cursor.execute('SELECT clienttype, callsign FROM recent WHERE vid=?;', ((int(current_vid.text())),))
             friend_data = cursor.fetchall()
             if current_row == -1:
                 pass
@@ -1108,12 +1108,12 @@ class Main(QMainWindow):
                         if str(friend_data[0][0]) == 'ATC':
                             self.show_controller_info(str(friend_data[0][1]))
                     if sender == self.showMap_Action:
-                        cursor.execute('SELECT planned_depairport, planned_destairport FROM status_ivao WHERE callsign=?;' \
+                        cursor.execute('SELECT planned_depairport, planned_destairport FROM recent WHERE callsign=?;' \
                                        , ((str(friend_data[0][1])),))
                         icao_depdest = cursor.fetchall()
                         self.view_map(str(friend_data[0][1]), icao_depdest[0][0], icao_depdest[0][1])
                     if sender == self.showDelete_Action:
-                        cursor.execute('DELETE FROM friends_ivao WHERE vid=?;', (int(current_vid.text()),))
+                        cursor.execute('DELETE FROM friends WHERE vid=?;', (int(current_vid.text()),))
                         self.statusBar().showMessage('Friend Deleted', 2000)
                         connection.commit()
                         connection.close()
@@ -1138,7 +1138,7 @@ class Main(QMainWindow):
         database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
         connection = sqlite3.connect(database)
         cursor = connection.cursor()
-        cursor.execute('SELECT vid, realname, rating, clienttype FROM friends_ivao;')
+        cursor.execute('SELECT vid, realname, rating, clienttype FROM friends;')
         roster = cursor.fetchall()
         ImageRatings = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
         self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
@@ -1151,7 +1151,7 @@ class Main(QMainWindow):
             self.ui.FriendstableWidget.insertRow(self.ui.FriendstableWidget.rowCount())
             col_vid = QTableWidgetItem(str(row[0]), 0)
             self.ui.FriendstableWidget.setItem(startrow, 0, col_vid)
-            cursor.execute('SELECT vid FROM status_ivao where vid=?;', (int(row[0]),))
+            cursor.execute('SELECT vid FROM recent where vid=?;', (int(row[0]),))
             check = cursor.fetchone()
             try:
                 if check[0] == row[0]:
@@ -1312,7 +1312,7 @@ class Main(QMainWindow):
                 self.ui.Statistics.removeRow(0)
             startrow = 0
 
-            cursor.execute("SELECT callsign FROM status_ivao WHERE clienttype='ATC';" )
+            cursor.execute("SELECT callsign FROM recent WHERE clienttype='ATC';" )
             controller_list = cursor.fetchall()
 
             list_all = []
@@ -1327,7 +1327,7 @@ class Main(QMainWindow):
                 else:
                     list_all.append(str(country_icao[0]))
 
-            cursor.execute("SELECT realname FROM status_ivao WHERE clienttype='PILOT';" )
+            cursor.execute("SELECT realname FROM recent WHERE clienttype='PILOT';" )
             pilot_list = cursor.fetchall()
 
             for callsign in range(0, len(pilot_list)):
@@ -1377,7 +1377,7 @@ class Main(QMainWindow):
                 self.ui.Statistics.removeRow(0)
             startrow = 0
 
-            cursor.execute("SELECT callsign FROM status_ivao WHERE clienttype='ATC';" )
+            cursor.execute("SELECT callsign FROM recent WHERE clienttype='ATC';" )
             controller_list = cursor.fetchall()
 
             list_icao = []
@@ -1431,7 +1431,7 @@ class Main(QMainWindow):
                 self.ui.Statistics.removeRow(0)
             startrow = 0
 
-            cursor.execute("SELECT realname FROM status_ivao WHERE clienttype='PILOT';" )
+            cursor.execute("SELECT realname FROM recent WHERE clienttype='PILOT';" )
             pilot_list = cursor.fetchall()
 
             list_icao = []
@@ -1483,9 +1483,9 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
 
-            cursor.execute("SELECT planned_depairport FROM status_ivao")
+            cursor.execute("SELECT planned_depairport FROM recent")
             allairports_dep = cursor.fetchall()
-            cursor.execute("SELECT planned_destairport FROM status_ivao")
+            cursor.execute("SELECT planned_destairport FROM recent")
             allairports_dest = cursor.fetchall()
 
             list_traffic_airport = []
@@ -1543,7 +1543,7 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            cursor.execute("SELECT SUBSTR(callsign,1,3) AS prefix, COUNT(DISTINCT callsign) AS airlines FROM status_ivao WHERE clienttype='PILOT' GROUP BY prefix ORDER BY airlines DESC;")
+            cursor.execute("SELECT SUBSTR(callsign,1,3) AS prefix, COUNT(DISTINCT callsign) AS airlines FROM recent WHERE clienttype='PILOT' GROUP BY prefix ORDER BY airlines DESC;")
             items = cursor.fetchall()
 
             for i in range(0, len(items)):
@@ -1583,7 +1583,7 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            cursor.execute("SELECT planned_aircraft FROM status_ivao WHERE clienttype='PILOT';" )
+            cursor.execute("SELECT planned_aircraft FROM recent WHERE clienttype='PILOT';" )
             airplane_type = cursor.fetchall()
             list_aircraft = []
             for item_list in range(0, len(airplane_type)):
@@ -1625,7 +1625,7 @@ class Main(QMainWindow):
             while self.ui.Statistics.rowCount () > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
-            cursor.execute("SELECT planned_aircraft FROM status_ivao WHERE clienttype='PILOT';" )
+            cursor.execute("SELECT planned_aircraft FROM recent WHERE clienttype='PILOT';" )
             airplane_type = cursor.fetchall()
             list_aircraft = []
             for item_list in range(0, len(airplane_type)):
@@ -1669,12 +1669,12 @@ class Main(QMainWindow):
             startrow = 0
 
             for min_pob, max_pob in [(1, 4), (5, 20), (21, 75), (76, 150), (151, 250), (250, 500)]:
-                cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='PILOT';" )
+                cursor.execute("SELECT COUNT(callsign) FROM recent WHERE clienttype='PILOT';" )
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
                     continue
                 else:
-                    cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='PILOT' AND planned_pob >= ? AND planned_pob <= ?;", (min_pob, max_pob))
+                    cursor.execute("SELECT COUNT(callsign) FROM recent WHERE clienttype='PILOT' AND planned_pob >= ? AND planned_pob <= ?;", (min_pob, max_pob))
                     pob = cursor.fetchone()
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
                     col_item = QTableWidgetItem(str('Flights with Passengers on Boards: %d - %d' % (min_pob, max_pob)), 0)
@@ -1698,12 +1698,12 @@ class Main(QMainWindow):
             startrow = 0
 
             for type_flight in ('S', 'G', 'M', 'N', 'X'):
-                cursor.execute("SELECT COUNT(planned_typeofflight) FROM status_ivao WHERE clienttype='PILOT';" )
+                cursor.execute("SELECT COUNT(planned_typeofflight) FROM recent WHERE clienttype='PILOT';" )
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
                     continue
                 else:
-                    cursor.execute("SELECT COUNT(planned_typeofflight) FROM status_ivao WHERE clienttype='PILOT' and planned_typeofflight = ?;", (type_flight,))
+                    cursor.execute("SELECT COUNT(planned_typeofflight) FROM recent WHERE clienttype='PILOT' and planned_typeofflight = ?;", (type_flight,))
                     item_typeofflight = cursor.fetchone()
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
                     if type_flight == 'S':
@@ -1731,12 +1731,12 @@ class Main(QMainWindow):
                 qApp.processEvents()
 
             for type_flight in ('I', 'V', 'Y', 'Z'):
-                cursor.execute("SELECT COUNT(planned_flighttype) FROM status_ivao WHERE clienttype='PILOT';" )
+                cursor.execute("SELECT COUNT(planned_flighttype) FROM recent WHERE clienttype='PILOT';" )
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
                     continue
                 else:
-                    cursor.execute("SELECT COUNT(planned_flighttype) FROM status_ivao WHERE clienttype='PILOT' and planned_flighttype = ?;", (type_flight,))
+                    cursor.execute("SELECT COUNT(planned_flighttype) FROM recent WHERE clienttype='PILOT' and planned_flighttype = ?;", (type_flight,))
                     item_typeofflight = cursor.fetchone()
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
                     if type_flight == 'I':
@@ -1770,12 +1770,12 @@ class Main(QMainWindow):
 
             for facility, description in (('DEP','Departure'), ('GND','Ground'), ('TWR', 'Tower'),
                                           ('APP','Approach'), ('CTR','Center'), ('OBS','Observer')):
-                cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC';" )
+                cursor.execute("SELECT COUNT(callsign) FROM recent WHERE clienttype='ATC';" )
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
                     continue
                 else:
-                    cursor.execute("SELECT COUNT(callsign) FROM status_ivao WHERE clienttype='ATC' AND callsign LIKE ?;",
+                    cursor.execute("SELECT COUNT(callsign) FROM recent WHERE clienttype='ATC' AND callsign LIKE ?;",
                                    ('%'+str(facility)+'%',))
                     position = cursor.fetchone()
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
@@ -1800,11 +1800,11 @@ class Main(QMainWindow):
                 self.ui.Statistics.removeRow(0)
             startrow = 0
             list_server = {}
-            cursor.execute("SELECT COUNT(server) FROM status_ivao")
+            cursor.execute("SELECT COUNT(server) FROM recent")
             total_server_used = cursor.fetchone()
             for server in ('AM1', 'AM2', 'AS1', 'EU1', 'EU2', 'EU3', 'EU4', 'EU5', 'EU6',
                            'EU7', 'EU8', 'EU9', 'EU11', 'EU12', 'EU13', 'EU14', 'EU15'):
-                cursor.execute("SELECT COUNT(server) FROM status_ivao WHERE server=?;", (str(server),))
+                cursor.execute("SELECT COUNT(server) FROM recent WHERE server=?;", (str(server),))
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
                     continue
@@ -1838,13 +1838,13 @@ class Main(QMainWindow):
 
         startrow = 0
         for item in ('AM1', 'AM2', 'AS1', 'EU1', 'EU2', 'EU3', 'EU4', 'EU5', 'EU6', 'EU7', 'EU8', 'EU9', 'EU11', 'EU12', 'EU13', 'EU14', 'EU15'):
-            cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='PILOT' AND server=?;", (str(item),))
+            cursor.execute("SELECT COUNT(clienttype) FROM recent WHERE clienttype='PILOT' AND server=?;", (str(item),))
             server_pilot = cursor.fetchone()
-            cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND NOT callsign LIKE '%OBS%' AND server=?;", (str(item),))
+            cursor.execute("SELECT COUNT(clienttype) FROM recent WHERE clienttype='ATC' AND NOT callsign LIKE '%OBS%' AND server=?;", (str(item),))
             server_controller = cursor.fetchone()
-            cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE clienttype='ATC' AND callsign LIKE '%OBS%' AND server=?;", (str(item),))
+            cursor.execute("SELECT COUNT(clienttype) FROM recent WHERE clienttype='ATC' AND callsign LIKE '%OBS%' AND server=?;", (str(item),))
             server_observer = cursor.fetchone()
-            cursor.execute("SELECT COUNT(clienttype) FROM status_ivao WHERE server=?;", (str(item),))
+            cursor.execute("SELECT COUNT(clienttype) FROM recent WHERE server=?;", (str(item),))
             server_total = cursor.fetchone()
             col_pilot = QTableWidgetItem(str(server_pilot[0]), 0)
             self.ui.network_table.setItem(startrow, 4, col_pilot)
