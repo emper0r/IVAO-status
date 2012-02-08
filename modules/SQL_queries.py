@@ -35,7 +35,7 @@ def sql_query(args=None, var=None):
     if args == 'Get_All_data_icao_codes':
         Q_db = cursor.execute("SELECT icao, latitude, longitude, city, country FROM airports DESC;")
     if args == 'Get_Country_from_ICAO':
-        Q_db = cursor.execute('SELECT country FROM airports WHERE icao = ?;', (str(var[0]),))
+        Q_db = cursor.execute('SELECT country FROM countries WHERE icao = ?;', (str(var[0]),))
     if args == 'Get_Country_from_FIR':
         Q_db = cursor.execute('SELECT country FROM fir_data_list WHERE icao = ?;', (str(var[0]),))
     if args == 'Get_Country_from_Division':
@@ -76,7 +76,7 @@ def sql_query(args=None, var=None):
     if args == 'Get_Airline':
         Q_db = cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?;', (str(var[0]),))
     if args == 'Get_ICAO_from_Country':
-        Q_db = cursor.execute("SELECT icao FROM icao_codes WHERE country=?;", (str(var[0]),))
+        Q_db = cursor.execute("SELECT icao FROM countries WHERE country=?;", (str(var[0]),))
     if args == 'Get_Outbound_Traffic':
         Q_db= cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM recent WHERE planned_depairport LIKE ?", \
                        (str(var[0]),))
@@ -124,7 +124,7 @@ def sql_query(args=None, var=None):
     if args == 'Get_Schedule_ATC':
         Q_db = cursor.execute("SELECT Name, Position, StartDateUTC, EndDateUTC, Voice, Training, Event FROM schedule_controllers;")
     if args == 'Get_Model':
-        Q_db = cursor.execute("SELECT Model, Fabricant, Description FROM icao_aircraft WHERE Model=?;", ((var[0]),))
+        Q_db = cursor.execute("SELECT model, fabricant, code FROM aircraft WHERE Model=?;", ((var[0]),))
     if args == 'Get_Schedule_Flights':
         Q_db = cursor.execute("SELECT Callsign, Name, Airplane, Departure, DepTime, Destination, DestTime, \
                                Altitude, CruisingSpeed, Route, Voice, Training, Event FROM schedule_pilots;")
