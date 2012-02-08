@@ -32,14 +32,16 @@ def sql_query(args=None, var=None):
     cursor = connection.cursor()
     if args == 'Get_All_Flags':
         Q_db = cursor.execute("SELECT DISTINCT(country) FROM countries ORDER BY country ASC;")
+    if args == 'Get_Country_by_Id':
+        Q_db = cursor.execute("SELECT DISTINCT(country) FROM countries WHERE id_country=?;", (str(var[0]),))
     if args == 'Get_All_data_icao_codes':
         Q_db = cursor.execute("SELECT icao, latitude, longitude, city, country FROM airports DESC;")
     if args == 'Get_Country_from_ICAO':
-        Q_db = cursor.execute('SELECT country FROM countries WHERE icao = ?;', (str(var[0]),))
+        Q_db = cursor.execute('SELECT countries.country FROM airports JOIN countries ON airports.country = countries.id_country WHERE airports.icao=?;', (str(var[0]),))
     if args == 'Get_Country_from_FIR':
-        Q_db = cursor.execute('SELECT country FROM fir_data_list WHERE icao = ?;', (str(var[0]),))
-    if args == 'Get_Country_from_Division':
-        Q_db = cursor.execute('SELECT country FROM division_ivao WHERE Division=?;', (str(var[0]),))
+        Q_db = cursor.execute('SELECT distinct(countries.country) FROM countries JOIN firs ON firs.id_country = countries.id_country WHERE firs.fir=?;', (str(var[0]),))
+    if args == 'Get_Country_from_Prefix':
+        Q_db = cursor.execute('SELECT countries.country FROM countries JOIN cprefix ON cprefix.id_country = countries.id_country WHERE cprefix.icao_initial=?', (str(var[0]),))
     if args == 'Get_Status':
         Q_db = cursor.execute("SELECT DISTINCT(callsign), planned_aircraft, planned_depairport, \
                                planned_destairport, onground, time_connected, groundspeed, planned_altitude, \
@@ -74,7 +76,7 @@ def sql_query(args=None, var=None):
         Q_db = cursor.execute("SELECT DISTINCT(callsign), rating, realname, time_connected, clienttype \
                                FROM recent WHERE clienttype='FOLME';")
     if args == 'Get_Airline':
-        Q_db = cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?;', (str(var[0]),))
+        Q_db = cursor.execute('SELECT Airline FROM airlines_codes WHERE Code=?;', (str(var[0]),))
     if args == 'Get_ICAO_from_Country':
         Q_db = cursor.execute("SELECT icao FROM countries WHERE country=?;", (str(var[0]),))
     if args == 'Get_Outbound_Traffic':
@@ -93,7 +95,7 @@ def sql_query(args=None, var=None):
         Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype FROM recent WHERE realname like ?;", \
                               (str(var[0]),))
     if args == 'Get_Airport_from_ICAO':
-        Q_db = cursor.execute("SELECT City_Airport FROM icao_codes WHERE icao=?", (str(var[0]),))
+        Q_db = cursor.execute("SELECT city FROM airports WHERE icao=?", (str(var[0]),))
     if args == 'Get_Controller_data':
         Q_db = cursor.execute("SELECT vid, realname, server, clienttype, frequency, rating, facilitytype, atis_message, \
                                time_connected, client_software_name, client_software_version FROM recent \
@@ -111,7 +113,7 @@ def sql_query(args=None, var=None):
     if args == 'Get_Airport_Location':
         Q_db = cursor.execute("SELECT City_Airport, Latitude, Longitude FROM icao_codes WHERE icao=?", (str(var[0]),))
     if args == 'Get_Location_from_ICAO':
-        Q_db = cursor.execute("SELECT longitude, latitude FROM icao_codes WHERE ICAO=?;", (str(var[0]),))
+        Q_db = cursor.execute("SELECT longitude, latitude FROM airports WHERE icao=?;", (str(var[0]),))
     if args == 'Get_Player_Location':
         Q_db = cursor.execute("SELECT latitude, longitude, callsign, true_heading, clienttype \
                                FROM recent WHERE callsign=?;",  (str(var[0]),))

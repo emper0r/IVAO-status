@@ -71,7 +71,7 @@ class ControllerInfo(QMainWindow):
             Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(callsign[:4]),))
             flagCodeOrig = Q_db.fetchone()
             if flagCodeOrig is None:
-                Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(callsign[:2]),))
+                Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(callsign[:2]),))
                 flagCodeOrig = Q_db.fetchone()
             flagCodePath_orig = (ImageFlags + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)

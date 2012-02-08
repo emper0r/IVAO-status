@@ -458,8 +458,12 @@ class Main(QMainWindow):
                     self.ui.ATC_FullList.setItem(startrow, 3, col_country)
 
                 elif str(row_atc[0][2:3]) == '-' or str(row_atc[0][2:3]) == '_':
-                    Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(row_atc[0][:2]),))
+                    Q_db = SQL_queries.sql_query('Get_Country_by_Id', (str(row_atc[0][:2]),))
                     div_ivao = Q_db.fetchone()
+                    if div_ivao is None:
+                        Q_db = SQL_queries.sql_query('Get_Country_from_Prefix', (str(row_atc[0][:2]),))
+                        div_ivao = Q_db.fetchone()
+                        flagCodePath = (ImageFlags + '/%s.png') % str(div_ivao[0])
                     if row_atc is None or div_ivao is None:
                         self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
                     else:
@@ -474,24 +478,21 @@ class Main(QMainWindow):
                         self.ui.ATC_FullList.setItem(startrow, 3, col_country)
                 else:
                     code_icao = str(row_atc[0][:4])
-                    try:
-                        Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(code_icao),))
+                    Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(code_icao),))
+                    flagCode = Q_db.fetchone()
+                    if flagCode is None:
+                        Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(code_icao),))
                         flagCode = Q_db.fetchone()
-                        if flagCode is None:
-                            Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(code_icao),))
-                            division = Q_db.fetchone()
-                            Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(division[0]),))
-                            flagCode = Q_db.fetchone()
-                        flagCodePath = (ImageFlags + '/%s.png') % flagCode
-                        if os.path.exists(flagCodePath) is True:
-                            Pixmap = QPixmap(flagCodePath)
-                            flag_country = QLabel()
-                            flag_country.setPixmap(Pixmap)
-                            self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
-                            col_country = QTableWidgetItem(str(flagCode[0]), 0)
-                            self.ui.ATC_FullList.setItem(startrow, 3, col_country)
-                            self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
-                    except:
+                    flagCodePath = (ImageFlags + '/%s.png') % flagCode
+                    if os.path.exists(flagCodePath) is True:
+                        Pixmap = QPixmap(flagCodePath)
+                        flag_country = QLabel()
+                        flag_country.setPixmap(Pixmap)
+                        self.ui.ATC_FullList.setCellWidget(startrow, 2, flag_country)
+                        col_country = QTableWidgetItem(str(flagCode[0]), 0)
+                        self.ui.ATC_FullList.setItem(startrow, 3, col_country)
+                        self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
+                    if flagCode is None:
                         col_country = QTableWidgetItem(str(flagCode).encode('latin-1'), 0)
                         self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
                         error_flag = QTableWidgetItem(str('None'), 0)
