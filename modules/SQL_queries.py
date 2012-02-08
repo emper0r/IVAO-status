@@ -106,7 +106,7 @@ def sql_query(args=None, var=None):
                             latitude, longitude, planned_altairport, planned_altairport2, planned_tascruise, time_connected, clienttype \
                             FROM recent WHERE callsign=?;", (str(var[0]),))
     if args == 'Get_FIR_from_ICAO':
-        Q_db = cursor.execute("SELECT FIR FROM fir_data_list WHERE icao=?", (str(var[0]),))
+        Q_db = cursor.execute("SELECT city FROM firs WHERE fir==?", (str(var[0]),))
     if args == 'Get_FMC_data':
         Q_db = cursor.execute("SELECT vid, realname, server, clienttype, rating, time_connected, client_software_name, \
                                client_software_version FROM recent WHERE callsign=?;", (str(var[0]),))

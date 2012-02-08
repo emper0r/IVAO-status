@@ -71,19 +71,17 @@ class ControllerInfo(QMainWindow):
             Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(callsign[:4]),))
             flagCodeOrig = Q_db.fetchone()
             if flagCodeOrig is None:
-                Q_db = SQL_queries.sql_query('Get_Country_from_FIR', (str(callsign[:2]),))
+                Q_db = SQL_queries.sql_query('Get_Country_by_Id', (str(callsign[:2]),))
                 flagCodeOrig = Q_db.fetchone()
             flagCodePath_orig = (ImageFlags + '/%s.png') % flagCodeOrig
             Pixmap = QPixmap(flagCodePath_orig)
             self.ui.Flag.setPixmap(Pixmap)
             Q_db = SQL_queries.sql_query('Get_Airport_from_ICAO', (str(callsign[:4]),))
-            city_orig = Q_db.fetchone()
             if str(callsign[-4:]) == '_CTR':
                 Q_db = SQL_queries.sql_query('Get_FIR_from_ICAO', (str(callsign[:4]),))
-                city_orig = Q_db.fetchone()
             if str(callsign[2:3]) == '_' or str(callsign[2:3]) == '-':
-                Q_db = SQL_queries.sql_query('Get_Country_from_Division', (str(callsign[:2]),))
-                city_orig = Q_db.fetchone()
+                Q_db = SQL_queries.sql_query('Get_Country_by_Id', (str(callsign[:2]),))
+            city_orig = Q_db.fetchone()
             self.ui.ControllingText.setText(str(city_orig[0].encode('latin-1')))
         except:
             self.ui.ControllingText.setText('Pending...')
