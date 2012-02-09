@@ -254,7 +254,7 @@ class Main(QMainWindow):
         self.vehicles = []
         self.SchedATC_URL = None
         self.SchedFlights_URL = None
-        #self.ui.tabWidget.currentChanged.connect(self.ivao_friend)
+        self.ui.tabWidget.currentChanged.connect(self.ivao_friend)
 
     @property
     def maptab(self):
@@ -268,9 +268,9 @@ class Main(QMainWindow):
     def initial_load(self):
         self.statusBar().showMessage('Populating Database', 2000)
         qApp.processEvents()
-        Q_db = SQL_queries.sql_query('Get_All_Flags')
+        Q_db = SQL_queries.sql_query('Get_Flags')
         db_t1 = Q_db.fetchall()
-        Q_db = SQL_queries.sql_query('Get_All_data_icao_codes')
+        Q_db = SQL_queries.sql_query('Get_ICAO_codes')
         db_t2 = Q_db.fetchall()
         startrow_dbt1 = startrow_dbt2 = 0
 
@@ -606,10 +606,10 @@ class Main(QMainWindow):
                     Q_db = SQL_queries.sql_query('Get_Airline', (str(row_pilot[0][:3]),))
                     airline_code = Q_db.fetchone()
                     if airline_code is None:
-                        col_airline = QTableWidgetItem(str(row_pilot[0]))
+                        col_airline = QTableWidgetItem(str('Unknown Operator'))
                     else:
                         col_airline = QTableWidgetItem(str(airline_code[0]), 0)
-                        self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
+                    self.ui.PILOT_FullList.setItem(startrow, 0, col_airline)
             except:
                 pass
             col_callsign = QTableWidgetItem(str(row_pilot[0]), 0)
@@ -669,8 +669,8 @@ class Main(QMainWindow):
            and all flight inbound/outbound in same country, This is my favorite part because
            is very similar like any Airport's Flights of MainBoard'''
         country_selected = self.ui.country_list.currentText()
-        Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(country_selected),))
-        flagCode = Q_db.fetchone()
+        #Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(country_selected),))
+        #flagCode = Q_db.fetchone()
         ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
         ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
         ImageRatings = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
@@ -767,7 +767,7 @@ class Main(QMainWindow):
                         Q_db = SQL_queries.sql_query('Get_Airline', (str(row_pilot[0][:3]),))
                         airline_code = Q_db.fetchone()
                         if airline_code is None:
-                            col_airline = QTableWidgetItem(str(row_pilot[0]))
+                            col_airline = QTableWidgetItem(str('Unknown Operator'))
                         else:
                             col_airline = QTableWidgetItem(str(airline_code[0]), 0)
                         self.ui.PilottableWidget.setItem(startrow_pilot, 0, col_airline)
@@ -1318,24 +1318,29 @@ class Main(QMainWindow):
 
             list_all = []
             for callsign in range(0, len(controller_list)):
-                if controller_list[callsign][0][2:3] == '-' or controller_list[callsign][0][2:3] == '_':
-                    cursor.execute("SELECT Country FROM division_ivao WHERE division = ?;", (str(controller_list[callsign][0])[:2],))
-                else:
-                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", (str(controller_list[callsign][0])[:4],))
-                country_icao = cursor.fetchone()
-                if country_icao is None:
-                    continue
-                else:
+                try:
+                    if controller_list[callsign][0][2:3] == '-' or controller_list[callsign][0][2:3] == '_':
+                        Q_db = SQL_queries.sql_query('Get_Country_by_Id', (str(controller_list[callsign][0])[:2],))
+                        country_icao = Q_db.fetchone()
+                        if country_icao is None:
+                            Q_db = SQL_queries.sql_query('Get_Country_from_Prefix', (str(controller_list[callsign][0])[:2],))
+                            country_icao = Q_db.fetchone()
+                    else:
+                        Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(controller_list[callsign][0])[:4],))
+                        country_icao = Q_db.fetchone()
+                        if country_icao is None:
+                            continue
                     list_all.append(str(country_icao[0]))
+                except:
+                    continue
 
             cursor.execute("SELECT realname FROM recent WHERE clienttype='PILOT';" )
             pilot_list = cursor.fetchall()
 
             for callsign in range(0, len(pilot_list)):
                 if pilot_list[callsign][0][-4:]:
-                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;",
-                                   (str(pilot_list[callsign][0].encode('latin-1'))[-4:],))
-                country_icao = cursor.fetchone()
+                    Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(pilot_list[callsign][0].encode('latin-1'))[-4:],))
+                country_icao = Q_db.fetchone()
                 if country_icao is None:
                     continue
                 else:
@@ -1383,15 +1388,21 @@ class Main(QMainWindow):
 
             list_icao = []
             for callsign in range(0, len(controller_list)):
-                if controller_list[callsign][0][2:3] == '-' or controller_list[callsign][0][2:3] == '_':
-                    cursor.execute("SELECT Country FROM division_ivao WHERE division = ?;", (str(controller_list[callsign][0])[:2],))
-                else:
-                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", (str(controller_list[callsign][0])[:4],))
-                country_icao = cursor.fetchone()
-                if country_icao is None:
-                    continue
-                else:
+                try:
+                    if controller_list[callsign][0][2:3] == '-' or controller_list[callsign][0][2:3] == '_':
+                        Q_db = SQL_queries.sql_query('Get_Country_by_Id', (str(controller_list[callsign][0])[:2],))
+                        country_icao = Q_db.fetchone()
+                        if country_icao is None:
+                            Q_db = SQL_queries.sql_query('Get_Country_from_Prefix', (str(controller_list[callsign][0])[:2],))
+                            country_icao = Q_db.fetchone()
+                    else:
+                        Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(controller_list[callsign][0])[:4],))
+                        country_icao = Q_db.fetchone()
+                        if country_icao is None:
+                            continue
                     list_icao.append(str(country_icao[0]))
+                except:
+                    continue
 
             countries = {}
             for item_list in set(list_icao):
@@ -1438,9 +1449,8 @@ class Main(QMainWindow):
             list_icao = []
             for callsign in range(0, len(pilot_list)):
                 if pilot_list[callsign][0][-4:]:
-                    cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;",
-                                   (str(pilot_list[callsign][0].encode('latin-1'))[-4:],))
-                country_icao = cursor.fetchone()
+                    Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(pilot_list[callsign][0].encode('latin-1'))[-4:],))
+                country_icao = Q_db.fetchone()
                 if country_icao is None:
                     continue
                 else:
@@ -1485,22 +1495,22 @@ class Main(QMainWindow):
                 self.ui.Statistics.removeRow(0)
 
             cursor.execute("SELECT planned_depairport FROM recent")
-            allairports_dep = cursor.fetchall()
+            all_airports_dep = cursor.fetchall()
             cursor.execute("SELECT planned_destairport FROM recent")
-            allairports_dest = cursor.fetchall()
+            all_airports_dest = cursor.fetchall()
 
             list_traffic_airport = []
-            for airport in range(0, len(allairports_dep)):
-                cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", (str(allairports_dep[airport][0]),))
-                country = cursor.fetchone()
+            for airport in range(0, len(all_airports_dep)):
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(all_airports_dep[airport][0]),))
+                country = Q_db.fetchone()
                 if country is None:
                     continue
                 else:
                     list_traffic_airport.append(str(country[0]))
 
-            for airport in range(0, len(allairports_dest)):
-                cursor.execute("SELECT Country FROM icao_codes WHERE ICAO = ?;", (str(allairports_dest[airport][0]),))
-                country = cursor.fetchone()
+            for airport in range(0, len(all_airports_dest)):
+                Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(all_airports_dest[airport][0]),))
+                country = Q_db.fetchone()
                 if country is None:
                     continue
                 else:
@@ -1558,7 +1568,7 @@ class Main(QMainWindow):
                         airline.setPixmap(Pixmap)
                         self.ui.Statistics.setCellWidget(startrow, 1, airline)
                     else:
-                        cursor.execute('SELECT Airline FROM airlines_codes WHERE Code = ?', (str(items[i][0]),))
+                        cursor.execute('SELECT airline_name FROM airlines WHERE code=?', (str(items[i][0]),))
                         airline_code = cursor.fetchone()
                         if airline_code is None:
                             col_airline = QTableWidgetItem(str(items[i][0]), 0)
@@ -1591,7 +1601,7 @@ class Main(QMainWindow):
                 if str(airplane_type[item_list][0]) == '' or str(airplane_type[item_list][0]) == 'None':
                     continue
                 else:
-                    cursor.execute("SELECT Fabricant FROM icao_aircraft WHERE Model = ?;", (str(airplane_type[item_list][0]).split('/')[1],))
+                    cursor.execute("SELECT fabricant FROM aircraft WHERE icao=?;", (str(airplane_type[item_list][0]).split('/')[1],))
                     fabricant = cursor.fetchall()
                     if fabricant == []:
                         continue
@@ -1644,7 +1654,7 @@ class Main(QMainWindow):
                     continue
                 else:
                     self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-                    cursor.execute("SELECT Description FROM icao_aircraft WHERE Model = ?;", (item,))
+                    cursor.execute("SELECT model FROM aircraft WHERE icao=?;", (item,))
                     aircraft_description = cursor.fetchone()
                     if aircraft_description is None:
                         continue

@@ -116,15 +116,7 @@ def GMapsLayer(vid, icao_orig, icao_dest):
         player_location.write('       labelXOffset: 30,\n')
         player_location.write('       labelYOffset: 5\n')
         player_location.write('   };\n\n')
-        try:
-            Q_db = SQL_queries.sql_query('Get_IdFIR_from_ICAO', (str(vid[0][2][:-4]),))
-            id_ctr = Q_db.fetchone()
-            if id_ctr is None:
-                Q_db = SQL_queries.sql_query('Get_IdFIR_from_ICAO', (str(vid[0][2][:4]),))
-                id_ctr = Q_db.fetchone()
-        except:
-            pass
-        Q_db = SQL_queries.sql_query('Get_borders_FIR', (int(id_ctr[0]),))
+        Q_db = SQL_queries.sql_query('Get_borders_FIR', (str(vid[0][2][:4]),))
         points_ctr = Q_db.fetchall()
         player_location.write('    var points = [];\n')
         for position in range(0, len(points_ctr)):

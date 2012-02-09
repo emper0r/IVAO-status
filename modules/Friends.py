@@ -60,7 +60,7 @@ class Friends():
             try:
                 if insert is True:
                     cursor.execute('INSERT INTO friends (vid, realname, rating, clienttype) \
-                    SELECT vid, realname, rating, clienttype FROM status_ivao WHERE vid=?;', (vid2add,))
+                    SELECT vid, realname, rating, clienttype FROM recent WHERE vid=?;', (vid2add,))
                     connection.commit()
                     QMessageBox.information(None, 'Friend of IVAO list', 'Friend Added!')
             except:
