@@ -366,8 +366,13 @@ def all2map():
             all_in_map.write('    map.addLayer(player_%s);\n' % str(players[callsign][2]).replace('-',''))
             all_in_map.write('\n')
         if str(players[callsign][2][-4:]) == '_CTR':
-            cursor.execute("SELECT Latitude, Longitude FROM fir_data_list WHERE ICAO = ?;", (str(players[callsign][2][:4]),))
-            position = cursor.fetchall()
+            try:
+                Q_db = SQL_queries.sql_query('Get_borders_FIR', (str(players[callsign][2][:4]),))
+                position = Q_db.fetchall()
+                if position == []:
+                    continue
+            except:
+                pass
             all_in_map.write('    var position = new OpenLayers.LonLat( %f, %f )\n'
                              % (float(position[0][0]), float(position[0][1])))
             all_in_map.write('    var player_%s = new OpenLayers.Layer.Vector("Player",\n' % str(players[callsign][2]).replace('-',''))
@@ -404,8 +409,8 @@ def all2map():
                     id_ctr = cursor.fetchone()
             except:
                 pass
-            cursor.execute("SELECT Longitude, Latitude FROM fir_coastlines_list where ID_FIRCOASTLINE = ?;", (int(id_ctr[0]),))
-            points_ctr = cursor.fetchall()
+            Q_db = SQL_queries.sql_query('Get_borders_FIR', (str(players[callsign][2][:4]),))
+            points_ctr = Q_db.fetchall()
             all_in_map.write('    var points = [];\n')
             for position in range(0, len(points_ctr)):
                 all_in_map.write('    var point_orig = new OpenLayers.Geometry.Point(%f, %f);\n'

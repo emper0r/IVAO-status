@@ -669,8 +669,6 @@ class Main(QMainWindow):
            and all flight inbound/outbound in same country, This is my favorite part because
            is very similar like any Airport's Flights of MainBoard'''
         country_selected = self.ui.country_list.currentText()
-        #Q_db = SQL_queries.sql_query('Get_Country_from_ICAO', (str(country_selected),))
-        #flagCode = Q_db.fetchone()
         ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
         ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
         ImageRatings = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
