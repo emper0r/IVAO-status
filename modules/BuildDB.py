@@ -120,9 +120,9 @@ class Build_datafiles(QMainWindow):
             airport = fields[1].decode('latin-1')
             city = fields[2].decode('latin-1')
             country = fields[3]
-            fir = fields[3]
-            latitude = fields[4]
-            longitude = fields[5].strip('\r\n')
+            fir = fields[4]
+            latitude = fields[5]
+            longitude = fields[6].strip('\r\n')
             cursor.execute("INSERT INTO airports (icao, airport, city, country, fir, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?);",
                            (icao, airport, city, country, fir, latitude, longitude))
             count += 1
