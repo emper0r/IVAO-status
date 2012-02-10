@@ -33,7 +33,7 @@ def sql_query(args=None, var=None):
     if args == 'Get_Flags':
         Q_db = cursor.execute("SELECT DISTINCT(country) FROM countries ORDER BY country ASC;")
     if args == 'Get_ICAO_codes':
-        Q_db = cursor.execute("SELECT icao, latitude, longitude, city, country FROM airports DESC;")
+        Q_db = cursor.execute("SELECT airports.icao, airports.latitude, airports.longitude, airports.city, countries.country FROM airports JOIN countries ON airports.country = countries.id_country;")
     if args == 'Get_Country_from_ICAO':
         Q_db = cursor.execute('SELECT countries.country FROM airports JOIN countries ON airports.country = countries.id_country WHERE airports.icao=?;', (str(var[0]),))
     if args == 'Get_ICAO_from_Country':
