@@ -458,12 +458,15 @@ class Main(QMainWindow):
                     self.ui.ATC_FullList.setItem(startrow, 3, col_country)
 
                 elif str(row_atc[0][2:3]) == '-' or str(row_atc[0][2:3]) == '_':
-                    Q_db = SQL_queries.sql_query('Get_Country_by_Id', (str(row_atc[0][:2]),))
-                    div_ivao = Q_db.fetchone()
-                    if div_ivao is None:
-                        Q_db = SQL_queries.sql_query('Get_Country_from_Prefix', (str(row_atc[0][:2]),))
+                    try:
+                        Q_db = SQL_queries.sql_query('Get_Country_by_Id', (str(row_atc[0][:2]),))
                         div_ivao = Q_db.fetchone()
-                        flagCodePath = (ImageFlags + '/%s.png') % str(div_ivao[0])
+                        if div_ivao is None:
+                            Q_db = SQL_queries.sql_query('Get_Country_from_Prefix', (str(row_atc[0][:2]),))
+                            div_ivao = Q_db.fetchone()
+                            flagCodePath = (ImageFlags + '/%s.png') % str(div_ivao[0])
+                    except:
+                        pass
                     if row_atc is None or div_ivao is None:
                         self.ui.ATC_FullList.setItem(startrow, 0, col_callsign)
                     else:
