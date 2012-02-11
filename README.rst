@@ -37,7 +37,13 @@ INSTALLER BINARY
 
 You can download the installer from:
 
-    https://github.com/downloads/emper0r/IVAO-status/IVAO-Status-1.0.6-Linux-x86-Install.bin
+    https://github.com/downloads/emper0r/IVAO-status/IVAO-Status-1.0.7-Linux-x86_64-Install.bin
+
+After download run this command on shell:
+
+    $ cd Your/Download/Path/
+    $ chmod 500 IVAO-Status-1.0.7-Linux-x86_64-Install.bin
+    $ ./IVAO-Status-1.0.7-Linux-x86_64-Install.bin 
 
 OR TRY TO GET THE SOURCE
 ========================
