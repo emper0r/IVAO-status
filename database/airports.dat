@@ -33,7 +33,8 @@
 14KS:G&S Space Port Airport:Parker:US:KZKC:38.2691:-94.9048
 14SN:Colmery-O'Neil VAMC Heliport:Topeka:US:KZKC:39.0263:-95.7224
 15KS:Sickler Airstrip:Emporia:US:KZKC:38.4305:-96.0883
-1MO3:Lake Viking:Gallatin:US:KZKC: 39.9333:-94.0738
+1MO3:Lake Viking:Gallatin:US:KZKC:39.9333:-94.0738
+1WA6:Fall City Airfield:Fall City:US:KZSE:47.3334:-121.5149
 2NC0:Mountain Air Airport:Burnsville:US:KZTL:35.5207:-82.2030
 2WN8:Cornell Muni:Cornell:US:KZMP:45.1655:-91.1057
 3OH9:Hollister Fld:Wilmington:US:KZID:39.4375:-83.7083
@@ -887,6 +888,7 @@ EDMC:Blauberen:Blaubeuren:DE:EDMM:48.4197:9.7988
 EDMD:Dachau-Grobenried:Dachau-Grobenried:DE:EDMM:48.2286:11.423
 EDME:Eggenfelden:Eggenfelden:DE:EDMM:48.3961:12.7236
 EDMG:Donauried:Guenzburg:DE:EDMM:48.486111:10.282222
+EDMJ:Jesenwang:Jesenwang:DE:EDMM:48.1046:11.0750
 EDMK:Durach:Kempten:DE:EDMM:47.6927:10.3383
 EDML:Landshut:Landshut:DE:EDMM:48.5127:12.035
 EDMN:Mattsies:Mindelheim:DE:EDMM:48.1088:10.5244
@@ -3870,6 +3872,7 @@ KICT:Mid-Continent:Wichita:US:KZKC:37.6499:-97.4331
 KIDA:Fanning Fld:Idaho Falls:US:KZLC:43.5145:-112.0702
 KIDI:Jimmy Stewart Fld:Indiana:US:KZOB:40.6322:-79.1056
 KIEN:Pine Ridge:Pine Ridge:US:KZDV:43.0225:-102.5111
+KIFP:Laughlin/Bullhead Intl Airport:Bullhead City:US:KLZA:35.1575:-114.5594
 KIGC:Charleston AFB:Charleston:US:KZJX:32.8997:-80.0498
 KIGM:Kingman:Kingman:US:KZLA:35.2594:-113.9381
 KIGQ:Lansing Muni:Chicago:US:KZAU:41.5398:-87.5322
@@ -4579,7 +4582,6 @@ KSIY:Siskiyou Co:Montague:US:KZSE:41.7814:-122.4682
 KSJC:San Jose:San Jose:US:KZOA:37.3626:-121.9291
 KSJN:St Johns Industrial Air Park:St Johns:US:KZAB:34.5185:-109.3788
 KSJT:Mathis Fld:San Angelo:US:KZFW:31.3577:-100.4964
-LZBD:Bidovce:Bidovce:SK:LZBB:48.7425:021.4480
 KSJX:Beaver I:Beaver I:US:KZMP:45.6912:-85.5663
 KSKA:Fairchild AFB:Spokane:US:KZSE:47.615:-117.6558
 KSKC:Waukesha:Waukesha:US:KZAU:43.033:-88.2331
@@ -4751,6 +4753,7 @@ KUNU:Dodge Co:Juneau:US:KZAU:43.4265:-88.7033
 KUNV:University Park:State College:US:KZNY:40.8492:-77.8487
 KUOX:University-Oxford:Oxford:US:KZME:34.3843:-89.5354
 KUSE:Fulton Co:Wauseon:US:KZOB:41.6101:-84.1272
+KUTA:Tunica Municipal Airport:Tunica:US:KZME:34.6834:-90.3501
 KUTS:Huntsville Muni:Huntsville:US:KZHU:30.7468:-95.5872
 KUUV:Sullivan Regl:Sullivan:US:KZKC:38.2334:-91.1644
 KUVA:Garner Fld:Uvalde:US:KZHU:29.2113:-99.7436
@@ -5051,7 +5054,7 @@ LEBI:Sa Sabina:Formentera:ES:LECB:38.740:1.4200
 LEBL:Barcelona:Barcelona:ES:LECB:41.297:2.0784
 LEBP:BP Oil España:Castellón:ES:LECB:39.9630:-0.0190
 LEBR:Sanabria:Zamora:ES:LECM:42.1305:-6.6236
-LEBT:Betera:Valencia:ES:LECB:39.3732:-0.2816
+LEBT:Betera:Betera:ES:LECB:39.6297:0.4763
 LEBZ:Talavera La Real:Badajoz:ES:LECS:38.8912:-6.8214
 LECA:La Nava-Corral de Ayllon:Segovia:ES:LECM:41.4108:-3.4483
 LECC:Cas Curredo:Ibiza:ES:LECP:38.9302:1.4675
@@ -5138,6 +5141,7 @@ LEPR:Palma del Rio:Cordoba:ES:LECS:37.4306:-5.1240
 LEPV:Costa Norte-Puerto de Viveiro-Celeiro:Lugo:ES:LECM:43.6747:-7.5950
 LEPY:El Portinyol:Barcelona:ES:LECB:41.5838:-2.5608
 LEPZ:Pozuelos de Calatrava:Ciudad Real:ES:LECS:38.9202:-4.1963
+LERE:Requena:Requena:ES:LECB:39.4747:1.0344
 LERG:Berga:Barcelona:ES:LECB:42.1055:1.8533
 LERI:Alcantarilla:Murcia:ES:LECB:37.95:-1.2331
 LERJ:Logroño:Logroño:ES:LECM:42.2706:-2.1848
@@ -5161,6 +5165,7 @@ LESU:Seo De Urgel:Lerida:ES:LECB:42.3386:1.4091
 LETA:Tablada:Sevilla:ES:LECS:37.3522:-6.0138
 LETE:Morante:Badajoz:ES:LECM:39.0369:-6.6905
 LETI:El Tietar:Avila:ES:LECM:40.2438:-4.7945
+LETJ:Trebujena:Trebujena:ES:LECS:36.8719:-6.1366
 LETO:Torrejon de Ardoz:Madrid:ES:LECM:40.4868:-3.4584
 LETP:San Tomé del Puerto:Segovia:ES:LECM:41.1214:-3.3530
 LETR:Tremp:Lleida:ES:LECB:42.1694:0.8927
@@ -5652,7 +5657,7 @@ LGKP:Karpathos:Karpathos:GR:LGGG:35.4214:27.146
 LGKR:Ioannis Kapodistrias:Kerkira:GR:LGGG:39.6019:19.9116
 LGKS:Kasos:Kasos:GR:LGGG:35.4213:26.91
 LGKV:Megas Alexandros:Kavala:GR:LGMD:40.9133:24.6192
-LGKY:Kalymnos:Kalymnos:GR:LGGG:36.5780:26.5640
+LGKY:Kalymnos:Kalymnos:GR:LGGG:36.9633:26.9406
 LGKZ:Filippos:Kozani:GR:LGMD:40.2861:21.8408
 LGLE:Leros:Leros:GR:LGGG:37.1849:26.8002
 LGLM:Ifaistos:Limnos:GR:LGMD:39.917:25.2363
@@ -5687,7 +5692,7 @@ LGTT:Dekelia:Dekelia:GR:LGGG:38.1089:23.7838
 LGVO:Volos:Volos:GR:LGMD:39.3833:22.9166
 LGZA:Dionysios Solomos:Zakinthos:GR:LGGG:37.7508:20.8842
 LHBC:Bekescsaba:Bekescsaba:HU:LHCC:46.683:21.1663
-LHBP:Ferihegy:Budapest:HU:LHCC:47.4369:19.2555
+LHBP:Liszt Ferenc International:Budapest:HU:LHCC:47.4369:19.2555
 LHDC:Debrecen:Debrecen:HU:LHCC:47.4889:21.6153
 LHFM:Fertoszentmiklos:Fertoszentmiklos:HU:LHCC:47.5828:16.8454
 LHGD:Godollo:Godollo:HU:LHCC:47.5709:19.3386
@@ -5730,7 +5735,7 @@ LIBW:Bonifati:Bonifati:IT:LIRR:39.583:15.883
 LIBY:St Maria Di Leuca:St Maria Di Leuca:IT:LIBB:39.8166:18.35
 LIBZ:Potenza:Potenza:IT:LIBB:40.633:15.8
 LICA:Terme:Lamezia:IT:LIBB:38.9053:16.2422
-LICB:Comiso As USAF:Comiso As USAF:IT:LIRR:36.933:14.5997
+LICB:Comiso:Comiso:IT:LIRR:36.933:14.5997
 LICC:Fontanarrosa:Catania:IT:LIBB:37.4667:15.0663
 LICD:Lampedusa:Lampedusa:IT:LMMM:35.4979:12.618
 LICE:Enna:Enna:IT:LIRR:37.5666:14.283
@@ -6205,6 +6210,7 @@ LSZL:Locarno:Locarno:CH:LSAZ:46.1608:8.8786
 LSZN:Hausen am Albis:Hausen am Albis:CH:LSAZ:47.2383:8.5155
 LSZO:Beromuenster:Luzern:CH:LSAZ:47.1905:8.2050
 LSZP:Kappelen:Biel:CH:LSAZ:47.0902:7.2907
+LSZQ:Bressaucourt:Porrentruy:CH:LSAZ:47.3925:7.0289
 LSZR:Altenrhein:St Gallen:CH:LSAZ:47.485:9.5607
 LSZS:Samedan:Samedan:CH:LSAZ:46.5327:9.8827
 LSZT:Lommis:Lommis:CH:LSAZ:47.5244:9.003
@@ -6297,6 +6303,7 @@ LYPG:Podgorica:Podgorica:YU:LYBA:42.3593:19.2518
 LYTI:Podgorica-Golubovci:Podgorica-Golubovci:YU:LYBA:42.3666:19.25
 LYTV:Tivat:Tivat:YU:LYBA:42.4046:18.7232
 LYVR:Vrsac:Vrsac:YU:LYBA:45.1468:21.3098
+LZBD:Bidovce:Bidovce:SK:LZBB:48.7425:021.4480
 LZDB:Dubnica nad Vahom:Dubnica nad Vahom:SK:LZBB:48.9969:18.1922
 LZDV:Letisko Dubova:Dubova:SK:LZBB:48.347:17.3565
 LZHL:Holic:Holic:SK:LZBB:48.8102:17.1336
@@ -6569,9 +6576,6 @@ MSSM:El Papalon:San Miguel:SV:MHTG:13.4497:-88.1164
 MSSS:Ilopango:San Salvador:SV:MHTG:13.6994:-89.1199
 MTCH:Cap Haitien:Cap Haitien:HT:MTEG:19.7326:-72.1949
 MTPP:Mais Gate:Port Au Prince:HT:MTEG:18.58:-72.2926
-KIFP:Laughlin/Bullhead Intl Airport:Bullhead City:US:KLZA:35.1575:-114.5594
-KUTA:Tunica Municipal Airport:Tunica:US:KZME:34.6834:-90.3501
-LSZQ:Bressaucourt:Porrentruy:CH:LSAZ:47.3925:7.0289
 MUBA:Baracoa:Baracoa:CU:MUFH:20.3653:-74.5063
 MUBY:Bayamo:Bayamo:CU:MUFH:20.3963:-76.6214
 MUCA:Ciego De Avila:Ciego De Avila:CU:MUFH:22.027:-78.7897
@@ -7246,6 +7250,7 @@ PHJH:West Maui:Lahaina:US:PHZH:20.9629:-156.6731
 PHJR:Barbers Point:Kapolei:US:PHZH:21.3073:-158.0704
 PHKO:Kailua-Kona:Kailua-Kona:US:PHZH:19.7387:-156.0457
 PHLI:Lihue:Kauai I:US:PHZH:21.9759:-159.339
+PHLU:Kalaupapa Airport:Kalaupapa:US:PHZH:21.1234:-156.5829
 PHMK:Kaunakakai:Kaunakakai:US:PHZH:21.1528:-157.0963
 PHMU:Waimea Kohala:Kamuela:US:PHZH:20.0013:-155.6682
 PHNA:Barbers Point:Oahu:US:PHZH:21.308:-158.0678
@@ -7755,7 +7760,7 @@ SAZX:Nueve De Julio ::AR::-35.4000:-60.9000
 SAZY:Chapelco:Chapelco:AR::-40.0831:-71.1331
 SB0W:Chapada Diamantina:Chapada Diamantina:BR:SBRE:-12.4864:-41.2740
 SB1K:Domingos Rego:Domingos Rego:BR:SBRE:-5.0778:-42.8725
-SBAA:Araguaia:Conceição do Araguaia:BR:SBRE:-8.3484:-49.3016
+SBAA:Conceição do Araguaia:Conceição do Araguaia:BR:SBAZ:-8.3484:-49.3016
 SBAE:Arealva:Bauru:BR:SBCW:-22.15778:-49.06833
 SBAF:Afonsos:Rio de Janeiro:BR:SBCW:-22.8751:-43.3848
 SBAM:Amapá:Amapá:BR:SBBS:2.0767:-50.8623
@@ -7801,7 +7806,7 @@ SBEK:Jacareacanga:Jacareacanga:BR:SBAZ:-6.2353:-57.7759
 SBES:Aldeia:São Pedro da Aldeia:BR:SBCW:-22.8129:-42.0927
 SBFI:Foz do Iguaçu:Foz do Iguaçu:BR:SBCW:-25.5962:-54.4873
 SBFL:Florianópolis:Florianópolis:BR:SBCW:-27.6705:-48.5472
-SBFN:Noronha:Fernando de Noronha:BR:SBRE:-3.855:-32.4234
+SBFN:Fernando de Noronha:Fernando de Noronha:BR:SBRE:-3.855:-32.4234
 SBFU:Furnas:São José Da Barra:BR:SBBS:-20.70333:-46.3375
 SBFZ:Fortaleza:Fortaleza:BR:SBRE:-3.7763:-38.5326
 SBGL:Galeão:Rio de Janeiro:BR:SBCW:-22.809:-43.2437
@@ -7893,6 +7898,7 @@ SBUR:Uberaba:Uberaba:BR:SBBS:-19.7651:-47.9648
 SBVG:Varginha:Varginha:BR:SBBS:-21.5901:-45.4734
 SBVH:Vilhena:Vilhena:BR:SBAZ:-12.6944:-60.0983
 SBVT:Vitória:Vitória:BR:SBBS:-20.2581:-40.2864
+SBWA:TMA:Amazonas:CO:SKED:-4.1932:-69.9427
 SBWB:TMA:Belém:BR:SBAZ:-1.3793:-48.4763
 SBWC:TMA:Corumbá:BR:SBCW:-19.012:-57.6731
 SBWD:TMA:Enchova:BR:SBBS:-21.6984:-41.3017
@@ -7936,6 +7942,7 @@ SBXT:TMA:Natal:BR:SBRE:-5.9114:-35.2481
 SBXU:TMA:Uberaba:BR:SBBS:-19.3800:-48.1800
 SBYA:Iauarete:Iauarete:BR:SBAZ:.6166:-69.2001
 SBYS:Academia:Academia:BR:SBBS:-21.9854:-47.3381
+SBZM:Zona da Mata:Goianá:BR:SBCW:-21.513056:-43.173056
 SCAC:Pupelde:Ancud:CL:SCTZ:-41.9039:-73.7975
 SCAN:Los Andes:Los Andes:CL:SCEZ:-32.7856:-70.4853
 SCAP:Alto Palena:Alto Palena:CL:SCTZ:-43.6153:-71.807
@@ -8188,37 +8195,44 @@ SKVP:Alfonso L. Pumarejo:Valledupar:CO:SKEC:10.435:-73.2496
 SKVV:Vanguardia:Villavicencio:CO:SKEC:4.1678:-73.6138
 SKYC:La Gloria:Ayacucho:CO:SKEC:8.3600:-73.3700
 SKYP:El Yopal:El Yopal:CO:SKED:5.1909:-72.2302
+SLAG:Monteagudo:Monteagudo:BO:SLLF:-19.823406:-63.961995
 SLAP:Apolo:Apolo:BO:SLLF:-14.7331:-68.5
-SLAS:Ascencion de Guarayos:Ascencion de Guarayos:BO:SLLF:-15.7167:-63.1001
+SLAS:Ascención de Guarayos:Ascención de Guarayos:BO:SLLF:-15.7167:-63.1001
+SLBJ:Bermejo:Bermejo:BO:SLLF:-22.773333:-64.312778
 SLCA:Camiri:Camiri:BO:SLLF:-20:-63.5331
-SLCB:Jorge Wilsterman:Cochabamba:BO:SLLP:-17.4211:-66.1772
-SLCN:Charana:Charana:BO:SLLF:-17.5831:-69.5998
-SLCO:Cobija:Cobija:BO:SLLP:-11.0405:-68.783
-SLCP:Concepcion:Concepcion:BO:SLLF:-16.1498:-62.0164
-SLET:El Trompillo:Santa Cruz:BO:SLLP:-17.8116:-63.1715
-SLGY:Emilio Beltran:Guayaramerin:BO:SLLP:-10.8228:-65.3439
-SLJE:San Jose de Chiquitos:San Jose de Chiquitos:BO:SLLF:-17.8001:-60.7331
-SLJO:San Joaquin:San Joaquin:BO:SLLF:-13.0667:-64.8164
+SLCB:Jorge Wilstermann:Cochabamba:BO:SLLF:-17.4211:-66.1772
+SLCC:Copacabana:Copacabana:BO:SLLF:-16.190386:-69.093989
+SLCN:Charaña:Charaña:BO:SLLF:-17.5831:-69.5998
+SLCO:Capitán Anibal Arab:Cobija:BO:SLLF:-11.0405:-68.783
+SLCP:Concepción:Concepción:BO:SLLF:-16.1498:-62.0164
+SLET:El Trompillo:Santa Cruz:BO:SLLF:-17.8116:-63.1715
+SLGY:Guayaramerín:Guayaramerín:BO:SLLF:-10.8228:-65.3439
+SLJE:San José de Chiquitos:San José de Chiquitos:BO:SLLF:-17.8001:-60.7331
+SLJO:San Joaquín:San Joaquín:BO:SLLF:-13.0667:-64.8164
 SLJV:San Javier:San Javier:BO:SLLF:-16.2667:-62.4664
-SLLP:La Paz:La Paz:BO:SLLP:-16.5134:-68.1923
+SLLJ:Laja:Laja:BO:SLLF:-16.5333:-68.3
+SLLP:El Alto:La Paz:BO:SLLF:-16.5134:-68.1923
 SLMG:Magdalena:Magdalena:BO:SLLF:-13.3331:-64.1164
-SLOR:Juan Mendoza:Oruro:BO:SLLP:-17.9626:-67.0763
-SLPO:Capitan Nicolas Rojas:Potosi:BO:SLLP:-19.5435:-65.7241
-SLPS:Puerto Suarez:Puerto Suarez:BO:SLLP:-18.9753:-57.8206
-SLRB:Robore:Robore:BO:SLLF:-18.3167:-59.7664
-SLRI:Riberalta:Riberalta:BO:SLLP:-11.0173:-66.0998
+SLOR:Juan Mendoza:Oruro:BO:SLLF:-17.9626:-67.0763
+SLPO:Capitán Nicolas Rojas:Potosí:BO:SLLF:-19.5435:-65.7241
+SLPS:Puerto Suárez:Puerto Suárez:BO:SLLF:-18.9753:-57.8206
+SLRA:San Ramón:San Ramón:BO:SLLF:-13.263777:-64.604051
+SLRB:Roboré:Roboré:BO:SLLF:-18.3167:-59.7664
+SLRI:Capitán Selin Zeitun Lopez:Riberalta:BO:SLLF:-11.0173:-66.0998
 SLRQ:Rurrenabaque:Rurrenabaque:BO:SLLF:-14.4667:-67.5664
 SLRY:Reyes:Reyes:BO:SLLF:-14.3167:-67.3831
-SLSA:Santa Ana de Yacuma:Santa Ana de Yacuma:BO:SLLF:-13.7584:-65.4323
-SLSB:San Borja:San Borja:BO:SLLF:-14.8667:-66.8664
-SLSI:San Ignacio de Velasco:San Ignacio de Velasco:BO:SLLF:-16.3831:-60.9664
-SLSM:San Ignacio De Moxos:San Ignacio De Moxos:BO:SLLP:-14.9667:-65.6334
-SLSU:JA De Padilla:Sucre:BO:SLLP:-19.0073:-65.2892
-SLTJ:Cap Oriel Lea Plaza:Tarija:BO:SLLP:-21.5558:-64.7014
-SLTR:Jorge Henrich Arauz:Trinidad:BO:SLLP:-14.8188:-64.9181
-SLVM:Villamontes:Villamontes:BO:SLLF:-21.25:-63.4501
-SLVR:Viru Viru:Santa Cruz:BO:SLLP:-17.6448:-63.1354
-SLYA:Yacuiba:Yacuiba:BO:SLLP:-21.961:-63.6517
+SLSA:Santa Ana del Yacuma:Santa Ana del Yacuma:BO:SLLF:-13.7584:-65.4323
+SLSB:Capitán Germán Quiroga Guardia:San Borja:BO:SLLF:-14.8667:-66.8664
+SLSI:Capitán Juan Cochamanidis:San Ignacio de Velasco:BO:SLLF:-16.3831:-60.9664
+SLSM:San Ignacio De Moxos:San Ignacio De Moxos:BO:SLLF:-14.9667:-65.6334
+SLSU:Juana Azurduy de Padilla:Sucre:BO:SLLF:-19.0073:-65.2892
+SLTI:San Matías:San Matías:BO:SLLF:-16.340587:-58.39978
+SLTJ:Capitán Oriel Lea Plaza:Tarija:BO:SLLF:-21.5558:-64.7014
+SLTR:Teniente Jorge Henrich Arauz:Trinidad:BO:SLLF:-14.8188:-64.9181
+SLVG:Capitán Vidal Villagomez:Vallegrande:BO:SLLF:-18.483415:-64.098997
+SLVM:Teniente Coronel Rafael Pabón:Villamontes:BO:SLLF:-21.25:-63.4501
+SLVR:Viru Viru:Santa Cruz:BO:SLLF:-17.6448:-63.1354
+SLYA:Yacuiba:Yacuiba:BO:SLLF:-21.961:-63.6517 
 SMJP:Johan A Pengel:Paramaribo:SR:SMPM:5.4528:-55.1878
 SMNI:Majoor Henry Fernandes:Nieuw Nickerie:SR:SMPM:5.9556:-57.0394
 SMZO:Zorg En Hoop:Paramaribo:SR:SMPM:5.811:-55.1908
@@ -8732,7 +8746,7 @@ ULPW:Sortavala:Sortavala:RU:ULLL:61.7000000000:30.6670000000
 ULSS:Rzhevka:St Petersburg:RU:ULLL:59.9830000000:30.5830000000
 ULWT:Tot'Ma:Tot'Ma:RU:ULWW:59.883:42.75
 ULWU:Velikii Ustug:Velikii Ustug:RU:ULWW:60.767:46.317
-ULWW:Vologda:Vologda:RU:ULWW:60.0666:46.3333
+ULWW:Vologda:Rybkino:RU:ULWW:59.28385:39.9445
 UMBB:Brest:Brest:BY:ULWW:52.1083:23.898
 UMGG:Gomel:Gomel:BY:ULWW:52.5269:31.0166
 UMII:Vitebsk:Vitebsk:BY:ULWW:55.1263:30.3497
@@ -9296,6 +9310,7 @@ WABT:Enarotali:Enarotali:ID:WAAZ:-3.9167:136.3663
 WADA:Selaparang:Mataram:ID:WAAZ:-8.5621:116.0994
 WADB:Muhammad Salahuddin:Bima:ID:WAAZ:-8.5409:118.6905
 WADD:Bali:Denpasar:ID:WAAZ:-8.7475:115.169
+WADT:Tambolaka:Tambolaka:ID:WAAZ:-9.4097:119.2444
 WADW:Mau Hau:Waingapu:ID:WAAZ:-9.6682:120.2989
 WAJI:Sarmi:Sarmi:ID:WAAZ:-1.8331:138.7163
 WAJJ:Sentani:Jayapura:ID:WAAZ:-2.577:140.5163
@@ -9319,10 +9334,12 @@ WAOI:Iskandar:Pangkalan Bun:ID:WAAZ:-2.7001:110.7
 WAON:Warukin:Warukin:ID:WAAZ:-2.2166:115.4363
 WAOO:Syamsuddin Noor:Banjarmasin:ID:WAAZ:-3.4424:114.7625
 WAOP:Tjilik Riwut:Palangkaraya:ID:WAAZ:-2.2267:113.9441
+WAOS:H. Asan:Sampit:ID:WAAZ:-2.4991:112.9749
 WAPA:Amahai:Amahai:ID:WAAZ:-3.3501:128.883
 WAPH:Taliabu:Labuha:ID:WAAZ:-1.6167:124.5497
 WAPI:Saumlaki:Saumlaki:ID:WAAZ:-7.9831:131.3
 WAPK:Nangasuri:Benjina:ID:WAAZ:-6.0635:134.2771
+WAPL:Dumatubin:Tual:ID:WAAZ:-5.6616:132.7314
 WAPN:Sanana:Sanana:ID:WAAZ:-2.0831:126
 WAPP:Pattimura:Ambon:ID:WAAZ:-3.7104:128.0918
 WAPR:Namlea:Namlea:ID:WAAZ:-3.25:127.083
@@ -9337,6 +9354,7 @@ WASK:Utarom:Kaimana:ID:WAAZ:-3.6667:133.75
 WASR:Rendani:Manokwari:ID:WAAZ:-.8919:134.0491
 WASS:Jefman:Sorong:ID:WAAZ:-.9264:131.1211
 WATC:Wai Oti:Maumere:ID:WAAZ:-8.6378:122.2375
+WATE:H. Hasan Aroeboesman:Ende Flores:ID:WAAZ:-8.8492:121.6606
 WATG:Satartacik:Satartacik:ID:WAAZ:-8.5971:120.477
 WATT:El Tari:Kupang:ID:WAAZ:-10.1778:123.6636
 WAWW:Woltermon-Ginsidi:Kendari:ID:WAAZ:-4.0842:122.413
@@ -9358,6 +9376,7 @@ WBKW:Tawau:Tawau:MY:WBFC:4.3133:118.1219
 WBSB:Brunei:Bandar Seri Begawan:BN:WBFC:4.9455:114.9279
 WI06:Waunakee:Waunakee:US:KZAU:43.1787:-89.4513
 WI15:Barron Muni:Barron:US:KZMP:45.4074:-91.8344
+WI1A:Nusawiru:Ciamis:ID:WIIZ:-7.7203:108.4899
 WI20:Boyceville Muni:Boyceville:US:KZMP:45.044:-92.0204
 WI40:Prentice:Prentice:US:KZMP:45.543:-90.2794
 WI46:Tomahawk Regl:Tomahawk:US:KZMP:45.4691:-89.8057
@@ -9366,6 +9385,7 @@ WIBB:Simpang Tiga:Pekanbaru:ID:WIIZ:.4611:101.4446
 WIBD:Pinang Kampai:Pinang Kampai:ID:WIIZ:1.6091:101.4335
 WICB:Budiarto:Tangerang:ID:WIIZ:-6.2331:106.65
 WICC:Husein Sastranegara:Bandung:ID:WIIZ:-6.902:107.5761
+WICD:Penggung:Cirebon:ID:WIIZ:-6.7561:108.5396
 WICM:Cibeureum:Cibeureum:ID:WIIZ:-7.3467:108.246
 WICT:Radin Inten:Bandar Lampung:ID:WIIZ:-5.2406:105.1755
 WIDD:Hang Nadim:Batam:ID:WSJC:1.1188:104.1141
@@ -9381,6 +9401,7 @@ WIMG:Tabing:Padang:ID:WIIZ:-.875:100.3518
 WIMM:Polonia:Medan:ID:WIIZ:3.558:98.6717
 WIMS:Pinangsore:Sibolga:ID:WIIZ:1.5559:98.8883
 WIOD:Hanandjoeddin:Tanjung Pandan:ID:WIIZ:-2.7451:107.753
+WIOG:Nangapinoh:Nangapinoh:ID:WAAZ:-0.3488:111.7476
 WIOI:Singkawang:Singkawang:ID:WIIZ:1.083:109.6663
 WIOK:Rahadi Usman:Rahadi Usman:ID:WIIZ:-1.8167:109.9634
 WION:Natuna:Ranai:ID:WSJC:3.9087:108.3878

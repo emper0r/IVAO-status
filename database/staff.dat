@@ -12,9 +12,6 @@ AWM:Assistant Webmaster:H:A:W
 AWM:Assistant Webmaster:D:A:W
 CH:Chief:C:C:C
 CHA#*:FIR Advisor:C:B:C
-DBA:Database Manager:H:C:D
-ADBA:Database Assistant Manager:H:A:D
-DBA#*:Database Administrator Advisor:H:B:B
 DIR:Executive Director:H:C:D
 DIR:Director:D:C:D
 EA#*:Division Events Advisor:D:A:E
@@ -30,11 +27,9 @@ FOD:Flight Operations Director:H:C:F
 G#*:Governor:H:B:B
 MA#*:Membership Advisor:H:B:M
 MAD:Membership Assistant Director:H:A:M
-MSAM:Member Services Assistant Manager:H:A:M
 MC:Membership Coordinator:D:C:M
 MAC:Membership Assistant Coordinator:D:A:M
 MD:Membership Director:H:C:M
-MSM:Member Services Manager:H:C:M
 MTL#*:MTL Designer:H:B:M
 MTM:Magazine Team Manager:H:C:R
 MTAC#*:Magazine Team Advisor Content Writer:H:B:R
@@ -49,7 +44,6 @@ SA#*:Server Administrator:H:B:M
 SD#*:Software Developer:H:B:O
 SDAD:Software Department Assistant Director:H:A:O
 SDD:Software Department Director:H:C:O
-SDT#*:Software Technical Advisor:H:B:O
 SOA#*:Special Operations Advisor:H:B:S
 SOAC:Special Operations Assistant Coordinator:D:A:S
 SOAD:Special Operations Assistant Director:H:A:S
@@ -62,13 +56,9 @@ TAD:Training Assistant Director:H:A:T
 TC:Training Coordinator:D:C:T
 TD:Training Director:H:C:T
 VPRE:Vice President:H:A:P
-VSA:Voice Server Administrator:H:C:N
-VSA#*:Voice Server Administrator:H:C:N
 WM:Webmaster:D:C:W
 WM:Webmaster:H:C:W
 WMA#*:Webmaster Advisor:H:B:W
-OD:Operations Director:H:C:O
-OAD:Operations Assistant Director:H:A:O
 LD:Logistics Director:H:C:L
 LAD:Logistics Assistant Director:H:A:L
 LA#*:Logistics Advisor:H:B:L
@@ -77,11 +67,14 @@ AFA:Forum Assistant Administrator:H:A:S
 EXA#*:Executive Advisor:H:A:E
 NA:Network Manager:H:C:N
 ANA:Network Assistant Manager:H:A:N
-TM:Tours Manager:H:C:T
-TAM:Tours Assistant Manager:H:A:T
 ACM:Academy Manager:H:C:A
 ACAM:Academy Assistant Manager:H:A:A
 ATA#*:ATC Training Advisor:H:B:T
 PTA#*:Pilot Training Advisor:H:B:T
 SECR:Secretary:H:C:B
 STA#*:Software Technical Advisor:H:B:S
+ASECR:Assistant Secretary:H:A:B
+TREA:Treasurer:H:C:B
+HTM:HAL Training Manager:H:C:T
+HTAM:HAL Training Assistant Manager:H:A:T
+EA#*::Events Advisor:H:B:E

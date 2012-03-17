@@ -291,7 +291,7 @@ class Main(QMainWindow):
                 self.ui.dbTableWidget_1.setCellWidget(startrow_dbt1, 0, flag_country)
             else:
                 pass
-            country = QTableWidgetItem(str(line[0]).encode('utf-8'), 0)
+            country = QTableWidgetItem(str(line[0]).encode('latin-1'), 0)
             self.ui.dbTableWidget_1.setItem(startrow_dbt1, 1, country)
             startrow_dbt1 += 1
 

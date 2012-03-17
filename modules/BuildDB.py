@@ -156,8 +156,14 @@ class Build_datafiles(QMainWindow):
             id_country = fields[2]
             city = fields[3].decode('latin-1')
             control_type = fields[4]
-            latitude = fields[5]
-            longitude = fields[6]
+            try:
+                latitude = fields[5]
+            except:
+                latitude = '-'
+            try:
+                longitude = fields[6]
+            except:
+                longitude = '-'
             try:
                 name = fields[7].decode('latin-1').strip('\r\n')
             except:
