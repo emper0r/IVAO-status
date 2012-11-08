@@ -23,11 +23,12 @@
 import os
 import ConfigParser
 import sqlite3
+import sys
 import Build_UI
 
 try:
-    '''Check if PyQt4 is installed or not, this library is a dependency of all,
-    if not installed read the README.rst'''
+    """Check if PyQt4 is installed or not, this library is a dependency of all,
+    if not installed read the README.rst"""
     from PyQt4.QtCore import *
     from PyQt4.QtGui import *
     from PyQt4.QtWebKit import *
@@ -39,7 +40,7 @@ except:
     sys.exit(2)
 
 class Build_datafiles(QMainWindow):
-    '''The BuildDB Class to insert into ivao.db all data from [.dat] files'''
+    """The BuildDB Class to insert into ivao.db all data from [.dat] files"""
     closed = pyqtSignal()
 
     def __init__(self):
@@ -54,9 +55,9 @@ class Build_datafiles(QMainWindow):
         self.build_db()
 
     def build_db(self):
-        '''Using official data files of IVAO, you can build the database for the application and keep it updated,
+        """Using official data files of IVAO, you can build the database for the application and keep it updated,
            so it easier for those who maintain the data continue adding information. I think with a database engine
-           is most useful in managing data files, so there are more opportunities to perform actions on them better.'''
+           is most useful in managing data files, so there are more opportunities to perform actions on them better."""
         self.show()
         qApp.processEvents()
         config = ConfigParser.RawConfigParser()
@@ -76,7 +77,7 @@ class Build_datafiles(QMainWindow):
         cursor.execute('DELETE FROM staff;')
         connection.commit()
 
-        '''Importing aircraft.dat'''
+        """Importing aircraft.dat"""
         data = open('database/aircraft.dat', 'r').readlines()
         count = 0
         for item in data:
@@ -94,7 +95,7 @@ class Build_datafiles(QMainWindow):
             qApp.processEvents()
         connection.commit()
 
-        '''Importing airlines.dat'''
+        """Importing airlines.dat"""
         data = open('database/airlines.dat', 'r').readlines()
         count = 0
         for item in data:
@@ -111,7 +112,7 @@ class Build_datafiles(QMainWindow):
             qApp.processEvents()
         connection.commit()
 
-        '''Importing airports.dat'''
+        """Importing airports.dat"""
         data = open('database/airports.dat', 'r').readlines()
         count = 0
         for item in data:
@@ -131,7 +132,7 @@ class Build_datafiles(QMainWindow):
             qApp.processEvents()
         connection.commit()
 
-        '''Importing cprefix.dat'''
+        """Importing cprefix.dat"""
         data = open('database/cprefix.dat', 'r').readlines()
         count = 0
         for item in data:
@@ -146,7 +147,7 @@ class Build_datafiles(QMainWindow):
             qApp.processEvents()
         connection.commit()
 
-        '''Importing firs.dat'''
+        """Importing firs.dat"""
         data = open('database/firs.dat', 'r').readlines()
         count = 0
         for item in data:
@@ -176,7 +177,7 @@ class Build_datafiles(QMainWindow):
             qApp.processEvents()
         connection.commit()
 
-        '''Importing ratings.dat'''
+        """Importing ratings.dat"""
         data = open('database/ratings.dat', 'r').readlines()
         count = 0
         for item in data:
@@ -194,7 +195,7 @@ class Build_datafiles(QMainWindow):
             qApp.processEvents()
         connection.commit()
 
-        '''Importing countries.dat'''
+        """Importing countries.dat"""
         data = open('database/countries.dat', 'r').readlines()
         count = 0
         for item in data:
@@ -212,7 +213,7 @@ class Build_datafiles(QMainWindow):
             qApp.processEvents()
         connection.commit()
 
-        '''Importing fir.dat'''
+        """Importing fir.dat"""
         data = open('database/fir.dat', 'r').readlines()
         count = 7
         firname = ''
@@ -240,7 +241,7 @@ class Build_datafiles(QMainWindow):
             qApp.processEvents()
         connection.commit()
 
-        '''Importing staff.dat'''
+        """Importing staff.dat"""
         data = open('database/staff.dat', 'r').readlines()
         count = 0
         for item in data:

@@ -21,13 +21,13 @@
 # AddFriend Class
 
 import os
-import SQL_queries
+import sys
 import ConfigParser
 import sqlite3
 
 try:
-    '''Check if PyQt4 is installed or not, this library is a dependency of all,
-    if not installed read the README.rst'''
+    """Check if PyQt4 is installed or not, this library is a dependency of all,
+    if not installed read the README.rst"""
     from PyQt4.QtCore import *
     from PyQt4.QtGui import *
     from PyQt4.QtWebKit import *
@@ -39,7 +39,7 @@ except:
     sys.exit(2)
 
 class Friends():
-    '''The Class AddFriend is to add/remove the friend in roster at MainTab of MainWindow'''
+    """The Class AddFriend is to add/remove the friend in roster at MainTab of MainWindow"""
     def add(self, vid2add):
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Config.cfg')

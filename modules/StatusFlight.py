@@ -22,8 +22,8 @@ import SQL_queries
 import distance
 
 def status_flight(callsign):
-    '''This function is to get the action of the Pilot but for now I try to show using percent and
-       some ground speeds of the track. I'm pretty sure with more check VARS can better this part'''
+    """This function is to get the action of the Pilot but for now I try to show using percent and
+       some ground speeds of the track. I'm pretty sure with more check VARS can better this part"""
     Q_db = SQL_queries.sql_query('Get_Status', (str(callsign),))
     get_status = Q_db.fetchone()
     status = '-'
@@ -57,15 +57,15 @@ def status_flight(callsign):
                         status = 'Descending'
                     if (percent >= 90.0) and (percent <= 97.0):
                         status = 'Initial Approach'
-                    if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 360) and (get_status[6] >= 30))):
+                    if (97.0 <= percent <= 105.0) and (360 >= get_status[6] >= 30):
                         status = 'Final Approach'
                     return status
                 else:
-                    if ((get_status[6] > 0) and (get_status[6] <= 30)) and (percent < 1.0):
+                    if (0 < get_status[6] <= 30) and (percent < 1.0):
                         status = 'Departing'
                     if (get_status[6] > 30) and (get_status[6] < 150) and (percent < 1.0):
                         status = 'Takeoff'
-                    if (((percent >= 97.0) and (percent <= 105.0)) and ((get_status[6] <= 270) and (get_status[6] >= 30))):
+                    if (97.0 <= percent <= 105.0) and (270 >= get_status[6] >= 30):
                         status = 'Landed'
                     if (get_status[6] < 30) and (percent > 99.0):
                         status = 'Taxing to Gate'
@@ -73,7 +73,7 @@ def status_flight(callsign):
                         status = 'On Blocks'
                     if (get_status[6] == 0) and (percent <= 1.0):
                         status = 'Boarding'
-                    if (get_status[6] == 0) and (percent >= 10.0 and percent <= 90.0):
+                    if (get_status[6] == 0) and (10.0 <= percent <= 90.0):
                         status = 'Altern Airport'
                     return status
         except:
@@ -81,7 +81,7 @@ def status_flight(callsign):
             return status
 
 def get_color(status_plane):
-    '''This function is implemented with status_plane'''
+    """This function is implemented with status_plane"""
     color = 'black'
     if status_plane == 'Boarding':
         color = 'green'

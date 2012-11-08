@@ -23,7 +23,7 @@ import ConfigParser
 import sqlite3
 
 def sql_query(args=None, var=None):
-    '''At this function should be to set all SQL queries to database, missing some ones yet but here is the major'''
+    """At this function should be to set all SQL queries to database, missing some ones yet but here is the major"""
     config = ConfigParser.RawConfigParser()
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Config.cfg')
     config.read(config_file)
@@ -46,10 +46,10 @@ def sql_query(args=None, var=None):
                                time_connected FROM recent WHERE clienttype='PILOT' \
                                AND realname LIKE ? ORDER BY vid DESC;", (('%'+str(var[0])),))
     if args == 'Get_Outbound_Traffic':
-        Q_db= cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM recent WHERE planned_depairport LIKE ?", \
+        Q_db= cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM recent WHERE planned_depairport LIKE ?",
                        (str(var[0]),))
     if args == 'Get_Inbound_Traffic':
-        Q_db = cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM recent WHERE planned_destairport LIKE ?", \
+        Q_db = cursor.execute("SELECT callsign, planned_depairport, planned_destairport FROM recent WHERE planned_destairport LIKE ?",
                        (str(var[0]),))
     if args == 'Get_Schedule_ATC':
         Q_db = cursor.execute("SELECT Name, Position, StartDateUTC, EndDateUTC, Voice, Training, Event FROM schedule_controllers;")
@@ -89,13 +89,13 @@ def sql_query(args=None, var=None):
     if args == 'Get_City':
         Q_db = cursor.execute("SELECT city, latitude, longitude FROM airports WHERE icao=?;", (str(var[0]),))
     if args == 'Search_vid':
-        Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype FROM recent WHERE vid like ?;", \
+        Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype FROM recent WHERE vid like ?;",
                               (str(var[0]),))
     if args == 'Search_callsign':
-        Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype FROM recent WHERE callsign like ?;", \
+        Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype FROM recent WHERE callsign like ?;",
                               (str(var[0]),))
     if args == 'Search_realname':
-        Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype FROM recent WHERE realname like ?;", \
+        Q_db = cursor.execute("SELECT vid, callsign, realname, rating, clienttype FROM recent WHERE realname like ?;",
                               (str(var[0]),))
     if args == 'Get_Controller_data':
         Q_db = cursor.execute("SELECT vid, realname, server, clienttype, frequency, rating, facilitytype, atis_message, \
@@ -136,22 +136,22 @@ def sql_query(args=None, var=None):
         return
     if args == 'Add_Schedule_ATC':
         Q_db = cursor.execute("INSERT INTO schedule_controllers (Name, Position, StartDateUTC, EndDateUTC, Voice, Training, Event) \
-                               VALUES (?,?,?,?,?,?,?);", (var[1], str(var[3]), str(var[4]), str(var[5]), \
+                               VALUES (?,?,?,?,?,?,?);", (var[1], str(var[3]), str(var[4]), str(var[5]),
                                 str(var[6]), str(var[7]), str(var[8]),))
         connection.commit()
         return
     if args == 'Add_Schedule_Flights':
         Q_db = cursor.execute("INSERT INTO schedule_pilots (Callsign, Name, Airplane, Departure, DepTime, Destination, DestTime, \
-                               Altitude, CruisingSpeed, Route, Voice, Training, Event) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);", \
-                                (str(var[4]), var[1], str(var[5]), str(var[6]), str(var[7]), str(var[8]), \
+                               Altitude, CruisingSpeed, Route, Voice, Training, Event) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);",
+                                (str(var[4]), var[1], str(var[5]), str(var[6]), str(var[7]), str(var[8]),
                                  str(var[9]), int(var[10]), int(var[11]), str(var[12]), str(var[13]), str(var[14]), str(var[15]),))
         connection.commit()
         return
     return Q_db
 
 def update_db(pilots, controllers, vehicles):
-    '''This function insert the data got it in memory downloaded from IVAO to parse the players for controllers,
-       pilots, and FMC to insert into database, separate by field ':' as NOTAM and Logistic explain what field means'''
+    """This function insert the data got it in memory downloaded from IVAO to parse the players for controllers,
+       pilots, and FMC to insert into database, separate by field ':' as NOTAM and Logistic explain what field means"""
     config = ConfigParser.RawConfigParser()
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Config.cfg')
     config.read(config_file)
@@ -217,15 +217,15 @@ def update_db(pilots, controllers, vehicles):
         , time_last_atis_received, time_connected, client_software_name, client_software_version \
         , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
         , onground) \
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", \
-        (callsign, vid, realname, clienttype, latitude, longitude, altitude, groundspeed, planned_aircraft \
-         , planned_tascruise, planned_depairport, planned_altitude, planned_destairport, server, protrevision \
-         , rating, transponder, visualrange, planned_revision, planned_flighttype \
-         , planned_deptime, planned_actdeptime, planned_hrsenroute, planned_minenroute, planned_hrsfuel \
-         , planned_minfuel, planned_altairport, planned_remarks, planned_route, planned_depairport_lat \
-         , planned_depairport_lon, planned_destairport_lat, planned_destairport_lon \
-         , time_last_atis_received, time_connected, client_software_name, client_software_version \
-         , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading \
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
+        (callsign, vid, realname, clienttype, latitude, longitude, altitude, groundspeed, planned_aircraft
+         , planned_tascruise, planned_depairport, planned_altitude, planned_destairport, server, protrevision
+         , rating, transponder, visualrange, planned_revision, planned_flighttype
+         , planned_deptime, planned_actdeptime, planned_hrsenroute, planned_minenroute, planned_hrsfuel
+         , planned_minfuel, planned_altairport, planned_remarks, planned_route, planned_depairport_lat
+         , planned_depairport_lon, planned_destairport_lat, planned_destairport_lon
+         , time_last_atis_received, time_connected, client_software_name, client_software_version
+         , adminrating, atc_or_pilotrating, planned_altairport2, planned_typeofflight, planned_pob, true_heading
          , onground))
     connection.commit()
 
@@ -255,9 +255,9 @@ def update_db(pilots, controllers, vehicles):
         cursor.execute("INSERT INTO recent (callsign, vid, realname, clienttype, frequency \
         , latitude, longitude, altitude, server, protrevision, rating, facilitytype, visualrange \
         , time_last_atis_received, time_connected, client_software_name, client_software_version \
-        , adminrating, atc_or_pilotrating, atis_message) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);", \
-        (callsign, vid, realname, clienttype, frequency, latitude, longitude, altitude, server \
-         , protrevision, rating, facilitytype, visualrange, time_last_atis_received, time_connected \
+        , adminrating, atc_or_pilotrating, atis_message) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
+        (callsign, vid, realname, clienttype, frequency, latitude, longitude, altitude, server
+         , protrevision, rating, facilitytype, visualrange, time_last_atis_received, time_connected
          , client_software_name, client_software_version, adminrating, atc_or_pilotrating, atis_message))
     connection.commit()
 
@@ -270,7 +270,7 @@ def update_db(pilots, controllers, vehicles):
         server = fields[14]
         time_connected = fields[37]
 
-        cursor.execute("INSERT INTO recent (callsign, vid, realname, clienttype, server, time_connected) VALUES (?,?,?,?,?,?);", \
+        cursor.execute("INSERT INTO recent (callsign, vid, realname, clienttype, server, time_connected) VALUES (?,?,?,?,?,?);",
                    (callsign, vid, realname, clienttype, server, time_connected))
     connection.commit()
     return

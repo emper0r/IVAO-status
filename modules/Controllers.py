@@ -21,14 +21,15 @@
 # Controller Class
 
 import os
+import sys
 import SQL_queries
 import ControllerInfo_UI
 import Friends
 import datetime
 
 try:
-    '''Check if PyQt4 is installed or not, this library is a dependency of all,
-    if not installed read the README.rst'''
+    """Check if PyQt4 is installed or not, this library is a dependency of all,
+    if not installed read the README.rst"""
     from PyQt4.QtCore import *
     from PyQt4.QtGui import *
     from PyQt4.QtWebKit import *
@@ -40,8 +41,8 @@ except:
     sys.exit(2)
 
 class ControllerInfo(QMainWindow):
-    '''The ControllerInfo Class is to show selected player from Controllers Tables to see the status of player
-       at the Airport controlled like, freq, country, and ATIS info'''
+    """The ControllerInfo Class is to show selected player from Controllers Tables to see the status of player
+       at the Airport controlled like, freq, country, and ATIS info"""
     closed = pyqtSignal()
 
     def __init__(self):
@@ -57,7 +58,7 @@ class ControllerInfo(QMainWindow):
 
     def status(self, callsign):
         self.callsign = callsign
-        self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
+        self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery"
                              , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
         Q_db = SQL_queries.sql_query('Get_Controller_data', (str(callsign),))
         info = Q_db.fetchall()
@@ -104,8 +105,8 @@ class ControllerInfo(QMainWindow):
         self.ui.rating_img.setPixmap(Pixmap)
         self.ui.facility_freq_Text.setText(str(self.position_atc[str(info[0][6])]) + ' ' + str(info[0][4]) + ' MHz')
         try:
-            start_connected = datetime.datetime(int(str(info[0][8])[:4]), int(str(info[0][8])[4:6]) \
-                                                , int(str(info[0][8])[6:8]), int(str(info[0][8])[8:10]) \
+            start_connected = datetime.datetime(int(str(info[0][8])[:4]), int(str(info[0][8])[4:6])
+                                                , int(str(info[0][8])[6:8]), int(str(info[0][8])[8:10])
                                                 , int(str(info[0][8])[10:12]), int(str(info[0][8])[12:14]))
             diff = datetime.datetime.utcnow() - start_connected
             self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])

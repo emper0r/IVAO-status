@@ -18,25 +18,25 @@
 #
 # IVAO-status :: License GPLv3+
 
-'''Importing Python's native modules'''
+"""Importing Python's native modules"""
 import os
 import ConfigParser
 import sqlite3
 
-'''Importing the libraries from modules directory'''
+"""Importing the libraries from modules directory"""
 from modules import SQL_queries
 
 def GMapsLayer(vid, icao_orig, icao_dest):
-    '''This function is for see the single player in GoogleMaps, if  is ATC, see with more or less zoom depends
+    """This function is for see the single player in GoogleMaps, if  is ATC, see with more or less zoom depends
        from ATC level and the PILOT, I implemented this before show up webeye, so i made the middle stuff,
-       now with webeye, I want use it here, to make strong those 2 tools'''
+       now with webeye, I want use it here, to make strong those 2 tools"""
     latitude, longitude, heading = vid[0][0], vid[0][1], vid[0][3]
     mapfileplayer_path = os.path.join(os.path.dirname(os.path.abspath(__file__)))
     player_location = open(mapfileplayer_path +'/player_location.html', 'w')
     player_location.write('<html><body>\n')
     player_location.write('  <div id="mapdiv"></div>\n')
     player_location.write('  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjpkAC9ePGem0lIq5XcMiuhR_wWLPFku8Ix9i2SXYRVK3e45q1BQUd_beF8dtzKET_EteAjPdGDwqpQ"></script>\n')
-    player_location.write('  <script src="%s/../OpenLayers/OpenLayers.js"></script>\n' % (mapfileplayer_path))
+    player_location.write('  <script src="%s/../OpenLayers/OpenLayers.js"></script>\n' % mapfileplayer_path)
     player_location.write('  <script>\n')
     player_location.write('\n')
     player_location.write('    map = new OpenLayers.Map("mapdiv",\n')
@@ -224,8 +224,8 @@ def GMapsLayer(vid, icao_orig, icao_dest):
     return
 
 def all2map():
-    '''This function is for see the whole map, all player in GoogleMaps, I implemented this before show up webeye,
-       now with webeye, I want to use it here, to make strong those 2 tools'''
+    """This function is for see the whole map, all player in GoogleMaps, I implemented this before show up webeye,
+       now with webeye, I want to use it here, to make strong those 2 tools"""
     config = ConfigParser.RawConfigParser()
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Config.cfg')
     config.read(config_file)
@@ -241,7 +241,7 @@ def all2map():
     all_in_map.write('<html><body>\n')
     all_in_map.write('  <div id="mapdiv"></div>\n')
     all_in_map.write('  <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAjpkAC9ePGem0lIq5XcMiuhR_wWLPFku8Ix9i2SXYRVK3e45q1BQUd_beF8dtzKET_EteAjPdGDwqpQ"></script>\n')
-    all_in_map.write('  <script src="%s/../OpenLayers/OpenLayers.js"></script>\n' % (mapfileall_path))
+    all_in_map.write('  <script src="%s/../OpenLayers/OpenLayers.js"></script>\n' % mapfileall_path)
     all_in_map.write('  <script>\n')
     all_in_map.write('\n')
     all_in_map.write('    map = new OpenLayers.Map("mapdiv",\n')
@@ -369,7 +369,7 @@ def all2map():
             try:
                 Q_db = SQL_queries.sql_query('Get_borders_FIR', (str(players[callsign][2][:4]),))
                 position = Q_db.fetchall()
-                if position == []:
+                if not position:
                     continue
             except:
                 pass

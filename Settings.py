@@ -22,24 +22,25 @@
 
 import os
 import ConfigParser
+import sys
 from modules import SettingWindow_UI
 
 try:
-    '''Check if PyQt4 is installed or not, this library is a dependency of all,
-    if not installed read the README.rst'''
+    """Check if PyQt4 is installed or not, this library is a dependency of all,
+    if not installed read the README.rst"""
     from PyQt4.QtCore import *
     from PyQt4.QtGui import *
     from PyQt4.QtWebKit import *
     from PyQt4.Qt import *
 except:
-    print ('\nYou have not installed the packages Qt Modules for Python,\n')
-    print ('please run command as root:  aptitude install python-qt4\n')
-    print ('with all dependencies.\n\n')
+    print ("\nYou have not installed the packages Qt Modules for Python,\n")
+    print ("please run command as root:  aptitude install python-qt4\n")
+    print ("with all dependencies.\n\n")
     sys.exit(2)
 
 class Settings(QMainWindow):
-    '''The Settings Class is to set options like interval time to update, show labels of the players when see in the map,
-       set proxy, this will write into Config.ini, this re-build the config if user delete it by error'''
+    """The Settings Class is to set options like interval time to update, show labels of the players when see in the map,
+       set proxy, this will write into Config.ini, this re-build the config if user delete it by error"""
     closed = pyqtSignal()
 
     def __init__(self, parent=None):

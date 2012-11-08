@@ -21,13 +21,14 @@
 # FOLME Class
 
 import os
+import sys
 import SQL_queries
 import FOLME_UI
 import Friends
 
 try:
-    '''Check if PyQt4 is installed or not, this library is a dependency of all,
-    if not installed read the README.rst'''
+    """Check if PyQt4 is installed or not, this library is a dependency of all,
+    if not installed read the README.rst"""
     from PyQt4.QtCore import *
     from PyQt4.QtGui import *
     from PyQt4.QtWebKit import *
@@ -39,7 +40,7 @@ except:
     sys.exit(2)
 
 class FollowMeService(QMainWindow):
-    '''The FOLME Class is for show selected player connected as FOLME'''
+    """The FOLME Class is for show selected player connected as FOLME"""
     closed = pyqtSignal()
 
     def __init__(self):
@@ -77,8 +78,8 @@ class FollowMeService(QMainWindow):
         Pixmap = QPixmap(ratingImagePath)
         self.ui.rating_img.setPixmap(Pixmap)
         try:
-            start_connected = datetime.datetime(int(str(info[0][5])[:4]), int(str(info[0][5])[4:6]) \
-                                                , int(str(info[0][5])[6:8]), int(str(info[0][5])[8:10]) \
+            start_connected = datetime.datetime(int(str(info[0][5])[:4]), int(str(info[0][5])[4:6])
+                                                , int(str(info[0][5])[6:8]), int(str(info[0][5])[8:10])
                                                 , int(str(info[0][5])[10:12]), int(str(info[0][5])[12:14]))
             diff = datetime.datetime.utcnow() - start_connected
             self.ui.TimeOnLineText.setText('Time on line: ' + str(diff)[:-7])

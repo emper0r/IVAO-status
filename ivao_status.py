@@ -18,7 +18,7 @@
 #
 # IVAO-status :: License GPLv3+
 
-'''Importing Python's native modules'''
+"""Importing Python's native modules"""
 import sys
 import os
 import sqlite3
@@ -29,7 +29,20 @@ import random
 import gzip
 import StringIO
 
-'''Importing the libraries from modules directory'''
+try:
+    """Check if PyQt4 is installed or not, this library is a dependency of all,
+    if not installed read the README.rst"""
+    from PyQt4.QtCore import *
+    from PyQt4.QtGui import *
+    from PyQt4.QtWebKit import *
+    from PyQt4.Qt import *
+except ImportError:
+    print ('\nYou have not installed the packages Qt Modules for Python,\n')
+    print ('please run command as root:  aptitude install python-qt4\n')
+    print ('with all dependencies.\n\n')
+    sys.exit(2)
+
+"""Importing the libraries from modules directory"""
 from modules import MainWindow_UI
 from modules import Pilots
 from modules import SQL_queries
@@ -41,23 +54,10 @@ from modules import MapView
 from modules import BuildDB
 import Settings
 
-try:
-    '''Check if PyQT4 is installed or not, this library is a dependency of all,
-    if not installed read the README.rst'''
-    from PyQt4.QtCore import *
-    from PyQt4.QtGui import *
-    from PyQt4.QtWebKit import *
-    from PyQt4.Qt import *
-except ImportError:
-    print ('\nYou have not installed the packages Qt Modules for Python,\n')
-    print ('please run command as root:  aptitude install python-qt4\n')
-    print ('with all dependencies.\n\n')
-    sys.exit(2)
-
-__version__ = '1.0.7'
+__version__ = '1.0.8'
 
 class Main(QMainWindow):
-    '''Preparing the MainWindow Class, to paint all design of the app'''
+    """Preparing the MainWindow Class, to paint all design of the app"""
     def __init__(self):
         QMainWindow.__init__(self)
         self.ui = MainWindow_UI.Ui_MainWindow()
@@ -215,10 +215,10 @@ class Main(QMainWindow):
         for item in range(len(ratings)):
             self.rating_atc[ratings[item].split(':')[0]] = ratings[item].split(':')[2]
             self.rating_pilot[ratings[item].split(':')[0]] = ratings[item].split(':')[4].strip('\r\n')
-        self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery" \
+        self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery"
                         , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
 
-        '''If user delete Config.ini by error, when app start write it again the file'''
+        """If user delete Config.ini by error, when app start write it again the file"""
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         if os.path.exists(config_file):
@@ -275,7 +275,7 @@ class Main(QMainWindow):
         startrow_dbt1 = startrow_dbt2 = 0
 
         for line in db_t1:
-            if line[0] == None:
+            if line[0] is None:
                 self.ui.dbTableWidget_1.removeRow(self.ui.dbTableWidget_1.rowCount())
             else:
                 pass
@@ -296,7 +296,7 @@ class Main(QMainWindow):
             startrow_dbt1 += 1
 
         for line in db_t2:
-            if line[0] == None:
+            if line[0] is None:
                 self.ui.dbTableWidget_2.removeRow(self.ui.dbTableWidget_2.rowCount())
             else:
                 pass
@@ -328,8 +328,8 @@ class Main(QMainWindow):
         qApp.restoreOverrideCursor()
 
     def connect(self):
-        '''Conecting to IVAO with only link explain in the Logistic mail rules,
-        this part contain some proxy settings because at least in my country is very used'''
+        """Conecting to IVAO with only link explain in the Logistic mail rules,
+        this part contain some proxy settings because at least in my country is very used"""
         self.statusBar().showMessage('Trying connecting to IVAO', 3000)
         qApp.processEvents()
         config = ConfigParser.RawConfigParser()
@@ -358,7 +358,7 @@ class Main(QMainWindow):
             if use_proxy == 0 and auth == 0:
                 pass
 
-            '''Doing Load balance to IVAO as Logistics require'''
+            """Doing Load balance to IVAO as Logistics required"""
             StatusURL = urllib2.urlopen(config.get('Info', 'data_access'))
             shuffle = random.choice([link for link in StatusURL.readlines() if 'gzurl0' in link]).split('=')[1].strip('\r\n')
             zfilename = urllib2.urlopen(shuffle)
@@ -389,7 +389,7 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Error! when trying to download info from IVAO. Check your connection to Internet.')
 
     def show_tables(self):
-        '''Here show all data into PILOT and CONTROLLER full list'''
+        """Here show all data into PILOT and CONTROLLER full list"""
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -397,7 +397,7 @@ class Main(QMainWindow):
         ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
         ImageRatings = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'ratings')
         self.statusBar().showMessage('Populating Controllers and Pilots', 3000)
-        #self.progress.show()
+        self.progress.show()
         pilots_ivao = atcs_ivao = obs_ivao = 0
         Q_db = SQL_queries.sql_query('Get_Pilots')
         pilots = Q_db.fetchone()
@@ -440,7 +440,7 @@ class Main(QMainWindow):
             self.ui.ATC_FullList.removeRow(0)
 
         for row_atc in rows_atcs:
-            if row_atc[1] == None:
+            if row_atc[1] is None:
                 continue
             else:
                 self.ui.ATC_FullList.insertRow(self.ui.ATC_FullList.rowCount())
@@ -530,15 +530,15 @@ class Main(QMainWindow):
                 except:
                     pass
                 try:
-                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]) \
-                                                        , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10]) \
+                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6])
+                                                        , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10])
                                                         , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
                     diff = datetime.datetime.utcnow() - start_connected
                     col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
                     self.ui.ATC_FullList.setItem(startrow, 8, col_time)
                 except:
                     pass
-                #self.progress.setValue(int(float(startrow) / float(len(rows_atcs)) * 100.0))
+                self.progress.setValue(int(float(startrow) / float(len(rows_atcs)) * 100.0))
                 startrow += 1
                 qApp.processEvents()
 
@@ -588,7 +588,7 @@ class Main(QMainWindow):
             diff = datetime.datetime.utcnow() - start_connected
             col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
-            #self.progress.setValue(int(float(startrow) / float(len(vehicles)) * 100.0))
+            self.progress.setValue(int(float(startrow) / float(len(vehicles)) * 100.0))
             startrow += 1
             qApp.processEvents()
 
@@ -655,7 +655,7 @@ class Main(QMainWindow):
             diff = datetime.datetime.utcnow() - start_connected
             col_time = QTableWidgetItem(str(diff).split('.')[0], 0)
             self.ui.PILOT_FullList.setItem(startrow, 9, col_time)
-            #self.progress.setValue(int(float(startrow) / float(len(rows_pilots)) * 100.0))
+            self.progress.setValue(int(float(startrow) / float(len(rows_pilots)) * 100.0))
             startrow += 1
             qApp.processEvents()
 
@@ -668,9 +668,9 @@ class Main(QMainWindow):
             pass
 
     def country_view(self):
-        '''This function show all users connected as PILOT and CONTOLLER of Country selected,
+        """This function show all users connected as PILOT and CONTOLLER of Country selected,
            and all flight inbound/outbound in same country, This is my favorite part because
-           is very similar like any Airport's Flights of MainBoard'''
+           is very similar like any Airport's Flights of MainBoard"""
         country_selected = self.ui.country_list.currentText()
         ImageFlags = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flags')
         ImageAirlines = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'airlines')
@@ -742,8 +742,8 @@ class Main(QMainWindow):
                 except:
                     pass
                 try:
-                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6]) \
-                                                        , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10]) \
+                    start_connected = datetime.datetime(int(str(row_atc[5])[:4]), int(str(row_atc[5])[4:6])
+                                                        , int(str(row_atc[5])[6:8]), int(str(row_atc[5])[8:10])
                                                         , int(str(row_atc[5])[10:12]), int(str(row_atc[5])[12:14]))
                 except:
                     pass
@@ -850,7 +850,7 @@ class Main(QMainWindow):
                 Q_db = SQL_queries.sql_query('Get_City', (str(inbound[1]),))
                 city = Q_db.fetchone()
                 col_city = ''
-                if city == None:
+                if city is None:
                     col_city = 'Pending...'
                 else:
                     col_city = str(city[0].encode('latin-1'))
@@ -866,7 +866,7 @@ class Main(QMainWindow):
                 Q_db = SQL_queries.sql_query('Get_City', (str(inbound[2]),))
                 city = Q_db.fetchone()
                 col_city = ''
-                if city == None:
+                if city is None:
                     col_city = 'Pending...'
                 else:
                     col_city = str(city[0].encode('latin-1'))
@@ -909,7 +909,7 @@ class Main(QMainWindow):
                 Q_db = SQL_queries.sql_query('Get_City', (str(outbound[1]),))
                 city = Q_db.fetchone()
                 col_city = ''
-                if city == None:
+                if city is None:
                     col_city = 'Pending...'
                 else:
                     col_city = str(city[0].encode('latin-1'))
@@ -925,7 +925,7 @@ class Main(QMainWindow):
                 Q_db = SQL_queries.sql_query('Get_City', (str(outbound[2]),))
                 city = Q_db.fetchone()
                 col_city = ''
-                if city == None:
+                if city is None:
                     col_city = 'Pending...'
                 else:
                     col_city = str(city[0].encode('latin-1'))
@@ -943,7 +943,7 @@ class Main(QMainWindow):
         self.ui.ATCtableWidget.setCurrentCell(-1, -1)
 
     def search_button(self):
-        '''Here can search by VID, Callsign or Player Name in MainTab'''
+        """Here can search by VID, Callsign or Player Name in MainTab"""
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -998,7 +998,7 @@ class Main(QMainWindow):
         connection.close()
 
     def action_click(self, event=None):
-        '''This section is for right-click mouse, and get in what table was clicked to do some action'''
+        """This section is for right-click mouse, and get in what table was clicked to do some action"""
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -1024,7 +1024,7 @@ class Main(QMainWindow):
                     if str(clienttype[0]) == 'ATC':
                         self.show_controller_info(current_callsign.text())
                 if sender == self.showMap_Action:
-                    cursor.execute('SELECT planned_depairport, planned_destairport FROM recent WHERE callsign=?;' \
+                    cursor.execute('SELECT planned_depairport, planned_destairport FROM recent WHERE callsign=?;'
                                    , ((str(current_callsign.text())),))
                     icao_depdest = cursor.fetchall()
                     self.view_map(current_callsign.text(), icao_depdest[0][0], icao_depdest[0][1])
@@ -1110,7 +1110,7 @@ class Main(QMainWindow):
                         if str(friend_data[0][0]) == 'ATC':
                             self.show_controller_info(str(friend_data[0][1]))
                     if sender == self.showMap_Action:
-                        cursor.execute('SELECT planned_depairport, planned_destairport FROM recent WHERE callsign=?;' \
+                        cursor.execute('SELECT planned_depairport, planned_destairport FROM recent WHERE callsign=?;'
                                        , ((str(friend_data[0][1])),))
                         icao_depdest = cursor.fetchall()
                         self.view_map(str(friend_data[0][1]), icao_depdest[0][0], icao_depdest[0][1])
@@ -1126,8 +1126,8 @@ class Main(QMainWindow):
                         QMessageBox.information(None, 'Friends List', msg)
 
     def ivao_friend(self):
-        '''Here can show the friend added to roster, this roster is reload after get consecutive data
-           to see if player's friend is online or not'''
+        """Here can show the friend added to roster, this roster is reload after get consecutive data
+           to see if player's friend is online or not"""
         self.ui.PILOT_FullList.setCurrentCell(-1, -1)
         self.ui.ATC_FullList.setCurrentCell(-1, -1)
         self.ui.PilottableWidget.setCurrentCell(-1, -1)
@@ -1192,14 +1192,36 @@ class Main(QMainWindow):
         connection.close()
 
     def metar(self):
-        '''This functions is for get the METAR balance as Logistics mail require'''
+        """This functions is for get the METAR balance as Logistics mail required"""
         self.statusBar().showMessage('Downloading METAR', 2000)
         qApp.processEvents()
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
         icao_airport = self.ui.METAREdit.text()
+
         try:
+            use_proxy = config.getint('Settings', 'use_proxy')
+            auth = config.getint('Settings', 'auth')
+            host = config.get('Settings', 'host')
+            port = config.get('Settings', 'port')
+            user = config.get('Settings', 'user')
+            pswd = config.get('Settings', 'pass')
+            if use_proxy == 2 and auth == 2:
+                passmgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+                passmgr.add_password(None, 'http://' + host + ':' + port, user, pswd)
+                authinfo = urllib2.ProxyBasicAuthHandler(passmgr)
+                proxy_support = urllib2.ProxyHandler({"http" : "http://" + host + ':' + port})
+                opener = urllib2.build_opener(proxy_support, authinfo)
+                urllib2.install_opener(opener)
+                QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port), str(user), str(pswd)))
+            if use_proxy == 2 and auth == 0:
+                proxy_support = urllib2.ProxyHandler({"http" : "http://" + host + ':' + port})
+                opener = urllib2.build_opener(proxy_support)
+                urllib2.install_opener(opener)
+                QNetworkProxy.setApplicationProxy(QNetworkProxy(QNetworkProxy.HttpProxy, str(host), int(port)))
+            if use_proxy == 0 and auth == 0:
+                pass
             StatusURL = urllib2.urlopen(config.get('Info', 'data_access'))
             shuffle = random.choice([link for link in StatusURL.readlines() if 'metar0' in link]).split('=')[1].strip('\r\n')
             METAR = urllib2.urlopen(shuffle + '?id=%s' % icao_airport)
@@ -1224,9 +1246,9 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Error! during try get Metar info, check your internet connection...', 4000)
 
     def view_map(self, vid, icao_orig=None, icao_dest=None):
-        '''This function is for see the single player in GoogleMaps, if  is ATC, see with more or less zoom depends
+        """This function is for see the single player in GoogleMaps, if  is ATC, see with more or less zoom depends
            from ATC level and the PILOT, I implemented this before show up webeye, so i made the middle stuff,
-           now with webeye, I want use it here, to make strong those 2 tools'''
+           now with webeye, I want use it here, to make strong those 2 tools"""
         self.statusBar().showMessage('Showing player in Map', 4000)
         qApp.processEvents()
         Q_db = SQL_queries.sql_query('Get_Location_from_ICAO', (str(icao_orig),))
@@ -1249,44 +1271,44 @@ class Main(QMainWindow):
                           This Aplication can be used to see IVAO operational network.<p>
                           July 2011 Tony (emper0r) P. Diaz  --  emperor.cu@gmail.com<p>
                           IVAO User: 304605"""
-                          % (__version__))
+                          % __version__)
 
     def show_pilot_info(self, callsign):
-        '''Here call the Pilot Class'''
+        """Here call the Pilot Class"""
         self.pilot_window = Pilots.PilotInfo()
         self.pilot_window.status(callsign)
         self.pilot_window.closed.connect(self.show)
         self.pilot_window.show()
 
     def show_controller_info(self, callsign):
-        '''Here call the Controller Class'''
+        """Here call the Controller Class"""
         self.controller_window = Controllers.ControllerInfo()
         self.controller_window.status(callsign)
         self.controller_window.closed.connect(self.show)
         self.controller_window.show()
 
     def show_followme_info(self, callsign):
-        '''Here call the FOLME Class'''
+        """Here call the FOLME Class"""
         self.followme_window = FOLME.FollowMeService()
         self.followme_window.status(callsign)
         self.followme_window.closed.connect(self.show)
         self.followme_window.show()
 
     def show_settings(self):
-        '''Here call the Settings Class'''
+        """Here call the Settings Class"""
         self.setting_window = Settings.Settings(self)
         self.setting_window.closed.connect(self.show)
         self.setting_window.show()
 
     def build_db(self):
-        '''Here call the Build database Class from files.dat'''
+        """Here call the Build database Class from files.dat"""
         self.build_update = BuildDB.Build_datafiles()
         self.build_update.closed.connect(self.show)
         self.build_update.show()
 
     def all2map(self):
-        '''This function is for see the whole map, all player in GoogleMaps, I implemented this before show up webeye,
-           now with webeye, I want to use it here, to make strong those 2 tools'''
+        """This function is for see the whole map, all player in GoogleMaps, I implemented this before show up webeye,
+           now with webeye, I want to use it here, to make strong those 2 tools"""
         self.statusBar().showMessage('Populating all players in the Map', 10000)
         qApp.processEvents()
         MapView.all2map()
@@ -1294,7 +1316,7 @@ class Main(QMainWindow):
         self.maptab.load(QUrl(mapfileall_path + '/all_in_map.html'))
 
     def statistics(self):
-        '''This function is for Statistics Tab in the MainWindow, when select option at combobox appears result'''
+        """This function is for Statistics Tab in the MainWindow, when select option at combobox appears result"""
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -1840,7 +1862,7 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Done!', 2000)
 
     def network(self):
-        '''This function is to see NetworkTab statistics'''
+        """This function is to see NetworkTab statistics"""
         config = ConfigParser.RawConfigParser()
         config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Config.cfg')
         config.read(config_file)
@@ -2007,9 +2029,9 @@ class Main(QMainWindow):
         self.statusBar().showMessage('Done!', 2000)
 
 def main():
+    """Next lines is for set only specific theme with Qt libraries to the app"""
     import sys, time, os
-    '''Next line is for set only exact theme with Qt libraries to the app'''
-    QApplication.setStyle(QStyleFactory.create("Cleanlooks"))
+    QApplication.setStyle(QStyleFactory.create('Cleanlooks'))
     QApplication.setPalette(QApplication.style().standardPalette())
     app = QApplication(sys.argv)
     image_splash = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')

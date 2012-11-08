@@ -46,9 +46,9 @@ except:
         print '\nThis software not run here yet.\n'
 
 def Scheduling():
-    '''This part is a parse HTML from Schedule website from IVAO, because i can't access
+    """This part is a parse HTML from Schedule website from IVAO, because i can't access
        directly to IVAO database to download schedule, so I have to get by other way where users can
-       see the schedule for controllers and pilots'''
+       see the schedule for controllers and pilots"""
     config = ConfigParser.RawConfigParser()
     config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Config.cfg')
     config.read(config_file)
@@ -78,8 +78,7 @@ def Scheduling():
         if use_proxy == 0 and auth == 0:
             pass
 
-        '''This lines set locales of enviroment at default language "English"
-           to can parse with web'''
+        """This lines set locales of enviroment at default "English" language to can parse with web"""
         save_locale = locale.getlocale()
         locale.setlocale(locale.LC_ALL, 'C')
 
@@ -106,7 +105,7 @@ def Scheduling():
                     SQL_queries.sql_query('Add_Schedule_Flights', columns)
                     qApp.processEvents()
 
-        '''Restore locales'''
+        """Restore locales"""
         locale.setlocale(locale.LC_ALL, save_locale)
         return True
     except IOError:

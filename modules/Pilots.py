@@ -21,17 +21,17 @@
 # Pilot Class
 
 import os
+import sys
 import SQL_queries
 import PilotInfo_UI
 import StatusFlight
 import Friends
-import sqlite3
 import distance
 import datetime
 
 try:
-    '''Check if PyQt4 is installed or not, this library is a dependency of all,
-    if not installed read the README.rst'''
+    """Check if PyQt4 is installed or not, this library is a dependency of all,
+    if not installed read the README.rst"""
     from PyQt4.QtCore import *
     from PyQt4.QtGui import *
     from PyQt4.QtWebKit import *
@@ -43,9 +43,10 @@ except:
     sys.exit(2)
 
 class PilotInfo(QMainWindow):
+    """The PilotInfo Class is to show selected player from Pilots Tables to see the status of the flight, like
+       departure, destination, miles, route, type of aircraft and flight, etc"""
     closed = pyqtSignal()
-    '''The PilotInfo Class is to show selected player from Pilots Tables to see the status of the flight, like
-       departure, destination, miles, route, type of aircraft and flight, etc'''
+
     def __init__(self):
         QMainWindow.__init__(self)
         self.ui = PilotInfo_UI.Ui_QPilotInfo()
@@ -171,8 +172,8 @@ class PilotInfo(QMainWindow):
         self.ui.FlightStatusDetail.setText(str(status_plane))
         self.ui.ETA_Arrive.setText(str(eta)[:-7])
         try:
-            start_connected = datetime.datetime(int(str(info[0][18])[:4]), int(str(info[0][18])[4:6]) \
-                                                , int(str(info[0][18])[6:8]), int(str(info[0][18])[8:10]) \
+            start_connected = datetime.datetime(int(str(info[0][18])[:4]), int(str(info[0][18])[4:6])
+                                                , int(str(info[0][18])[6:8]), int(str(info[0][18])[8:10])
                                                 , int(str(info[0][18])[10:12]), int(str(info[0][18])[12:14]))
             diff = datetime.datetime.utcnow() - start_connected
             self.ui.time_online_text.setText(str(diff)[:-7])
