@@ -209,7 +209,7 @@ class Main(QMainWindow):
         self.progress.setValue(0)
         self._maptab = None
 
-        ratings = open('database/ratings.dat','r').readlines()
+        ratings = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', 'ratings.dat'), 'r').readlines()
         self.rating_pilot = {}
         self.rating_atc = {}
         for item in range(len(ratings)):
