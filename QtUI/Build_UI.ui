@@ -3,14 +3,14 @@
  <class>QBuildDB</class>
  <widget class="QMainWindow" name="QBuildDB">
   <property name="windowModality">
-   <enum>Qt::WindowModal</enum>
+   <enum>Qt::ApplicationModal</enum>
   </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>385</width>
-    <height>115</height>
+    <height>120</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,14 +22,19 @@
   <property name="minimumSize">
    <size>
     <width>385</width>
-    <height>115</height>
+    <height>120</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>385</width>
-    <height>115</height>
+    <height>120</height>
    </size>
+  </property>
+  <property name="font">
+   <font>
+    <family>DejaVu Sans</family>
+   </font>
   </property>
   <property name="cursor">
    <cursorShape>PointingHandCursor</cursorShape>
@@ -37,15 +42,24 @@
   <property name="focusPolicy">
    <enum>Qt::StrongFocus</enum>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::DefaultContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>Import database from [.dat] files</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <widget class="QPushButton" name="Close">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>159</x>
-      <y>78</y>
+      <y>90</y>
       <width>70</width>
       <height>23</height>
      </rect>
@@ -67,7 +81,7 @@
     <property name="geometry">
      <rect>
       <x>19</x>
-      <y>50</y>
+      <y>30</y>
       <width>350</width>
       <height>19</height>
      </rect>
@@ -87,7 +101,7 @@
      <rect>
       <x>21</x>
       <y>14</y>
-      <width>111</width>
+      <width>101</width>
       <height>16</height>
      </rect>
     </property>
@@ -97,6 +111,9 @@
       <bold>true</bold>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="text">
      <string>Importing File:</string>
     </property>
@@ -104,8 +121,8 @@
    <widget class="QLabel" name="LabelFile">
     <property name="geometry">
      <rect>
-      <x>21</x>
-      <y>30</y>
+      <x>120</x>
+      <y>13</y>
       <width>230</width>
       <height>16</height>
      </rect>
@@ -116,8 +133,52 @@
       <bold>false</bold>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QProgressBar" name="progressBarTotal">
+    <property name="geometry">
+     <rect>
+      <x>19</x>
+      <y>70</y>
+      <width>350</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="TotalImported">
+    <property name="geometry">
+     <rect>
+      <x>21</x>
+      <y>54</y>
+      <width>101</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string>Total Imports</string>
     </property>
    </widget>
   </widget>

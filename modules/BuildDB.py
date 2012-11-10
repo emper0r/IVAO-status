@@ -77,6 +77,7 @@ class Build_datafiles(QMainWindow):
         cursor.execute('DELETE FROM staff;')
         connection.commit()
 
+        progressTotal = 0
         """Importing aircraft.dat"""
         data = open('database/aircraft.dat', 'r').readlines()
         count = 0
@@ -92,8 +93,10 @@ class Build_datafiles(QMainWindow):
             count += 1
             self.ui.LabelFile.setText('Aircraft.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+            self.ui.progressBarTotal.setValue( float(count) / float(len(data)) * 100.0 / 9)
             qApp.processEvents()
         connection.commit()
+        progressTotal = float(self.ui.progressBarTotal.value()+1)
 
         """Importing airlines.dat"""
         data = open('database/airlines.dat', 'r').readlines()
@@ -109,8 +112,10 @@ class Build_datafiles(QMainWindow):
             count += 1
             self.ui.LabelFile.setText('Airlines.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+            self.ui.progressBarTotal.setValue(float(progressTotal) + float(self.ui.progressBar.value()) / 9)
             qApp.processEvents()
         connection.commit()
+        progressTotal = float(self.ui.progressBarTotal.value())
 
         """Importing airports.dat"""
         data = open('database/airports.dat', 'r').readlines()
@@ -129,8 +134,10 @@ class Build_datafiles(QMainWindow):
             count += 1
             self.ui.LabelFile.setText('Airports.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+            self.ui.progressBarTotal.setValue(float(progressTotal) + float(self.ui.progressBar.value()) / 9)
             qApp.processEvents()
         connection.commit()
+        progressTotal = float(self.ui.progressBarTotal.value())
 
         """Importing cprefix.dat"""
         data = open('database/cprefix.dat', 'r').readlines()
@@ -144,8 +151,10 @@ class Build_datafiles(QMainWindow):
             count += 1
             self.ui.LabelFile.setText('Cprefix.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+            self.ui.progressBarTotal.setValue(float(progressTotal) + float(self.ui.progressBar.value()) / 9)
             qApp.processEvents()
         connection.commit()
+        progressTotal = float(self.ui.progressBarTotal.value())
 
         """Importing firs.dat"""
         data = open('database/firs.dat', 'r').readlines()
@@ -169,13 +178,16 @@ class Build_datafiles(QMainWindow):
                 name = fields[7].decode('latin-1').strip('\r\n')
             except:
                 name = '-'
-            cursor.execute("INSERT INTO firs (fir, location, id_country, city, control_type, latitude, longitude, name) VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
+            cursor.execute("INSERT INTO firs (fir, location, id_country, city, control_type, latitude, longitude, name) "
+                           "VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
                            (fir, location, id_country, city, control_type, latitude, longitude, name))
             count += 1
             self.ui.LabelFile.setText('Firs.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+            self.ui.progressBarTotal.setValue(float(progressTotal) + float(self.ui.progressBar.value()) / 9)
             qApp.processEvents()
         connection.commit()
+        progressTotal = float(self.ui.progressBarTotal.value())
 
         """Importing ratings.dat"""
         data = open('database/ratings.dat', 'r').readlines()
@@ -192,8 +204,10 @@ class Build_datafiles(QMainWindow):
             count += 1
             self.ui.LabelFile.setText('Ratings.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+            self.ui.progressBarTotal.setValue(float(progressTotal) + float(self.ui.progressBar.value()) / 9)
             qApp.processEvents()
         connection.commit()
+        progressTotal = float(self.ui.progressBarTotal.value())
 
         """Importing countries.dat"""
         data = open('database/countries.dat', 'r').readlines()
@@ -210,8 +224,10 @@ class Build_datafiles(QMainWindow):
             count += 1
             self.ui.LabelFile.setText('Countries.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+            self.ui.progressBarTotal.setValue(float(progressTotal) + float(self.ui.progressBar.value()) / 9)
             qApp.processEvents()
         connection.commit()
+        progressTotal = float(self.ui.progressBarTotal.value())
 
         """Importing fir.dat"""
         data = open('database/fir.dat', 'r').readlines()
@@ -237,9 +253,11 @@ class Build_datafiles(QMainWindow):
                 count += 1
                 self.ui.LabelFile.setText('Fir.dat - [ %d / %d ]' % (count, len(data)))
                 self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+                self.ui.progressBarTotal.setValue(float(progressTotal) + float(self.ui.progressBar.value()) / 9)
                 count_firname = False
             qApp.processEvents()
         connection.commit()
+        progressTotal = float(self.ui.progressBarTotal.value())
 
         """Importing staff.dat"""
         data = open('database/staff.dat', 'r').readlines()
@@ -256,7 +274,9 @@ class Build_datafiles(QMainWindow):
             count += 1
             self.ui.LabelFile.setText('Staff.dat - [ %d / %d ]' % (count, len(data)))
             self.ui.progressBar.setValue( float(count) / float(len(data)) * 100.0)
+            self.ui.progressBarTotal.setValue(float(progressTotal) + float(self.ui.progressBar.value()) / 9)
             qApp.processEvents()
         connection.commit()
 
         self.ui.LabelFile.setText('DONE!')
+        self.ui.Close.setEnabled(True)
