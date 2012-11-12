@@ -43,9 +43,9 @@ After download run this command on shell:
 
     $ cd Your/Download/Path/
 
-    $ chmod 500 IVAO-Status-1.0.7-Linux-x86_64-Install.bin
+    $ chmod 500 IVAO-Status-1.0.8-Linux-x86_64-Install.bin
 
-    $ ./IVAO-Status-1.0.7-Linux-x86_64-Install.bin 
+    $ ./IVAO-Status-1.0.8-Linux-x86_64-Install.bin 
 
 OR TRY TO GET THE SOURCE
 ========================
