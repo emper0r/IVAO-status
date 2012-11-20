@@ -67,6 +67,8 @@ class Main(QMainWindow):
         self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         image_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')
         self.setWindowIcon(QIcon(image_icon))
+        self.ui.IVAOStatustableWidget.setColumnWidth(0,170)
+        self.ui.IVAOStatustableWidget.setColumnWidth(1,100)
         self.ui.PILOT_FullList.setColumnWidth(0, 90)
         self.ui.PILOT_FullList.setColumnWidth(1, 65)
         self.ui.PILOT_FullList.setColumnWidth(2, 60)
@@ -411,9 +413,41 @@ class Main(QMainWindow):
         pob = Q_db.fetchone()
         self.ui.IVAOStatustableWidget.setCurrentCell(-1, -1)
         pilots_ivao = QTableWidgetItem(str(pilots[0]))
+        self.pb_pilots = QProgressBar()
+        self.pb_pilots.setMinimum(1)
+        self.pb_pilots.setMaximum(100)
+        if pilots[0] == 0:
+            self.pb_pilots.setValue(0)
+        else:
+            self.pb_pilots.setValue(float(pilots[0]) / (atc[0] + pilots[0] + followme[0]) * 100)
+        self.ui.IVAOStatustableWidget.setCellWidget(0, 1, self.pb_pilots)
         atcs_ivao = QTableWidgetItem(str((int(atc[0]) - int(obs[0]))))
+        self.pb_atc = QProgressBar()
+        self.pb_atc.setMinimum(1)
+        self.pb_atc.setMaximum(100)
+        if atc[0] == 0:
+            self.pb_atc.setValue(0)
+        else:
+            self.pb_atc.setValue(float((int(atc[0]) - int(obs[0])) / atc[0] + pilots[0] + followme[0] * 100))
+        self.ui.IVAOStatustableWidget.setCellWidget(1, 1, self.pb_atc)
         vehicles = QTableWidgetItem(str(int(followme[0])))
+        self.pb_folme = QProgressBar()
+        self.pb_folme.setMinimum(1)
+        self.pb_folme.setMaximum(100)
+        if followme[0] == 0:
+            self.pb_folme.setValue(0)
+        else:
+            self.pb_folme.setValue(float((int(followme[0]) / atc[0] + pilots[0] + followme[0] * 100)))
+        self.ui.IVAOStatustableWidget.setCellWidget(2, 1, self.pb_folme)
         obs_ivao = QTableWidgetItem(str(int(obs[0])))
+        self.pb_obs = QProgressBar()
+        self.pb_obs.setMinimum(1)
+        self.pb_obs.setMaximum(100)
+        if obs[0] == 0:
+            self.pb_obs.setValue(0)
+        else:
+            self.pb_obs.setValue(float((int(obs[0]) / atc[0] + pilots[0] + followme[0] * 100)))
+        self.ui.IVAOStatustableWidget.setCellWidget(3, 1, self.pb_obs)
         total_ivao = QTableWidgetItem(str(atc[0] + pilots[0] + followme[0]))
         if pob[0] is None:
             pob_ivao = QTableWidgetItem(str(0))
@@ -421,7 +455,7 @@ class Main(QMainWindow):
             pob_ivao = QTableWidgetItem(str(int(pob[0])))
 
         time_received = datetime.datetime.utcnow()
-        time_board = QTableWidgetItem(str(time_received).split('.')[0] + ' - Zulu Time (UTC)')
+        time_board = QTableWidgetItem(str(time_received).split('.')[0] + ' - Zulu')
 
         self.ui.IVAOStatustableWidget.setItem(0, 0, pilots_ivao)
         self.ui.IVAOStatustableWidget.setItem(1, 0, atcs_ivao)

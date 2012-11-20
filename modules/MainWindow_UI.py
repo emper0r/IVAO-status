@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'QtUI/MainWindow_UI.ui'
 #
-# Created: Sun Feb  5 17:42:26 2012
-#      by: PyQt4 UI code generator 4.9
+# Created: Tue Nov 20 11:11:58 2012
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -62,7 +62,7 @@ class Ui_MainWindow(object):
         self.IVAOStatustableWidget.setGridStyle(QtCore.Qt.DotLine)
         self.IVAOStatustableWidget.setWordWrap(False)
         self.IVAOStatustableWidget.setObjectName(_fromUtf8("IVAOStatustableWidget"))
-        self.IVAOStatustableWidget.setColumnCount(1)
+        self.IVAOStatustableWidget.setColumnCount(2)
         self.IVAOStatustableWidget.setRowCount(8)
         item = QtGui.QTableWidgetItem()
         self.IVAOStatustableWidget.setVerticalHeaderItem(0, item)
@@ -86,6 +86,8 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         item.setFont(font)
         self.IVAOStatustableWidget.setHorizontalHeaderItem(0, item)
+        item = QtGui.QTableWidgetItem()
+        self.IVAOStatustableWidget.setHorizontalHeaderItem(1, item)
         self.IVAOStatustableWidget.horizontalHeader().setDefaultSectionSize(150)
         self.IVAOStatustableWidget.horizontalHeader().setHighlightSections(False)
         self.IVAOStatustableWidget.horizontalHeader().setMinimumSectionSize(150)
@@ -1248,7 +1250,7 @@ class Ui_MainWindow(object):
         self.tabWidget.addTab(self.database, _fromUtf8(""))
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 21))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1024, 19))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuMenu = QtGui.QMenu(self.menuBar)
         self.menuMenu.setObjectName(_fromUtf8("menuMenu"))
@@ -1294,6 +1296,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
         self.country_list.setCurrentIndex(-1)
+        QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
         '''This next lines are the links from buttons to actions'''
         QtCore.QObject.connect(self.actionExit, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.close)
         QtCore.QObject.connect(self.actionUpdate, QtCore.SIGNAL(_fromUtf8("activated()")), MainWindow.connect)
@@ -1330,6 +1333,8 @@ class Ui_MainWindow(object):
         item.setText(QtGui.QApplication.translate("MainWindow", "Last data received", None, QtGui.QApplication.UnicodeUTF8))
         item = self.IVAOStatustableWidget.horizontalHeaderItem(0)
         item.setText(QtGui.QApplication.translate("MainWindow", "Information Board", None, QtGui.QApplication.UnicodeUTF8))
+        item = self.IVAOStatustableWidget.horizontalHeaderItem(1)
+        item.setText(QtGui.QApplication.translate("MainWindow", "% of Total", None, QtGui.QApplication.UnicodeUTF8))
         self.IVAOStatusLabel.setText(QtGui.QApplication.translate("MainWindow", "IVAO Status", None, QtGui.QApplication.UnicodeUTF8))
         self.FriendstableWidget.setSortingEnabled(False)
         item = self.FriendstableWidget.horizontalHeaderItem(0)

@@ -203,6 +203,11 @@
         </font>
        </property>
       </column>
+      <column>
+       <property name="text">
+        <string>% of Total</string>
+       </property>
+      </column>
      </widget>
      <widget class="QLabel" name="IVAOStatusLabel">
       <property name="geometry">
@@ -3243,7 +3248,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
