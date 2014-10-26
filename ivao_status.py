@@ -56,6 +56,7 @@ import Settings
 
 __version__ = '1.0.8'
 
+
 class Main(QMainWindow):
     """Preparing the MainWindow Class, to paint all design of the app"""
     def __init__(self):
@@ -63,8 +64,8 @@ class Main(QMainWindow):
         self.ui = MainWindow_UI.Ui_MainWindow()
         self.ui.setupUi(self)
         screen = QDesktopWidget().screenGeometry()
-        size =  self.geometry()
-        self.move ((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
+        size = self.geometry()
+        self.move((screen.width() - size.width()) / 2, (screen.height() - size.height()) / 2)
         image_icon = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'images', 'ivao_status_splash.png')
         self.setWindowIcon(QIcon(image_icon))
         self.ui.IVAOStatustableWidget.setColumnWidth(0,170)
@@ -217,8 +218,8 @@ class Main(QMainWindow):
         for item in range(len(ratings)):
             self.rating_atc[ratings[item].split(':')[0]] = ratings[item].split(':')[2]
             self.rating_pilot[ratings[item].split(':')[0]] = ratings[item].split(':')[4].strip('\r\n')
-        self.position_atc = {"0":"Observer", "1":"Flight Service Station", "2":"Clearance Delivery"
-                        , "3":"Ground", "4":"Tower", "5":"Approach", "6":"Center", "7":"Departure"}
+        self.position_atc = {"0": "Observer", "1": "Flight Service Station", "2": "Clearance Delivery"
+                        , "3": "Ground", "4": "Tower", "5": "Approach", "6": "Center", "7":"Departure"}
 
         """If user delete Config.ini by error, when app start write it again the file"""
         config = ConfigParser.RawConfigParser()
@@ -470,7 +471,7 @@ class Main(QMainWindow):
         rows_atcs = Q_db.fetchall()
         startrow = 0
 
-        while self.ui.ATC_FullList.rowCount () > 0:
+        while self.ui.ATC_FullList.rowCount() > 0:
             self.ui.ATC_FullList.removeRow(0)
 
         for row_atc in rows_atcs:
@@ -580,7 +581,7 @@ class Main(QMainWindow):
         vehicles = Q_db.fetchall()
 
         startrow = 0
-        while self.ui.PILOT_FullList.rowCount () > 0:
+        while self.ui.PILOT_FullList.rowCount() > 0:
             self.ui.PILOT_FullList.removeRow(0)
 
         for followservice in vehicles:
@@ -906,7 +907,7 @@ class Main(QMainWindow):
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
                 self.ui.InboundTableWidget.setItem(startrow_in, 4, col_country)
-                if  flagCodePath_orig == flagCodePath_dest:
+                if flagCodePath_orig == flagCodePath_dest:
                     status_flight = 'Domestic'
                 else:
                     status_flight = 'International'
@@ -965,7 +966,7 @@ class Main(QMainWindow):
                     col_city = str(city[0].encode('latin-1'))
                 col_country = QTableWidgetItem(col_city, 0)
                 self.ui.OutboundTableWidget.setItem(startrow_out, 4, col_country)
-                if  flagCodePath_orig == flagCodePath_dest:
+                if flagCodePath_orig == flagCodePath_dest:
                     status_flight = 'Domestic'
                 else:
                     status_flight = 'International'
@@ -983,7 +984,6 @@ class Main(QMainWindow):
         config.read(config_file)
         database = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database', config.get('Database', 'db'))
         connection = sqlite3.connect(database)
-        cursor = connection.cursor()
         arg = self.ui.SearchEdit.text()
         item = self.ui.SearchcomboBox.currentIndex()
 
@@ -1366,7 +1366,7 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Counting...', 2000)
             qApp.processEvents()
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
 
@@ -1436,7 +1436,7 @@ class Main(QMainWindow):
 
         if item == 1:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
 
@@ -1496,7 +1496,7 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Counting...', 2000)
             qApp.processEvents()
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
 
@@ -1548,7 +1548,7 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Counting...', 2000)
             qApp.processEvents()
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
 
             cursor.execute("SELECT planned_depairport FROM recent")
@@ -1608,7 +1608,7 @@ class Main(QMainWindow):
             self.statusBar().showMessage('Counting...', 2000)
             qApp.processEvents()
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
             cursor.execute("SELECT SUBSTR(callsign,1,3) AS prefix, COUNT(DISTINCT callsign) AS airlines FROM recent WHERE clienttype='PILOT' GROUP BY prefix ORDER BY airlines DESC;")
@@ -1648,7 +1648,7 @@ class Main(QMainWindow):
 
         if item == 5:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
             cursor.execute("SELECT planned_aircraft FROM recent WHERE clienttype='PILOT';" )
@@ -1690,7 +1690,7 @@ class Main(QMainWindow):
 
         if item == 6:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
             cursor.execute("SELECT planned_aircraft FROM recent WHERE clienttype='PILOT';" )
@@ -1732,7 +1732,7 @@ class Main(QMainWindow):
 
         if item == 7:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
 
@@ -1761,7 +1761,7 @@ class Main(QMainWindow):
 
         if item == 8:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
 
@@ -1832,13 +1832,13 @@ class Main(QMainWindow):
 
         if item == 9:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
 
-            for facility, description in (('DEP','Departure'), ('GND','Ground'), ('TWR', 'Tower'),
-                                          ('APP','Approach'), ('CTR','Center'), ('OBS','Observer')):
-                cursor.execute("SELECT COUNT(callsign) FROM recent WHERE clienttype='ATC';" )
+            for facility, description in (('DEP', 'Departure'), ('GND', 'Ground'), ('TWR', 'Tower'),
+                                          ('APP', 'Approach'), ('CTR', 'Center'), ('OBS',  'Observer')):
+                cursor.execute("SELECT COUNT(callsign) FROM recent WHERE clienttype='ATC';")
                 total_items = cursor.fetchone()
                 if total_items[0] == 0:
                     continue
@@ -1864,7 +1864,7 @@ class Main(QMainWindow):
 
         if item == 10:
             self.ui.Statistics.insertRow(self.ui.Statistics.rowCount())
-            while self.ui.Statistics.rowCount () > 0:
+            while self.ui.Statistics.rowCount() > 0:
                 self.ui.Statistics.removeRow(0)
             startrow = 0
             list_server = {}
@@ -1944,7 +1944,7 @@ class Main(QMainWindow):
         sched_atc = Q_db.fetchall()
 
         qApp.processEvents()
-        while self.ui.SchedulingATC.rowCount () > 0:
+        while self.ui.SchedulingATC.rowCount() > 0:
             self.ui.SchedulingATC.removeRow(0)
 
         startrow = 0
@@ -1986,7 +1986,7 @@ class Main(QMainWindow):
         sched_pilots = Q_db.fetchall()
 
         qApp.processEvents()
-        while self.ui.SchedulingFlights.rowCount () > 0:
+        while self.ui.SchedulingFlights.rowCount() > 0:
             self.ui.SchedulingFlights.removeRow(0)
 
         startrow = 0
@@ -2064,7 +2064,9 @@ class Main(QMainWindow):
 
 def main():
     """Next lines is for set only specific theme with Qt libraries to the app"""
-    import sys, time, os
+    import sys
+    import time
+    import os
     QApplication.setStyle(QStyleFactory.create('Cleanlooks'))
     QApplication.setPalette(QApplication.style().standardPalette())
     app = QApplication(sys.argv)
