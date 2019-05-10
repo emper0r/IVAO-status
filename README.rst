@@ -1,3 +1,5 @@
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/emper0r/IVAO-status.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/emper0r/IVAO-status/alerts/)
+
 ===============
  IVAO - STATUS
 ===============
